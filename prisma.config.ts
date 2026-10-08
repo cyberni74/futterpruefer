@@ -9,6 +9,7 @@ export default defineConfig({
     path: "prisma/migrations",
   },
   datasource: {
-    url: process.env["DATABASE_URL"],
+    // Migrationen über eine Session-Verbindung (Supabase: Port 5432), Laufzeit über DATABASE_URL (Transaction-Pooler, Port 6543)
+    url: process.env["DIRECT_URL"] ?? process.env["DATABASE_URL"],
   },
 });

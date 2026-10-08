@@ -7,10 +7,11 @@ import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "../src/generated/prisma/client";
 import { totalScore } from "../src/lib/scoring";
 import { slugify } from "../src/lib/slug";
+import { pgConfig } from "../src/lib/pg-config";
 
 const esc = (t: string) => t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
-const prisma = new PrismaClient({ adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL! }) });
+const prisma = new PrismaClient({ adapter: new PrismaPg(pgConfig(process.env.DATABASE_URL!)) });
 
 const DEMO_NOTE = "<p><em>Hinweis: Dies ist ein Demo-Beispieltest mit fiktiver Marke. Vor dem Livegang durch echte Tests ersetzen.</em></p>";
 

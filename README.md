@@ -28,7 +28,7 @@ node scripts/qa-interactions.mjs                            # Suche, Dark Mode, 
 ## Deployment (Vercel)
 
 1. Repository mit Vercel verbinden.
-2. Postgres anlegen (Neon über Vercel Marketplace) → `DATABASE_URL` wird gesetzt.
+2. Datenbank: Supabase-Projekt (Frankfurt) mit Rolle `prisma`; `DATABASE_URL` (Pooler, Port 6543) und `DIRECT_URL` (Pooler, Port 5432) setzen. RLS ist auf allen Tabellen aktiv, die Supabase-REST-API hat keinen Zugriff.
 3. `AUTH_SECRET`, `NEXT_PUBLIC_SITE_URL` setzen; optional Blob, Resend, Turnstile, Anthropic.
 4. Der Build führt `prisma migrate deploy` und den (idempotenten) Seed aus: Kategorien, Admin-Konto aus `ADMIN_EMAIL`/`ADMIN_PASSWORD` und – nur bei leerer DB – Demo-Inhalte. Passwort ändern = `ADMIN_PASSWORD` ändern + Redeploy.
 
