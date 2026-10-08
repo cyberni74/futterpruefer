@@ -25,7 +25,7 @@ export default async function FaqPage() {
           {items.map((it) => (
             <li key={it.id} className={cardCls}>
               <details>
-                <summary className="flex min-h-11 cursor-pointer list-none items-center gap-3 [&::-webkit-details-marker]:hidden">
+                <summary className="flex min-h-11 cursor-pointer list-none items-center gap-3 transition-colors hover:text-brand [&::-webkit-details-marker]:hidden">
                   <span className="inline-flex min-w-10 justify-center rounded-lg bg-bg-soft px-2 py-1 text-xs font-bold tabular-nums text-muted">{it.sortOrder}</span>
                   <span className="min-w-0 flex-1 font-semibold">{it.question}</span>
                   <span className="shrink-0 text-sm font-semibold text-brand">Bearbeiten</span>

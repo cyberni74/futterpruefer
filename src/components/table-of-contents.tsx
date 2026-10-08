@@ -19,7 +19,7 @@ export function TableOfContents({ items, variant }: { items: TocItem[]; variant:
   if (variant === "mobile")
     return (
       <details className="group rounded-2xl border border-border bg-surface shadow-card lg:hidden">
-        <summary className="flex min-h-12 list-none items-center gap-2 px-4 font-bold [&::-webkit-details-marker]:hidden">
+        <summary className="flex min-h-12 list-none items-center gap-2 rounded-2xl px-4 font-bold transition-colors hover:text-brand [&::-webkit-details-marker]:hidden">
           <ListTree className="size-5 text-brand" aria-hidden /> Inhaltsverzeichnis
           <span className="ml-auto text-xl text-brand transition group-open:rotate-45" aria-hidden>+</span>
         </summary>

@@ -152,7 +152,7 @@ export default async function ReviewPage({ params }: PageProps<"/[kategorie]/[sl
               <span className="inline-flex items-center gap-1.5 rounded-full bg-brand-soft px-3 py-1 text-xs font-bold text-brand-strong"><PawPrint className="size-3.5" aria-hidden />{ANIMAL_LABEL[r.category.animal]}</span>
               <Link href={`/${r.category.slug}`} className="inline-flex items-center rounded-full border border-border px-3 py-1 text-xs font-bold hover:bg-bg-soft">{r.category.name}</Link>
               {pom && (
-                <Link href="/produkt-des-monats" className="inline-flex items-center gap-1.5 rounded-full bg-accent px-3 py-1 text-xs font-bold text-white dark:text-black"><Award className="size-3.5" aria-hidden />Produkt des Monats {MONTHS[pom.month - 1]} {pom.year}</Link>
+                <Link href="/produkt-des-monats" className="inline-flex items-center gap-1.5 rounded-full bg-accent px-3 py-1 text-xs font-bold text-white dark:text-black hover:bg-accent-strong"><Award className="size-3.5" aria-hidden />Produkt des Monats {MONTHS[pom.month - 1]} {pom.year}</Link>
               )}
             </div>
             <h1 className="mt-3 text-3xl font-extrabold leading-tight md:text-5xl">{r.brand} {r.productName} im Test</h1>

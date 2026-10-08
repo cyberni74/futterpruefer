@@ -24,7 +24,7 @@ export default async function GlossarAdminPage() {
           {items.map((it) => (
             <li key={it.id} className={cardCls}>
               <details>
-                <summary className="flex min-h-11 cursor-pointer list-none items-center gap-3 [&::-webkit-details-marker]:hidden">
+                <summary className="flex min-h-11 cursor-pointer list-none items-center gap-3 transition-colors hover:text-brand [&::-webkit-details-marker]:hidden">
                   <span className="min-w-0 flex-1"><span className="font-semibold">{it.term}</span><span className="block truncate text-sm text-muted">{it.definition}</span></span>
                   <span className="shrink-0 text-sm font-semibold text-brand">Bearbeiten</span>
                 </summary>

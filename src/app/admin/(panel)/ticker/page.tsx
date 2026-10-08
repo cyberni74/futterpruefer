@@ -32,7 +32,7 @@ export default async function TickerPage() {
             return (
               <li key={it.id} className={cardCls}>
                 <details>
-                  <summary className="flex min-h-11 cursor-pointer list-none items-center gap-3 [&::-webkit-details-marker]:hidden">
+                  <summary className="flex min-h-11 cursor-pointer list-none items-center gap-3 transition-colors hover:text-brand [&::-webkit-details-marker]:hidden">
                     {it.isWarning && <AlertTriangle className="size-5 shrink-0 text-bad" aria-label="Warnung" />}
                     <span className="min-w-0 flex-1">
                       <span className="block truncate font-semibold">{it.text}</span>

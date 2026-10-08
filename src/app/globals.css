@@ -162,3 +162,30 @@ button, [role="button"], summary { cursor: pointer; }
 .prose-fp .crit-schlecht .crit-bar-fill { background: var(--bad); }
 .prose-fp .crit-bar-value { font-weight: 800; font-variant-numeric: tabular-nums; font-size: .95rem; }
 .prose-fp h2[id] { scroll-margin-top: 7rem; }
+
+/* ---------------------------------------------------------------------------
+   Einheitliches Hover-/Tap-Feedback für alles Klickbare.
+   :where() hat Spezifität 0 – eigene hover:-Utilities der Komponenten gewinnen.
+--------------------------------------------------------------------------- */
+@layer base {
+  :where(button:not(:disabled), [role="button"], [role="tab"], [role="option"], summary, select, label:has(> input[type="file"]), input[type="checkbox"], input[type="radio"], input[type="file"]) { cursor: pointer; }
+  :where(a, button, summary, [role="button"], [role="tab"]) {
+    transition-property: color, background-color, border-color, text-decoration-color, text-decoration-thickness, box-shadow, opacity, translate, scale, filter;
+    transition-duration: 200ms;
+    transition-timing-function: cubic-bezier(.22, 1, .36, 1);
+  }
+  @media (hover: hover) {
+    /* Textlinks: Farbe + kräftigere Unterstreichung */
+    :where(a:not([class*="bg-"]):not([class*="after:"]):not([class*="border"])):hover { color: var(--brand-strong); text-decoration-line: underline; text-decoration-thickness: 2px; text-underline-offset: 3px; }
+    /* Buttons & Pill-Links: leicht heller */
+    :where(button, a, summary, [role="button"]):where([class*="rounded"]):not(:disabled):not([aria-disabled="true"]):hover { filter: brightness(1.06); }
+    .dark :where(button, a, summary, [role="button"]):where([class*="rounded"]):not(:disabled):hover { filter: brightness(1.15); }
+  }
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    :where(button, a, [role="button"]):where([class*="rounded-full"], [class*="rounded-xl"]):not(:disabled):not([aria-disabled="true"]):hover { translate: 0 -1px; }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    :where(button, a, summary, [role="button"]):where([class*="rounded"]):not(:disabled):active { scale: .97; translate: 0 0; }
+  }
+}
+.prose-fp a:hover { color: var(--brand-strong); text-decoration-thickness: 2px; }

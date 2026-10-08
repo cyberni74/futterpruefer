@@ -34,7 +34,7 @@ export function LexikonBrowser({ items }: { items: LexItem[] }) {
         </label>
         <div className="flex flex-wrap gap-2" role="group" aria-label="Nach Bewertung filtern">
           {(["", "UNBEDENKLICH", "EINGESCHRAENKT", "BEDENKLICH"] as const).map((k) => (
-            <button key={k || "alle"} type="button" aria-pressed={concern === k} onClick={() => setConcern(k)} className={`inline-flex min-h-11 items-center gap-2 rounded-full border px-4 text-sm font-semibold ${concern === k ? "border-brand bg-brand-soft text-brand-strong" : "border-border bg-surface"}`}>
+            <button key={k || "alle"} type="button" aria-pressed={concern === k} onClick={() => setConcern(k)} className={`inline-flex min-h-11 items-center gap-2 rounded-full border px-4 text-sm font-semibold ${concern === k ? "border-brand bg-brand-soft text-brand-strong" : "border-border bg-surface hover:border-brand hover:text-brand-strong"}`}>
               {k && <span className={`size-2.5 rounded-full ${CONCERN[k].dot}`} aria-hidden />}
               {k ? CONCERN[k].label : "Alle"}
             </button>

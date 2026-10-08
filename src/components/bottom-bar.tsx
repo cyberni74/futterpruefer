@@ -18,7 +18,7 @@ export function BottomBar() {
           const active = href === "/" ? pathname === "/" : pathname.startsWith(href) || (href === "/tests" && pathname.startsWith("/kategorie"));
           return (
             <li key={href}>
-              <Link href={href} aria-current={active ? "page" : undefined} className={`flex min-h-14 flex-col items-center justify-center gap-0.5 text-xs font-semibold ${active ? "text-brand" : "text-muted"}`}>
+              <Link href={href} aria-current={active ? "page" : undefined} className={`flex min-h-14 flex-col items-center justify-center gap-0.5 text-xs font-semibold ${active ? "text-brand" : "text-muted hover:text-fg"} transition-colors active:scale-95`}>
                 <Icon className="size-6" aria-hidden />
                 {label}
               </Link>
@@ -29,7 +29,7 @@ export function BottomBar() {
           <button
             type="button"
             onClick={() => window.dispatchEvent(new Event("fp:open-search"))}
-            className={`flex min-h-14 w-full flex-col items-center justify-center gap-0.5 text-xs font-semibold ${pathname.startsWith("/suche") ? "text-brand" : "text-muted"}`}
+            className={`flex min-h-14 w-full flex-col items-center justify-center gap-0.5 text-xs font-semibold ${pathname.startsWith("/suche") ? "text-brand" : "text-muted hover:text-fg"} transition-colors active:scale-95`}
           >
             <Search className="size-6" aria-hidden />
             Suche

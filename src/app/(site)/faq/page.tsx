@@ -14,7 +14,7 @@ export default async function FaqPage() {
       <div className="space-y-3">
         {items.map((i) => (
           <details key={i.id} className="group rounded-2xl border border-border bg-surface shadow-card">
-            <summary className="flex min-h-14 list-none items-center justify-between gap-3 p-4 font-bold">
+            <summary className="flex min-h-14 list-none items-center justify-between gap-3 rounded-2xl p-4 font-bold transition-colors hover:text-brand">
               <h2 className="text-base">{i.question}</h2>
               <span aria-hidden className="text-xl text-brand transition group-open:rotate-45">+</span>
             </summary>
