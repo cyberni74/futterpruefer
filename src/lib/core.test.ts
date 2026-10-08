@@ -82,3 +82,13 @@ describe("team", () => {
     expect(new Set(TEAM.map((m) => m.slug)).size).toBe(TEAM.length);
   });
 });
+
+describe("isIndexable", () => {
+  it("nur echte Domain wird indexiert", async () => {
+    const { isIndexable } = await import("./site");
+    expect(isIndexable("https://futterpruefer-x.vercel.app", undefined)).toBe(false);
+    expect(isIndexable("http://localhost:3000", undefined)).toBe(false);
+    expect(isIndexable("https://futterpruefer.de", undefined)).toBe(true);
+    expect(isIndexable("https://futterpruefer.de", "1")).toBe(false);
+  });
+});

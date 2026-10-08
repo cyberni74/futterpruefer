@@ -7,6 +7,12 @@ export const SITE = {
   author: "Futterprüfer-Redaktion",
 };
 
+/** Indexierung nur auf der echten Domain – Vercel-Subdomains, localhost und SITE_NOINDEX=1 bleiben noindex. */
+export function isIndexable(url = SITE.url, flag = process.env.SITE_NOINDEX): boolean {
+  if (flag === "1") return false;
+  return !/\.vercel\.app$|localhost|127\.0\.0\.1/.test(new URL(url).hostname);
+}
+
 export function absoluteUrl(path = "/"): string {
   return `${SITE.url}${path.startsWith("/") ? path : `/${path}`}`;
 }

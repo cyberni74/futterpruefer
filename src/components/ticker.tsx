@@ -16,8 +16,8 @@ export function Ticker({ items }: { items: TickerEntry[] }) {
             {loop.map((t, i) => (
               <li key={`${t.id}-${i}`} aria-hidden={i >= items.length || undefined} className={`flex items-center gap-1.5 whitespace-nowrap text-sm ${i >= items.length ? "motion-reduce:hidden" : ""}`}>
                 {t.isWarning && <AlertTriangle className="size-4 text-bad" aria-hidden />}
-                {t.href ? (
-                  <Link href={t.href} tabIndex={i >= items.length ? -1 : undefined} className={`hover:underline ${t.isWarning ? "font-semibold text-bad" : ""}`}>{t.text}</Link>
+                {t.href && i < items.length ? (
+                  <Link href={t.href} className={`hover:underline ${t.isWarning ? "font-semibold text-bad" : ""}`}>{t.text}</Link>
                 ) : (
                   <span className={t.isWarning ? "font-semibold text-bad" : ""}>{t.text}</span>
                 )}

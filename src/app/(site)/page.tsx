@@ -11,6 +11,12 @@ import { JsonLd } from "@/components/json-ld";
 import { NewsletterBox } from "@/components/newsletter-box";
 import { SITE, absoluteUrl } from "@/lib/site";
 import { hyphenateCategory } from "@/lib/urls";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+  openGraph: { type: "website", locale: "de_DE", siteName: SITE.name, url: "/", title: `${SITE.name} – Hunde- & Katzenfutter im Fachtest`, description: SITE.description },
+};
 
 export const revalidate = 3600;
 
