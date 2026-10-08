@@ -46,7 +46,7 @@ export function SiteHeader() {
         className={`fixed inset-x-0 top-0 z-40 px-3 pt-[max(env(safe-area-inset-top),0.5rem)] transition-transform duration-300 ${hidden && !searchOpen ? "-translate-y-[120%]" : "translate-y-0"}`}
       >
         <div className="mx-auto flex h-14 max-w-6xl items-center gap-2 rounded-2xl border border-border bg-surface/90 px-3 shadow-card backdrop-blur-md md:h-16 md:px-5">
-          <Logo />
+          <Logo priority />
           <nav aria-label="Hauptnavigation" className="ml-6 hidden md:block">
             <ul className="flex items-center gap-1">
               {NAV.map((item) => {

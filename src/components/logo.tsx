@@ -1,15 +1,11 @@
+import Image from "next/image";
 import Link from "next/link";
+import logoWide from "../../public/brand/logo-wide.png";
 
-export function Logo({ className = "" }: { className?: string }) {
+export function Logo({ className = "", priority = false }: { className?: string; priority?: boolean }) {
   return (
-    <Link href="/" className={`inline-flex min-h-11 items-center gap-2 font-display text-lg font-extrabold tracking-tight text-fg ${className}`} aria-label="Futterprüfer – zur Startseite">
-      <svg viewBox="0 0 32 32" className="size-8 shrink-0" aria-hidden>
-        <rect width="32" height="32" rx="9" fill="var(--brand)" />
-        <path d="M9 16.5l4.5 4.5L23 11.5" fill="none" stroke="#fff" strokeWidth="3.2" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
-      <span>
-        Futter<span className="text-brand">prüfer</span>
-      </span>
+    <Link href="/" className={`inline-flex min-h-11 shrink-0 items-center rounded-xl dark:bg-white dark:px-2 dark:py-1 ${className}`} aria-label="Futterprüfer.de – zur Startseite">
+      <Image src={logoWide} alt="Futterprüfer.de" priority={priority} sizes="160px" className="h-10 w-auto md:h-11" />
     </Link>
   );
 }
