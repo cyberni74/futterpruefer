@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ShieldCheck } from "lucide-react";
+import { ArrowRight, ShieldCheck } from "lucide-react";
 import { getLatestPosts, getLatestReviews, getProductOfMonth, getTickerEntries, getCategories } from "@/lib/queries";
 import { ProductOfMonthHero } from "@/components/product-of-month";
 import { Ticker } from "@/components/ticker";
@@ -44,9 +44,10 @@ export default async function Home() {
       <div className="mx-auto max-w-6xl px-4">
         <nav aria-label="Testkategorien" className="mt-10 grid grid-cols-2 gap-3 lg:grid-cols-4">
           {categories.map((c) => (
-            <Link key={c.id} href={`/${c.slug}`} className="flex min-h-16 flex-col items-start gap-1 rounded-2xl border border-border bg-surface p-3.5 font-bold sm:flex-row sm:items-center sm:gap-3 sm:p-4 shadow-card transition hover:-translate-y-0.5 hover:shadow-lift motion-reduce:hover:translate-y-0">
-              <span aria-hidden className="text-2xl">{c.animal === "HUND" ? "🐕" : "🐈"}</span>
-              <span className="min-w-0 leading-tight">{hyphenateCategory(c.shortName)}</span>
+            <Link key={c.id} href={`/${c.slug}`} className="group relative flex min-h-16 flex-col items-start gap-1 overflow-hidden rounded-2xl border border-border bg-surface p-3.5 pr-9 font-bold shadow-card transition duration-300 hover:-translate-y-1 hover:border-brand hover:bg-brand-soft hover:shadow-lift focus-visible:border-brand active:scale-[0.97] sm:flex-row sm:items-center sm:gap-3 sm:p-4 sm:pr-10 motion-reduce:transition-none motion-reduce:hover:translate-y-0 motion-reduce:active:scale-100">
+              <span aria-hidden className="text-2xl transition-transform duration-300 group-hover:-rotate-6 group-hover:scale-125 motion-reduce:transition-none motion-reduce:group-hover:transform-none">{c.animal === "HUND" ? "🐕" : "🐈"}</span>
+              <span className="min-w-0 leading-tight transition-colors group-hover:text-brand-strong">{hyphenateCategory(c.shortName)}</span>
+              <ArrowRight aria-hidden className="absolute right-3 bottom-3.5 size-4 text-brand opacity-0 transition duration-300 -translate-x-1 group-hover:translate-x-0 group-hover:opacity-100 group-focus-visible:opacity-100 sm:top-1/2 sm:bottom-auto sm:-translate-y-1/2 motion-reduce:transition-none" />
             </Link>
           ))}
         </nav>
