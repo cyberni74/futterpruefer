@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import type { ReviewCardData } from "@/lib/queries";
 import { MONTHS } from "@/lib/site";
+import { reviewPath } from "@/lib/urls";
 import { FpImage } from "./fp-image";
 import { ScoreBadge } from "./score-badge";
 
@@ -32,7 +33,7 @@ export function ProductOfMonthHero({ pom }: { pom: { year: number; month: number
           </div>
           <p className="text-lg leading-relaxed text-white/90 dark:text-fg/90">{pom.reason}</p>
           <div className="flex flex-wrap gap-3 pt-2">
-            <Link href={`/tests/${r.slug}`} className="inline-flex min-h-12 items-center gap-2 rounded-full bg-accent px-6 font-bold text-white hover:bg-accent-strong dark:text-black">
+            <Link href={reviewPath(r)} className="inline-flex min-h-12 items-center gap-2 rounded-full bg-accent px-6 font-bold text-white hover:bg-accent-strong dark:text-black">
               Zum Testbericht <ArrowRight className="size-5" aria-hidden />
             </Link>
             <Link href="/produkt-des-monats" className="inline-flex min-h-12 items-center rounded-full border border-white/40 px-5 font-semibold text-white hover:bg-white/10 dark:border-border dark:text-fg">

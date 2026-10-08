@@ -90,12 +90,12 @@ export async function getTickerEntries(): Promise<TickerEntry[]> {
       orderBy: [{ isWarning: "desc" }, { createdAt: "desc" }],
       take: 5,
     }),
-    prisma.review.findMany({ where: publishedWhere(), orderBy: { publishedAt: "desc" }, take: 3, select: { id: true, slug: true, title: true, totalScore: true } }),
+    prisma.review.findMany({ where: publishedWhere(), orderBy: { publishedAt: "desc" }, take: 3, select: { id: true, slug: true, title: true, totalScore: true, category: { select: { slug: true } } } }),
     prisma.blogPost.findMany({ where: publishedWhere(), orderBy: { publishedAt: "desc" }, take: 2, select: { id: true, slug: true, title: true } }),
   ]);
   return [
     ...manual.map((m) => ({ id: m.id, text: m.text, href: m.href, isWarning: m.isWarning })),
-    ...reviews.map((r) => ({ id: r.id, text: `Neuer Test: ${r.title} – ${r.totalScore}/100 Punkte`, href: `/tests/${r.slug}`, isWarning: false })),
+    ...reviews.map((r) => ({ id: r.id, text: `Neuer Test: ${r.title} – ${r.totalScore}/100 Punkte`, href: `/${r.category.slug}/${r.slug}`, isWarning: false })),
     ...posts.map((p) => ({ id: p.id, text: `Fachblog: ${p.title}`, href: `/blog/${p.slug}`, isWarning: false })),
   ];
 }
@@ -111,4 +111,20 @@ export function getRelatedReviews(categoryId: string, excludeId: string, take = 
 
 export async function findRedirect(path: string) {
   return prisma.redirect.findUnique({ where: { fromPath: path } });
+}
+
+/**
+ * Löst einen (ggf. alten) Test-Slug zur aktuellen URL auf – auch über Slug-Weiterleitungen aus dem Admin (/tests/<alt> → /tests/<neu>).
+ */
+export async function resolveReviewPath(slug: string): Promise<string | null> {
+  let current = slug;
+  for (let hop = 0; hop < 5; hop++) {
+    const r = await prisma.review.findFirst({ where: { slug: current, ...publishedWhere() }, select: { slug: true, category: { select: { slug: true } } } });
+    if (r) return `/${r.category.slug}/${r.slug}`;
+    const red = await prisma.redirect.findUnique({ where: { fromPath: `/tests/${current}` } });
+    const next = red?.toPath.match(/^\/tests\/([a-z0-9-]+)$/)?.[1];
+    if (!next || next === current) return red?.toPath ?? null;
+    current = next;
+  }
+  return null;
 }

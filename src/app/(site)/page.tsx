@@ -43,7 +43,7 @@ export default async function Home() {
       <div className="mx-auto max-w-6xl px-4">
         <nav aria-label="Testkategorien" className="mt-10 grid grid-cols-2 gap-3 lg:grid-cols-4">
           {categories.map((c) => (
-            <Link key={c.id} href={`/kategorie/${c.slug}`} className="flex min-h-16 items-center gap-3 rounded-2xl border border-border bg-surface p-4 font-bold shadow-card transition hover:-translate-y-0.5 hover:shadow-lift motion-reduce:hover:translate-y-0">
+            <Link key={c.id} href={`/${c.slug}`} className="flex min-h-16 items-center gap-3 rounded-2xl border border-border bg-surface p-4 font-bold shadow-card transition hover:-translate-y-0.5 hover:shadow-lift motion-reduce:hover:translate-y-0">
               <span aria-hidden className="text-2xl">{c.animal === "HUND" ? "🐕" : "🐈"}</span>
               <span className="leading-tight">{c.shortName}</span>
             </Link>

@@ -17,10 +17,12 @@ describe("scoring", () => {
     expect(clampScore("scoreValue", 4.6)).toBe(5);
   });
   it("Ampel-Schwellen", () => {
-    expect(ratingFor(75)).toBe("gut");
-    expect(ratingFor(74)).toBe("mittel");
-    expect(ratingFor(50)).toBe("mittel");
-    expect(ratingFor(49)).toBe("schlecht");
+    expect(ratingFor(100)).toBe("gut");
+    expect(ratingFor(80)).toBe("gut");
+    expect(ratingFor(79)).toBe("mittel");
+    expect(ratingFor(60)).toBe("mittel");
+    expect(ratingFor(59)).toBe("schlecht");
+    expect(ratingFor(0)).toBe("schlecht");
     expect(ratingFor(null)).toBe("schlecht");
   });
   it("Schadstoff-Warnsignal unter 50 %", () => {

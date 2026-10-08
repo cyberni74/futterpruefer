@@ -47,7 +47,7 @@ export function SearchDialog({ open, onClose }: { open: boolean; onClose: () => 
     } else if (!open && d.open) d.close();
   }, [open]);
 
-  const href = (h: SearchHit) => (h.type === "test" ? `/tests/${h.slug}` : h.type === "lexikon" ? `/lexikon/${h.slug}` : `/blog/${h.slug}`);
+  const href = (h: SearchHit) => h.href;
   const go = (url: string) => {
     onClose();
     setQ("");

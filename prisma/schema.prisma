@@ -55,6 +55,21 @@ model Review {
   imageUrl  String?
   imageAlt  String  @default("")
   imageBlur String?
+  /// weitere Produktbilder (URLs)
+  gallery   String[] @default([])
+
+  // Produktdaten
+  /// Zusammensetzung wie auf dem Etikett (kommagetrennt)
+  composition String    @default("")
+  /// [{ "name": "Rohprotein", "value": 10.5 }] – Angaben in %
+  analysis    Json      @default("[]")
+  packageSize String    @default("")
+  price       Decimal?  @db.Decimal(8, 2)
+  pricePerDay Decimal?  @db.Decimal(8, 2)
+  priceDate   DateTime?
+  testedAt    DateTime?
+  /// [{ "claim", "rating": ZULAESSIG|FRAGWUERDIG|UNZULAESSIG, "reason", "legal", "imageUrl" }]
+  claims      Json      @default("[]")
 
   // Bewertung (Maxima siehe src/lib/scoring.ts)
   scoreRaw         Int @default(0)
@@ -66,6 +81,8 @@ model Review {
   totalScore       Int @default(0)
 
   verdict  String   @default("")
+  /// Kurzbegründung für das Schadstoff-Warnsignal
+  harmfulReason String @default("")
   pros     String[] @default([])
   cons     String[] @default([])
   bodyHtml String   @default("")

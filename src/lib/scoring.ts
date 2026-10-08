@@ -33,10 +33,13 @@ export function harmfulFailed(scoreHarmful: number | null | undefined): boolean 
 
 export type Rating = "gut" | "mittel" | "schlecht";
 
+/** Ampel-Schwellen der Gesamtwertung: ≥ 80 Grün, 60–79 Gelb, < 60 Rot. */
+export const RATING_THRESHOLDS = { gut: 80, mittel: 60 } as const;
+
 export function ratingFor(total: number | null | undefined): Rating {
   const t = total ?? 0;
-  if (t >= 75) return "gut";
-  if (t >= 50) return "mittel";
+  if (t >= RATING_THRESHOLDS.gut) return "gut";
+  if (t >= RATING_THRESHOLDS.mittel) return "mittel";
   return "schlecht";
 }
 

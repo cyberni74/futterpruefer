@@ -10,14 +10,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   try {
     const [cats, reviews, posts, lex] = await Promise.all([
       prisma.category.findMany({ select: { slug: true } }),
-      prisma.review.findMany({ where: publishedWhere(), select: { slug: true, updatedAt: true } }),
+      prisma.review.findMany({ where: publishedWhere(), select: { slug: true, updatedAt: true, category: { select: { slug: true } } } }),
       prisma.blogPost.findMany({ where: publishedWhere(), select: { slug: true, updatedAt: true } }),
       prisma.lexikonEntry.findMany({ where: publishedWhere(), select: { slug: true, updatedAt: true } }),
     ]);
     return [
       ...statics,
-      ...cats.map((c) => ({ url: absoluteUrl(`/kategorie/${c.slug}`), changeFrequency: "daily" as const, priority: 0.8 })),
-      ...reviews.map((r) => ({ url: absoluteUrl(`/tests/${r.slug}`), lastModified: r.updatedAt, priority: 0.9 })),
+      ...cats.map((c) => ({ url: absoluteUrl(`/${c.slug}`), changeFrequency: "daily" as const, priority: 0.8 })),
+      ...reviews.map((r) => ({ url: absoluteUrl(`/${r.category.slug}/${r.slug}`), lastModified: r.updatedAt, priority: 0.9 })),
       ...posts.map((p) => ({ url: absoluteUrl(`/blog/${p.slug}`), lastModified: p.updatedAt, priority: 0.7 })),
       ...lex.map((e) => ({ url: absoluteUrl(`/lexikon/${e.slug}`), lastModified: e.updatedAt, priority: 0.6 })),
     ];

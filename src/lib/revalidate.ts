@@ -8,9 +8,9 @@ export function revalidateContent(kind: "review" | "blog" | "ticker" | "pdm" | "
   revalidatePath("/rss.xml");
   if (kind === "review" || kind === "pdm") {
     revalidatePath("/tests");
-    revalidatePath("/kategorie/[slug]", "page");
+    revalidatePath("/[kategorie]", "page");
+    revalidatePath("/[kategorie]/[slug]", "page");
     revalidatePath("/produkt-des-monats");
-    for (const s of slugs) if (s) revalidatePath(`/tests/${s}`);
   }
   if (kind === "blog") {
     revalidatePath("/blog");

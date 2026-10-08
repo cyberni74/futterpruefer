@@ -2,6 +2,7 @@ import Link from "next/link";
 import { AlertTriangle } from "lucide-react";
 import type { ReviewCardData } from "@/lib/queries";
 import { harmfulFailed } from "@/lib/scoring";
+import { reviewPath } from "@/lib/urls";
 import { FpImage } from "./fp-image";
 import { ScoreBadge } from "./score-badge";
 
@@ -21,7 +22,7 @@ export function ReviewCard({ review, priority = false }: { review: ReviewCardDat
         <ScoreBadge score={review.totalScore} className="absolute -top-9 right-4 z-10" />
         <p className="text-xs font-bold uppercase tracking-wide text-brand">{review.category?.shortName}</p>
         <h3 className="mt-1 pr-16 text-lg font-bold leading-snug">
-          <Link href={`/tests/${review.slug}`} className="after:absolute after:inset-0">
+          <Link href={reviewPath(review)} className="after:absolute after:inset-0">
             {review.title}
           </Link>
         </h3>

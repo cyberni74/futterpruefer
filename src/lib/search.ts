@@ -4,6 +4,8 @@ import { prisma } from "@/lib/db";
 export type SearchHit = {
   type: "test" | "blog" | "lexikon";
   slug: string;
+  /** Pfad zur Seite */
+  href: string;
   title: string;
   subtitle: string;
   score: number | null;
@@ -18,12 +20,12 @@ export async function search(query: string | null | undefined, limit = 20): Prom
   const now = new Date();
 
   const [tests, posts, lex] = await Promise.all([
-    prisma.$queryRaw<Array<{ slug: string; title: string; brand: string; keyword: string; totalScore: number; imageUrl: string | null; rank: number }>>`
-      SELECT slug, title, brand, keyword, "totalScore", "imageUrl",
+    prisma.$queryRaw<Array<{ slug: string; catSlug: string; title: string; brand: string; keyword: string; totalScore: number; imageUrl: string | null; rank: number }>>`
+      SELECT r.slug, c.slug AS "catSlug", title, brand, keyword, "totalScore", "imageUrl",
         ts_rank(to_tsvector('german', coalesce(title,'') || ' ' || coalesce(brand,'') || ' ' || coalesce("productName",'') || ' ' || coalesce(keyword,'') || ' ' || coalesce(verdict,'')), websearch_to_tsquery('german', ${q}))
         + similarity(lower(brand || ' ' || "productName"), lower(${q})) AS rank
-      FROM "Review"
-      WHERE status = 'PUBLISHED' AND "publishedAt" <= ${now} AND (
+      FROM "Review" r JOIN "Category" c ON c.id = r."categoryId"
+      WHERE r.status = 'PUBLISHED' AND r."publishedAt" <= ${now} AND (
         to_tsvector('german', coalesce(title,'') || ' ' || coalesce(brand,'') || ' ' || coalesce("productName",'') || ' ' || coalesce(keyword,'') || ' ' || coalesce(verdict,'')) @@ websearch_to_tsquery('german', ${q})
         OR lower(brand || ' ' || "productName") % lower(${q})
         OR word_similarity(lower(${q}), lower(brand || ' ' || "productName")) > 0.4
@@ -57,9 +59,9 @@ export async function search(query: string | null | undefined, limit = 20): Prom
   ]);
 
   const hits: Array<SearchHit & { rank: number }> = [
-    ...tests.map((t) => ({ type: "test" as const, slug: t.slug, title: t.title, subtitle: t.keyword || t.brand, score: t.totalScore, imageUrl: t.imageUrl, rank: Number(t.rank) })),
-    ...lex.map((l) => ({ type: "lexikon" as const, slug: l.slug, title: l.name, subtitle: l.shortDescription, score: null, imageUrl: null, rank: Number(l.rank) })),
-    ...posts.map((p) => ({ type: "blog" as const, slug: p.slug, title: p.title, subtitle: p.excerpt, score: null, imageUrl: p.imageUrl, rank: Number(p.rank) })),
+    ...tests.map((t) => ({ type: "test" as const, slug: t.slug, href: `/${t.catSlug}/${t.slug}`, title: t.title, subtitle: t.keyword || t.brand, score: t.totalScore, imageUrl: t.imageUrl, rank: Number(t.rank) })),
+    ...lex.map((l) => ({ type: "lexikon" as const, slug: l.slug, href: `/lexikon/${l.slug}`, title: l.name, subtitle: l.shortDescription, score: null, imageUrl: null, rank: Number(l.rank) })),
+    ...posts.map((p) => ({ type: "blog" as const, slug: p.slug, href: `/blog/${p.slug}`, title: p.title, subtitle: p.excerpt, score: null, imageUrl: p.imageUrl, rank: Number(p.rank) })),
   ];
-  return hits.sort((a, b) => b.rank - a.rank).slice(0, limit).map(({ type, slug, title, subtitle, score, imageUrl }) => ({ type, slug, title, subtitle, score, imageUrl }));
+  return hits.sort((a, b) => b.rank - a.rank).slice(0, limit).map(({ type, slug, href, title, subtitle, score, imageUrl }) => ({ type, slug, href, title, subtitle, score, imageUrl }));
 }

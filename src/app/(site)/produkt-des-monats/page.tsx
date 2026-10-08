@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { getProductOfMonthArchive } from "@/lib/queries";
 import { MONTHS } from "@/lib/site";
+import { reviewPath } from "@/lib/urls";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { MonthSeal } from "@/components/product-of-month";
 import { ScoreBadge } from "@/components/score-badge";
@@ -26,7 +27,7 @@ export default async function PomArchive() {
               <MonthSeal month={p.month} year={p.year} className="hidden size-24 md:flex" />
               <div className="flex-1">
                 <p className="text-sm font-bold text-brand">{MONTHS[p.month - 1]} {p.year}</p>
-                <h2 className="mt-1 text-xl font-extrabold"><Link href={`/tests/${p.review.slug}`} className="after:absolute after:inset-0 hover:underline">{p.review.title}</Link></h2>
+                <h2 className="mt-1 text-xl font-extrabold"><Link href={reviewPath(p.review)} className="after:absolute after:inset-0 hover:underline">{p.review.title}</Link></h2>
                 <p className="mt-2 text-muted">{p.reason}</p>
               </div>
               <ScoreBadge score={p.review.totalScore} />

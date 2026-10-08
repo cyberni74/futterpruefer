@@ -8,11 +8,11 @@ const esc = (s: string | null | undefined) => (s ?? "").replace(/&/g, "&amp;").r
 
 export async function GET() {
   const [reviews, posts] = await Promise.all([
-    prisma.review.findMany({ where: publishedWhere(), orderBy: { publishedAt: "desc" }, take: 30, select: { slug: true, title: true, verdict: true, totalScore: true, publishedAt: true } }),
+    prisma.review.findMany({ where: publishedWhere(), orderBy: { publishedAt: "desc" }, take: 30, select: { slug: true, title: true, verdict: true, totalScore: true, publishedAt: true, category: { select: { slug: true } } } }),
     prisma.blogPost.findMany({ where: publishedWhere(), orderBy: { publishedAt: "desc" }, take: 30, select: { slug: true, title: true, excerpt: true, publishedAt: true } }),
   ]);
   const items = [
-    ...reviews.map((r) => ({ title: `Test: ${r.title} – ${r.totalScore}/100`, link: absoluteUrl(`/tests/${r.slug}`), desc: r.verdict, date: r.publishedAt, cat: "Tests" })),
+    ...reviews.map((r) => ({ title: `Test: ${r.title} – ${r.totalScore}/100`, link: absoluteUrl(`/${r.category.slug}/${r.slug}`), desc: r.verdict, date: r.publishedAt, cat: "Tests" })),
     ...posts.map((p) => ({ title: p.title, link: absoluteUrl(`/blog/${p.slug}`), desc: p.excerpt, date: p.publishedAt, cat: "Fachblog" })),
   ].sort((a, b) => (b.date?.getTime() ?? 0) - (a.date?.getTime() ?? 0));
 

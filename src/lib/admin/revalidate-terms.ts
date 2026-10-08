@@ -9,7 +9,7 @@ export function revalidateTerms() {
   revalidatePath("/lexikon");
   revalidatePath("/lexikon/[slug]", "page");
   revalidatePath("/glossar");
-  revalidatePath("/tests/[slug]", "page");
+  revalidatePath("/[kategorie]/[slug]", "page");
   revalidatePath("/blog/[slug]", "page");
   revalidatePath("/");
   revalidatePath("/sitemap.xml");

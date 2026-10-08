@@ -35,6 +35,8 @@ const nextConfig: NextConfig = {
     remotePatterns: [{ protocol: "https", hostname: "*.public.blob.vercel-storage.com" }],
   },
   serverExternalPackages: ["sharp"],
+  // OG-Bilder lesen lokale Produktbilder aus /public
+  outputFileTracingIncludes: { "/[kategorie]/[slug]/opengraph-image": ["./public/demo/**", "./public/uploads/**"] },
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];
   },

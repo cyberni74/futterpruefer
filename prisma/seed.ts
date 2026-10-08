@@ -50,10 +50,10 @@ async function blogImage(file: string, title: string, hue: number) {
 }
 
 const CATEGORIES = [
-  { slug: "alleinfutter-hund", name: "Alleinfuttermittel für Hunde", shortName: "Alleinfutter Hund", animal: "HUND", foodType: "ALLEIN", sortOrder: 1, description: "Vollwertige Futtermittel, die den gesamten Nährstoffbedarf eines Hundes decken sollen." },
-  { slug: "alleinfutter-katze", name: "Alleinfuttermittel für Katzen", shortName: "Alleinfutter Katze", animal: "KATZE", foodType: "ALLEIN", sortOrder: 2, description: "Vollwertige Futtermittel, die den gesamten Nährstoffbedarf einer Katze decken sollen." },
-  { slug: "ergaenzungsfutter-hund", name: "Ergänzungsfuttermittel für Hunde", shortName: "Ergänzung Hund", animal: "HUND", foodType: "ERGAENZUNG", sortOrder: 3, description: "Snacks, Kauartikel und Zusätze, die eine Ration ergänzen – nicht ersetzen." },
-  { slug: "ergaenzungsfutter-katze", name: "Ergänzungsfuttermittel für Katzen", shortName: "Ergänzung Katze", animal: "KATZE", foodType: "ERGAENZUNG", sortOrder: 4, description: "Snacks, Pasten und Zusätze, die eine Ration für Katzen ergänzen." },
+  { slug: "alleinfuttermittel-hund", name: "Alleinfuttermittel für Hunde", shortName: "Alleinfutter Hund", animal: "HUND", foodType: "ALLEIN", sortOrder: 1, description: "Vollwertige Futtermittel, die den gesamten Nährstoffbedarf eines Hundes decken sollen." },
+  { slug: "alleinfuttermittel-katze", name: "Alleinfuttermittel für Katzen", shortName: "Alleinfutter Katze", animal: "KATZE", foodType: "ALLEIN", sortOrder: 2, description: "Vollwertige Futtermittel, die den gesamten Nährstoffbedarf einer Katze decken sollen." },
+  { slug: "ergaenzungsfuttermittel-hund", name: "Ergänzungsfuttermittel für Hunde", shortName: "Ergänzung Hund", animal: "HUND", foodType: "ERGAENZUNG", sortOrder: 3, description: "Snacks, Kauartikel und Zusätze, die eine Ration ergänzen – nicht ersetzen." },
+  { slug: "ergaenzungsfuttermittel-katze", name: "Ergänzungsfuttermittel für Katzen", shortName: "Ergänzung Katze", animal: "KATZE", foodType: "ERGAENZUNG", sortOrder: 4, description: "Snacks, Pasten und Zusätze, die eine Ration für Katzen ergänzen." },
 ] as const;
 
 type Demo = {
@@ -62,18 +62,18 @@ type Demo = {
 };
 
 const DEMOS: Demo[] = [
-  { brand: "Hofgrün", product: "Rind & Pastinake", cat: "alleinfutter-hund", keyword: "Nassfutter, Monoprotein", price: "PREMIUM", perKg: 9.8, s: [27, 19, 18, 14, 9, 3], verdict: "Hochwertige, klar deklarierte Rezeptur mit einer tierischen Proteinquelle. Ideal auch für empfindliche Hunde.", pros: ["Offene Deklaration mit Prozentangaben", "Eine einzige tierische Proteinquelle", "Keine Zucker- oder Aromazusätze"], cons: ["Hoher Preis pro Kilogramm", "Jodgehalt am unteren Rand"], hue: 150, daysAgo: 2 },
-  { brand: "Nordrudel", product: "Lachs Adult Trocken", cat: "alleinfutter-hund", keyword: "Trockenfutter, getreidefrei", price: "MITTEL", perKg: 6.4, s: [22, 17, 16, 11, 8, 4], verdict: "Solides Trockenfutter mit gutem Fettsäureprofil, die Erbsenanteile drücken jedoch die Rohstoffnote.", pros: ["Gutes Omega-3-Profil", "Faires Preis-Leistungs-Verhältnis"], cons: ["Hoher Anteil Hülsenfrüchte", "Werbeaussage „natürlich“ unscharf"], hue: 200, daysAgo: 6 },
-  { brand: "Bellwerk", product: "Classic Mix Huhn", cat: "alleinfutter-hund", keyword: "Trockenfutter, Discount", price: "GUENSTIG", perKg: 2.1, s: [9, 7, 12, 5, 6, 4], verdict: "Günstig, aber mit unklarer Deklaration und Zuckerzusatz. Für die tägliche Fütterung nicht empfehlenswert.", pros: ["Sehr niedriger Preis", "Bedarfsdeckende Vitaminierung"], cons: ["Zucker und Farbstoffe zugesetzt", "Sammelbezeichnungen statt klarer Rohstoffe", "Hoher Getreideanteil"], hue: 20, daysAgo: 11 },
-  { brand: "Feldtafel", product: "Senior Pute & Kürbis", cat: "alleinfutter-hund", keyword: "Nassfutter, Senior", price: "MITTEL", perKg: 6.9, s: [24, 18, 17, 13, 9, 4], verdict: "Gut verträgliche Senior-Rezeptur mit angepasstem Phosphorgehalt und sauberer Deklaration.", pros: ["Moderater Phosphorgehalt", "Transparente Zusammensetzung"], cons: ["Kleine Dosen erzeugen viel Verpackungsmüll"], hue: 35, daysAgo: 15 },
-  { brand: "Samtkralle", product: "Huhn pur in Brühe", cat: "alleinfutter-katze", keyword: "Nassfutter, Monoprotein", price: "PREMIUM", perKg: 12.5, s: [28, 19, 18, 14, 9, 2], verdict: "Sehr fleischbetonte Rezeptur mit hervorragender Taurinversorgung. Teuer, aber fachlich überzeugend.", pros: ["Hoher Fleischanteil", "Taurin bedarfsgerecht ergänzt", "Keine pflanzlichen Füllstoffe"], cons: ["Sehr hoher Preis"], hue: 280, daysAgo: 3 },
-  { brand: "Katzenkontor", product: "Indoor Trocken", cat: "alleinfutter-katze", keyword: "Trockenfutter, Wohnungskatze", price: "MITTEL", perKg: 8.2, s: [16, 15, 14, 9, 6, 3], verdict: "Akzeptabel, aber der hohe Kohlenhydratanteil passt nicht zum Bedarf einer reinen Fleischfresserin.", pros: ["Gute Akzeptanz", "Bedarfsdeckende Mineralisierung"], cons: ["Hoher Kohlenhydratanteil", "Tierische Nebenerzeugnisse nicht spezifiziert"], hue: 260, daysAgo: 9 },
-  { brand: "Miaurant", product: "Gourmet Fisch-Cocktail", cat: "alleinfutter-katze", keyword: "Nassfutter, Fisch", price: "GUENSTIG", perKg: 4.3, s: [12, 8, 13, 6, 6, 4], verdict: "Aromatisiert und mit Zucker versetzt – die Schadstoffkategorie fällt durch. Nicht für die Dauerfütterung.", pros: ["Günstig", "Hohe Akzeptanz"], cons: ["Zuckerzusatz", "Nur 4 % deklarierter Fisch", "Irreführende „Gourmet“-Aufmachung"], hue: 190, daysAgo: 13 },
-  { brand: "Hofgrün", product: "Kauwurzel Ziege", cat: "ergaenzungsfutter-hund", keyword: "Kausnack, Monoprotein", price: "MITTEL", perKg: 24.0, s: [26, 19, 15, 13, 8, 3], verdict: "Naturbelassener Kausnack mit einer einzigen Zutat. Gut geeignet für Allergiker.", pros: ["Nur eine Zutat", "Lange Kaudauer"], cons: ["Starker Eigengeruch"], hue: 90, daysAgo: 5 },
-  { brand: "Bellwerk", product: "Dental Sticks", cat: "ergaenzungsfutter-hund", keyword: "Zahnpflege-Snack", price: "GUENSTIG", perKg: 11.0, s: [10, 9, 10, 6, 5, 3], verdict: "Hoher Zucker- und Stärkeanteil, der Zahnpflege-Nutzen ist nicht belegt.", pros: ["Gut dosierbar"], cons: ["Zucker als Zutat", "Werbeversprechen nicht belegt", "Viele Zusatzstoffe"], hue: 10, daysAgo: 18 },
-  { brand: "Samtkralle", product: "Lachsöl-Paste", cat: "ergaenzungsfutter-katze", keyword: "Paste, Omega-3", price: "MITTEL", perKg: 38.0, s: [23, 18, 17, 12, 8, 3], verdict: "Sinnvolle Ergänzung zur Omega-3-Versorgung mit klarer Dosierempfehlung.", pros: ["Klare Dosierung", "Hoher EPA/DHA-Gehalt"], cons: ["Malzextrakt als Geschmacksträger"], hue: 330, daysAgo: 8 },
-  { brand: "Katzenkontor", product: "Knusper-Taler Huhn", cat: "ergaenzungsfutter-katze", keyword: "Leckerli", price: "GUENSTIG", perKg: 19.0, s: [14, 12, 11, 8, 6, 3], verdict: "Als gelegentliches Leckerli vertretbar, der Getreideanteil ist jedoch hoch.", pros: ["Kleine Stückgröße", "Ohne Farbstoffe"], cons: ["Hoher Getreideanteil", "Fleischanteil unklar"], hue: 45, daysAgo: 20 },
-  { brand: "Nordrudel", product: "Wild & Süßkartoffel", cat: "alleinfutter-hund", keyword: "Nassfutter, Allergiker", price: "PREMIUM", perKg: 10.5, s: [26, 20, 18, 14, 9, 3], verdict: "Hervorragende Hypoallergen-Option mit exotischer Proteinquelle und tadelloser Deklaration.", pros: ["Exotische Proteinquelle", "Keine bedenklichen Zusätze", "Vollständig offene Deklaration"], cons: ["Hoher Preis"], hue: 120, daysAgo: 1 },
+  { brand: "Hofgrün", product: "Rind & Pastinake", cat: "alleinfuttermittel-hund", keyword: "Nassfutter, Monoprotein", price: "PREMIUM", perKg: 9.8, s: [27, 19, 18, 14, 9, 3], verdict: "Hochwertige, klar deklarierte Rezeptur mit einer tierischen Proteinquelle. Ideal auch für empfindliche Hunde.", pros: ["Offene Deklaration mit Prozentangaben", "Eine einzige tierische Proteinquelle", "Keine Zucker- oder Aromazusätze"], cons: ["Hoher Preis pro Kilogramm", "Jodgehalt am unteren Rand"], hue: 150, daysAgo: 2 },
+  { brand: "Nordrudel", product: "Lachs Adult Trocken", cat: "alleinfuttermittel-hund", keyword: "Trockenfutter, getreidefrei", price: "MITTEL", perKg: 6.4, s: [22, 17, 16, 11, 8, 4], verdict: "Solides Trockenfutter mit gutem Fettsäureprofil, die Erbsenanteile drücken jedoch die Rohstoffnote.", pros: ["Gutes Omega-3-Profil", "Faires Preis-Leistungs-Verhältnis"], cons: ["Hoher Anteil Hülsenfrüchte", "Werbeaussage „natürlich“ unscharf"], hue: 200, daysAgo: 6 },
+  { brand: "Bellwerk", product: "Classic Mix Huhn", cat: "alleinfuttermittel-hund", keyword: "Trockenfutter, Discount", price: "GUENSTIG", perKg: 2.1, s: [9, 7, 12, 5, 6, 4], verdict: "Günstig, aber mit unklarer Deklaration und Zuckerzusatz. Für die tägliche Fütterung nicht empfehlenswert.", pros: ["Sehr niedriger Preis", "Bedarfsdeckende Vitaminierung"], cons: ["Zucker und Farbstoffe zugesetzt", "Sammelbezeichnungen statt klarer Rohstoffe", "Hoher Getreideanteil"], hue: 20, daysAgo: 11 },
+  { brand: "Feldtafel", product: "Senior Pute & Kürbis", cat: "alleinfuttermittel-hund", keyword: "Nassfutter, Senior", price: "MITTEL", perKg: 6.9, s: [24, 18, 17, 13, 9, 4], verdict: "Gut verträgliche Senior-Rezeptur mit angepasstem Phosphorgehalt und sauberer Deklaration.", pros: ["Moderater Phosphorgehalt", "Transparente Zusammensetzung"], cons: ["Kleine Dosen erzeugen viel Verpackungsmüll"], hue: 35, daysAgo: 15 },
+  { brand: "Samtkralle", product: "Huhn pur in Brühe", cat: "alleinfuttermittel-katze", keyword: "Nassfutter, Monoprotein", price: "PREMIUM", perKg: 12.5, s: [28, 19, 18, 14, 9, 2], verdict: "Sehr fleischbetonte Rezeptur mit hervorragender Taurinversorgung. Teuer, aber fachlich überzeugend.", pros: ["Hoher Fleischanteil", "Taurin bedarfsgerecht ergänzt", "Keine pflanzlichen Füllstoffe"], cons: ["Sehr hoher Preis"], hue: 280, daysAgo: 3 },
+  { brand: "Katzenkontor", product: "Indoor Trocken", cat: "alleinfuttermittel-katze", keyword: "Trockenfutter, Wohnungskatze", price: "MITTEL", perKg: 8.2, s: [16, 15, 14, 9, 6, 3], verdict: "Akzeptabel, aber der hohe Kohlenhydratanteil passt nicht zum Bedarf einer reinen Fleischfresserin.", pros: ["Gute Akzeptanz", "Bedarfsdeckende Mineralisierung"], cons: ["Hoher Kohlenhydratanteil", "Tierische Nebenerzeugnisse nicht spezifiziert"], hue: 260, daysAgo: 9 },
+  { brand: "Miaurant", product: "Gourmet Fisch-Cocktail", cat: "alleinfuttermittel-katze", keyword: "Nassfutter, Fisch", price: "GUENSTIG", perKg: 4.3, s: [12, 8, 13, 6, 6, 4], verdict: "Aromatisiert und mit Zucker versetzt – die Schadstoffkategorie fällt durch. Nicht für die Dauerfütterung.", pros: ["Günstig", "Hohe Akzeptanz"], cons: ["Zuckerzusatz", "Nur 4 % deklarierter Fisch", "Irreführende „Gourmet“-Aufmachung"], hue: 190, daysAgo: 13 },
+  { brand: "Hofgrün", product: "Kauwurzel Ziege", cat: "ergaenzungsfuttermittel-hund", keyword: "Kausnack, Monoprotein", price: "MITTEL", perKg: 24.0, s: [26, 19, 15, 13, 8, 3], verdict: "Naturbelassener Kausnack mit einer einzigen Zutat. Gut geeignet für Allergiker.", pros: ["Nur eine Zutat", "Lange Kaudauer"], cons: ["Starker Eigengeruch"], hue: 90, daysAgo: 5 },
+  { brand: "Bellwerk", product: "Dental Sticks", cat: "ergaenzungsfuttermittel-hund", keyword: "Zahnpflege-Snack", price: "GUENSTIG", perKg: 11.0, s: [10, 9, 10, 6, 5, 3], verdict: "Hoher Zucker- und Stärkeanteil, der Zahnpflege-Nutzen ist nicht belegt.", pros: ["Gut dosierbar"], cons: ["Zucker als Zutat", "Werbeversprechen nicht belegt", "Viele Zusatzstoffe"], hue: 10, daysAgo: 18 },
+  { brand: "Samtkralle", product: "Lachsöl-Paste", cat: "ergaenzungsfuttermittel-katze", keyword: "Paste, Omega-3", price: "MITTEL", perKg: 38.0, s: [23, 18, 17, 12, 8, 3], verdict: "Sinnvolle Ergänzung zur Omega-3-Versorgung mit klarer Dosierempfehlung.", pros: ["Klare Dosierung", "Hoher EPA/DHA-Gehalt"], cons: ["Malzextrakt als Geschmacksträger"], hue: 330, daysAgo: 8 },
+  { brand: "Katzenkontor", product: "Knusper-Taler Huhn", cat: "ergaenzungsfuttermittel-katze", keyword: "Leckerli", price: "GUENSTIG", perKg: 19.0, s: [14, 12, 11, 8, 6, 3], verdict: "Als gelegentliches Leckerli vertretbar, der Getreideanteil ist jedoch hoch.", pros: ["Kleine Stückgröße", "Ohne Farbstoffe"], cons: ["Hoher Getreideanteil", "Fleischanteil unklar"], hue: 45, daysAgo: 20 },
+  { brand: "Nordrudel", product: "Wild & Süßkartoffel", cat: "alleinfuttermittel-hund", keyword: "Nassfutter, Allergiker", price: "PREMIUM", perKg: 10.5, s: [26, 20, 18, 14, 9, 3], verdict: "Hervorragende Hypoallergen-Option mit exotischer Proteinquelle und tadelloser Deklaration.", pros: ["Exotische Proteinquelle", "Keine bedenklichen Zusätze", "Vollständig offene Deklaration"], cons: ["Hoher Preis"], hue: 120, daysAgo: 1 },
 ];
 
 async function main() {
@@ -93,8 +93,10 @@ async function main() {
     cats[c.slug] = row.id;
   }
 
+  await seedLexikonAndGlossary();
   if ((await prisma.review.count()) > 0) {
     console.log("Inhalte vorhanden – Demo-Inhalte übersprungen.");
+    await ensureDemoDetails();
     return;
   }
 
@@ -170,7 +172,118 @@ async function main() {
     ],
   });
 
+  await ensureDemoDetails();
   console.log(`Seed fertig: ${ids.length} Tests, ${posts.length} Blogartikel.`);
+}
+
+// ---------------------------------------------------------------------------
+// Lexikon & Glossar (nur wenn leer)
+// ---------------------------------------------------------------------------
+const LEXIKON: Array<{ name: string; synonyms: string[]; group: string; concern: "UNBEDENKLICH" | "EINGESCHRAENKT" | "BEDENKLICH"; short: string; assessment: string }> = [
+  { name: "Taurin", synonyms: ["Taurine"], group: "Nährstoff", concern: "UNBEDENKLICH", short: "Aminosulfonsäure, die Katzen nur unzureichend selbst bilden – sie muss mit der Nahrung zugeführt werden.", assessment: "Für Katzen lebensnotwendig. Ein Mangel kann zu Herzmuskelerkrankungen (dilatative Kardiomyopathie) und Netzhautschäden führen. Ein Zusatz in Katzenfutter ist sinnvoll." },
+  { name: "Zucker", synonyms: ["Saccharose", "Zuckerarten"], group: "Zucker & Süßungsmittel", concern: "BEDENKLICH", short: "Zugesetzter Zucker dient vor allem Geschmack und Optik – ernährungsphysiologisch ist er für Hund und Katze überflüssig.", assessment: "Unnötige Energiequelle, kann Übergewicht und Zahnproblemen Vorschub leisten. In einem hochwertigen Futter hat zugesetzter Zucker nichts verloren." },
+  { name: "Karamell", synonyms: ["Zuckercouleur", "Karamellzucker"], group: "Zucker & Süßungsmittel", concern: "BEDENKLICH", short: "Gebräunter Zucker, meist zur Farbgebung eingesetzt – die Farbe richtet sich an den Menschen, nicht an das Tier.", assessment: "Kein Nutzen für das Tier. Zeigt, dass beim Produkt Optik vor Ernährung steht." },
+  { name: "Tierische Nebenerzeugnisse", synonyms: ["tierische Nebenprodukte"], group: "Rohstoff", concern: "EINGESCHRAENKT", short: "Sammelbegriff für Schlachtnebenprodukte wie Innereien, Blut, Knorpel oder Federn – von wertvoll bis minderwertig.", assessment: "Innereien können sehr hochwertig sein. Problematisch ist die fehlende Transparenz: Der Begriff verrät nicht, was tatsächlich enthalten ist." },
+  { name: "Getreide", synonyms: [], group: "Rohstoff", concern: "EINGESCHRAENKT", short: "Sammelbezeichnung für Getreidearten wie Weizen, Mais oder Gerste ohne genaue Angabe.", assessment: "Getreide ist für viele Hunde gut verträglich. Die Sammelbezeichnung erlaubt jedoch wechselnde Rezepturen; bei Katzen sollte der Anteil gering sein." },
+  { name: "Erbsenprotein", synonyms: ["Erbseneiweiß"], group: "Rohstoff", concern: "EINGESCHRAENKT", short: "Pflanzliches Protein aus Erbsen, häufig in getreidefreiem Futter, um den Proteingehalt zu erhöhen.", assessment: "Hebt den Rohproteinwert ohne zusätzliches Fleisch. Ein möglicher Zusammenhang hülsenfruchtreicher Rationen mit Herzerkrankungen bei Hunden wird diskutiert, ist aber nicht abschließend geklärt." },
+  { name: "Lachsöl", synonyms: ["Fischöl"], group: "Rohstoff", concern: "UNBEDENKLICH", short: "Reich an den Omega-3-Fettsäuren EPA und DHA.", assessment: "Wertvolle Ergänzung für Haut, Fell und Gelenke – sofern frisch und ausreichend stabilisiert." },
+  { name: "BHA", synonyms: ["E 320", "Butylhydroxyanisol"], group: "Konservierungsstoff", concern: "BEDENKLICH", short: "Synthetisches Antioxidationsmittel, das Fette vor dem Ranzigwerden schützt.", assessment: "Zugelassen, aber umstritten: Die IARC stuft BHA als „möglicherweise krebserregend“ (Gruppe 2B) ein. Natürliche Antioxidantien wie Tocopherole sind vorzuziehen." },
+  { name: "BHT", synonyms: ["E 321", "Butylhydroxytoluol"], group: "Konservierungsstoff", concern: "EINGESCHRAENKT", short: "Synthetisches Antioxidationsmittel zur Fettstabilisierung.", assessment: "Zugelassen, die Datenlage ist uneinheitlich. Wir bevorzugen Futter mit natürlichen Antioxidantien." },
+  { name: "Ethoxyquin", synonyms: ["E 324"], group: "Konservierungsstoff", concern: "BEDENKLICH", short: "Synthetisches Antioxidans, dessen Zulassung als Futtermittelzusatzstoff in der EU ausgesetzt ist.", assessment: "Die Zulassung wurde mit der Durchführungsverordnung (EU) 2017/962 ausgesetzt. Rückstände können jedoch über Rohstoffe wie Fischmehl eingetragen werden." },
+  { name: "Bierhefe", synonyms: ["Hefe"], group: "Rohstoff", concern: "UNBEDENKLICH", short: "Liefert B-Vitamine und verbessert die Akzeptanz.", assessment: "In kleinen Mengen eine sinnvolle Zutat." },
+  { name: "Mineralstoffe", synonyms: [], group: "Nährstoff", concern: "UNBEDENKLICH", short: "Sammelbegriff für Mengen- und Spurenelemente wie Calcium, Phosphor oder Zink.", assessment: "Für ein Alleinfuttermittel unverzichtbar. Entscheidend ist das richtige Verhältnis, etwa von Calcium zu Phosphor." },
+  { name: "Farbstoffe", synonyms: ["Farbstoff"], group: "Zusatzstoff", concern: "BEDENKLICH", short: "Farbstoffe verändern nur die Optik des Futters – für Hund und Katze ohne jeden Nutzen.", assessment: "Überflüssiger Zusatz, der sich an den Käufer richtet. Kann bei empfindlichen Tieren Unverträglichkeiten begünstigen." },
+  { name: "Süßkartoffel", synonyms: [], group: "Rohstoff", concern: "UNBEDENKLICH", short: "Gut verdauliche Kohlenhydratquelle mit Ballaststoffen und Beta-Carotin.", assessment: "Häufig in getreidefreiem Futter; in moderater Menge gut geeignet." },
+];
+
+const GLOSSAR: Array<{ term: string; synonyms?: string[]; definition: string }> = [
+  { term: "Alleinfuttermittel", definition: "Futter, das bei alleiniger Fütterung den gesamten Nährstoffbedarf des Tieres decken muss." },
+  { term: "Ergänzungsfuttermittel", definition: "Futter, das nur zusammen mit anderen Futtermitteln den Bedarf deckt, z. B. Snacks oder Zusätze." },
+  { term: "Offene Deklaration", definition: "Angabe aller Einzelfuttermittel mit ihren genauen Anteilen in Prozent." },
+  { term: "Geschlossene Deklaration", definition: "Angabe nach Kategorien (z. B. „Fleisch und tierische Nebenerzeugnisse“) ohne genaue Zusammensetzung." },
+  { term: "Rohprotein", definition: "Gesamtgehalt an Eiweiß laut Analyse – sagt nichts über die Qualität der Proteinquelle aus." },
+  { term: "Rohfett", definition: "Gesamtfettgehalt des Futters laut Analyse." },
+  { term: "Rohasche", definition: "Mineralischer Rückstand nach dem Verbrennen einer Probe; hohe Werte können auf viel Knochenanteil hindeuten." },
+  { term: "Rohfaser", definition: "Unverdaulicher Anteil pflanzlicher Zellwände; wichtig für die Darmtätigkeit." },
+  { term: "Trockensubstanz", synonyms: ["Trockenmasse"], definition: "Futter ohne Wasseranteil. Erst in der Trockensubstanz lassen sich Nass- und Trockenfutter vergleichen." },
+  { term: "Monoprotein", definition: "Futter mit nur einer tierischen Eiweißquelle – hilfreich bei Unverträglichkeiten und Ausschlussdiäten." },
+  { term: "Analytische Bestandteile", definition: "Pflichtangaben zu Rohprotein, Rohfett, Rohfaser, Rohasche und ggf. Feuchtigkeit in Prozent." },
+  { term: "Bedarfsdeckung", definition: "Maß dafür, ob ein Futter die empfohlenen Nährstoffmengen für Tierart und Lebensphase liefert." },
+];
+
+async function seedLexikonAndGlossary() {
+  if ((await prisma.lexikonEntry.count()) === 0) {
+    for (const e of LEXIKON) {
+      await prisma.lexikonEntry.create({
+        data: {
+          slug: slugify(e.name), name: e.name, synonyms: e.synonyms, group: e.group, concern: e.concern,
+          shortDescription: e.short, assessment: e.assessment,
+          bodyHtml: `<p>${esc(e.short)}</p><h2>Einschätzung</h2><p>${esc(e.assessment)}</p>`,
+          status: "PUBLISHED", publishedAt: new Date(),
+        },
+      });
+    }
+  }
+  if ((await prisma.glossaryTerm.count()) === 0) {
+    await prisma.glossaryTerm.createMany({ data: GLOSSAR.map((g) => ({ slug: slugify(g.term), term: g.term, synonyms: g.synonyms ?? [], definition: g.definition })) });
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Demo-Produktdaten (nur für Demo-Tests, nur wenn noch leer)
+// ---------------------------------------------------------------------------
+type Detail = { composition: string; analysis: Array<[string, number]>; pkg: string; price: number; perDay: number; harmfulReason?: string; claims: Array<{ claim: string; rating: "ZULAESSIG" | "FRAGWUERDIG" | "UNZULAESSIG"; reason: string; legal?: string }> };
+
+const WET = (meat: string, extra: string): Array<[string, number]> => [["Rohprotein", 10.5], ["Rohfett", 6.5], ["Rohfaser", 0.5], ["Rohasche", 2.2], ["Feuchtigkeit", 78], ...(extra ? ([[extra, 0.1]] as Array<[string, number]>) : [])].filter(([n]) => n !== meat) as Array<[string, number]>;
+const DRY: Array<[string, number]> = [["Rohprotein", 26], ["Rohfett", 15], ["Rohfaser", 3], ["Rohasche", 7], ["Feuchtigkeit", 9]];
+
+const DETAILS: Record<string, Detail> = {
+  "Hofgrün Rind & Pastinake": { composition: "Rind (65 %: Muskelfleisch, Herz, Leber), Rinderbrühe (20 %), Pastinake (10 %), Leinöl, Mineralstoffe", analysis: WET("", ""), pkg: "400 g", price: 3.9, perDay: 2.45, claims: [{ claim: "getreidefrei", rating: "ZULAESSIG", reason: "Die Zusammensetzung enthält kein Getreide." }, { claim: "Monoprotein", rating: "ZULAESSIG", reason: "Rind ist die einzige tierische Proteinquelle." }] },
+  "Nordrudel Lachs Adult Trocken": { composition: "Lachs (28 %, getrocknet), Erbsen, Erbsenprotein, Süßkartoffel, Lachsöl (4 %), Bierhefe, Mineralstoffe", analysis: DRY, pkg: "2 kg", price: 12.8, perDay: 1.05, claims: [{ claim: "100 % natürlich", rating: "FRAGWUERDIG", reason: "Der Begriff „natürlich“ ist nicht geschützt; zugesetzte Vitamine und Spurenelemente sind synthetischer Herkunft." }, { claim: "getreidefrei", rating: "ZULAESSIG", reason: "Kein Getreide in der Zusammensetzung." }] },
+  "Bellwerk Classic Mix Huhn": { composition: "Getreide, Fleisch und tierische Nebenerzeugnisse (4 % Huhn), pflanzliche Eiweißextrakte, Zucker, Mineralstoffe, Farbstoffe, BHA", analysis: [["Rohprotein", 21], ["Rohfett", 8], ["Rohfaser", 2.5], ["Rohasche", 7.5], ["Feuchtigkeit", 10]], pkg: "4 kg", price: 8.4, perDay: 0.35, harmfulReason: "Enthält zugesetzten Zucker, Farbstoffe und das synthetische Antioxidans BHA.", claims: [{ claim: "mit Huhn", rating: "FRAGWUERDIG", reason: "Nur 4 % Huhn – die Aufmachung suggeriert einen deutlich höheren Fleischanteil.", legal: "VO (EG) 767/2009 Art. 11 Abs. 1" }, { claim: "stärkt das Immunsystem", rating: "UNZULAESSIG", reason: "Ein krankheitsbezogenes Versprechen ohne Beleg; Futtermittel dürfen nicht mit der Verhütung oder Heilung von Krankheiten werben.", legal: "VO (EG) 767/2009 Art. 13 Abs. 3" }] },
+  "Feldtafel Senior Pute & Kürbis": { composition: "Pute (55 %), Putenbrühe (25 %), Kürbis (12 %), Reis (5 %), Lachsöl, Mineralstoffe", analysis: WET("", ""), pkg: "400 g", price: 2.75, perDay: 1.9, claims: [{ claim: "für Senioren", rating: "ZULAESSIG", reason: "Moderater Phosphorgehalt und angepasste Energiedichte sind nachvollziehbar." }] },
+  "Samtkralle Huhn pur in Brühe": { composition: "Huhn (70 %), Hühnerbrühe (29 %), Mineralstoffe, Taurin", analysis: [["Rohprotein", 13], ["Rohfett", 4.5], ["Rohfaser", 0.3], ["Rohasche", 1.8], ["Feuchtigkeit", 80]], pkg: "200 g", price: 2.5, perDay: 1.25, claims: [{ claim: "Human Grade", rating: "FRAGWUERDIG", reason: "Der Begriff ist rechtlich nicht definiert; ein Nachweis über die Lebensmitteltauglichkeit aller Rohstoffe liegt uns nicht vor." }] },
+  "Katzenkontor Indoor Trocken": { composition: "Getreide, Geflügelprotein (getrocknet, 18 %), tierische Nebenerzeugnisse, Erbsenprotein, Bierhefe, Mineralstoffe, Taurin, BHT", analysis: [["Rohprotein", 32], ["Rohfett", 12], ["Rohfaser", 4], ["Rohasche", 7], ["Feuchtigkeit", 8]], pkg: "1,5 kg", price: 12.3, perDay: 0.45, claims: [{ claim: "reduziert Haarballen", rating: "FRAGWUERDIG", reason: "Der Rohfaseranteil ist leicht erhöht; eine Wirkung ist plausibel, aber nicht belegt." }] },
+  "Miaurant Gourmet Fisch-Cocktail": { composition: "Fleisch und tierische Nebenerzeugnisse, Fisch und Fischnebenerzeugnisse (4 % Fisch), Getreide, Zucker, Karamell, Mineralstoffe, Taurin", analysis: [["Rohprotein", 8.5], ["Rohfett", 4], ["Rohfaser", 0.4], ["Rohasche", 2.4], ["Feuchtigkeit", 82]], pkg: "85 g", price: 0.37, perDay: 0.95, harmfulReason: "Enthält zugesetzten Zucker und Karamell – beides ist für Katzen überflüssig.", claims: [{ claim: "Gourmet", rating: "FRAGWUERDIG", reason: "Die Rezeptur mit nur 4 % Fisch rechtfertigt die Premium-Aufmachung aus unserer Sicht nicht." }, { claim: "Fisch-Cocktail mit Lachs", rating: "UNZULAESSIG", reason: "Lachs wird auf der Schauseite hervorgehoben, in der Zusammensetzung aber nicht mit Prozentanteil genannt.", legal: "VO (EG) 767/2009 Art. 11 Abs. 1, Art. 17 Abs. 1 lit. e" }] },
+  "Hofgrün Kauwurzel Ziege": { composition: "Ziegenhaut (100 %, getrocknet)", analysis: [["Rohprotein", 78], ["Rohfett", 3], ["Rohfaser", 0.5], ["Rohasche", 2], ["Feuchtigkeit", 12]], pkg: "250 g", price: 6, perDay: 0.6, claims: [{ claim: "nur eine Zutat", rating: "ZULAESSIG", reason: "Die Deklaration nennt ausschließlich Ziegenhaut." }] },
+  "Bellwerk Dental Sticks": { composition: "Getreide, Zucker, pflanzliche Nebenerzeugnisse, Fleisch und tierische Nebenerzeugnisse (4 %), Mineralstoffe, Farbstoffe", analysis: [["Rohprotein", 8], ["Rohfett", 1.5], ["Rohfaser", 2.5], ["Rohasche", 3], ["Feuchtigkeit", 18]], pkg: "180 g", price: 1.99, perDay: 0.28, harmfulReason: "Zucker und Farbstoffe als Zutaten – für einen Zahnpflege-Snack besonders widersprüchlich.", claims: [{ claim: "reduziert Zahnstein um 80 %", rating: "UNZULAESSIG", reason: "Uns liegt kein Beleg für die bezifferte Wirkung vor; der Zuckerzusatz widerspricht dem Zahnpflege-Versprechen.", legal: "VO (EG) 767/2009 Art. 13 Abs. 1" }, { claim: "tierärztlich empfohlen", rating: "FRAGWUERDIG", reason: "Ohne Nachweis, wer die Empfehlung ausspricht, nicht überprüfbar." }] },
+  "Samtkralle Lachsöl-Paste": { composition: "Lachsöl (60 %), Malzextrakt, Hefe, Vitamin E", analysis: [["Rohprotein", 2], ["Rohfett", 62], ["Rohfaser", 0.5], ["Rohasche", 1], ["Feuchtigkeit", 20]], pkg: "100 g", price: 3.8, perDay: 0.11, claims: [{ claim: "für glänzendes Fell", rating: "ZULAESSIG", reason: "Omega-3-Fettsäuren tragen zu Haut- und Fellgesundheit bei; die Aussage ist allgemein und nicht krankheitsbezogen." }] },
+  "Katzenkontor Knusper-Taler Huhn": { composition: "Getreide, Fleisch und tierische Nebenerzeugnisse (8 % Huhn), pflanzliche Eiweißextrakte, Mineralstoffe, Taurin", analysis: [["Rohprotein", 30], ["Rohfett", 14], ["Rohfaser", 2], ["Rohasche", 6], ["Feuchtigkeit", 12]], pkg: "60 g", price: 1.15, perDay: 0.1, claims: [] },
+  "Nordrudel Wild & Süßkartoffel": { composition: "Wild (60 %: Hirsch, Wildschwein), Wildbrühe (18 %), Süßkartoffel (15 %), Lachsöl, Mineralstoffe", analysis: WET("", ""), pkg: "400 g", price: 4.2, perDay: 2.6, claims: [{ claim: "hypoallergen", rating: "FRAGWUERDIG", reason: "Exotische Proteinquellen senken das Allergierisiko, „hypoallergen“ ist aber kein geschützter Begriff und kein Wirkversprechen." }, { claim: "getreidefrei", rating: "ZULAESSIG", reason: "Kein Getreide enthalten." }] },
+};
+
+function demoBody(title: string, d: Detail, verdict: string) {
+  return `<p><em>Hinweis: Demo-Beispieltest mit fiktiver Marke. Vor dem Livegang durch echte Tests ersetzen.</em></p>
+<h2>Rohstoffqualität</h2><p>Die Zusammensetzung von ${esc(title)} lautet: ${esc(d.composition)}. Entscheidend sind Art, Herkunft und Anteil der Hauptzutaten.</p>
+<h2>Schadstoffe &amp; Bedenkliches</h2><p>${esc(d.harmfulReason ?? "Wir haben keine problematischen Zusätze wie Zucker, Farbstoffe oder synthetische Antioxidantien gefunden.")}</p>
+<h2>Nährstoffprofil</h2><p>Die analytischen Bestandteile bewerten wir in der Trockensubstanz, damit Nass- und Trockenfutter vergleichbar sind.</p>
+<h2>Deklaration &amp; Transparenz</h2><p>Wir prüfen, ob die Deklaration nachvollziehbar ist und ob die Werbeaussagen halten, was sie versprechen. Details im Werbeaussagen-Check unten.</p>
+<h2>Bedarfsdeckung</h2><p>Abgleich der Nährstoffgehalte mit dem Bedarf der Tierart und Lebensphase.</p>
+<h2>Preis-Leistung</h2><p>Packung ${esc(d.pkg)} für ca. ${d.price.toFixed(2).replace(".", ",")} €, das entspricht etwa ${d.perDay.toFixed(2).replace(".", ",")} € pro Tagesration.</p>
+<h2>Fazit des Experten</h2><p>${esc(verdict)}</p>`;
+}
+
+async function ensureDemoDetails() {
+  const demos = await prisma.review.findMany({ where: { composition: "", title: { in: Object.keys(DETAILS) } }, select: { id: true, title: true, verdict: true, publishedAt: true } });
+  for (const r of demos) {
+    const d = DETAILS[r.title];
+    await prisma.review.update({
+      where: { id: r.id },
+      data: {
+        composition: d.composition,
+        analysis: d.analysis.map(([name, value]) => ({ name, value })),
+        packageSize: d.pkg,
+        price: d.price,
+        pricePerDay: d.perDay,
+        priceDate: new Date(),
+        testedAt: r.publishedAt ? new Date(r.publishedAt.getTime() - 5 * 86400000) : null,
+        harmfulReason: d.harmfulReason ?? "",
+        claims: d.claims.map((c) => ({ claim: c.claim, rating: c.rating, reason: c.reason, legal: c.legal ?? "", imageUrl: "" })),
+        bodyHtml: demoBody(r.title, d, r.verdict),
+      },
+    });
+  }
+  if (demos.length) console.log(`Demo-Produktdaten ergänzt: ${demos.length}`);
 }
 
 main().catch((e) => { console.error(e); process.exit(1); }).finally(() => prisma.$disconnect());
