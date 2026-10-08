@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { CRITERIA, HARMFUL_FAIL_RATIO, MAX_TOTAL, RATING_THRESHOLDS } from "@/lib/scoring";
-import { PageShell, Todo } from "@/components/page-shell";
+import { PageShell } from "@/components/page-shell";
 
-export const metadata: Metadata = { title: "Methodik", description: "So bewerten wir Hunde- und Katzenfutter: sechs Kriterien, 100 Punkte, offengelegte Gewichtung und Interessenkonflikte.", alternates: { canonical: "/methodik" } };
+export const metadata: Metadata = { title: "Methodik", description: "So bewerten wir Hunde- und Katzenfutter: sechs Kriterien, 100 Punkte und offengelegte Gewichtung.", alternates: { canonical: "/methodik" } };
 
 export default function MethodikPage() {
   return (
@@ -37,16 +37,7 @@ export default function MethodikPage() {
           <li>Preis-Leistungs-Bewertung auf Basis des Kilopreises</li>
         </ol>
         <p>Bei Rezepturänderungen wird der Test aktualisiert. Das Datum steht auf jeder Testseite.</p>
-
-        <h2 id="interessenkonflikte">Offenlegung möglicher Interessenkonflikte</h2>
-        <p>Transparenz ist die Grundlage dieses Portals. Der Betreiber ist beruflich im Futtermittelbereich tätig. Deshalb legen wir offen:</p>
-        <ul>
-          <li><strong>Beteiligungen:</strong> <Todo>Unternehmen, Art und Umfang der Beteiligung eintragen</Todo></li>
-          <li><strong>Kooperationen und Beratungsmandate:</strong> <Todo>aktuelle Kooperationen eintragen oder „keine“</Todo></li>
-          <li><strong>Umgang mit Wettbewerbsprodukten:</strong> Produkte von Unternehmen, an denen eine Beteiligung besteht, werden als solche gekennzeichnet. <Todo>ggf. ergänzen: Bewertung durch externe Zweitprüfung</Todo></li>
-          <li><strong>Werbung und Affiliate-Links:</strong> <Todo>„keine“ oder Art der Kennzeichnung eintragen</Todo></li>
-        </ul>
-        <p>Hersteller können Produkte zur Prüfung einreichen. Eine Einreichung, Zahlung oder Kooperation hat keinen Einfluss auf die Bewertung.</p>
+        <p>Hersteller können Produkte zur Prüfung einreichen. Eine Einreichung hat keinen Einfluss auf die Bewertung.</p>
       </div>
     </PageShell>
   );

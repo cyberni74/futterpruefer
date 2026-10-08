@@ -35,7 +35,7 @@ node scripts/qa-interactions.mjs                            # Suche, Dark Mode, 
 ## Inhalte vor dem Livegang
 
 - Alle Demo-Tests (fiktive Marken) und Demo-Blogartikel ersetzen.
-- Gelb markierte Platzhalter auf **Methodik** (Interessenkonflikte), **Über mich**, **Impressum**, **Datenschutz** ausfüllen und rechtlich prüfen lassen.
+- Gelb markierte Platzhalter auf **Team**, **Impressum**, **Datenschutz** ausfüllen und rechtlich prüfen lassen.
 
 ## Architektur
 

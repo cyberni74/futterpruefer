@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { PageShell, Todo } from "@/components/page-shell";
 import { JsonLd } from "@/components/json-ld";
 import { SITE } from "@/lib/site";
@@ -20,7 +19,6 @@ export default function TeamPage() {
         </ul>
         <h2>Warum dieses Portal?</h2>
         <p><Todo>Motivation in eigenen Worten</Todo></p>
-        <p>Unsere beruflichen Verbindungen legen wir auf der <Link href="/methodik#interessenkonflikte">Methodik-Seite</Link> vollständig offen.</p>
       </div>
     </PageShell>
   );
