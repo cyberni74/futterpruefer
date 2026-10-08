@@ -30,7 +30,7 @@ node scripts/qa-interactions.mjs                            # Suche, Dark Mode, 
 1. Repository mit Vercel verbinden.
 2. Postgres anlegen (Neon über Vercel Marketplace) → `DATABASE_URL` wird gesetzt.
 3. `AUTH_SECRET`, `NEXT_PUBLIC_SITE_URL` setzen; optional Blob, Resend, Turnstile, Anthropic.
-4. Der Build führt `prisma migrate deploy` aus. Einmalig `npm run db:seed` gegen die Produktions-DB ausführen (mit `ADMIN_PASSWORD`), danach die Demo-Inhalte im Admin löschen.
+4. Der Build führt `prisma migrate deploy` und den (idempotenten) Seed aus: Kategorien, Admin-Konto aus `ADMIN_EMAIL`/`ADMIN_PASSWORD` und – nur bei leerer DB – Demo-Inhalte. Passwort ändern = `ADMIN_PASSWORD` ändern + Redeploy.
 
 ## Inhalte vor dem Livegang
 

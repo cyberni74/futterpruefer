@@ -78,12 +78,13 @@ const DEMOS: Demo[] = [
 async function main() {
   const email = (process.env.ADMIN_EMAIL ?? "admin@futterpruefer.de").toLowerCase();
   const password = process.env.ADMIN_PASSWORD;
-  if (!password || password.length < 12) throw new Error("ADMIN_PASSWORD (min. 12 Zeichen) muss gesetzt sein.");
-  await prisma.adminUser.upsert({
-    where: { email },
-    update: {},
-    create: { email, name: "Redaktion", passwordHash: await bcrypt.hash(password, 12) },
-  });
+  if (password && password.length >= 12) {
+    // ADMIN_PASSWORD ist die Quelle der Wahrheit: Änderung + Redeploy setzt das Passwort neu.
+    const passwordHash = await bcrypt.hash(password, 12);
+    await prisma.adminUser.upsert({ where: { email }, update: { passwordHash }, create: { email, name: "Redaktion", passwordHash } });
+  } else {
+    console.warn("ADMIN_PASSWORD fehlt oder ist kürzer als 12 Zeichen – Admin-Konto unverändert.");
+  }
 
   const cats: Record<string, string> = {};
   for (const c of CATEGORIES) {
