@@ -1,0 +1,170 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Status {
+  DRAFT
+  PUBLISHED
+}
+
+enum Animal {
+  HUND
+  KATZE
+}
+
+enum FoodType {
+  ALLEIN
+  ERGAENZUNG
+}
+
+enum PriceClass {
+  GUENSTIG
+  MITTEL
+  PREMIUM
+}
+
+model Category {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  name        String
+  shortName   String
+  description String
+  animal      Animal
+  foodType    FoodType
+  sortOrder   Int      @default(0)
+  reviews     Review[]
+}
+
+model Review {
+  id          String     @id @default(cuid())
+  slug        String     @unique
+  title       String
+  brand       String
+  productName String
+  keyword     String     @default("")
+  categoryId  String
+  category    Category   @relation(fields: [categoryId], references: [id])
+  priceClass  PriceClass @default(MITTEL)
+  pricePerKg  Decimal?   @db.Decimal(8, 2)
+
+  imageUrl  String?
+  imageAlt  String  @default("")
+  imageBlur String?
+
+  // Bewertung (Maxima siehe src/lib/scoring.ts)
+  scoreRaw         Int @default(0)
+  scoreHarmful     Int @default(0)
+  scoreNutrients   Int @default(0)
+  scoreDeclaration Int @default(0)
+  scoreNeeds       Int @default(0)
+  scoreValue       Int @default(0)
+  totalScore       Int @default(0)
+
+  verdict  String   @default("")
+  pros     String[] @default([])
+  cons     String[] @default([])
+  bodyHtml String   @default("")
+
+  metaTitle       String   @default("")
+  metaDescription String   @default("")
+  keywords        String[] @default([])
+
+  status      Status    @default(DRAFT)
+  publishedAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  productOfMonth ProductOfMonth[]
+
+  @@index([status, publishedAt])
+  @@index([categoryId])
+}
+
+model BlogPost {
+  id              String    @id @default(cuid())
+  slug            String    @unique
+  title           String
+  excerpt         String    @default("")
+  bodyHtml        String    @default("")
+  imageUrl        String?
+  imageAlt        String    @default("")
+  imageBlur       String?
+  metaTitle       String    @default("")
+  metaDescription String    @default("")
+  keywords        String[]  @default([])
+  status          Status    @default(DRAFT)
+  publishedAt     DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@index([status, publishedAt])
+}
+
+model ProductOfMonth {
+  id        String   @id @default(cuid())
+  year      Int
+  month     Int
+  reviewId  String
+  review    Review   @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+  reason    String
+  createdAt DateTime @default(now())
+
+  @@unique([year, month])
+}
+
+model TickerItem {
+  id        String    @id @default(cuid())
+  text      String
+  href      String?
+  isWarning Boolean   @default(false)
+  active    Boolean   @default(true)
+  expiresAt DateTime?
+  createdAt DateTime  @default(now())
+}
+
+model Redirect {
+  id        String   @id @default(cuid())
+  fromPath  String   @unique
+  toPath    String
+  createdAt DateTime @default(now())
+}
+
+model FaqItem {
+  id        String @id @default(cuid())
+  question  String
+  answer    String
+  sortOrder Int    @default(0)
+}
+
+model ContactMessage {
+  id        String   @id @default(cuid())
+  kind      String
+  name      String
+  email     String
+  company   String?
+  message   String
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model AdminUser {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  name         String
+  passwordHash String
+  createdAt    DateTime @default(now())
+}
+
+model LoginAttempt {
+  id        String   @id @default(cuid())
+  key       String
+  success   Boolean
+  createdAt DateTime @default(now())
+
+  @@index([key, createdAt])
+}
