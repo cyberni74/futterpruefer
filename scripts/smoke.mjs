@@ -13,7 +13,8 @@ for (const [name, vp] of [["mobile", { width: 390, height: 844 }], ["desktop", {
     const page = await ctx.newPage();
     const errors = [];
     const ignore = (t) => /ERR_TUNNEL_CONNECTION_FAILED|va\.vercel-scripts\.com|_vercel\/insights/.test(t);
-    page.on("console", (m) => m.type() === "error" && !ignore(m.text()) && errors.push(m.text()));
+    page.on("console", (m) => m.type() === "error" && !ignore(m.text()) && !m.text().startsWith("Failed to load resource") && errors.push(m.text()));
+    page.on("response", (r) => r.status() >= 400 && !ignore(r.url()) && r.url() !== page.url() && errors.push(`${r.status()} ${r.url()}`));
     page.on("pageerror", (e) => errors.push(String(e)));
     const res = await page.goto(base + p, { waitUntil: "networkidle" });
     await page.evaluate(async () => { for (let y = 0; y < document.body.scrollHeight; y += 600) { window.scrollTo(0, y); await new Promise((r) => setTimeout(r, 60)); } window.scrollTo(0, 0); });

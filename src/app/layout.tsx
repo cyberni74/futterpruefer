@@ -3,6 +3,7 @@ import { Inter, Manrope } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { ThemeProvider } from "@/components/theme-provider";
 import { SITE } from "@/lib/site";
+import { consentScript } from "@/lib/consent";
 import "./globals.css";
 
 const body = Inter({ subsets: ["latin"], variable: "--font-body", display: "swap" });
@@ -35,6 +36,9 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="de" suppressHydrationWarning className={`${body.variable} ${heading.variable}`}>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: consentScript }} />
+      </head>
       <body className="min-h-dvh">
         <ThemeProvider>{children}</ThemeProvider>
         <Analytics />

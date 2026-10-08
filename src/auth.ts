@@ -16,8 +16,8 @@ const schema = z.object({ email: z.string().trim().toLowerCase().email().max(200
 
 async function tooManyFailures(keys: string[]) {
   const since = new Date(Date.now() - WINDOW_MS);
-  const fails = await prisma.loginAttempt.count({ where: { key: { in: keys }, success: false, createdAt: { gte: since } } });
-  return fails >= MAX_FAILS;
+  const counts = await Promise.all(keys.map((key) => prisma.loginAttempt.count({ where: { key, success: false, createdAt: { gte: since } } })));
+  return counts.some((c) => c >= MAX_FAILS);
 }
 
 export const { handlers, auth, signIn, signOut } = NextAuth({

@@ -16,7 +16,7 @@ export function ScoreBadge({ score, size = "md", className = "" }: { score: numb
       role="img"
     >
       {s}
-      {size !== "sm" && <span className="mt-0.5 text-[0.55em] font-semibold opacity-90">/100</span>}
+      {size !== "sm" && <span className="mt-0.5 text-[0.55em] font-semibold">/100</span>}
     </span>
   );
 }

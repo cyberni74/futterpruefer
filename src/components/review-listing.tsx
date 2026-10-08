@@ -59,6 +59,7 @@ export async function ReviewListing({ basePath, filters, categoryId, showAnimal 
         </div>
       </form>
 
+      <h2 className="sr-only">Testergebnisse</h2>
       <p className="mb-4 text-sm text-muted" aria-live="polite">{reviews.length} {reviews.length === 1 ? "Test" : "Tests"} gefunden · Bis zu 3 Produkte zum Vergleich auswählen</p>
       {reviews.length === 0 ? (
         <p className="rounded-2xl border border-dashed border-border p-8 text-center text-muted">Keine Tests für diese Filter.</p>

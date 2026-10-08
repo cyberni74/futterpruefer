@@ -143,3 +143,5 @@ button, [role="button"], summary { cursor: pointer; }
     .reveal { animation: reveal linear both; animation-timeline: view(); animation-range: entry 0% entry 35%; }
   }
 }
+
+.fp-consent #fp-cookie { display: none; }
