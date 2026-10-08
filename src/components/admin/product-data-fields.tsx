@@ -39,7 +39,61 @@ export function AnalysisField({ initial, error }: { initial: Array<{ name: strin
 const EMPTY: Claim = { claim: "", rating: "FRAGWUERDIG", reason: "", legal: "", imageUrl: "" };
 const RATING_TONE = { ZULAESSIG: "border-good", FRAGWUERDIG: "border-mid", UNZULAESSIG: "border-bad" } as const;
 
-export function ClaimsField({ claims, setClaims, error, declarationMax, onApplyDeduction }: { claims: Claim[]; setClaims: React.Dispatch<React.SetStateAction<Claim[]>>; error?: string; declarationMax: number; onApplyDeduction: (score: number) => void }) {
+async function uploadImage(file: File, nameSource: string, variant = ""): Promise<{ url?: string; error?: string }> {
+  const fd = new FormData();
+  fd.set("file", file);
+  fd.set("name", nameSource || "produktbild");
+  fd.set("kind", "review");
+  if (variant) fd.set("variant", variant);
+  try {
+    const res = await fetch("/api/admin/upload", { method: "POST", body: fd });
+    const data = (await res.json().catch(() => ({}))) as { url?: string; error?: string };
+    return res.ok && data.url ? { url: data.url } : { error: data.error ?? "Upload fehlgeschlagen." };
+  } catch {
+    return { error: "Upload fehlgeschlagen." };
+  }
+}
+
+function ClaimPhoto({ value, onChange, nameSource, index }: { value: string; onChange: (url: string) => void; nameSource: string; index: number }) {
+  const [busy, setBusy] = useState(false);
+  const [msg, setMsg] = useState("");
+  return (
+    <div>
+      <span className={labelCls}>Foto der Aussage auf der Verpackung (optional)</span>
+      <div className="flex items-center gap-3">
+        {value && (
+          // eslint-disable-next-line @next/next/no-img-element -- Admin-Vorschau
+          <img src={value} alt="" className="size-16 shrink-0 rounded-lg border border-border object-cover" />
+        )}
+        <label className={`${btn} cursor-pointer ${busy ? "pointer-events-none opacity-60" : ""}`}>
+          <ImagePlus className="size-4" aria-hidden /> {busy ? "Lädt hoch …" : value ? "Foto ersetzen" : "Foto hochladen"}
+          <input
+            type="file"
+            accept="image/jpeg,image/png,image/webp,image/avif"
+            className="sr-only"
+            disabled={busy}
+            aria-label={`Foto zu Werbeaussage ${index + 1} hochladen`}
+            onChange={async (e) => {
+              const f = e.target.files?.[0];
+              e.target.value = "";
+              if (!f) return;
+              setBusy(true);
+              setMsg("");
+              const r = await uploadImage(f, nameSource, "aussage");
+              setBusy(false);
+              if (r.url) onChange(r.url);
+              else setMsg(r.error ?? "Upload fehlgeschlagen.");
+            }}
+          />
+        </label>
+        {value && <button type="button" onClick={() => onChange("")} className={iconBtn} aria-label={`Foto zu Werbeaussage ${index + 1} entfernen`}><Trash2 className="size-4" aria-hidden /></button>}
+      </div>
+      {msg && <p className="mt-1 text-sm font-medium text-bad" aria-live="polite">{msg}</p>}
+    </div>
+  );
+}
+
+export function ClaimsField({ claims, setClaims, error, declarationMax, onApplyDeduction, nameSource = "" }: { claims: Claim[]; setClaims: React.Dispatch<React.SetStateAction<Claim[]>>; error?: string; declarationMax: number; onApplyDeduction: (score: number) => void; nameSource?: string }) {
   const valid = claims.filter((c) => c.claim.trim());
   const deduction = suggestedDeclarationDeduction(valid);
   const set = (i: number, patch: Partial<Claim>) => setClaims((cs) => cs.map((c, j) => (j === i ? { ...c, ...patch } : c)));
@@ -63,7 +117,7 @@ export function ClaimsField({ claims, setClaims, error, declarationMax, onApplyD
           <label className="block"><span className={labelCls}>Begründung</span><textarea value={c.reason} onChange={(e) => set(i, { reason: e.target.value })} rows={2} maxLength={1000} className={textareaCls} placeholder="Unserer Einschätzung nach … , weil …" /></label>
           <div className="grid gap-3 sm:grid-cols-2">
             <label className="block"><span className={labelCls}>Rechtsgrundlage (optional)</span><input value={c.legal} onChange={(e) => set(i, { legal: e.target.value })} maxLength={200} className={inputCls} placeholder="z. B. VO (EG) 767/2009 Art. 13" /></label>
-            <label className="block"><span className={labelCls}>Foto-URL (optional)</span><input value={c.imageUrl} onChange={(e) => set(i, { imageUrl: e.target.value })} maxLength={500} className={inputCls} placeholder="https://… oder /uploads/…" /></label>
+            <ClaimPhoto value={c.imageUrl} onChange={(imageUrl) => set(i, { imageUrl })} nameSource={nameSource} index={i} />
           </div>
           <button type="button" onClick={() => setClaims((cs) => cs.filter((_, j) => j !== i))} className={`${btn} text-bad`}><Trash2 className="size-4" aria-hidden /> Aussage entfernen</button>
         </fieldset>
@@ -88,18 +142,10 @@ export function GalleryField({ initial, nameSource, error }: { initial: string[]
   async function upload(file: File) {
     setBusy(true);
     setMsg("");
-    try {
-      const fd = new FormData();
-      fd.set("file", file);
-      fd.set("name", nameSource || "produktbild");
-      fd.set("kind", "review");
-      const res = await fetch("/api/admin/upload", { method: "POST", body: fd });
-      const data = (await res.json().catch(() => ({}))) as { url?: string; error?: string };
-      if (!res.ok || !data.url) setMsg(data.error ?? "Upload fehlgeschlagen.");
-      else setUrls((u) => [...u, data.url!]);
-    } finally {
-      setBusy(false);
-    }
+    const r = await uploadImage(file, nameSource);
+    setBusy(false);
+    if (r.url) setUrls((u) => [...u, r.url!]);
+    else setMsg(r.error ?? "Upload fehlgeschlagen.");
   }
   return (
     <div>

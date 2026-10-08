@@ -12,9 +12,14 @@ type Props = {
   initialAlt?: string;
   initialBlur?: string | null;
   errors?: Record<string, string>;
+  /** Feldpräfix: "image" (Verpackung/Titelbild) oder "contentImage" (Produkt selbst) */
+  prefix?: "image" | "contentImage";
+  label?: string;
+  altPlaceholder?: string;
 };
 
-export function ImageField({ kind, nameSource, initialUrl, initialAlt = "", initialBlur, errors = {} }: Props) {
+export function ImageField({ kind, nameSource, initialUrl, initialAlt = "", initialBlur, errors = {}, prefix = "image", label = "Bild", altPlaceholder }: Props) {
+  const altPrefix = prefix === "contentImage" ? "Inhalt von" : kind === "blog" ? "Titelbild:" : "Verpackung von";
   const uid = useId();
   const fileRef = useRef<HTMLInputElement>(null);
   const [url, setUrl] = useState(initialUrl ?? "");
@@ -39,12 +44,13 @@ export function ImageField({ kind, nameSource, initialUrl, initialAlt = "", init
       fd.set("file", file);
       fd.set("name", nameSource);
       fd.set("kind", kind);
+      fd.set("variant", prefix === "contentImage" ? "inhalt" : "");
       const res = await fetch("/api/admin/upload", { method: "POST", body: fd });
       const data = (await res.json().catch(() => ({}))) as { url?: string; blur?: string; altSuggestion?: string; error?: string };
       if (!res.ok || !data.url) throw new Error(data.error ?? "Upload fehlgeschlagen.");
       setUrl(data.url);
       setBlur(data.blur ?? "");
-      if (data.altSuggestion && (!alt || alt.startsWith("Verpackung von") || alt.startsWith("Titelbild:"))) setAlt(data.altSuggestion);
+      if (data.altSuggestion && (!alt || alt.startsWith(altPrefix))) setAlt(data.altSuggestion);
       setMsg({ ok: true, text: "Bild hochgeladen und als WebP optimiert." });
     } catch (e) {
       setMsg({ ok: false, text: e instanceof Error ? e.message : "Upload fehlgeschlagen." });
@@ -58,7 +64,7 @@ export function ImageField({ kind, nameSource, initialUrl, initialAlt = "", init
     <div className="space-y-3">
       <div>
         <label htmlFor={`${uid}-file`} className={labelCls}>
-          Bild
+          {label}
         </label>
         <div className="flex flex-col gap-3 sm:flex-row sm:items-start">
           <div className="relative aspect-[4/3] w-full shrink-0 overflow-hidden rounded-xl border border-border bg-bg-soft sm:w-48">
@@ -109,7 +115,7 @@ export function ImageField({ kind, nameSource, initialUrl, initialAlt = "", init
             <p aria-live="polite" className={`text-sm ${msg?.ok ? "text-good" : "text-bad"}`}>
               {msg?.text}
             </p>
-            {errors.imageUrl && <p className="text-sm font-medium text-bad">{errors.imageUrl}</p>}
+            {errors[`${prefix}Url`] && <p className="text-sm font-medium text-bad">{errors[`${prefix}Url`]}</p>}
           </div>
         </div>
       </div>
@@ -119,22 +125,22 @@ export function ImageField({ kind, nameSource, initialUrl, initialAlt = "", init
         </label>
         <input
           id={`${uid}-alt`}
-          name="imageAlt"
+          name={`${prefix}Alt`}
           value={alt}
           onChange={(e) => setAlt(e.target.value)}
           maxLength={200}
-          placeholder={kind === "blog" ? "Titelbild: …" : "Verpackung von …"}
+          placeholder={altPlaceholder ?? `${altPrefix} …`}
           className={inputCls}
-          {...describe(`${uid}-alt`, errors.imageAlt)}
+          {...describe(`${uid}-alt`, errors[`${prefix}Alt`])}
         />
-        {errors.imageAlt && (
+        {errors[`${prefix}Alt`] && (
           <p id={`${uid}-alt-error`} className="mt-1 text-sm font-medium text-bad">
-            {errors.imageAlt}
+            {errors[`${prefix}Alt`]}
           </p>
         )}
       </div>
-      <input type="hidden" name="imageUrl" value={url} />
-      <input type="hidden" name="imageBlur" value={blur} />
+      <input type="hidden" name={`${prefix}Url`} value={url} />
+      <input type="hidden" name={`${prefix}Blur`} value={blur} />
     </div>
   );
 }

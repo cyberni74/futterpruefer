@@ -25,8 +25,18 @@ export function buildImageFileName(name: string | null | undefined, suffix = ran
   return `${base}-${suffix}.webp`;
 }
 
-export function altSuggestion(kind: "review" | "blog", name: string | null | undefined): string {
+/** Bildrolle bei Tests: Verpackung (Standard), Inhalt (Futter selbst) oder Werbeaussage auf der Packung */
+export type ImageVariant = "" | "inhalt" | "aussage";
+
+export function parseVariant(v: unknown): ImageVariant {
+  return v === "inhalt" || v === "aussage" ? v : "";
+}
+
+export function altSuggestion(kind: "review" | "blog", name: string | null | undefined, variant: ImageVariant = ""): string {
   const n = (name ?? "").trim().replace(/\s+/g, " ").slice(0, 120);
   if (!n) return "";
-  return kind === "blog" ? `Titelbild: ${n}` : `Verpackung von ${n}`;
+  if (kind === "blog") return `Titelbild: ${n}`;
+  if (variant === "inhalt") return `Inhalt von ${n} ohne Verpackung`;
+  if (variant === "aussage") return `Werbeaussage auf der Verpackung von ${n}`;
+  return `Verpackung von ${n}`;
 }

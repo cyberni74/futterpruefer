@@ -32,8 +32,19 @@ export default async function ReviewPreviewPage({ params }: { params: Promise<{ 
         {r.productName} · Preisklasse {PRICE_CLASS_LABEL[r.priceClass]}
         {r.pricePerKg ? ` · ${r.pricePerKg.toString().replace(".", ",")} €/kg` : ""}
       </p>
-      <div className="relative mt-6 aspect-[4/3] overflow-hidden rounded-3xl border border-border bg-bg-soft">
-        <FpImage src={r.imageUrl} alt={r.imageAlt} blur={r.imageBlur} sizes="(min-width: 768px) 768px, 100vw" priority />
+      <div className="mt-6 grid gap-3 sm:grid-cols-2">
+        <figure>
+          <div className="relative aspect-[4/3] overflow-hidden rounded-3xl border border-border bg-bg-soft">
+            <FpImage src={r.imageUrl} alt={r.imageAlt} blur={r.imageBlur} sizes="(min-width: 640px) 384px, 100vw" priority />
+          </div>
+          <figcaption className="mt-1.5 text-sm text-muted">Verpackung{!r.imageUrl && " (fehlt)"}</figcaption>
+        </figure>
+        <figure>
+          <div className="relative aspect-[4/3] overflow-hidden rounded-3xl border border-border bg-bg-soft">
+            <FpImage src={r.contentImageUrl} alt={r.contentImageAlt} blur={r.contentImageBlur} sizes="(min-width: 640px) 384px, 100vw" />
+          </div>
+          <figcaption className="mt-1.5 text-sm text-muted">Das Futter selbst{!r.contentImageUrl && " (fehlt)"}</figcaption>
+        </figure>
       </div>
       <div className="mt-8">
         <VerdictPanel data={r} />

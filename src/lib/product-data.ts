@@ -14,6 +14,12 @@ export const CLAIM_LABEL: Record<ClaimRating, string> = {
 
 const str = (v: unknown, max = 1000) => (typeof v === "string" ? v.trim().slice(0, max) : "");
 
+/** Nur eigene Uploads, Demo-Bilder oder https – verhindert javascript:-Links aus JSON-Daten. */
+export function safeImageUrl(v: unknown): string {
+  const u = str(v, 500);
+  return u.startsWith("/uploads/") || u.startsWith("/demo/") || /^https:\/\/[^\s]+$/.test(u) ? u : "";
+}
+
 export function parseClaims(json: unknown): Claim[] {
   if (!Array.isArray(json)) return [];
   return json
@@ -23,7 +29,7 @@ export function parseClaims(json: unknown): Claim[] {
       const claim = str(o.claim, 200);
       const rating = CLAIM_RATINGS.includes(o.rating as ClaimRating) ? (o.rating as ClaimRating) : null;
       if (!claim || !rating) return null;
-      return { claim, rating, reason: str(o.reason), legal: str(o.legal, 200), imageUrl: str(o.imageUrl, 500) };
+      return { claim, rating, reason: str(o.reason), legal: str(o.legal, 200), imageUrl: safeImageUrl(o.imageUrl) };
     })
     .filter((c): c is Claim => c !== null);
 }

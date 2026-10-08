@@ -97,7 +97,9 @@ export default async function ReviewPage({ params }: PageProps<"/[kategorie]/[sl
   const url = absoluteUrl(reviewPath(r));
   const testedAt = r.testedAt ?? r.publishedAt;
   const minutes = readingMinutes(r.bodyHtml, r.verdict);
-  const images = [r.imageUrl, ...(r.gallery ?? [])].filter((x): x is string => Boolean(x));
+  const images = [r.imageUrl, r.contentImageUrl, ...(r.gallery ?? [])].filter((x): x is string => Boolean(x));
+  const name = `${r.brand} ${r.productName}`;
+  const gallery = (r.gallery ?? []).filter(Boolean);
   const abs = (u: string) => (u.startsWith("http") ? u : absoluteUrl(u));
   const author = { "@type": "Person", name: SITE.author, url: absoluteUrl("/ueber-mich") };
 
@@ -160,21 +162,34 @@ export default async function ReviewPage({ params }: PageProps<"/[kategorie]/[sl
               <li className="flex items-center gap-1.5"><RefreshCw className="size-4" aria-hidden />Zuletzt aktualisiert <time dateTime={r.updatedAt.toISOString()}>{formatDate(r.updatedAt)}</time></li>
               <li className="flex items-center gap-1.5"><Clock className="size-4" aria-hidden />{minutes} Min. Lesezeit</li>
             </ul>
-            {images.length > 0 && (
-              <div className="mt-6">
-                <figure className="relative aspect-[4/3] overflow-hidden rounded-3xl bg-bg-soft">
-                  <FpImage src={images[0]} alt={r.imageAlt || `${r.brand} ${r.productName}`} blur={r.imageBlur} sizes="(min-width:1024px) 760px, 100vw" priority />
-                </figure>
-                {images.length > 1 && (
-                  <ul className="mt-3 flex gap-3 overflow-x-auto pb-1" aria-label="Weitere Produktbilder">
-                    {images.slice(1).map((src, i) => (
-                      <li key={src} className="relative aspect-square w-24 shrink-0 overflow-hidden rounded-xl bg-bg-soft">
-                        <FpImage src={src} alt={`${r.brand} ${r.productName} – Bild ${i + 2}`} sizes="96px" />
-                      </li>
-                    ))}
-                  </ul>
+            {(r.imageUrl || r.contentImageUrl) && (
+              <div className={`mt-6 grid gap-3 ${r.imageUrl && r.contentImageUrl ? "sm:grid-cols-2" : ""}`}>
+                {r.imageUrl && (
+                  <figure>
+                    <div className="relative aspect-[4/3] overflow-hidden rounded-3xl bg-bg-soft">
+                      <FpImage src={r.imageUrl} alt={r.imageAlt || `Verpackung von ${name}`} blur={r.imageBlur} sizes={r.contentImageUrl ? "(min-width:1024px) 380px, (min-width:640px) 50vw, 100vw" : "(min-width:1024px) 760px, 100vw"} priority />
+                    </div>
+                    <figcaption className="mt-1.5 text-sm text-muted">Verpackung</figcaption>
+                  </figure>
+                )}
+                {r.contentImageUrl && (
+                  <figure>
+                    <div className="relative aspect-[4/3] overflow-hidden rounded-3xl bg-bg-soft">
+                      <FpImage src={r.contentImageUrl} alt={r.contentImageAlt || `Inhalt von ${name} ohne Verpackung`} blur={r.contentImageBlur} sizes={r.imageUrl ? "(min-width:1024px) 380px, (min-width:640px) 50vw, 100vw" : "(min-width:1024px) 760px, 100vw"} priority={!r.imageUrl} />
+                    </div>
+                    <figcaption className="mt-1.5 text-sm text-muted">Das Futter selbst</figcaption>
+                  </figure>
                 )}
               </div>
+            )}
+            {gallery.length > 0 && (
+              <ul className="mt-3 flex gap-3 overflow-x-auto pb-1" aria-label="Weitere Produktbilder">
+                {gallery.map((src, i) => (
+                  <li key={src} className="relative aspect-square w-24 shrink-0 overflow-hidden rounded-xl bg-bg-soft">
+                    <FpImage src={src} alt={`${name} – weiteres Bild ${i + 1}`} sizes="96px" />
+                  </li>
+                ))}
+              </ul>
             )}
             <div className="mt-5"><ReadAloud targetId="testbericht" /></div>
           </header>

@@ -35,6 +35,49 @@ async function demoImage(file: string, brand: string, product: string, hue: numb
   return { url: `/demo/${file}`, blur: `data:image/webp;base64,${blur.toString("base64")}` };
 }
 
+type Form = "kroketten" | "brocken" | "paste" | "sticks" | "taler";
+
+function formFor(d: { product: string; keyword: string }): Form {
+  if (/stick|wurzel/i.test(d.product)) return "sticks";
+  if (/paste/i.test(d.keyword)) return "paste";
+  if (/leckerli|taler/i.test(`${d.keyword} ${d.product}`)) return "taler";
+  if (/trocken/i.test(d.keyword)) return "kroketten";
+  return "brocken";
+}
+
+const FORM_LABEL: Record<Form, string> = { kroketten: "Kroketten", brocken: "Brocken in Soße", paste: "Paste", sticks: "Kaustangen", taler: "Taler" };
+
+/** Demo-Bild 2: das Futter selbst auf einem Teller (deterministisch je Produkt). */
+async function demoContentImage(file: string, form: Form, hue: number) {
+  const dir = path.join(process.cwd(), "public", "demo");
+  await mkdir(dir, { recursive: true });
+  let seed = hue * 7 + form.length;
+  const rnd = () => ((seed = (seed * 9301 + 49297) % 233280) / 233280);
+  const brown = (l: number) => `hsl(${25 + Math.round(rnd() * 12)},${45 + Math.round(rnd() * 15)}%,${l + Math.round(rnd() * 8)}%)`;
+  const pieces: string[] = [];
+  const inPlate = () => { for (;;) { const x = 600 + (rnd() * 2 - 1) * 300, y = 470 + (rnd() * 2 - 1) * 190; if (((x - 600) / 300) ** 2 + ((y - 470) / 190) ** 2 < 0.85) return [x, y]; } };
+  if (form === "kroketten") for (let i = 0; i < 70; i++) { const [x, y] = inPlate(); pieces.push(`<ellipse cx="${x}" cy="${y}" rx="${20 + rnd() * 6}" ry="${15 + rnd() * 5}" transform="rotate(${rnd() * 180} ${x} ${y})" fill="${brown(28)}" stroke="rgba(0,0,0,.25)" stroke-width="2"/>`); }
+  if (form === "taler") for (let i = 0; i < 28; i++) { const [x, y] = inPlate(); pieces.push(`<circle cx="${x}" cy="${y}" r="${30 + rnd() * 6}" fill="${brown(45)}" stroke="rgba(0,0,0,.22)" stroke-width="3"/><circle cx="${x}" cy="${y}" r="8" fill="rgba(0,0,0,.12)"/>`); }
+  if (form === "brocken") {
+    pieces.push(`<ellipse cx="600" cy="470" rx="270" ry="170" fill="hsl(28,45%,52%)" opacity=".55"/>`);
+    for (let i = 0; i < 26; i++) { const [x, y] = inPlate(); const w = 48 + rnd() * 30, h = 34 + rnd() * 22; pieces.push(`<rect x="${x - w / 2}" y="${y - h / 2}" width="${w}" height="${h}" rx="12" transform="rotate(${rnd() * 90 - 45} ${x} ${y})" fill="${brown(30)}" stroke="rgba(0,0,0,.2)" stroke-width="2"/>`); }
+  }
+  if (form === "sticks") for (let i = 0; i < 6; i++) { const y = 360 + i * 44, x = 380 + rnd() * 50; pieces.push(`<rect x="${x}" y="${y}" width="${400 + rnd() * 40}" height="34" rx="17" transform="rotate(${rnd() * 10 - 5} 600 ${y})" fill="${brown(36)}" stroke="rgba(0,0,0,.25)" stroke-width="3"/>`); }
+  if (form === "paste") pieces.push(`<path d="M420 470 C 470 380, 560 520, 620 430 S 760 380, 790 480 C 740 560, 620 520, 560 560 S 440 560, 420 470 Z" fill="hsl(22,78%,63%)" stroke="rgba(0,0,0,.18)" stroke-width="3"/><path d="M500 460 C 540 430, 600 470, 660 445" stroke="rgba(255,255,255,.6)" stroke-width="10" fill="none" stroke-linecap="round"/>`);
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="900" viewBox="0 0 1200 900">
+  <rect width="1200" height="900" fill="hsl(${hue},25%,93%)"/>
+  <rect y="620" width="1200" height="280" fill="hsl(30,25%,80%)"/>
+  <ellipse cx="600" cy="500" rx="380" ry="240" fill="rgba(0,0,0,.10)"/>
+  <ellipse cx="600" cy="470" rx="370" ry="230" fill="#fafafa" stroke="#ddd" stroke-width="4"/>
+  <ellipse cx="600" cy="470" rx="310" ry="195" fill="#f1f1f1"/>
+  ${pieces.join("")}
+  <text x="1160" y="870" font-family="Arial, sans-serif" font-size="24" text-anchor="end" fill="#667">DEMO · ${FORM_LABEL[form]}</text>
+</svg>`;
+  await sharp(Buffer.from(svg)).webp({ quality: 80 }).toFile(path.join(dir, file));
+  const blur = await sharp(Buffer.from(svg)).resize(16).webp({ quality: 40 }).toBuffer();
+  return { url: `/demo/${file}`, blur: `data:image/webp;base64,${blur.toString("base64")}`, label: FORM_LABEL[form] };
+}
+
 async function blogImage(file: string, title: string, hue: number) {
   const dir = path.join(process.cwd(), "public", "demo");
   await mkdir(dir, { recursive: true });
@@ -97,6 +140,7 @@ async function main() {
   if ((await prisma.review.count()) > 0) {
     console.log("Inhalte vorhanden – Demo-Inhalte übersprungen.");
     await ensureDemoDetails();
+    await ensureDemoContentImages();
     return;
   }
 
@@ -173,6 +217,7 @@ async function main() {
   });
 
   await ensureDemoDetails();
+  await ensureDemoContentImages();
   console.log(`Seed fertig: ${ids.length} Tests, ${posts.length} Blogartikel.`);
 }
 
@@ -261,6 +306,18 @@ function demoBody(title: string, d: Detail, verdict: string) {
 <h2>Bedarfsdeckung</h2><p>Abgleich der Nährstoffgehalte mit dem Bedarf der Tierart und Lebensphase.</p>
 <h2>Preis-Leistung</h2><p>Packung ${esc(d.pkg)} für ca. ${d.price.toFixed(2).replace(".", ",")} €, das entspricht etwa ${d.perDay.toFixed(2).replace(".", ",")} € pro Tagesration.</p>
 <h2>Fazit des Experten</h2><p>${esc(verdict)}</p>`;
+}
+
+/** Bild 2 (Futter selbst) für Demo-Tests nachrüsten, die noch keins haben. */
+async function ensureDemoContentImages() {
+  const byTitle = new Map(DEMOS.map((d) => [`${d.brand} ${d.product}`, d]));
+  const rows = await prisma.review.findMany({ where: { contentImageUrl: null, title: { in: [...byTitle.keys()] } }, select: { id: true, slug: true, title: true } });
+  for (const r of rows) {
+    const d = byTitle.get(r.title)!;
+    const img = await demoContentImage(`${r.slug}-inhalt.webp`, formFor(d), d.hue);
+    await prisma.review.update({ where: { id: r.id }, data: { contentImageUrl: img.url, contentImageBlur: img.blur, contentImageAlt: `Inhalt von ${r.title} ohne Verpackung: ${img.label}` } });
+  }
+  if (rows.length) console.log(`Demo-Inhaltsbilder ergänzt: ${rows.length}`);
 }
 
 async function ensureDemoDetails() {

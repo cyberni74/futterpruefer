@@ -55,6 +55,10 @@ model Review {
   imageUrl  String?
   imageAlt  String  @default("")
   imageBlur String?
+  /// Bild 2: das Produkt selbst (Kroketten, Brocken, Tropfen …)
+  contentImageUrl  String?
+  contentImageAlt  String  @default("")
+  contentImageBlur String?
   /// weitere Produktbilder (URLs)
   gallery   String[] @default([])
 

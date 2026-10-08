@@ -17,6 +17,14 @@ describe("Werbeaussagen", () => {
     expect(parseClaims(null)).toEqual([]);
     expect(parseClaims("kaputt")).toEqual([]);
   });
+  it("lässt nur sichere Foto-URLs zu", () => {
+    const c = parseClaims([
+      { claim: "a", rating: "ZULAESSIG", imageUrl: "javascript:alert(1)" },
+      { claim: "b", rating: "ZULAESSIG", imageUrl: "/uploads/x.webp" },
+      { claim: "c", rating: "ZULAESSIG", imageUrl: "http://x.de/a.jpg" },
+    ]);
+    expect(c.map((x) => x.imageUrl)).toEqual(["", "/uploads/x.webp", ""]);
+  });
   it("Abzugsvorschlag und Contra-Übernahme", () => {
     const c = parseClaims(raw);
     expect(misleadingClaims(c)).toHaveLength(1);

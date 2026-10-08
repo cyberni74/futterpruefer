@@ -144,6 +144,9 @@ export const reviewSchema = z
     imageUrl,
     imageAlt: text("Alt-Text", 200),
     imageBlur,
+    contentImageUrl: imageUrl,
+    contentImageAlt: text("Alt-Text Inhalt", 200),
+    contentImageBlur: imageBlur,
     ...scoreFields,
     verdict: text("Fazit", 400),
     harmfulReason: text("Begründung Warnhinweis", 400),
@@ -165,7 +168,10 @@ export const reviewSchema = z
   })
   .superRefine((v, ctx) => {
     if (v.imageUrl && !v.imageAlt) ctx.addIssue({ code: "custom", path: ["imageAlt"], message: "Bitte einen Alt-Text für das Bild angeben." });
+    if (v.contentImageUrl && !v.contentImageAlt) ctx.addIssue({ code: "custom", path: ["contentImageAlt"], message: "Bitte einen Alt-Text für das Inhaltsbild angeben." });
     if (v.publishMode === "draft") return;
+    if (!v.imageUrl) ctx.addIssue({ code: "custom", path: ["imageUrl"], message: "Zum Veröffentlichen bitte ein Foto der Verpackung hochladen." });
+    if (!v.contentImageUrl) ctx.addIssue({ code: "custom", path: ["contentImageUrl"], message: "Zum Veröffentlichen bitte ein Foto des Futters selbst hochladen." });
     if (v.verdict.length < 10) ctx.addIssue({ code: "custom", path: ["verdict"], message: "Zum Veröffentlichen bitte ein Fazit (1–2 Sätze) angeben." });
     if (v.pros.length < 2) ctx.addIssue({ code: "custom", path: ["pros"], message: "Zum Veröffentlichen mindestens 2 Pro-Punkte angeben." });
     if (v.cons.length < 2) ctx.addIssue({ code: "custom", path: ["cons"], message: "Zum Veröffentlichen mindestens 2 Contra-Punkte angeben." });
@@ -266,6 +272,9 @@ export function reviewFormToRaw(fd: FormData) {
     imageUrl: str(fd, "imageUrl"),
     imageAlt: str(fd, "imageAlt"),
     imageBlur: str(fd, "imageBlur"),
+    contentImageUrl: str(fd, "contentImageUrl"),
+    contentImageAlt: str(fd, "contentImageAlt"),
+    contentImageBlur: str(fd, "contentImageBlur"),
     ...Object.fromEntries(CRITERIA.map((c) => [c.key, str(fd, c.key)])),
     verdict: str(fd, "verdict"),
     harmfulReason: str(fd, "harmfulReason"),

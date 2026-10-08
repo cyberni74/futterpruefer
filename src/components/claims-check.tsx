@@ -1,5 +1,17 @@
 import { CheckCircle2, AlertTriangle, XCircle, Scale } from "lucide-react";
 import { CLAIM_LABEL, type Claim, type ClaimRating } from "@/lib/product-data";
+import { FpImage } from "./fp-image";
+
+function ClaimPhoto({ src, claim }: { src: string; claim: string }) {
+  return (
+    <a href={src} target="_blank" rel="noopener" className="mt-2 inline-flex items-center gap-2 text-sm font-semibold text-brand underline-offset-2 hover:underline">
+      <span className="relative block size-16 shrink-0 overflow-hidden rounded-lg border border-border bg-bg-soft">
+        <FpImage src={src} alt={`Verpackungsfoto mit der Aussage „${claim}“`} sizes="64px" />
+      </span>
+      Foto vergrößern<span className="sr-only"> (öffnet in neuem Tab)</span>
+    </a>
+  );
+}
 
 const TONE: Record<ClaimRating, { cls: string; Icon: typeof CheckCircle2 }> = {
   ZULAESSIG: { cls: "bg-good-soft text-good", Icon: CheckCircle2 },
@@ -32,7 +44,7 @@ export function ClaimsCheck({ claims, brand }: { claims: Claim[]; brand: string 
             <div className="mt-2"><Badge rating={c.rating} /></div>
             {c.reason && <p className="mt-2 text-sm"><span className="font-semibold">Unsere Einschätzung:</span> {c.reason}</p>}
             {c.legal && <p className="mt-2 flex items-start gap-1.5 text-xs text-muted"><Scale className="mt-0.5 size-3.5 shrink-0" aria-hidden />{c.legal}</p>}
-            {c.imageUrl && <a href={c.imageUrl} className="mt-2 inline-block text-sm font-semibold text-brand underline">Verpackungsfoto ansehen</a>}
+            {c.imageUrl && <ClaimPhoto src={c.imageUrl} claim={c.claim} />}
           </li>
         ))}
       </ul>
@@ -46,7 +58,7 @@ export function ClaimsCheck({ claims, brand }: { claims: Claim[]; brand: string 
           <tbody>
             {claims.map((c, i) => (
               <tr key={`${c.claim}-${i}`} className="border-t border-border align-top">
-                <th scope="row" className="p-3 font-bold">„{c.claim}“{c.imageUrl && <a href={c.imageUrl} className="mt-1 block text-xs font-semibold text-brand underline">Verpackungsfoto</a>}</th>
+                <th scope="row" className="p-3 font-bold">„{c.claim}“{c.imageUrl && <div className="font-normal"><ClaimPhoto src={c.imageUrl} claim={c.claim} /></div>}</th>
                 <td className="p-3"><Badge rating={c.rating} /></td>
                 <td className="p-3">
                   {c.reason && <p>Unsere Einschätzung: {c.reason}</p>}

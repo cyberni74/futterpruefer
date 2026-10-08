@@ -31,6 +31,9 @@ export type ReviewEditorData = {
   imageUrl: string | null;
   imageAlt: string;
   imageBlur: string | null;
+  contentImageUrl: string | null;
+  contentImageAlt: string;
+  contentImageBlur: string | null;
   scores: Scores;
   verdict: string;
   harmfulReason: string;
@@ -290,15 +293,28 @@ export function ReviewEditor({ initial, categories, action, badge, deleteSlot, j
               </div>
             </Section>
 
-            <Section title="Produktbild" id="sec-bild">
-              <ImageField
-                kind="review"
-                nameSource={productLabel || title}
-                initialUrl={initial.imageUrl}
-                initialAlt={initial.imageAlt}
-                initialBlur={initial.imageBlur}
-                errors={errors}
-              />
+            <Section title="Produktbilder" id="sec-bild" description="Zwei Pflichtbilder je Test: die Verpackung (Hauptbild, Vorschaukarten, Social-Media-Bild) und das Futter selbst ohne Verpackung (Kroketten, Brocken, Tropfen …).">
+              <div className="space-y-8">
+                <ImageField
+                  kind="review"
+                  label="Bild 1: Verpackung"
+                  nameSource={productLabel || title}
+                  initialUrl={initial.imageUrl}
+                  initialAlt={initial.imageAlt}
+                  initialBlur={initial.imageBlur}
+                  errors={errors}
+                />
+                <ImageField
+                  kind="review"
+                  prefix="contentImage"
+                  label="Bild 2: Produkt selbst (Kroketten, Brocken, Tropfen …)"
+                  nameSource={productLabel || title}
+                  initialUrl={initial.contentImageUrl}
+                  initialAlt={initial.contentImageAlt}
+                  initialBlur={initial.contentImageBlur}
+                  errors={errors}
+                />
+              </div>
             </Section>
 
             <Section title="Weitere Produktbilder" id="sec-galerie">
@@ -392,7 +408,7 @@ export function ReviewEditor({ initial, categories, action, badge, deleteSlot, j
             </Section>
 
             <Section title="Werbeaussagen-Check" id="sec-werbeaussagen" description="Jede Herstelleraussage mit Bewertung und Begründung. Unzulässige Aussagen lösen eine orange Warnbox aus.">
-              <ClaimsField
+              <ClaimsField nameSource={productLabel || title}
                 claims={claims}
                 setClaims={setClaims}
                 error={errors.claims}

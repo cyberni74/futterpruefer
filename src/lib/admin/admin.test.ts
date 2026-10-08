@@ -130,6 +130,8 @@ describe("upload", () => {
     expect(altSuggestion("review", "Rinti Gold")).toBe("Verpackung von Rinti Gold");
     expect(altSuggestion("blog", "Getreide im Futter")).toBe("Titelbild: Getreide im Futter");
     expect(altSuggestion("review", "  ")).toBe("");
+    expect(altSuggestion("review", "Rinti Gold", "inhalt")).toBe("Inhalt von Rinti Gold ohne Verpackung");
+    expect(altSuggestion("blog", "X", "inhalt")).toBe("Titelbild: X");
   });
 });
 
@@ -170,9 +172,12 @@ function reviewFd(overrides: Record<string, string | string[]> = {}) {
     categoryId: "cat1",
     priceClass: "MITTEL",
     pricePerKg: "12,90",
-    imageUrl: "",
-    imageAlt: "",
+    imageUrl: "/uploads/verpackung.webp",
+    imageAlt: "Verpackung",
     imageBlur: "",
+    contentImageUrl: "/uploads/inhalt.webp",
+    contentImageAlt: "Inhalt",
+    contentImageBlur: "",
     scoreRaw: "25",
     scoreHarmful: "18",
     scoreNutrients: "15",
@@ -232,7 +237,7 @@ describe("reviewSchema", () => {
     expect(Object.keys(fe)).toEqual(expect.arrayContaining(["pros", "slug", "pricePerKg", "imageUrl"]));
   });
   it("verlangt Alt-Text bei Bild", () => {
-    const r = reviewSchema.safeParse(reviewFormToRaw(reviewFd({ imageUrl: "/uploads/x.webp" })));
+    const r = reviewSchema.safeParse(reviewFormToRaw(reviewFd({ imageUrl: "/uploads/x.webp", imageAlt: "" })));
     expect(r.success).toBe(false);
   });
 });

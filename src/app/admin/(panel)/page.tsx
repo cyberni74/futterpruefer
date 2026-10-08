@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { FilePlus2, FlaskConical, Inbox, Megaphone, Newspaper, PenSquare, Trophy } from "lucide-react";
+import { BookOpenText, FilePlus2, FlaskConical, Inbox, Megaphone, Newspaper, PenSquare, Trophy } from "lucide-react";
 import { prisma } from "@/lib/db";
 import { PageHeader, cardCls } from "@/components/admin/ui";
 import { StatusBadge } from "@/components/admin/status-badge";
@@ -11,7 +11,7 @@ export const metadata: Metadata = { title: "Dashboard" };
 
 export default async function DashboardPage() {
   const now = new Date();
-  const [published, drafts, scheduled, blogPublished, blogDrafts, blogScheduled, tickerActive, unread, reviews, posts] = await Promise.all([
+  const [published, drafts, scheduled, blogPublished, blogDrafts, blogScheduled, tickerActive, unread, reviews, posts, lexPublished, lexDrafts, glossary] = await Promise.all([
     prisma.review.count({ where: { status: "PUBLISHED", publishedAt: { lte: now } } }),
     prisma.review.count({ where: { status: "DRAFT" } }),
     prisma.review.count({ where: { status: "PUBLISHED", publishedAt: { gt: now } } }),
@@ -22,6 +22,9 @@ export default async function DashboardPage() {
     prisma.contactMessage.count({ where: { read: false } }),
     prisma.review.findMany({ orderBy: { updatedAt: "desc" }, take: 5, select: { id: true, title: true, status: true, publishedAt: true, updatedAt: true } }),
     prisma.blogPost.findMany({ orderBy: { updatedAt: "desc" }, take: 5, select: { id: true, title: true, status: true, publishedAt: true, updatedAt: true } }),
+    prisma.lexikonEntry.count({ where: { status: "PUBLISHED" } }),
+    prisma.lexikonEntry.count({ where: { status: "DRAFT" } }),
+    prisma.glossaryTerm.count(),
   ]);
 
   const latest = [
@@ -36,6 +39,7 @@ export default async function DashboardPage() {
     { label: "Tests im Entwurf", value: drafts, href: "/admin/tests?status=entwurf", icon: PenSquare, tone: "text-muted" },
     { label: "Tests geplant", value: scheduled, href: "/admin/tests?status=geplant", icon: FlaskConical, tone: "text-mid" },
     { label: "Blogartikel", value: blogPublished, sub: `${blogDrafts} Entwürfe · ${blogScheduled} geplant`, href: "/admin/blog", icon: Newspaper, tone: "text-brand" },
+    { label: "Lexikon-Einträge", value: lexPublished, sub: `${lexDrafts} Entwürfe · ${glossary} Glossar-Begriffe`, href: "/admin/lexikon", icon: BookOpenText, tone: "text-brand" },
     { label: "Ticker aktiv", value: tickerActive, href: "/admin/ticker", icon: Megaphone, tone: "text-brand" },
     { label: "Ungelesene Anfragen", value: unread, href: "/admin/anfragen", icon: Inbox, tone: unread > 0 ? "text-accent" : "text-muted" },
   ];
@@ -43,7 +47,7 @@ export default async function DashboardPage() {
   return (
     <>
       <PageHeader title="Dashboard" description="Überblick über Inhalte und Anfragen." />
-      <ul className="grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-6">
+      <ul className="grid grid-cols-2 gap-3 md:grid-cols-4">
         {stats.map((s) => {
           const Icon = s.icon;
           return (

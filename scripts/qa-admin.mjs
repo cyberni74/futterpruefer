@@ -30,9 +30,15 @@ await p.getByPlaceholder("Pro-Punkt 1").fill("Gute Rohstoffe");
 await p.getByPlaceholder("Pro-Punkt 2").fill("Klare Deklaration");
 await p.getByPlaceholder("Contra-Punkt 1").fill("Teuer");
 await p.getByPlaceholder("Contra-Punkt 2").fill("Kleine Dosen");
+// Pflichtbilder: Verpackung + Futter selbst
+await p.getByLabel("Bild 1: Verpackung").setInputFiles("public/demo/bellwerk-classic-mix-huhn.webp");
+await p.getByText("Bild hochgeladen und als WebP optimiert.").first().waitFor({ timeout: 15000 });
+await p.getByLabel(/Bild 2: Produkt selbst/).setInputFiles("public/demo/bellwerk-classic-mix-huhn-inhalt.webp");
+await p.getByText("Bild hochgeladen und als WebP optimiert.").nth(1).waitFor({ timeout: 15000 });
+check("Beide Bilder hochgeladen, Alt-Vorschläge gesetzt", (await p.locator("input[name=imageAlt]").inputValue()).startsWith("Verpackung von") && (await p.locator("input[name=contentImageAlt]").inputValue()).startsWith("Inhalt von"));
 await p.getByText("Veröffentlichen sofort").click();
 await p.getByRole("button", { name: /Speichern/ }).first().click();
-await p.waitForURL(/\/admin\/tests\/[a-z0-9]+/, { timeout: 15000 });
+await p.waitForURL(/\/admin\/tests\/(?!neu)[a-z0-9]+/, { timeout: 15000 });
 await p.waitForLoadState("networkidle");
 const slug = await p.locator("input[name=slug]").inputValue();
 check(`Gespeichert (Slug ${slug})`, !!slug);

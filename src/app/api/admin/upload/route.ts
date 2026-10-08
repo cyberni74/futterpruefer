@@ -3,7 +3,7 @@ import path from "node:path";
 import sharp from "sharp";
 import { put } from "@vercel/blob";
 import { auth } from "@/auth";
-import { MAX_IMAGE_WIDTH, MAX_UPLOAD_BYTES, altSuggestion, buildImageFileName, isAllowedSharpFormat } from "@/lib/admin/upload";
+import { MAX_IMAGE_WIDTH, MAX_UPLOAD_BYTES, altSuggestion, buildImageFileName, isAllowedSharpFormat, parseVariant } from "@/lib/admin/upload";
 
 export const dynamic = "force-dynamic";
 
@@ -27,6 +27,7 @@ export async function POST(request: Request) {
   const file = form.get("file");
   const name = String(form.get("name") ?? "").slice(0, 200);
   const kind = form.get("kind") === "blog" ? "blog" : "review";
+  const variant = kind === "review" ? parseVariant(form.get("variant")) : "";
   if (!(file instanceof File) || file.size === 0) return error("Keine Datei erhalten.", 400);
   if (file.size > MAX_UPLOAD_BYTES) return error("Die Datei ist größer als 8 MB.", 413);
 
@@ -49,7 +50,7 @@ export async function POST(request: Request) {
     return error("Das Bild konnte nicht verarbeitet werden.", 422);
   }
   const blur = `data:image/webp;base64,${blurBuf.toString("base64")}`;
-  const fileName = buildImageFileName(name);
+  const fileName = buildImageFileName(variant ? `${name} ${variant}` : name);
 
   let url: string;
   try {
@@ -67,5 +68,5 @@ export async function POST(request: Request) {
     return error("Speichern des Bildes fehlgeschlagen.", 500);
   }
 
-  return Response.json({ url, blur, altSuggestion: altSuggestion(kind, name) });
+  return Response.json({ url, blur, altSuggestion: altSuggestion(kind, name, variant) });
 }

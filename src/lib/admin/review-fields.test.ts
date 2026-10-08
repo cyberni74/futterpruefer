@@ -3,7 +3,7 @@ import { reviewFormToRaw, reviewSchema } from "./schemas";
 
 const base: Record<string, string> = {
   title: "Testfutter Rind", slug: "testfutter-rind", brand: "Test", productName: "Rind", keyword: "", categoryId: "c1", priceClass: "MITTEL", pricePerKg: "",
-  imageUrl: "", imageAlt: "", imageBlur: "", scoreRaw: "20", scoreHarmful: "15", scoreNutrients: "15", scoreDeclaration: "10", scoreNeeds: "8", scoreValue: "4",
+  imageUrl: "/uploads/v.webp", imageAlt: "Verpackung", imageBlur: "", contentImageUrl: "/uploads/i.webp", contentImageAlt: "Inhalt", contentImageBlur: "", scoreRaw: "20", scoreHarmful: "15", scoreNutrients: "15", scoreDeclaration: "10", scoreNeeds: "8", scoreValue: "4",
   verdict: "Ein solides Futter mit klarer Deklaration.", harmfulReason: "", composition: "Rind (60 %), Reis", analysis: "", packageSize: "400 g", price: "3,90", pricePerDay: "", priceDate: "2026-10-01", testedAt: "",
   claims: "", bodyHtml: "<p>x</p>", metaTitle: "", metaDescription: "", keywords: "", publishMode: "now", scheduledAt: "",
 };
@@ -32,6 +32,14 @@ describe("Testartikel-Formular", () => {
     expect(paths(form({ scoreHarmful: "8" }))).toContain("harmfulReason");
     expect(form({ scoreHarmful: "8", harmfulReason: "Enthält Zucker und BHA." }).success).toBe(true);
     expect(form({ scoreHarmful: "8", publishMode: "draft" }).success).toBe(true);
+  });
+  it("Veröffentlichen verlangt Verpackungs- und Inhaltsbild", () => {
+    const r = form({ imageUrl: "", contentImageUrl: "" });
+    expect(r.success).toBe(false);
+    const paths = r.success ? [] : r.error.issues.map((i) => i.path[0]);
+    expect(paths).toEqual(expect.arrayContaining(["imageUrl", "contentImageUrl"]));
+    expect(form({ imageUrl: "", contentImageUrl: "", publishMode: "draft" }).success).toBe(true);
+    expect(form({ contentImageAlt: "" }).success).toBe(false);
   });
   it("rote/gelbe Werbeaussagen brauchen eine Begründung", () => {
     expect(paths(form({ claims: JSON.stringify([{ claim: "heilt alles", rating: "UNZULAESSIG", reason: "" }]) }))).toContain("claims");

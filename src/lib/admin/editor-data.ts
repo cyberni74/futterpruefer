@@ -20,6 +20,9 @@ type ReviewRow = {
   imageUrl: string | null;
   imageAlt: string;
   imageBlur: string | null;
+  contentImageUrl: string | null;
+  contentImageAlt: string;
+  contentImageBlur: string | null;
   verdict: string;
   harmfulReason: string;
   composition: string;
@@ -58,6 +61,9 @@ export function reviewToEditorData(r: ReviewRow, now = new Date()) {
     imageUrl: r.imageUrl,
     imageAlt: r.imageAlt,
     imageBlur: r.imageBlur,
+    contentImageUrl: r.contentImageUrl,
+    contentImageAlt: r.contentImageAlt,
+    contentImageBlur: r.contentImageBlur,
     scores: Object.fromEntries(CRITERIA.map((c) => [c.key, r[c.key]])) as Scores,
     verdict: r.verdict,
     harmfulReason: r.harmfulReason,
@@ -94,6 +100,9 @@ export const EMPTY_REVIEW = {
   imageUrl: null,
   imageAlt: "",
   imageBlur: null,
+  contentImageUrl: null,
+  contentImageAlt: "",
+  contentImageBlur: null,
   scores: Object.fromEntries(CRITERIA.map((c) => [c.key, 0])) as Scores,
   verdict: "",
   harmfulReason: "",
