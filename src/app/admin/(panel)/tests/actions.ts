@@ -9,6 +9,7 @@ import { isUniqueViolation, reviewFormToRaw, reviewSchema, toFieldErrors, type A
 import { resolvePublish, statusKey, STATUS_LABEL } from "@/lib/admin/publish";
 import { applyRedirectPlan, contentPath, planSlugRedirect } from "@/lib/admin/redirects";
 import { fail, guard, ok, revalidateAdmin } from "@/lib/admin/guard";
+import { canonicalBrand, getBrands } from "@/lib/admin/brands";
 
 export async function saveReview(id: string | null, _prev: ActionResult | null, formData: FormData): Promise<ActionResult> {
   const denied = await guard();
@@ -38,7 +39,7 @@ export async function saveReview(id: string | null, _prev: ActionResult | null, 
   const data = {
     slug: v.slug,
     title: v.title,
-    brand: v.brand,
+    brand: canonicalBrand(v.brand, await getBrands()),
     productName: v.productName,
     keyword: v.keyword,
     categoryId: v.categoryId,

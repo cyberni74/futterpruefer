@@ -60,6 +60,8 @@ export type ReviewEditorData = {
 type Props = {
   initial: ReviewEditorData;
   categories: { id: string; name: string; slug: string }[];
+  /** bereits angelegte Marken für das Auswahlfeld */
+  brands?: string[];
   action: (prev: ActionResult | null, fd: FormData) => Promise<ActionResult>;
   badge?: React.ReactNode;
   deleteSlot?: React.ReactNode;
@@ -74,7 +76,7 @@ function padList(list: string[], min = 2) {
   return out;
 }
 
-export function ReviewEditor({ initial, categories, action, badge, deleteSlot, justCreated }: Props) {
+export function ReviewEditor({ initial, categories, brands = [], action, badge, deleteSlot, justCreated }: Props) {
   const isNew = !initial.id;
   const [state, formAction, pending] = useActionState(
     action,
@@ -242,7 +244,7 @@ export function ReviewEditor({ initial, categories, action, badge, deleteSlot, j
               </Field>
               <div className="grid gap-4 sm:grid-cols-2">
                 <Field id="brand" label="Marke *" error={errors.brand}>
-                  <input id="brand" name="brand" value={brand} onChange={(e) => setBrand(e.target.value)} required maxLength={80} className={inputCls} {...describe("brand", errors.brand)} />
+                  <BrandField brands={brands} value={brand} onChange={setBrand} error={errors.brand} />
                 </Field>
                 <Field id="productName" label="Produktname *" error={errors.productName}>
                   <input
@@ -466,5 +468,43 @@ export function ReviewEditor({ initial, categories, action, badge, deleteSlot, j
 
       {deleteSlot && <div className="mt-10 border-t border-border pt-6">{deleteSlot}</div>}
     </div>
+  );
+}
+
+const NEW_BRAND = "__neu__";
+
+/** Marken-Auswahl: vorhandene Marken im Dropdown, neue Marke per Freitext – wird beim Speichern automatisch Teil der Liste. */
+function BrandField({ brands, value, onChange, error }: { brands: string[]; value: string; onChange: (v: string) => void; error?: string }) {
+  const known = value === "" || brands.includes(value);
+  const [creating, setCreating] = useState(!known || brands.length === 0);
+  if (creating) {
+    return (
+      <div className="flex gap-2">
+        <input id="brand" name="brand" value={value} onChange={(e) => onChange(e.target.value)} required maxLength={80} placeholder="Name der neuen Marke" autoFocus={brands.length > 0} className={inputCls} {...describe("brand", error)} />
+        {brands.length > 0 && (
+          <button type="button" onClick={() => { setCreating(false); onChange(brands.includes(value) ? value : ""); }} className="inline-flex min-h-11 shrink-0 items-center rounded-xl border border-border px-3 text-sm font-semibold hover:bg-bg-soft">
+            Aus Liste wählen
+          </button>
+        )}
+      </div>
+    );
+  }
+  return (
+    <select
+      id="brand"
+      name="brand"
+      value={value}
+      required
+      onChange={(e) => {
+        if (e.target.value === NEW_BRAND) { setCreating(true); onChange(""); }
+        else onChange(e.target.value);
+      }}
+      className={inputCls}
+      {...describe("brand", error)}
+    >
+      <option value="" disabled>Marke wählen …</option>
+      {brands.map((b) => <option key={b} value={b}>{b}</option>)}
+      <option value={NEW_BRAND}>+ Neue Marke anlegen …</option>
+    </select>
   );
 }

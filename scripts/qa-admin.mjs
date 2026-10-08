@@ -21,7 +21,9 @@ check("Login", true);
 
 await p.goto(base + "/admin/tests/neu", { waitUntil: "networkidle" });
 await p.getByLabel("Titel *").fill(title);
-await p.getByLabel("Marke *").fill("QA-Marke");
+// Marke: vorhandene Liste → „Neue Marke anlegen“ → Freitext
+if (await p.locator("select#brand").count()) await p.locator("select#brand").selectOption("__neu__");
+await p.locator("input#brand").fill("QA-Marke");
 await p.getByLabel("Produktname *").fill("Testfutter");
 await p.getByLabel("Kategorie *").selectOption({ index: 1 });
 for (const [k, v] of [["scoreRaw", 25], ["scoreHarmful", 18], ["scoreNutrients", 17], ["scoreDeclaration", 12], ["scoreNeeds", 8], ["scoreValue", 4]]) await p.fill(`#${k}`, String(v));
