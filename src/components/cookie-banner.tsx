@@ -1,23 +1,24 @@
 "use client";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useClientValue } from "@/lib/use-client";
 
 const KEY = "fp-consent-v1";
 
 /** Die Seite setzt keine Tracking-Cookies (cookiefreie Analyse). Der Hinweis informiert und speichert die Kenntnisnahme lokal. */
 export function CookieBanner() {
-  const [show, setShow] = useState(false);
-  useEffect(() => {
+  const [dismissed, setDismissed] = useState(false);
+  const stored = useClientValue(() => {
     try {
-      setShow(!localStorage.getItem(KEY));
+      return localStorage.getItem(KEY) !== null;
     } catch {
-      setShow(false);
+      return true;
     }
-  }, []);
-  if (!show) return null;
+  }, true);
+  if (stored || dismissed) return null;
   const close = (v: string) => {
     try { localStorage.setItem(KEY, v); } catch {}
-    setShow(false);
+    setDismissed(true);
   };
   return (
     <div role="region" aria-label="Datenschutzhinweis" className="fixed inset-x-3 bottom-20 z-50 mx-auto max-w-xl rounded-2xl border border-border bg-surface p-4 shadow-lift md:bottom-4">

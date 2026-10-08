@@ -1,15 +1,15 @@
 "use client";
 import { Pause, Play, Square } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { useClientValue } from "@/lib/use-client";
 
 /** Vorlesefunktion über die geräteinterne Web Speech API. Liest den Text des Elements mit der angegebenen ID. */
 export function ReadAloud({ targetId }: { targetId: string }) {
-  const [supported, setSupported] = useState(false);
+  const supported = useClientValue(() => "speechSynthesis" in window, false);
   const [state, setState] = useState<"idle" | "playing" | "paused">("idle");
   const utter = useRef<SpeechSynthesisUtterance | null>(null);
 
   useEffect(() => {
-    setSupported(typeof window !== "undefined" && "speechSynthesis" in window);
     return () => { if ("speechSynthesis" in window) window.speechSynthesis.cancel(); };
   }, []);
 

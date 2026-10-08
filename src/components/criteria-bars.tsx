@@ -28,10 +28,10 @@ export function CriteriaBars({ scores }: { scores: Scores }) {
               <motion.div
                 className="h-full rounded-full"
                 style={{ background: COLOR[tone] }}
-                initial={{ width: reduce ? `${(v / c.max) * 100}%` : 0 }}
+                initial={{ width: 0 }}
                 whileInView={{ width: `${(v / c.max) * 100}%` }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.9, delay: 0.15 + i * 0.08, ease: [0.22, 1, 0.36, 1] }}
+                transition={reduce ? { duration: 0 } : { duration: 0.9, delay: 0.15 + i * 0.08, ease: [0.22, 1, 0.36, 1] }}
               />
             </div>
           </li>

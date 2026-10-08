@@ -1,11 +1,11 @@
 "use client";
 import { Check, Link2, Mail, Share2 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useClientValue } from "@/lib/use-client";
 
 export function ShareButtons({ url, title }: { url: string; title: string }) {
   const [copied, setCopied] = useState(false);
-  const [canShare, setCanShare] = useState(false);
-  useEffect(() => setCanShare(typeof navigator !== "undefined" && typeof navigator.share === "function"), []);
+  const canShare = useClientValue(() => typeof navigator.share === "function", false);
   const u = encodeURIComponent(url);
   const t = encodeURIComponent(title);
   const btn = "inline-flex min-h-11 items-center gap-2 rounded-full border border-border bg-surface px-4 text-sm font-semibold hover:bg-bg-soft";

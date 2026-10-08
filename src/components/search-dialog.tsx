@@ -11,13 +11,10 @@ export function useLiveSearch(query: string) {
   const [loading, setLoading] = useState(false);
   useEffect(() => {
     const q = query.trim();
-    if (q.length < 2) {
-      setHits([]);
-      return;
-    }
+    if (q.length < 2) return;
     const ctrl = new AbortController();
-    setLoading(true);
     const t = setTimeout(() => {
+      setLoading(true);
       fetch(`/api/suche?q=${encodeURIComponent(q)}`, { signal: ctrl.signal })
         .then((r) => (r.ok ? r.json() : { hits: [] }))
         .then((d: { hits?: SearchHit[] }) => setHits(d.hits ?? []))
@@ -29,7 +26,7 @@ export function useLiveSearch(query: string) {
       ctrl.abort();
     };
   }, [query]);
-  return { hits, loading };
+  return query.trim().length < 2 ? { hits: [] as SearchHit[], loading: false } : { hits, loading };
 }
 
 export function SearchDialog({ open, onClose }: { open: boolean; onClose: () => void }) {
@@ -49,8 +46,6 @@ export function SearchDialog({ open, onClose }: { open: boolean; onClose: () => 
       setTimeout(() => inputRef.current?.focus(), 10);
     } else if (!open && d.open) d.close();
   }, [open]);
-
-  useEffect(() => setActive(-1), [hits]);
 
   const href = (h: SearchHit) => (h.type === "test" ? `/tests/${h.slug}` : `/blog/${h.slug}`);
   const go = (url: string) => {
@@ -81,7 +76,10 @@ export function SearchDialog({ open, onClose }: { open: boolean; onClose: () => 
           <input
             ref={inputRef}
             value={q}
-            onChange={(e) => setQ(e.target.value)}
+            onChange={(e) => {
+              setQ(e.target.value);
+              setActive(-1);
+            }}
             onKeyDown={(e) => {
               if (e.key === "ArrowDown") { e.preventDefault(); setActive((a) => Math.min(a + 1, hits.length - 1)); }
               if (e.key === "ArrowUp") { e.preventDefault(); setActive((a) => Math.max(a - 1, -1)); }

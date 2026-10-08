@@ -49,5 +49,5 @@ export async function search(query: string | null | undefined, limit = 20): Prom
     ...tests.map((t) => ({ type: "test" as const, slug: t.slug, title: t.title, subtitle: t.keyword || t.brand, score: t.totalScore, imageUrl: t.imageUrl, rank: Number(t.rank) })),
     ...posts.map((p) => ({ type: "blog" as const, slug: p.slug, title: p.title, subtitle: p.excerpt, score: null, imageUrl: p.imageUrl, rank: Number(p.rank) })),
   ];
-  return hits.sort((a, b) => b.rank - a.rank).slice(0, limit).map(({ rank: _rank, ...h }) => h);
+  return hits.sort((a, b) => b.rank - a.rank).slice(0, limit).map(({ type, slug, title, subtitle, score, imageUrl }) => ({ type, slug, title, subtitle, score, imageUrl }));
 }

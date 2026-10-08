@@ -1,7 +1,7 @@
 import { AlertOctagon, CalendarClock, Check, Minus } from "lucide-react";
 import { ScoreRing } from "./score-ring";
 import { CriteriaBars } from "./criteria-bars";
-import { harmfulFailed, type Scores } from "@/lib/scoring";
+import { CRITERIA, harmfulFailed, type Scores } from "@/lib/scoring";
 import { formatDate } from "@/lib/site";
 
 export type VerdictData = Scores & {
@@ -13,7 +13,8 @@ export type VerdictData = Scores & {
 };
 
 export function VerdictPanel({ data }: { data: VerdictData }) {
-  const failed = harmfulFailed(data.scoreHarmful);
+  const scores = Object.fromEntries(CRITERIA.map((c) => [c.key, Number(data[c.key] ?? 0)])) as Scores;
+  const failed = harmfulFailed(scores.scoreHarmful);
   const pros = (data.pros ?? []).filter(Boolean);
   const cons = (data.cons ?? []).filter(Boolean);
   return (
@@ -37,9 +38,9 @@ export function VerdictPanel({ data }: { data: VerdictData }) {
           )}
         </div>
         <div className="mt-6 flex flex-col items-center gap-8 md:flex-row md:items-start md:gap-10">
-          <ScoreRing score={data.totalScore} />
+          <ScoreRing score={Number(data.totalScore ?? 0)} />
           <div className="w-full flex-1">
-            <CriteriaBars scores={data} />
+            <CriteriaBars scores={scores} />
           </div>
         </div>
         {data.verdict && <p className="mt-8 text-lg font-medium leading-relaxed">{data.verdict}</p>}

@@ -14,15 +14,14 @@ export function ScoreRing({ score, size = 200 }: { score: number; size?: number 
   const stroke = 14;
   const r = (size - stroke) / 2;
   const c = 2 * Math.PI * r;
-  const progress = useMotionValue(reduce ? value : 0);
+  const progress = useMotionValue(0);
   const dash = useTransform(progress, (v) => c - (v / MAX_TOTAL) * c);
-  const [display, setDisplay] = useState(reduce ? value : 0);
+  const [display, setDisplay] = useState(0);
 
   useEffect(() => {
     if (!inView) return;
     if (reduce) {
       progress.set(value);
-      setDisplay(value);
       return;
     }
     const controls = animate(progress, value, { duration: 1.4, ease: [0.22, 1, 0.36, 1], onUpdate: (v) => setDisplay(Math.round(v)) });
@@ -36,7 +35,7 @@ export function ScoreRing({ score, size = 200 }: { score: number; size?: number 
         <motion.circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke={COLOR[rating]} strokeWidth={stroke} strokeLinecap="round" strokeDasharray={c} style={{ strokeDashoffset: dash }} />
       </svg>
       <div className="absolute inset-0 flex flex-col items-center justify-center" aria-hidden>
-        <span className="font-display text-6xl font-extrabold tabular-nums leading-none" style={{ color: COLOR[rating] }}>{display}</span>
+        <span className="font-display text-6xl font-extrabold tabular-nums leading-none" style={{ color: COLOR[rating] }}>{reduce ? value : display}</span>
         <span className="mt-1 text-sm font-semibold text-muted">von {MAX_TOTAL} Punkten</span>
         <span className="mt-2 rounded-full px-2.5 py-0.5 text-xs font-bold" style={{ background: `color-mix(in srgb, ${COLOR[rating]} 16%, transparent)`, color: COLOR[rating] }}>{RATING_LABEL[rating]}</span>
       </div>
