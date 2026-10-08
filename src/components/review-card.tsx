@@ -16,11 +16,11 @@ export function ReviewCard({ review, priority = false }: { review: ReviewCardDat
             <AlertTriangle className="size-3.5" aria-hidden /> Bedenklich
           </span>
         )}
-        <ScoreBadge score={review.totalScore} className="absolute -bottom-6 right-4" />
       </div>
-      <div className="flex flex-1 flex-col p-4 pt-5">
+      <div className="relative flex flex-1 flex-col p-4 pt-5">
+        <ScoreBadge score={review.totalScore} className="absolute -top-9 right-4 z-10" />
         <p className="text-xs font-bold uppercase tracking-wide text-brand">{review.category?.shortName}</p>
-        <h3 className="mt-1 pr-14 text-lg font-bold leading-snug">
+        <h3 className="mt-1 pr-16 text-lg font-bold leading-snug">
           <Link href={`/tests/${review.slug}`} className="after:absolute after:inset-0">
             {review.title}
           </Link>

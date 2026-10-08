@@ -1,22 +1,27 @@
 import { ratingFor } from "@/lib/scoring";
 
-const TONE = {
-  gut: "bg-good text-white",
-  mittel: "bg-mid text-white dark:text-[#1a1400]",
-  schlecht: "bg-bad text-white dark:text-[#1f0000]",
-} as const;
+// Feste Farben: Das Siegel ist immer weiß, damit es in hellem und dunklem Modus gleich gut lesbar ist.
+const COLOR = { gut: "#15803d", mittel: "#a16207", schlecht: "#b91c1c" } as const;
+const SIZE = { sm: 44, md: 64, lg: 84 } as const;
 
+/** Punkte-Siegel: weiße Scheibe, Ampel-Ring als Fortschritt, Punktzahl in der Mitte. */
 export function ScoreBadge({ score, size = "md", className = "" }: { score: number | null | undefined; size?: "sm" | "md" | "lg"; className?: string }) {
-  const s = score ?? 0;
-  const dims = size === "sm" ? "size-11 text-sm" : size === "lg" ? "size-20 text-2xl" : "size-14 text-lg";
+  const s = Math.max(0, Math.min(100, Math.round(score ?? 0)));
+  const color = COLOR[ratingFor(s)];
+  const px = SIZE[size];
+  const stroke = size === "sm" ? 4 : 5;
+  const r = 50 - stroke / 2 - 3;
+  const c = 2 * Math.PI * r;
   return (
-    <span
-      className={`inline-flex shrink-0 flex-col items-center justify-center rounded-full font-display font-extrabold leading-none shadow-card ring-4 ring-surface ${TONE[ratingFor(s)]} ${dims} ${className}`}
-      aria-label={`${s} von 100 Punkten`}
-      role="img"
-    >
-      {s}
-      {size !== "sm" && <span className="mt-0.5 text-[0.55em] font-semibold">/100</span>}
+    <span className={`${/\b(absolute|fixed)\b/.test(className) ? "" : "relative "}inline-flex shrink-0 rounded-full bg-white shadow-lift ${className}`} style={{ width: px, height: px }} role="img" aria-label={`${s} von 100 Punkten`}>
+      <svg viewBox="0 0 100 100" className="absolute inset-0 size-full -rotate-90" aria-hidden>
+        <circle cx="50" cy="50" r={r} fill="none" stroke="#e3ebe8" strokeWidth={stroke} />
+        <circle cx="50" cy="50" r={r} fill="none" stroke={color} strokeWidth={stroke} strokeLinecap="round" strokeDasharray={`${(s / 100) * c} ${c}`} />
+      </svg>
+      <span className="relative flex size-full flex-col items-center justify-center font-display leading-none" style={{ color }} aria-hidden>
+        <span className={`font-extrabold tabular-nums ${size === "sm" ? "text-[0.95rem]" : size === "lg" ? "text-[1.9rem]" : "text-[1.45rem]"}`}>{s}</span>
+        {size !== "sm" && <span className={`mt-0.5 font-semibold text-[#4b5f5d] ${size === "lg" ? "text-xs" : "text-[0.62rem]"}`}>/100</span>}
+      </span>
     </span>
   );
 }
