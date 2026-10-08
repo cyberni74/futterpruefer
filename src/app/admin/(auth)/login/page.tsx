@@ -1,3 +1,4 @@
+import Image from "next/image";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
@@ -18,9 +19,7 @@ export default async function LoginPage() {
     <main className="flex min-h-dvh items-center justify-center bg-bg-soft px-4 py-10">
       <div className="w-full max-w-sm">
         <div className="mb-6 text-center">
-          <span className="mx-auto inline-flex size-12 items-center justify-center rounded-2xl bg-brand font-display text-lg font-extrabold text-white dark:text-[#04201e]">
-            FP
-          </span>
+          <Image src="/brand/logo-round-512.png" alt="Futterprüfer.de" width={160} height={160} priority className="mx-auto size-24 rounded-full bg-white" />
           <h1 className="mt-3 text-2xl font-extrabold">Redaktions-Login</h1>
           <p className="mt-1 text-sm text-muted">Futterprüfer.de – Verwaltung</p>
         </div>

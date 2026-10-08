@@ -1,3 +1,4 @@
+import Image from "next/image";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
@@ -48,7 +49,7 @@ export default async function PanelLayout({ children }: { children: React.ReactN
       {/* Desktop-Seitenleiste */}
       <aside className="sticky top-0 hidden h-dvh w-64 shrink-0 flex-col border-r border-border bg-surface p-4 lg:flex">
         <Link href="/admin" className="mb-6 flex min-h-11 items-center gap-2 px-2 font-display text-lg font-extrabold">
-          <span className="inline-flex size-8 items-center justify-center rounded-lg bg-brand text-sm text-white dark:text-[#04201e]">FP</span>
+          <Image src="/brand/logo-round-512.png" alt="" width={64} height={64} className="size-10 rounded-full bg-white" />
           Futterprüfer <span className="text-xs font-semibold text-muted">Admin</span>
         </Link>
         <AdminNav unread={unread} variant="sidebar" />
@@ -71,7 +72,7 @@ export default async function PanelLayout({ children }: { children: React.ReactN
         <header className="sticky top-0 z-30 border-b border-border bg-surface/95 px-4 pt-2 backdrop-blur lg:hidden">
           <div className="flex items-center justify-between">
             <Link href="/admin" className="flex min-h-11 items-center gap-2 font-display font-extrabold">
-              <span className="inline-flex size-7 items-center justify-center rounded-lg bg-brand text-xs text-white dark:text-[#04201e]">FP</span>
+              <Image src="/brand/logo-round-512.png" alt="" width={64} height={64} className="size-9 rounded-full bg-white" />
               Admin
             </Link>
             <div className="flex items-center">
