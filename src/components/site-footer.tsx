@@ -4,7 +4,7 @@ import { Logo } from "./logo";
 const COLS = [
   { title: "Tests", links: [["Alleinfutter Hund", "/alleinfuttermittel-hund"], ["Alleinfutter Katze", "/alleinfuttermittel-katze"], ["Ergänzung Hund", "/ergaenzungsfuttermittel-hund"], ["Ergänzung Katze", "/ergaenzungsfuttermittel-katze"], ["Produkt des Monats", "/produkt-des-monats"]] },
   { title: "Wissen", links: [["Fachblog", "/blog"], ["Futter-Lexikon", "/lexikon"], ["Glossar", "/glossar"], ["Methodik", "/methodik"], ["FAQ", "/faq"], ["RSS-Feed", "/rss.xml"]] },
-  { title: "Kontakt", links: [["Über mich", "/ueber-mich"], ["Für Hersteller", "/fuer-hersteller"], ["Kontakt", "/kontakt"], ["Impressum", "/impressum"], ["Datenschutz", "/datenschutz"]] },
+  { title: "Kontakt", links: [["Team", "/team"], ["Für Hersteller", "/fuer-hersteller"], ["Kontakt", "/kontakt"], ["Impressum", "/impressum"], ["Datenschutz", "/datenschutz"]] },
 ] as const;
 
 export function SiteFooter() {

@@ -101,7 +101,7 @@ export default async function ReviewPage({ params }: PageProps<"/[kategorie]/[sl
   const name = `${r.brand} ${r.productName}`;
   const gallery = (r.gallery ?? []).filter(Boolean);
   const abs = (u: string) => (u.startsWith("http") ? u : absoluteUrl(u));
-  const author = { "@type": "Person", name: SITE.author, url: absoluteUrl("/ueber-mich") };
+  const author = { "@type": "Organization", name: SITE.author, url: absoluteUrl("/team") };
 
   return (
     <div className="mx-auto max-w-6xl px-4">
@@ -157,7 +157,7 @@ export default async function ReviewPage({ params }: PageProps<"/[kategorie]/[sl
             </div>
             <h1 className="mt-3 text-3xl font-extrabold leading-tight md:text-5xl">{r.brand} {r.productName} im Test</h1>
             <ul className="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-sm text-muted">
-              <li className="flex items-center gap-1.5"><UserRound className="size-4" aria-hidden />Von <Link href="/ueber-mich" className="font-semibold text-fg hover:underline">{SITE.author}</Link></li>
+              <li className="flex items-center gap-1.5"><UserRound className="size-4" aria-hidden />Von <Link href="/team" className="font-semibold text-fg hover:underline">{SITE.author}</Link></li>
               {testedAt && <li className="flex items-center gap-1.5"><CalendarCheck className="size-4" aria-hidden />Getestet am <time dateTime={testedAt.toISOString()}>{formatDate(testedAt)}</time></li>}
               <li className="flex items-center gap-1.5"><RefreshCw className="size-4" aria-hidden />Zuletzt aktualisiert <time dateTime={r.updatedAt.toISOString()}>{formatDate(r.updatedAt)}</time></li>
               <li className="flex items-center gap-1.5"><Clock className="size-4" aria-hidden />{minutes} Min. Lesezeit</li>

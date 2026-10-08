@@ -37,6 +37,9 @@ const nextConfig: NextConfig = {
   serverExternalPackages: ["sharp"],
   // OG-Bilder lesen lokale Produktbilder aus /public
   outputFileTracingIncludes: { "/[kategorie]/[slug]/opengraph-image": ["./public/demo/**", "./public/uploads/**"] },
+  async redirects() {
+    return [{ source: "/ueber-mich", destination: "/team", permanent: true }];
+  },
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];
   },

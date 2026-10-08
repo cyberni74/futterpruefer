@@ -17,7 +17,7 @@ export const NAV = [
   { href: "/blog", label: "Fachblog" },
   { href: "/lexikon", label: "Lexikon" },
   { href: "/methodik", label: "Methodik" },
-  { href: "/ueber-mich", label: "Über mich" },
+  { href: "/team", label: "Team" },
 ] as const;
 
 export const MONTHS = [
