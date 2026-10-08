@@ -1,36 +1,46 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Futterprüfer.de
 
-## Getting Started
+Bewertungsportal für Hunde- und Katzenfutter (Deutsch, Mobile First).
 
-First, run the development server:
+**Stack:** Next.js 16 (App Router, TypeScript) · Tailwind CSS 4 · Framer Motion · PostgreSQL + Prisma 7 · Auth.js · TipTap · sharp · Vercel Blob · next-themes
+
+## Lokal starten
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+cp .env.example .env          # Werte eintragen
+npm install                   # generiert auch den Prisma-Client
+npx prisma migrate deploy     # Schema + Volltextsuche (pg_trgm, deutsche FTS)
+npm run db:seed               # Kategorien, Admin-Konto, Demo-Inhalte
+npm run dev                   # http://localhost:3000, Admin: /admin
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Prüfungen
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm test                      # Unit-Tests (vitest)
+npm run typecheck
+npm run lint
+npm run build
+node scripts/smoke.mjs http://localhost:3000 / /tests      # Render-Check mobil + desktop
+node scripts/qa-interactions.mjs                            # Suche, Dark Mode, Vergleich, Kontakt
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Deployment (Vercel)
 
-## Learn More
+1. Repository mit Vercel verbinden.
+2. Postgres anlegen (Neon über Vercel Marketplace) → `DATABASE_URL` wird gesetzt.
+3. `AUTH_SECRET`, `NEXT_PUBLIC_SITE_URL` setzen; optional Blob, Resend, Turnstile, Anthropic.
+4. Der Build führt `prisma migrate deploy` aus. Einmalig `npm run db:seed` gegen die Produktions-DB ausführen (mit `ADMIN_PASSWORD`), danach die Demo-Inhalte im Admin löschen.
 
-To learn more about Next.js, take a look at the following resources:
+## Inhalte vor dem Livegang
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Alle Demo-Tests (fiktive Marken) und Demo-Blogartikel ersetzen.
+- Gelb markierte Platzhalter auf **Methodik** (Interessenkonflikte), **Über mich**, **Impressum**, **Datenschutz** ausfüllen und rechtlich prüfen lassen.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Architektur
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `src/app/(site)` – öffentliche Seiten (ISR, `revalidate = 3600`; beim Speichern im Admin sofortige Revalidierung über `src/lib/revalidate.ts`)
+- `src/app/admin` – Redaktionsbereich (Login mit Rate Limiting, jede Server-Action prüft `requireAdmin()`)
+- `src/lib/scoring.ts` – Kriterien, Maxima, Ampel, Warnsignal (eine Quelle für Frontend, Admin und Validierung)
+- `src/lib/search.ts` – deutsche Volltextsuche + Trigramm-Ähnlichkeit
+- Slug-Änderungen erzeugen automatisch 301-Weiterleitungen (`Redirect`-Tabelle)
