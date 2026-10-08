@@ -9,7 +9,7 @@
 
 ## Offen: Vercel
 1. Projekt aus dem GitHub-Repo anlegen (Vercel-Connector, Scope `bernhardehmer-3885s-projects`, Team `team_Sewsn2eWj2JUvmZVNX3GDcLq`)
-2. Passwort der Rolle `prisma` neu setzen (Supabase MCP: `alter user "prisma" with password '…'`)
+2. ~~Passwort der Rolle `prisma` setzen~~ erledigt (Wert nur in Vercel)
 3. Env-Variablen (production + preview):
    - `DATABASE_URL` = `postgres://prisma.cotopvhmsqztjtdsdnoc:PW@HOST:6543/postgres`
    - `DIRECT_URL`   = `postgres://prisma.cotopvhmsqztjtdsdnoc:PW@HOST:5432/postgres?sslmode=require`
