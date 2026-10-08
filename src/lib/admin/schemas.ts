@@ -1,3 +1,4 @@
+import { parseAnalysis, parseClaims } from "@/lib/product-data";
 import { z } from "zod";
 import { CRITERIA, type CriterionKey } from "@/lib/scoring";
 import { parseKeywords } from "./seo";
@@ -32,7 +33,7 @@ const imageUrl = z
   .string()
   .trim()
   .max(500)
-  .refine((v) => v === "" || v.startsWith("/uploads/") || /^https:\/\/[^\s]+$/.test(v), { error: "Ungültige Bild-URL." });
+  .refine((v) => v === "" || v.startsWith("/uploads/") || v.startsWith("/demo/") || /^https:\/\/[^\s]+$/.test(v), { error: "Ungültige Bild-URL." });
 
 const imageBlur = z
   .string()
@@ -79,6 +80,57 @@ const pricePerKg = z
     return Math.round(n * 100) / 100;
   });
 
+const money = (label: string) =>
+  z
+    .string()
+    .trim()
+    .transform((v, ctx) => {
+      if (v === "") return null;
+      const n = Number(v.replace(/\s|€/g, "").replace(",", "."));
+      if (!Number.isFinite(n) || n < 0 || n > 999999) {
+        ctx.addIssue({ code: "custom", message: `${label}: bitte einen gültigen Betrag angeben (z. B. 12,90).` });
+        return z.NEVER;
+      }
+      return Math.round(n * 100) / 100;
+    });
+
+const dateOnly = (label: string) =>
+  z
+    .string()
+    .trim()
+    .transform((v, ctx) => {
+      if (v === "") return null;
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(v) || Number.isNaN(new Date(`${v}T12:00:00Z`).getTime())) {
+        ctx.addIssue({ code: "custom", message: `${label}: ungültiges Datum.` });
+        return z.NEVER;
+      }
+      return new Date(`${v}T12:00:00Z`);
+    });
+
+const jsonArray = <T,>(parse: (j: unknown) => T[], label: string, max: number) =>
+  z
+    .string()
+    .max(50000)
+    .transform((v, ctx) => {
+      if (!v.trim()) return [] as T[];
+      try {
+        const out = parse(JSON.parse(v));
+        if (out.length > max) {
+          ctx.addIssue({ code: "custom", message: `${label}: höchstens ${max} Einträge.` });
+          return z.NEVER;
+        }
+        return out;
+      } catch {
+        ctx.addIssue({ code: "custom", message: `${label}: ungültige Daten.` });
+        return z.NEVER;
+      }
+    });
+
+const galleryUrls = z
+  .array(z.string().trim().max(500))
+  .transform((a) => a.filter(Boolean))
+  .pipe(z.array(z.string().refine((v) => v.startsWith("/uploads/") || v.startsWith("/demo/") || /^https:\/\/[^\s]+$/.test(v), { error: "Ungültige Bild-URL in der Galerie." })).max(8, { error: "Höchstens 8 weitere Bilder." }));
+
 export const reviewSchema = z
   .object({
     title: text("Titel", 160, 3),
@@ -94,6 +146,16 @@ export const reviewSchema = z
     imageBlur,
     ...scoreFields,
     verdict: text("Fazit", 400),
+    harmfulReason: text("Begründung Warnhinweis", 400),
+    composition: text("Zusammensetzung", 3000),
+    analysis: jsonArray(parseAnalysis, "Analytische Bestandteile", 20),
+    packageSize: text("Gebinde", 40),
+    price: money("Packungspreis"),
+    pricePerDay: money("Preis pro Tagesration"),
+    priceDate: dateOnly("Preisstand"),
+    testedAt: dateOnly("Getestet am"),
+    gallery: galleryUrls,
+    claims: jsonArray(parseClaims, "Werbeaussagen", 20),
     pros: listItems("Pro"),
     cons: listItems("Contra"),
     bodyHtml,
@@ -107,6 +169,12 @@ export const reviewSchema = z
     if (v.verdict.length < 10) ctx.addIssue({ code: "custom", path: ["verdict"], message: "Zum Veröffentlichen bitte ein Fazit (1–2 Sätze) angeben." });
     if (v.pros.length < 2) ctx.addIssue({ code: "custom", path: ["pros"], message: "Zum Veröffentlichen mindestens 2 Pro-Punkte angeben." });
     if (v.cons.length < 2) ctx.addIssue({ code: "custom", path: ["cons"], message: "Zum Veröffentlichen mindestens 2 Contra-Punkte angeben." });
+    if (v.scoreHarmful < 10 && v.harmfulReason.length < 10)
+      ctx.addIssue({ code: "custom", path: ["harmfulReason"], message: "Schadstoff-Kriterium unter 10 Punkten: bitte eine Kurzbegründung für den Warnhinweis angeben." });
+    v.claims.forEach((c, i) => {
+      if (c.rating !== "ZULAESSIG" && c.reason.length < 10)
+        ctx.addIssue({ code: "custom", path: ["claims"], message: `Werbeaussage ${i + 1} („${c.claim}“): bitte die Einschätzung begründen.` });
+    });
   });
 
 export type ReviewInput = z.output<typeof reviewSchema>;
@@ -200,6 +268,16 @@ export function reviewFormToRaw(fd: FormData) {
     imageBlur: str(fd, "imageBlur"),
     ...Object.fromEntries(CRITERIA.map((c) => [c.key, str(fd, c.key)])),
     verdict: str(fd, "verdict"),
+    harmfulReason: str(fd, "harmfulReason"),
+    composition: str(fd, "composition"),
+    analysis: str(fd, "analysis"),
+    packageSize: str(fd, "packageSize"),
+    price: str(fd, "price"),
+    pricePerDay: str(fd, "pricePerDay"),
+    priceDate: str(fd, "priceDate"),
+    testedAt: str(fd, "testedAt"),
+    gallery: strs(fd, "gallery"),
+    claims: str(fd, "claims"),
     pros: strs(fd, "pros"),
     cons: strs(fd, "cons"),
     bodyHtml: str(fd, "bodyHtml"),

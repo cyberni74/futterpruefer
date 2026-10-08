@@ -2,6 +2,8 @@
 import { Link2, RefreshCw } from "lucide-react";
 import { startTransition, useActionState, useRef, useState } from "react";
 import { VerdictPanel } from "@/components/verdict-panel";
+import { consWithClaims, type Claim } from "@/lib/product-data";
+import { AnalysisField, ClaimsField, GalleryField } from "./product-data-fields";
 import { CRITERIA, MAX_TOTAL, clampScore, totalScore, type CriterionKey, type Scores } from "@/lib/scoring";
 import { slugify } from "@/lib/slug";
 import { PRICE_CLASS_LABEL } from "@/lib/site";
@@ -31,6 +33,16 @@ export type ReviewEditorData = {
   imageBlur: string | null;
   scores: Scores;
   verdict: string;
+  harmfulReason: string;
+  composition: string;
+  analysis: Array<{ name: string; value: number }>;
+  packageSize: string;
+  price: string;
+  pricePerDay: string;
+  priceDate: string;
+  testedAt: string;
+  gallery: string[];
+  claims: Claim[];
   pros: string[];
   cons: string[];
   bodyHtml: string;
@@ -44,7 +56,7 @@ export type ReviewEditorData = {
 
 type Props = {
   initial: ReviewEditorData;
-  categories: { id: string; name: string }[];
+  categories: { id: string; name: string; slug: string }[];
   action: (prev: ActionResult | null, fd: FormData) => Promise<ActionResult>;
   badge?: React.ReactNode;
   deleteSlot?: React.ReactNode;
@@ -81,6 +93,8 @@ export function ReviewEditor({ initial, categories, action, badge, deleteSlot, j
     () => Object.fromEntries(CRITERIA.map((c) => [c.key, String(initial.scores[c.key] ?? 0)])) as Record<CriterionKey, string>,
   );
   const [verdict, setVerdict] = useState(initial.verdict);
+  const [harmfulReason, setHarmfulReason] = useState(initial.harmfulReason);
+  const [claims, setClaims] = useState<Claim[]>(initial.claims ?? []);
   const [pros, setPros] = useState(() => padList(initial.pros));
   const [cons, setCons] = useState(() => padList(initial.cons));
   const [mode, setMode] = useState<PublishMode>(initial.publishMode);
@@ -109,9 +123,12 @@ export function ReviewEditor({ initial, categories, action, badge, deleteSlot, j
     totalScore: total,
     verdict,
     pros: pros.map((p) => p.trim()).filter(Boolean),
-    cons: cons.map((p) => p.trim()).filter(Boolean),
+    cons: consWithClaims(cons.map((p) => p.trim()).filter(Boolean), claims.filter((c) => c.claim.trim())),
     updatedAt: initial.updatedAt,
+    harmfulReason,
   };
+  const catSlug = categories.find((c) => c.id === categoryId)?.slug ?? "kategorie";
+  const declarationMax = CRITERIA.find((c) => c.key === "scoreDeclaration")!.max;
 
   return (
     <div>
@@ -182,9 +199,9 @@ export function ReviewEditor({ initial, categories, action, badge, deleteSlot, j
                 error={errors.slug}
                 hint={
                   !isNew && slug !== initial.slug ? (
-                    <span className="font-semibold break-all text-mid">Neue URL – /tests/{initial.slug} wird automatisch weitergeleitet.</span>
+                    <span className="font-semibold break-all text-mid">Neue URL – die bisherige Adresse wird automatisch weitergeleitet (301).</span>
                   ) : (
-                    <span className="break-all">futterpruefer.de/tests/{slug || "…"}</span>
+                    <span className="break-all">futterpruefer.de/{catSlug}/{slug || "…"}</span>
                   )
                 }
               >
@@ -284,6 +301,10 @@ export function ReviewEditor({ initial, categories, action, badge, deleteSlot, j
               />
             </Section>
 
+            <Section title="Weitere Produktbilder" id="sec-galerie">
+              <GalleryField initial={initial.gallery} nameSource={productLabel || title} error={errors.gallery} />
+            </Section>
+
             <Section title="Bewertungsmaske" id="sec-bewertung" description={`Punkte je Kriterium – die Gesamtwertung (max. ${MAX_TOTAL}) wird automatisch berechnet.`}>
               <div className="space-y-5">
                 {CRITERIA.map((c) => {
@@ -338,6 +359,48 @@ export function ReviewEditor({ initial, categories, action, badge, deleteSlot, j
               </div>
             </Section>
 
+            <Section title="Warnhinweis Schadstoffe" id="sec-warnung" description="Pflicht, wenn „Schadstoffe & Bedenkliches“ unter 10 Punkten liegt – erscheint als rote Warnbox über dem Fazit.">
+              <Field id="harmfulReason" label={`Kurzbegründung${numericScores.scoreHarmful < 10 ? " *" : ""}`} error={errors.harmfulReason} hint={`${harmfulReason.length}/400 Zeichen`}>
+                <textarea id="harmfulReason" name="harmfulReason" value={harmfulReason} onChange={(e) => setHarmfulReason(e.target.value)} rows={2} maxLength={400} className={textareaCls} placeholder="z. B. Enthält zugesetzten Zucker und das synthetische Antioxidans BHA." {...describe("harmfulReason", errors.harmfulReason, true)} />
+              </Field>
+            </Section>
+
+            <Section title="Produktdaten" id="sec-produktdaten" description="Erscheint als eigener Block auf der Testseite. Leere Felder werden ausgeblendet.">
+              <div className="grid gap-4 sm:grid-cols-2">
+                <Field id="testedAt" label="Getestet am" error={errors.testedAt}>
+                  <input id="testedAt" name="testedAt" type="date" defaultValue={initial.testedAt} className={inputCls} />
+                </Field>
+                <Field id="packageSize" label="Gebinde" error={errors.packageSize} hint="z. B. 400 g, 12 kg">
+                  <input id="packageSize" name="packageSize" defaultValue={initial.packageSize} maxLength={40} className={inputCls} />
+                </Field>
+              </div>
+              <Field id="composition" label="Zusammensetzung (wie auf dem Etikett)" error={errors.composition} hint="Kommagetrennt. Stoffe mit Lexikon-Eintrag werden automatisch verlinkt und mit Ampel markiert.">
+                <textarea id="composition" name="composition" defaultValue={initial.composition} rows={4} maxLength={3000} className={textareaCls} placeholder="Rind (60 %), Reis, Lachsöl, Mineralstoffe" />
+              </Field>
+              <AnalysisField initial={initial.analysis} error={errors.analysis} />
+              <div className="grid gap-4 sm:grid-cols-3">
+                <Field id="price" label="Packungspreis (€)" error={errors.price}>
+                  <input id="price" name="price" defaultValue={initial.price} inputMode="decimal" maxLength={12} className={inputCls} />
+                </Field>
+                <Field id="pricePerDay" label="Pro Tagesration (€)" error={errors.pricePerDay}>
+                  <input id="pricePerDay" name="pricePerDay" defaultValue={initial.pricePerDay} inputMode="decimal" maxLength={12} className={inputCls} />
+                </Field>
+                <Field id="priceDate" label="Preisstand" error={errors.priceDate}>
+                  <input id="priceDate" name="priceDate" type="date" defaultValue={initial.priceDate} className={inputCls} />
+                </Field>
+              </div>
+            </Section>
+
+            <Section title="Werbeaussagen-Check" id="sec-werbeaussagen" description="Jede Herstelleraussage mit Bewertung und Begründung. Unzulässige Aussagen lösen eine orange Warnbox aus.">
+              <ClaimsField
+                claims={claims}
+                setClaims={setClaims}
+                error={errors.claims}
+                declarationMax={declarationMax}
+                onApplyDeduction={(v) => setScores((s) => ({ ...s, scoreDeclaration: String(v) }))}
+              />
+            </Section>
+
             <Section title="Fazit, Pro & Contra" id="sec-fazit">
               <Field id="verdict" label="Fazit (1–2 Sätze)" error={errors.verdict} hint={`${verdict.length}/400 Zeichen`}>
                 <textarea id="verdict" name="verdict" value={verdict} onChange={(e) => setVerdict(e.target.value)} rows={3} maxLength={400} className={textareaCls} {...describe("verdict", errors.verdict, true)} />
@@ -377,7 +440,7 @@ export function ReviewEditor({ initial, categories, action, badge, deleteSlot, j
         <aside id="pane-preview" aria-label="Live-Vorschau des Fazits" className={`min-w-0 ${tab === "preview" ? "" : "hidden lg:block"}`}>
           <div className="lg:sticky lg:top-6">
             <p className="mb-2 text-xs font-bold tracking-wide text-muted uppercase">Live-Vorschau · so erscheint das Fazit</p>
-            <VerdictPanel data={previewData} />
+            <VerdictPanel data={previewData} showWarning />
             <button type="button" onClick={() => setTab("form")} className="mt-4 min-h-11 w-full rounded-xl border border-border text-sm font-semibold lg:hidden">
               Zurück zum Formular
             </button>

@@ -1,4 +1,9 @@
 import { CRITERIA, type Scores } from "@/lib/scoring";
+import { parseAnalysis, parseClaims } from "@/lib/product-data";
+
+const money = (v: { toString(): string } | null | undefined) => (v == null ? "" : Number(v.toString()).toFixed(2).replace(".", ","));
+const day = (d: Date | null | undefined) => (d ? d.toISOString().slice(0, 10) : "");
+
 import { dateToBerlinLocal } from "./datetime";
 import { initialPublishMode, type ContentStatus } from "./publish";
 
@@ -16,6 +21,16 @@ type ReviewRow = {
   imageAlt: string;
   imageBlur: string | null;
   verdict: string;
+  harmfulReason: string;
+  composition: string;
+  analysis: unknown;
+  packageSize: string;
+  price: { toString(): string } | null;
+  pricePerDay: { toString(): string } | null;
+  priceDate: Date | null;
+  testedAt: Date | null;
+  gallery: string[];
+  claims: unknown;
   pros: string[];
   cons: string[];
   bodyHtml: string;
@@ -45,6 +60,16 @@ export function reviewToEditorData(r: ReviewRow, now = new Date()) {
     imageBlur: r.imageBlur,
     scores: Object.fromEntries(CRITERIA.map((c) => [c.key, r[c.key]])) as Scores,
     verdict: r.verdict,
+    harmfulReason: r.harmfulReason,
+    composition: r.composition,
+    analysis: parseAnalysis(r.analysis),
+    packageSize: r.packageSize,
+    price: money(r.price),
+    pricePerDay: money(r.pricePerDay),
+    priceDate: day(r.priceDate),
+    testedAt: day(r.testedAt),
+    gallery: r.gallery,
+    claims: parseClaims(r.claims),
     pros: r.pros,
     cons: r.cons,
     bodyHtml: r.bodyHtml,
@@ -71,6 +96,16 @@ export const EMPTY_REVIEW = {
   imageBlur: null,
   scores: Object.fromEntries(CRITERIA.map((c) => [c.key, 0])) as Scores,
   verdict: "",
+  harmfulReason: "",
+  composition: "",
+  analysis: [] as Array<{ name: string; value: number }>,
+  packageSize: "",
+  price: "",
+  pricePerDay: "",
+  priceDate: "",
+  testedAt: "",
+  gallery: [] as string[],
+  claims: [] as ReturnType<typeof parseClaims>,
   pros: [],
   cons: [],
   bodyHtml: "",

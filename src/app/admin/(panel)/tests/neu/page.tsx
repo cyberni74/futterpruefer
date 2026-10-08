@@ -8,6 +8,6 @@ export const dynamic = "force-dynamic";
 export const metadata: Metadata = { title: "Neuer Test" };
 
 export default async function NewReviewPage() {
-  const categories = await prisma.category.findMany({ orderBy: { sortOrder: "asc" }, select: { id: true, name: true } });
+  const categories = await prisma.category.findMany({ orderBy: { sortOrder: "asc" }, select: { id: true, name: true, slug: true } });
   return <ReviewEditor initial={EMPTY_REVIEW} categories={categories} action={saveReview.bind(null, null)} />;
 }

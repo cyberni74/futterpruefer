@@ -15,7 +15,7 @@ export default async function EditReviewPage({ params, searchParams }: { params:
   const sp = await searchParams;
   const [review, categories] = await Promise.all([
     prisma.review.findUnique({ where: { id } }),
-    prisma.category.findMany({ orderBy: { sortOrder: "asc" }, select: { id: true, name: true } }),
+    prisma.category.findMany({ orderBy: { sortOrder: "asc" }, select: { id: true, name: true, slug: true } }),
   ]);
   if (!review) notFound();
 
