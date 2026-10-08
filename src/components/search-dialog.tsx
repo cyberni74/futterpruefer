@@ -47,7 +47,7 @@ export function SearchDialog({ open, onClose }: { open: boolean; onClose: () => 
     } else if (!open && d.open) d.close();
   }, [open]);
 
-  const href = (h: SearchHit) => (h.type === "test" ? `/tests/${h.slug}` : `/blog/${h.slug}`);
+  const href = (h: SearchHit) => (h.type === "test" ? `/tests/${h.slug}` : h.type === "lexikon" ? `/lexikon/${h.slug}` : `/blog/${h.slug}`);
   const go = (url: string) => {
     onClose();
     setQ("");
@@ -112,7 +112,7 @@ export function SearchDialog({ open, onClose }: { open: boolean; onClose: () => 
                     onClick={(e) => { e.preventDefault(); go(href(h)); }}
                     className={`flex min-h-14 items-center gap-3 rounded-xl px-3 py-2 ${i === active ? "bg-brand-soft" : "hover:bg-bg-soft"}`}
                   >
-                    <span className="w-14 shrink-0 text-center text-xs font-bold uppercase tracking-wide text-muted">{h.type === "test" ? "Test" : "Blog"}</span>
+                    <span className="w-14 shrink-0 text-center text-xs font-bold uppercase tracking-wide text-muted">{h.type === "test" ? "Test" : h.type === "lexikon" ? "Lexikon" : "Blog"}</span>
                     <span className="min-w-0 flex-1">
                       <span className="block truncate font-semibold">{h.title}</span>
                       <span className="block truncate text-sm text-muted">{h.subtitle}</span>

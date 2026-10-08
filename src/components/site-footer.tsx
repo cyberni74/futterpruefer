@@ -3,7 +3,7 @@ import { Logo } from "./logo";
 
 const COLS = [
   { title: "Tests", links: [["Alleinfutter Hund", "/kategorie/alleinfutter-hund"], ["Alleinfutter Katze", "/kategorie/alleinfutter-katze"], ["Ergänzung Hund", "/kategorie/ergaenzungsfutter-hund"], ["Ergänzung Katze", "/kategorie/ergaenzungsfutter-katze"], ["Produkt des Monats", "/produkt-des-monats"]] },
-  { title: "Wissen", links: [["Fachblog", "/blog"], ["Methodik", "/methodik"], ["FAQ", "/faq"], ["RSS-Feed", "/rss.xml"]] },
+  { title: "Wissen", links: [["Fachblog", "/blog"], ["Futter-Lexikon", "/lexikon"], ["Glossar", "/glossar"], ["Methodik", "/methodik"], ["FAQ", "/faq"], ["RSS-Feed", "/rss.xml"]] },
   { title: "Kontakt", links: [["Über mich", "/ueber-mich"], ["Für Hersteller", "/fuer-hersteller"], ["Kontakt", "/kontakt"], ["Impressum", "/impressum"], ["Datenschutz", "/datenschutz"]] },
 ] as const;
 

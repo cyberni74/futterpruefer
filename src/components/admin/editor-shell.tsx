@@ -14,6 +14,8 @@ export function EditorHeader({
   title,
   badge,
   previewHref,
+  previewLabel = "Vorschau",
+  previewHint = "Vorschau nach dem ersten Speichern verfügbar",
   pending,
 }: {
   formId: string;
@@ -22,6 +24,8 @@ export function EditorHeader({
   title: string;
   badge?: ReactNode;
   previewHref?: string;
+  previewLabel?: string;
+  previewHint?: string;
   pending: boolean;
 }) {
   return (
@@ -38,10 +42,10 @@ export function EditorHeader({
       <div className="flex flex-wrap gap-2">
         {previewHref ? (
           <Link href={previewHref} target="_blank" className={btnSecondary}>
-            <Eye className="size-4" aria-hidden /> Vorschau
+            <Eye className="size-4" aria-hidden /> {previewLabel}
           </Link>
         ) : (
-          <span className="self-center text-xs text-muted">Vorschau nach dem ersten Speichern verfügbar</span>
+          <span className="self-center text-xs text-muted">{previewHint}</span>
         )}
         <button type="submit" form={formId} className={`${btnPrimary} hidden md:inline-flex`} disabled={pending}>
           {pending ? <Loader2 className="size-4 animate-spin" aria-hidden /> : <Save className="size-4" aria-hidden />}

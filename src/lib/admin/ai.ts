@@ -1,5 +1,5 @@
 export type AiTask = "meta" | "keywords";
-export type AiKind = "review" | "blog";
+export type AiKind = "review" | "blog" | "lexikon";
 
 export type AiContext = {
   title: string;
@@ -35,7 +35,12 @@ export function sanitizeContext(raw: unknown): AiContext {
 }
 
 export function buildPrompt(task: AiTask, kind: AiKind, ctx: AiContext): string {
-  const art = kind === "review" ? "einen Futtertest (Hunde-/Katzenfutter-Bewertung)" : "einen Fachblog-Artikel über Hunde- und Katzenernährung";
+  const art =
+    kind === "review"
+      ? "einen Futtertest (Hunde-/Katzenfutter-Bewertung)"
+      : kind === "lexikon"
+        ? "einen Lexikon-Eintrag über einen Inhaltsstoff in Hunde- und Katzenfutter"
+        : "einen Fachblog-Artikel über Hunde- und Katzenernährung";
   const lines = [
     `Du bist SEO-Redakteur für das deutsche Portal Futterprüfer.de. Erstelle Angaben für ${art}.`,
     "",

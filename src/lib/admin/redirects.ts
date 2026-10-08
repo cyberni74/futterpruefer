@@ -7,12 +7,14 @@ export type RedirectPlan = {
   upsert: { fromPath: string; toPath: string } | null;
 };
 
-export function contentPath(prefix: "tests" | "blog", slug: string): string {
+export type ContentPrefix = "tests" | "blog" | "lexikon";
+
+export function contentPath(prefix: ContentPrefix, slug: string): string {
   return `/${prefix}/${slug}`;
 }
 
 /** Plant die Weiterleitungs-Änderungen für einen (ggf. geänderten) Slug. */
-export function planSlugRedirect(prefix: "tests" | "blog", oldSlug: string | null | undefined, newSlug: string): RedirectPlan {
+export function planSlugRedirect(prefix: ContentPrefix, oldSlug: string | null | undefined, newSlug: string): RedirectPlan {
   const newPath = contentPath(prefix, newSlug);
   if (!oldSlug || oldSlug === newSlug) return { deleteFromPath: newPath, retarget: null, upsert: null };
   const oldPath = contentPath(prefix, oldSlug);

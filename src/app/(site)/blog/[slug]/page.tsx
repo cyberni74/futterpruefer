@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound, permanentRedirect } from "next/navigation";
 import { prisma } from "@/lib/db";
 import { blogCardSelect, findRedirect, getPostBySlug, publishedWhere } from "@/lib/queries";
-import { sanitize } from "@/lib/sanitize";
+import { getReviewsForPost, renderArticle } from "@/lib/content";
 import { absoluteUrl, formatDate, SITE } from "@/lib/site";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { FpImage } from "@/components/fp-image";
@@ -10,6 +10,8 @@ import { ReadAloud } from "@/components/read-aloud";
 import { ShareButtons } from "@/components/share-buttons";
 import { BlogCard } from "@/components/blog-card";
 import { JsonLd } from "@/components/json-ld";
+import { ReviewCard } from "@/components/review-card";
+import { NewsletterBox } from "@/components/newsletter-box";
 
 export const revalidate = 3600;
 
@@ -45,7 +47,16 @@ export default async function PostPage({ params }: PageProps<"/blog/[slug]">) {
     if (r) permanentRedirect(r.toPath);
     notFound();
   }
-  const more = await prisma.blogPost.findMany({ where: { ...publishedWhere(), id: { not: p.id } }, orderBy: { publishedAt: "desc" }, take: 3, select: blogCardSelect });
+  const kw = p.keywords.filter(Boolean);
+  const [related, reviews, body] = await Promise.all([
+    kw.length
+      ? prisma.blogPost.findMany({ where: { ...publishedWhere(), id: { not: p.id }, OR: kw.map((k) => ({ OR: [{ title: { contains: k, mode: "insensitive" as const } }, { keywords: { has: k } }] })) }, orderBy: { publishedAt: "desc" }, take: 3, select: blogCardSelect })
+      : Promise.resolve([]),
+    getReviewsForPost(p, 3),
+    renderArticle(p.bodyHtml),
+  ]);
+  const fill = related.length < 3 ? await prisma.blogPost.findMany({ where: { ...publishedWhere(), id: { notIn: [p.id, ...related.map((x) => x.id)] } }, orderBy: { publishedAt: "desc" }, take: 3 - related.length, select: blogCardSelect }) : [];
+  const more = [...related, ...fill];
   const url = absoluteUrl(`/blog/${p.slug}`);
   return (
     <article className="mx-auto max-w-3xl px-4">
@@ -80,14 +91,21 @@ export default async function PostPage({ params }: PageProps<"/blog/[slug]">) {
       </div>
       <div id="artikel" className="prose-fp mt-8">
         {p.excerpt && <p className="text-xl font-medium">{p.excerpt}</p>}
-        <div dangerouslySetInnerHTML={{ __html: sanitize(p.bodyHtml) }} />
+        <div dangerouslySetInnerHTML={{ __html: body }} />
       </div>
+      {reviews.length > 0 && (
+        <section aria-labelledby="passende-tests" className="mt-16">
+          <h2 id="passende-tests" className="mb-6 text-2xl font-extrabold">Passende Tests</h2>
+          <ul className="grid gap-x-5 gap-y-8 sm:grid-cols-2 lg:grid-cols-3">{reviews.map((r) => <li key={r.id}><ReviewCard review={r} /></li>)}</ul>
+        </section>
+      )}
       {more.length > 0 && (
         <section aria-labelledby="verwandt" className="mt-16">
           <h2 id="verwandt" className="mb-6 text-2xl font-extrabold">Verwandte Artikel</h2>
           <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">{more.map((m) => <li key={m.id}><BlogCard post={m} /></li>)}</ul>
         </section>
       )}
+      <div className="mt-16"><NewsletterBox /></div>
     </article>
   );
 }

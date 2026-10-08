@@ -26,8 +26,8 @@ export default async function SearchPage({ searchParams }: PageProps<"/suche">) 
       <ul className="mt-4 divide-y divide-border">
         {hits.map((h) => (
           <li key={`${h.type}-${h.slug}`}>
-            <Link href={h.type === "test" ? `/tests/${h.slug}` : `/blog/${h.slug}`} className="flex min-h-16 items-center gap-4 py-3 hover:bg-bg-soft">
-              <span className="w-12 shrink-0 text-xs font-bold uppercase text-muted">{h.type === "test" ? "Test" : "Blog"}</span>
+            <Link href={h.type === "test" ? `/tests/${h.slug}` : h.type === "lexikon" ? `/lexikon/${h.slug}` : `/blog/${h.slug}`} className="flex min-h-16 items-center gap-4 py-3 hover:bg-bg-soft">
+              <span className="w-12 shrink-0 text-xs font-bold uppercase text-muted">{h.type === "test" ? "Test" : h.type === "lexikon" ? "Lexikon" : "Blog"}</span>
               <span className="min-w-0 flex-1"><span className="block font-semibold">{h.title}</span><span className="line-clamp-1 text-sm text-muted">{h.subtitle}</span></span>
               {h.score !== null && <ScoreBadge score={h.score} size="sm" />}
             </Link>

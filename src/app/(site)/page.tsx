@@ -8,6 +8,7 @@ import { BlogCard } from "@/components/blog-card";
 import { SectionHeading } from "@/components/section-heading";
 import { Reveal } from "@/components/reveal";
 import { JsonLd } from "@/components/json-ld";
+import { NewsletterBox } from "@/components/newsletter-box";
 import { SITE, absoluteUrl } from "@/lib/site";
 
 export const revalidate = 3600;
@@ -91,6 +92,8 @@ export default async function Home() {
             </ul>
           )}
         </section>
+
+        <div className="mt-16"><NewsletterBox /></div>
       </div>
     </>
   );

@@ -4,7 +4,7 @@ import { notFound, permanentRedirect } from "next/navigation";
 import { ArrowRight, Scale } from "lucide-react";
 import { prisma } from "@/lib/db";
 import { findRedirect, getRelatedReviews, getReviewBySlug, publishedWhere } from "@/lib/queries";
-import { sanitize } from "@/lib/sanitize";
+import { getPostsForReview, renderArticle } from "@/lib/content";
 import { absoluteUrl, formatDate, PRICE_CLASS_LABEL, SITE } from "@/lib/site";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { VerdictPanel } from "@/components/verdict-panel";
@@ -13,6 +13,8 @@ import { ReadAloud } from "@/components/read-aloud";
 import { ShareButtons } from "@/components/share-buttons";
 import { ReviewCard } from "@/components/review-card";
 import { JsonLd } from "@/components/json-ld";
+import { BlogCard } from "@/components/blog-card";
+import { NewsletterBox } from "@/components/newsletter-box";
 
 export const revalidate = 3600;
 
@@ -49,7 +51,7 @@ export default async function ReviewPage({ params }: PageProps<"/tests/[slug]">)
     if (redirect) permanentRedirect(redirect.toPath);
     notFound();
   }
-  const related = await getRelatedReviews(r.categoryId, r.id, 3);
+  const [related, posts, body] = await Promise.all([getRelatedReviews(r.categoryId, r.id, 3), getPostsForReview(r, 3), renderArticle(r.bodyHtml)]);
   const url = absoluteUrl(`/tests/${r.slug}`);
 
   return (
@@ -102,7 +104,8 @@ export default async function ReviewPage({ params }: PageProps<"/tests/[slug]">)
             <FpImage src={r.imageUrl} alt={r.imageAlt || r.title} blur={r.imageBlur} sizes="(min-width:896px) 864px, 100vw" />
           </figure>
         )}
-        <div className="prose-fp" dangerouslySetInnerHTML={{ __html: sanitize(r.bodyHtml) }} />
+        <div className="prose-fp" dangerouslySetInnerHTML={{ __html: body }} />
+        <p className="mt-6 rounded-2xl bg-bg-soft p-4 text-sm text-muted">Unterstrichene Begriffe sind im <Link href="/lexikon" className="font-semibold text-brand underline">Futter-Lexikon</Link> bzw. im <Link href="/glossar" className="font-semibold text-brand underline">Glossar</Link> erklärt. Der farbige Punkt zeigt die Bedenklichkeits-Ampel.</p>
       </div>
 
       {related.length > 0 && (
@@ -121,6 +124,15 @@ export default async function ReviewPage({ params }: PageProps<"/tests/[slug]">)
           </Link>
         </section>
       )}
+
+      {posts.length > 0 && (
+        <section aria-labelledby="fachartikel" className="mt-16">
+          <h2 id="fachartikel" className="mb-6 text-2xl font-extrabold">Passende Fachartikel</h2>
+          <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">{posts.map((p) => <li key={p.id}><BlogCard post={p} /></li>)}</ul>
+        </section>
+      )}
+
+      <div className="mt-16"><NewsletterBox /></div>
     </article>
   );
 }

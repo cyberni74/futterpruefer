@@ -168,3 +168,39 @@ model LoginAttempt {
 
   @@index([key, createdAt])
 }
+
+enum Concern {
+  UNBEDENKLICH
+  EINGESCHRAENKT
+  BEDENKLICH
+}
+
+model LexikonEntry {
+  id               String    @id @default(cuid())
+  slug             String    @unique
+  name             String
+  synonyms         String[]  @default([])
+  group            String    @default("")
+  concern          Concern   @default(UNBEDENKLICH)
+  shortDescription String    @default("")
+  assessment       String    @default("")
+  bodyHtml         String    @default("")
+  metaTitle        String    @default("")
+  metaDescription  String    @default("")
+  status           Status    @default(DRAFT)
+  publishedAt      DateTime?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  @@index([status])
+}
+
+model GlossaryTerm {
+  id         String   @id @default(cuid())
+  slug       String   @unique
+  term       String
+  synonyms   String[] @default([])
+  definition String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}

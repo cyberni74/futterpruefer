@@ -10,7 +10,7 @@ import {
   truncateForSerp,
   type LengthTone,
 } from "@/lib/admin/seo";
-import type { AiContext } from "@/lib/admin/ai";
+import type { AiContext, AiKind } from "@/lib/admin/ai";
 import { btnSecondary, describe, inputCls, labelCls, textareaCls } from "./ui";
 
 const TONE_CLS: Record<LengthTone, string> = {
@@ -21,7 +21,7 @@ const TONE_CLS: Record<LengthTone, string> = {
 const BAR_CLS: Record<LengthTone, string> = { good: "bg-good", mid: "bg-mid", bad: "bg-bad" };
 
 type Props = {
-  kind: "review" | "blog";
+  kind: AiKind;
   slug: string;
   /** Fallback-Titel für die SERP-Vorschau, wenn kein Meta-Titel gesetzt ist */
   fallbackTitle: string;
@@ -30,6 +30,8 @@ type Props = {
   /** Liefert den aktuellen Inhalt für die KI-Generierung */
   getContext: () => AiContext;
   errors?: Record<string, string>;
+  /** Keyword-Feld und -Generierung anzeigen (nicht jeder Inhaltstyp speichert Keywords) */
+  showKeywords?: boolean;
 };
 
 function Counter({ length, tone, label }: { length: number; tone: LengthTone; label: string }) {
@@ -40,7 +42,7 @@ function Counter({ length, tone, label }: { length: number; tone: LengthTone; la
   );
 }
 
-export function SeoPanel({ kind, slug, fallbackTitle, fallbackDescription = "", initial, getContext, errors = {} }: Props) {
+export function SeoPanel({ kind, slug, fallbackTitle, fallbackDescription = "", initial, getContext, errors = {}, showKeywords = true }: Props) {
   const uid = useId();
   const [metaTitle, setMetaTitle] = useState(initial.metaTitle);
   const [metaDescription, setMetaDescription] = useState(initial.metaDescription);
@@ -62,7 +64,7 @@ export function SeoPanel({ kind, slug, fallbackTitle, fallbackDescription = "", 
 
   const serpTitle = truncateForSerp(metaTitle || `${fallbackTitle} | Futterprüfer`, 60);
   const serpDesc = truncateForSerp(metaDescription || fallbackDescription || "Keine Meta-Beschreibung – Google wählt selbst einen Textausschnitt.", 158);
-  const section = kind === "review" ? "tests" : "blog";
+  const section = kind === "review" ? "tests" : kind === "lexikon" ? "lexikon" : "blog";
 
   async function generate(task: "meta" | "keywords") {
     setBusy(task);
@@ -102,10 +104,12 @@ export function SeoPanel({ kind, slug, fallbackTitle, fallbackDescription = "", 
           {busy === "meta" ? <Loader2 className="size-4 animate-spin" aria-hidden /> : <Sparkles className="size-4 text-brand" aria-hidden />}
           Meta generieren
         </button>
-        <button type="button" className={btnSecondary} onClick={() => generate("keywords")} disabled={busy !== null}>
-          {busy === "keywords" ? <Loader2 className="size-4 animate-spin" aria-hidden /> : <Sparkles className="size-4 text-brand" aria-hidden />}
-          Keywords generieren
-        </button>
+        {showKeywords && (
+          <button type="button" className={btnSecondary} onClick={() => generate("keywords")} disabled={busy !== null}>
+            {busy === "keywords" ? <Loader2 className="size-4 animate-spin" aria-hidden /> : <Sparkles className="size-4 text-brand" aria-hidden />}
+            Keywords generieren
+          </button>
+        )}
       </div>
       <p aria-live="polite" className={`text-sm empty:hidden ${msg?.ok ? "text-good" : "font-medium text-bad"}`}>
         {msg?.text}
@@ -173,6 +177,7 @@ export function SeoPanel({ kind, slug, fallbackTitle, fallbackDescription = "", 
         </div>
       </div>
 
+      {showKeywords && (
       <div>
         <label htmlFor={`${uid}-kw`} className={labelCls}>
           Keywords
@@ -190,6 +195,7 @@ export function SeoPanel({ kind, slug, fallbackTitle, fallbackDescription = "", 
           Durch Kommas getrennt.
         </p>
       </div>
+      )}
     </div>
   );
 }

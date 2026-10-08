@@ -25,7 +25,7 @@ export async function POST(request: Request) {
     return error("Ungültige Anfrage.", 400);
   }
   const task = body.task === "keywords" ? "keywords" : body.task === "meta" ? "meta" : null;
-  const kind = body.kind === "blog" ? "blog" : "review";
+  const kind = body.kind === "blog" ? "blog" : body.kind === "lexikon" ? "lexikon" : "review";
   if (!task) return error("Unbekannte Aufgabe.", 400);
   const ctx = sanitizeContext(body.context);
   if (!ctx.title) return error("Bitte zuerst einen Titel eingeben.", 400);

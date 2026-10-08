@@ -1,12 +1,14 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { FlaskConical, HelpCircle, Inbox, LayoutDashboard, Megaphone, Newspaper, Trophy } from "lucide-react";
+import { FlaskConical, HelpCircle, Inbox, LayoutDashboard, Megaphone, Newspaper, Trophy, BookOpen, Library } from "lucide-react";
 
 const ITEMS = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
   { href: "/admin/tests", label: "Tests", icon: FlaskConical },
   { href: "/admin/blog", label: "Fachblog", icon: Newspaper },
+  { href: "/admin/lexikon", label: "Lexikon", icon: BookOpen },
+  { href: "/admin/glossar", label: "Glossar", icon: Library },
   { href: "/admin/ticker", label: "Ticker", icon: Megaphone },
   { href: "/admin/produkt-des-monats", label: "Produkt des Monats", short: "PdM", icon: Trophy },
   { href: "/admin/faq", label: "FAQ", icon: HelpCircle },

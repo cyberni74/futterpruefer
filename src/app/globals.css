@@ -145,3 +145,11 @@ button, [role="button"], summary { cursor: pointer; }
 }
 
 .fp-consent #fp-cookie { display: none; }
+
+/* Automatisch verlinkte Begriffe */
+.prose-fp a.lex-link, .prose-fp a.gloss-link { text-decoration: none; border-bottom: 2px dotted currentColor; color: inherit; font-weight: 600; }
+.prose-fp a.lex-link::after { content: ""; display: inline-block; width: .5em; height: .5em; border-radius: 9999px; margin-left: .2em; vertical-align: .15em; background: var(--good); }
+.prose-fp a.lex-eingeschraenkt::after { background: var(--mid); }
+.prose-fp a.lex-bedenklich::after { background: var(--bad); }
+.prose-fp a.gloss-link { border-bottom-style: dashed; font-weight: 500; }
+.prose-fp a.lex-link:hover, .prose-fp a.gloss-link:hover { color: var(--brand); }
