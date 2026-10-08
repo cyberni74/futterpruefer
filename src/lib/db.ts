@@ -5,8 +5,14 @@ import { pgConfig } from "@/lib/pg-config";
 const globalForPrisma = globalThis as unknown as { prisma?: PrismaClient };
 
 function createClient() {
-  const connectionString = process.env.DATABASE_URL;
+  let connectionString = process.env.DATABASE_URL;
   if (!connectionString) throw new Error("DATABASE_URL ist nicht gesetzt.");
+  const hostOverride = process.env.DB_HOST_OVERRIDE;
+  if (hostOverride) {
+    const u = new URL(connectionString);
+    u.hostname = hostOverride;
+    connectionString = u.toString();
+  }
   return new PrismaClient({ adapter: new PrismaPg(pgConfig(connectionString)) });
 }
 

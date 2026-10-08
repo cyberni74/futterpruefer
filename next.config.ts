@@ -28,6 +28,8 @@ const securityHeaders = [
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
+  // Vom Build-Skript ermittelter DB-Host (falls der Host in DATABASE_URL nicht erreichbar war)
+  env: { DB_HOST_OVERRIDE: process.env.DB_HOST_OVERRIDE ?? "" },
   images: {
     formats: ["image/avif", "image/webp"],
     remotePatterns: [{ protocol: "https", hostname: "*.public.blob.vercel-storage.com" }],
