@@ -1,4 +1,5 @@
 import "server-only";
+import { cache } from "react";
 import { prisma } from "@/lib/db";
 import type { Prisma } from "@/generated/prisma/client";
 
@@ -39,6 +40,16 @@ export type BlogCardData = Prisma.BlogPostGetPayload<{ select: typeof blogCardSe
 export function getLatestReviews(take = 10) {
   return prisma.review.findMany({ where: publishedWhere(), orderBy: { publishedAt: "desc" }, take, select: reviewCardSelect });
 }
+
+/** Neueste Änderung eines veröffentlichten Tests – Grundlage für das Jahr im Startseiten-Title. */
+export const getNewestReviewUpdate = cache(async (): Promise<Date | null> => {
+  const row = await prisma.review.findFirst({
+    where: publishedWhere(),
+    orderBy: { updatedAt: "desc" },
+    select: { updatedAt: true },
+  });
+  return row?.updatedAt ?? null;
+});
 
 export function getLatestPosts(take = 5) {
   return prisma.blogPost.findMany({ where: publishedWhere(), orderBy: { publishedAt: "desc" }, take, select: blogCardSelect });

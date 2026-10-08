@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Inter, Manrope } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { ThemeProvider } from "@/components/theme-provider";
-import { SITE, isIndexable } from "@/lib/site";
+import { SITE, isIndexable, pageAlternates } from "@/lib/site";
 import { consentScript } from "@/lib/consent";
 import "./globals.css";
 
@@ -17,10 +17,7 @@ export const metadata: Metadata = {
   openGraph: { type: "website", locale: "de_DE", siteName: SITE.name },
   ...(isIndexable() ? {} : { robots: { index: false, follow: false, googleBot: { index: false, follow: false } } }),
   twitter: { card: "summary_large_image" },
-  alternates: {
-    canonical: "/",
-    types: { "application/rss+xml": [{ url: "/rss.xml", title: `${SITE.name} – Tests & Fachblog` }] },
-  },
+  alternates: pageAlternates("/"),
   formatDetection: { telephone: false },
 };
 

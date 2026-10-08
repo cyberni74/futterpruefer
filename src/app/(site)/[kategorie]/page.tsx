@@ -4,6 +4,7 @@ import { Breadcrumbs } from "@/components/breadcrumbs";
 import { ReviewListing } from "@/components/review-listing";
 import { parseFilters } from "@/lib/filters";
 import { getCategories, getCategory } from "@/lib/queries";
+import { DEFAULT_OG_IMAGE, SITE, pageAlternates } from "@/lib/site";
 
 export async function generateStaticParams() {
   try {
@@ -16,7 +17,22 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: PageProps<"/[kategorie]">): Promise<Metadata> {
   const cat = await getCategory((await params).kategorie);
   if (!cat) return {};
-  return { title: `${cat.name} im Test`, description: cat.description, alternates: { canonical: `/${cat.slug}` }, openGraph: { type: "website", locale: "de_DE", siteName: "Futterprüfer", url: `/${cat.slug}`, title: `${cat.name} im Test`, description: cat.description } };
+  const title = `${cat.name} im Test`;
+  return {
+    title,
+    description: cat.description,
+    alternates: pageAlternates(`/${cat.slug}`),
+    openGraph: {
+      type: "website",
+      locale: "de_DE",
+      siteName: SITE.name,
+      url: `/${cat.slug}`,
+      title,
+      description: cat.description,
+      images: [DEFAULT_OG_IMAGE],
+    },
+    twitter: { card: "summary_large_image", title, description: cat.description, images: [DEFAULT_OG_IMAGE] },
+  };
 }
 
 export default async function CategoryPage({ params, searchParams }: PageProps<"/[kategorie]">) {

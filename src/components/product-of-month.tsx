@@ -28,7 +28,9 @@ export function ProductOfMonthHero({ pom }: { pom: { year: number; month: number
         <div className="flex flex-col justify-center gap-4 p-6 md:p-10">
           <p className="text-sm font-bold uppercase tracking-widest text-white/80 dark:text-fg/80">Produkt des Monats</p>
           <div className="flex items-start gap-4">
-            <h2 id="pdm-heading" className="flex-1 text-3xl font-extrabold leading-tight md:text-4xl dark:text-fg">{r.title}</h2>
+            <h2 id="pdm-heading" className="flex-1 text-3xl font-extrabold leading-tight md:text-4xl dark:text-fg">
+              <span className="sr-only">Produkt des Monats: </span>{r.title}
+            </h2>
             <ScoreBadge score={r.totalScore} size="lg" />
           </div>
           <p className="text-lg leading-relaxed text-white/90 dark:text-fg/90">{pom.reason}</p>

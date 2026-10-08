@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, ShieldCheck } from "lucide-react";
-import { getLatestPosts, getLatestReviews, getProductOfMonth, getTickerEntries, getCategories } from "@/lib/queries";
+import type { Metadata } from "next";
+import { getLatestPosts, getLatestReviews, getNewestReviewUpdate, getProductOfMonth, getTickerEntries, getCategories } from "@/lib/queries";
 import { ProductOfMonthHero } from "@/components/product-of-month";
 import { Ticker } from "@/components/ticker";
 import { ReviewCard } from "@/components/review-card";
@@ -9,36 +10,88 @@ import { SectionHeading } from "@/components/section-heading";
 import { Reveal } from "@/components/reveal";
 import { JsonLd } from "@/components/json-ld";
 import { NewsletterBox } from "@/components/newsletter-box";
-import { SITE, absoluteUrl } from "@/lib/site";
+import { DEFAULT_OG_IMAGE, SITE, pageAlternates } from "@/lib/site";
+import { CRITERIA } from "@/lib/scoring";
 import { hyphenateCategory } from "@/lib/urls";
-import type { Metadata } from "next";
+import {
+  FALLBACK_HERO,
+  HOME_DESCRIPTION,
+  HOME_FAQ,
+  HOME_H1,
+  INTRO,
+  METHODIK_NOTE,
+  OG_DESCRIPTION,
+  OG_TITLE,
+  homeJsonLd,
+  homeTitle,
+} from "@/lib/home-seo";
 
-export const metadata: Metadata = {
-  alternates: { canonical: "/" },
-  openGraph: { type: "website", locale: "de_DE", siteName: SITE.name, url: "/", title: `${SITE.name} – Hunde- & Katzenfutter im Fachtest`, description: SITE.description },
-};
+const textLink = "font-semibold text-brand underline underline-offset-4 hover:text-brand-strong";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const title = homeTitle(await getNewestReviewUpdate());
+  return {
+    title: { absolute: title },
+    description: HOME_DESCRIPTION,
+    alternates: pageAlternates("/"),
+    openGraph: {
+      type: "website",
+      locale: "de_DE",
+      siteName: SITE.name,
+      url: "/",
+      title: OG_TITLE,
+      description: OG_DESCRIPTION,
+      images: [DEFAULT_OG_IMAGE],
+    },
+    twitter: { card: "summary_large_image", title: OG_TITLE, description: OG_DESCRIPTION, images: [DEFAULT_OG_IMAGE] },
+  };
+}
 
 export const revalidate = 3600;
 
 export default async function Home() {
-  const [pom, ticker, reviews, posts, categories] = await Promise.all([getProductOfMonth(), getTickerEntries(), getLatestReviews(10), getLatestPosts(5), getCategories()]);
+  const [pom, ticker, reviews, posts, categories, latestUpdate] = await Promise.all([
+    getProductOfMonth(),
+    getTickerEntries(),
+    getLatestReviews(10),
+    getLatestPosts(5),
+    getCategories(),
+    getNewestReviewUpdate(),
+  ]);
 
   return (
     <>
-      <JsonLd
-        data={[
-          { "@context": "https://schema.org", "@type": "Organization", name: SITE.name, url: SITE.url, logo: absoluteUrl("/brand/logo-round-512.png") },
-          { "@context": "https://schema.org", "@type": "WebSite", name: SITE.name, url: SITE.url, inLanguage: "de-DE", potentialAction: { "@type": "SearchAction", target: `${SITE.url}/suche?q={search_term_string}`, "query-input": "required name=search_term_string" } },
-        ]}
-      />
-      <h1 className="sr-only">Futterprüfer – Hunde- und Katzenfutter im unabhängigen Fachtest</h1>
-      <div className="mx-auto max-w-6xl px-4">
+      <JsonLd data={homeJsonLd(homeTitle(latestUpdate), reviews)} />
+
+      <section aria-labelledby="home-title" className="mx-auto max-w-6xl px-4">
+        <h1 id="home-title" className="max-w-4xl text-3xl font-extrabold leading-tight md:text-5xl">
+          {HOME_H1}
+        </h1>
+        <div className="mt-4 max-w-3xl space-y-4 text-lg leading-relaxed text-muted">
+          {INTRO.map((paragraph, index) => (
+            <p key={index}>
+              {paragraph.map((part, partIndex) => {
+                const content = part.strong ? <strong className="font-semibold text-fg">{part.text}</strong> : part.text;
+                return part.href ? (
+                  <Link key={partIndex} href={part.href} className={textLink}>
+                    {part.text}
+                  </Link>
+                ) : (
+                  <span key={partIndex}>{content}</span>
+                );
+              })}
+            </p>
+          ))}
+        </div>
+      </section>
+
+      <div className="mx-auto mt-8 max-w-6xl px-4">
         {pom ? (
           <ProductOfMonthHero pom={pom} />
         ) : (
           <section className="rounded-3xl bg-brand-soft p-8 md:p-12">
-            <p className="text-3xl font-extrabold md:text-5xl">Hunde- und Katzenfutter im Fachtest</p>
-            <p className="mt-4 max-w-2xl text-lg text-muted">{SITE.description}</p>
+            <p className="text-3xl font-extrabold md:text-5xl">{FALLBACK_HERO}</p>
+            <p className="mt-4 max-w-2xl text-lg text-muted">{HOME_DESCRIPTION}</p>
           </section>
         )}
       </div>
@@ -48,7 +101,10 @@ export default async function Home() {
       </div>
 
       <div className="mx-auto max-w-6xl px-4">
-        <nav aria-label="Testkategorien" className="mt-10 grid grid-cols-2 gap-3 lg:grid-cols-4">
+        <h2 id="kategorien" className="sr-only">
+          Futtertests nach Kategorie
+        </h2>
+        <nav aria-labelledby="kategorien" className="mt-10 grid grid-cols-2 gap-3 lg:grid-cols-4">
           {categories.map((c) => (
             <Link key={c.id} href={`/${c.slug}`} className="group relative flex min-h-16 flex-col items-start gap-1 overflow-hidden rounded-2xl border border-border bg-surface p-3.5 pr-9 font-bold shadow-card transition duration-300 hover:-translate-y-1 hover:border-brand hover:bg-brand-soft hover:shadow-lift focus-visible:border-brand active:scale-[0.97] sm:flex-row sm:items-center sm:gap-3 sm:p-4 sm:pr-10 motion-reduce:transition-none motion-reduce:hover:translate-y-0 motion-reduce:active:scale-100">
               <span aria-hidden className="text-2xl transition-transform duration-300 group-hover:-rotate-6 group-hover:scale-125 motion-reduce:transition-none motion-reduce:group-hover:transform-none">{c.animal === "HUND" ? "🐕" : "🐈"}</span>
@@ -59,7 +115,7 @@ export default async function Home() {
         </nav>
 
         <section aria-labelledby="neueste-tests" className="mt-16">
-          <SectionHeading id="neueste-tests" kicker="Frisch geprüft" title="Die neuesten Tests" href="/tests" linkLabel="Alle Tests" />
+          <SectionHeading id="neueste-tests" kicker="Frisch geprüft" title="Neueste Futtertests für Hund und Katze" href="/tests" linkLabel="Alle Futtertests" />
           {reviews.length === 0 ? (
             <p className="text-muted">Noch keine Tests veröffentlicht.</p>
           ) : (
@@ -75,17 +131,22 @@ export default async function Home() {
           )}
         </section>
 
-        <section aria-labelledby="methodik-teaser" className="mt-16 flex flex-col items-start gap-4 rounded-3xl border border-border bg-bg-soft p-6 md:flex-row md:items-center md:p-8">
+        <section aria-labelledby="methodik-teaser" className="mt-16 flex flex-col items-start gap-4 rounded-3xl border border-border bg-bg-soft p-6 md:flex-row md:p-8">
           <ShieldCheck className="size-12 shrink-0 text-brand" aria-hidden />
           <div className="flex-1">
-            <h2 id="methodik-teaser" className="text-xl font-extrabold">100 Punkte, sechs Kriterien, volle Transparenz</h2>
-            <p className="mt-1 text-muted">Rohstoffe, Schadstoffe, Nährstoffprofil, Deklaration, Bedarfsdeckung und Preis-Leistung. Keine gekauften Noten.</p>
+            <h2 id="methodik-teaser" className="text-xl font-extrabold">So testen wir: 100 Punkte, sechs Kriterien</h2>
+            <ul className="mt-2 grid gap-x-6 gap-y-1 text-muted sm:grid-cols-2">
+              {CRITERIA.map((c) => (
+                <li key={c.key}>{c.label}: <strong className="text-fg">{c.max} Punkte</strong></li>
+              ))}
+            </ul>
+            <p className="mt-2 text-muted">{METHODIK_NOTE}</p>
           </div>
-          <Link href="/methodik" className="inline-flex min-h-12 items-center rounded-full bg-accent px-6 font-bold text-white hover:bg-accent-strong dark:text-black">Methodik ansehen</Link>
+          <Link href="/methodik" className="inline-flex min-h-12 items-center self-start rounded-full bg-accent px-6 font-bold text-white hover:bg-accent-strong md:self-center dark:text-black">Methodik ansehen</Link>
         </section>
 
         <section aria-labelledby="neueste-artikel" className="mt-16">
-          <SectionHeading id="neueste-artikel" kicker="Fachblog" title="Neueste Artikel" href="/blog" linkLabel="Zum Blog" />
+          <SectionHeading id="neueste-artikel" kicker="Fachblog" title="Ratgeber: Neues aus dem Fachblog" href="/blog" linkLabel="Zum Fachblog" />
           {posts.length === 0 ? (
             <p className="text-muted">Noch keine Artikel veröffentlicht.</p>
           ) : (
@@ -99,6 +160,28 @@ export default async function Home() {
               ))}
             </ul>
           )}
+        </section>
+
+        <section aria-labelledby="home-faq" className="mt-16">
+          <SectionHeading id="home-faq" kicker="FAQ" title="Häufige Fragen zum Futtertest" href="/faq" linkLabel="Alle Fragen" />
+          <div className="space-y-3">
+            {HOME_FAQ.map((item) => (
+              <details key={item.q} className="group rounded-2xl border border-border bg-surface shadow-card">
+                <summary className="flex min-h-14 list-none items-center justify-between gap-3 rounded-2xl p-4 font-bold transition-colors hover:text-brand">
+                  <h3 className="text-base">{item.q}</h3>
+                  <span aria-hidden className="text-xl text-brand transition group-open:rotate-45">+</span>
+                </summary>
+                <div className="px-4 pb-4 text-muted">
+                  <p>{item.a}</p>
+                  <p className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-sm">
+                    {item.links.map(([label, href]) => (
+                      <Link key={href + label} href={href} className={textLink}>{label}</Link>
+                    ))}
+                  </p>
+                </div>
+              </details>
+            ))}
+          </div>
         </section>
 
         <div className="mt-16"><NewsletterBox /></div>
