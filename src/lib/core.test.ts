@@ -74,3 +74,11 @@ describe("hyphenateCategory", () => {
     expect(hyphenateCategory(null)).toBe("");
   });
 });
+
+describe("team", () => {
+  it("Initialen ohne Titel, eindeutige Slugs", async () => {
+    const { TEAM, initials } = await import("./team");
+    expect(initials("Dr. Lena Hoffmann")).toBe("LH");
+    expect(new Set(TEAM.map((m) => m.slug)).size).toBe(TEAM.length);
+  });
+});
