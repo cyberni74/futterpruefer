@@ -6,7 +6,7 @@ import { publishedWhere } from "@/lib/queries";
 import { parseCompareIds } from "@/lib/filters";
 import { CRITERIA, harmfulFailed, ratioRating } from "@/lib/scoring";
 import { PRICE_CLASS_LABEL } from "@/lib/site";
-import { reviewPath } from "@/lib/urls";
+import { hyphenateCategory, reviewPath } from "@/lib/urls";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { ScoreBadge } from "@/components/score-badge";
 import { FpImage } from "@/components/fp-image";
@@ -38,7 +38,7 @@ export default async function ComparePage({ searchParams }: PageProps<"/vergleic
                   <th key={i.id} scope="col" className="p-2 text-left align-top sm:p-3">
                     <div className="relative mb-3 aspect-[4/3] overflow-hidden rounded-xl bg-bg-soft"><FpImage src={i.imageUrl} alt={i.imageAlt || i.title} blur={i.imageBlur} sizes="260px" /></div>
                     <Link href={reviewPath(i)} className="text-base font-bold hover:underline">{i.title}</Link>
-                    <p className="text-xs font-medium text-muted">{i.category.shortName}</p>
+                    <p className="text-xs font-medium text-muted">{hyphenateCategory(i.category.shortName)}</p>
                   </th>
                 ))}
               </tr>

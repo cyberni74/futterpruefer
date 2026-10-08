@@ -9,3 +9,8 @@ export const OLD_CATEGORY_SLUGS: Record<string, string> = {
   "ergaenzungsfutter-hund": "ergaenzungsfuttermittel-hund",
   "ergaenzungsfutter-katze": "ergaenzungsfuttermittel-katze",
 };
+
+/** Weiche Trennstellen für lange Kategorienamen („Ergänzungs­futter­mittel“), damit sie mobil sauber umbrechen. */
+export function hyphenateCategory(name: string | null | undefined): string {
+  return (name ?? "").replace(/futtermittel/gi, (m) => `­${m.slice(0, 6)}­${m.slice(6)}`).replace(/^­/, "");
+}

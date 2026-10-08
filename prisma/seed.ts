@@ -93,10 +93,10 @@ async function blogImage(file: string, title: string, hue: number) {
 }
 
 const CATEGORIES = [
-  { slug: "alleinfuttermittel-hund", name: "Alleinfuttermittel für Hunde", shortName: "Alleinfutter Hund", animal: "HUND", foodType: "ALLEIN", sortOrder: 1, description: "Vollwertige Futtermittel, die den gesamten Nährstoffbedarf eines Hundes decken sollen." },
-  { slug: "alleinfuttermittel-katze", name: "Alleinfuttermittel für Katzen", shortName: "Alleinfutter Katze", animal: "KATZE", foodType: "ALLEIN", sortOrder: 2, description: "Vollwertige Futtermittel, die den gesamten Nährstoffbedarf einer Katze decken sollen." },
-  { slug: "ergaenzungsfuttermittel-hund", name: "Ergänzungsfuttermittel für Hunde", shortName: "Ergänzung Hund", animal: "HUND", foodType: "ERGAENZUNG", sortOrder: 3, description: "Snacks, Kauartikel und Zusätze, die eine Ration ergänzen – nicht ersetzen." },
-  { slug: "ergaenzungsfuttermittel-katze", name: "Ergänzungsfuttermittel für Katzen", shortName: "Ergänzung Katze", animal: "KATZE", foodType: "ERGAENZUNG", sortOrder: 4, description: "Snacks, Pasten und Zusätze, die eine Ration für Katzen ergänzen." },
+  { slug: "alleinfuttermittel-hund", name: "Alleinfuttermittel für Hunde", shortName: "Alleinfuttermittel Hund", animal: "HUND", foodType: "ALLEIN", sortOrder: 1, description: "Vollwertige Futtermittel, die den gesamten Nährstoffbedarf eines Hundes decken sollen." },
+  { slug: "alleinfuttermittel-katze", name: "Alleinfuttermittel für Katzen", shortName: "Alleinfuttermittel Katze", animal: "KATZE", foodType: "ALLEIN", sortOrder: 2, description: "Vollwertige Futtermittel, die den gesamten Nährstoffbedarf einer Katze decken sollen." },
+  { slug: "ergaenzungsfuttermittel-hund", name: "Ergänzungsfuttermittel für Hunde", shortName: "Ergänzungsfuttermittel Hund", animal: "HUND", foodType: "ERGAENZUNG", sortOrder: 3, description: "Snacks, Kauartikel und Zusätze, die eine Ration ergänzen – nicht ersetzen." },
+  { slug: "ergaenzungsfuttermittel-katze", name: "Ergänzungsfuttermittel für Katzen", shortName: "Ergänzungsfuttermittel Katze", animal: "KATZE", foodType: "ERGAENZUNG", sortOrder: 4, description: "Snacks, Pasten und Zusätze, die eine Ration für Katzen ergänzen." },
 ] as const;
 
 type Demo = {
@@ -169,7 +169,7 @@ async function main() {
   }
 
   const posts = [
-    { title: "Alleinfutter oder Ergänzungsfutter – was ist der Unterschied?", excerpt: "Warum die Bezeichnung auf dem Etikett rechtlich entscheidend ist und was sie über die Bedarfsdeckung verrät.", hue: 170 },
+    { title: "Alleinfuttermittel oder Ergänzungsfuttermittel – was ist der Unterschied?", excerpt: "Warum die Bezeichnung auf dem Etikett rechtlich entscheidend ist und was sie über die Bedarfsdeckung verrät.", hue: 170 },
     { title: "Zucker im Tierfutter: Wo er sich versteckt", excerpt: "Karamell, Melasse, Malzextrakt: So erkennen Sie zugesetzten Zucker in der Zusammensetzung.", hue: 30 },
     { title: "Taurin: Warum Katzen es zwingend brauchen", excerpt: "Ein Taurinmangel kann schwere Herzerkrankungen auslösen. Worauf Sie beim Katzenfutter achten sollten.", hue: 280 },
     { title: "Futterdeklaration richtig lesen", excerpt: "Offene vs. geschlossene Deklaration, Prozentangaben und Sammelbezeichnungen verständlich erklärt.", hue: 200 },

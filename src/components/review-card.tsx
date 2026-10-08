@@ -2,7 +2,7 @@ import Link from "next/link";
 import { AlertTriangle } from "lucide-react";
 import type { ReviewCardData } from "@/lib/queries";
 import { harmfulFailed } from "@/lib/scoring";
-import { reviewPath } from "@/lib/urls";
+import { hyphenateCategory, reviewPath } from "@/lib/urls";
 import { FpImage } from "./fp-image";
 import { ScoreBadge } from "./score-badge";
 
@@ -20,7 +20,7 @@ export function ReviewCard({ review, priority = false }: { review: ReviewCardDat
       </div>
       <div className="relative flex flex-1 flex-col p-4 pt-5">
         <ScoreBadge score={review.totalScore} className="absolute -top-9 right-4 z-10" />
-        <p className="text-xs font-bold uppercase tracking-wide text-brand">{review.category?.shortName}</p>
+        <p className="text-xs font-bold uppercase tracking-wide text-brand">{hyphenateCategory(review.category?.shortName)}</p>
         <h3 className="mt-1 pr-16 text-lg font-bold leading-snug">
           <Link href={reviewPath(review)} className="after:absolute after:inset-0">
             {review.title}

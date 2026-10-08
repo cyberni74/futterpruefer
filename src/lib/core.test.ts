@@ -65,3 +65,12 @@ describe("formatDate", () => {
     expect(formatDate("kein-datum")).toBe("");
   });
 });
+
+describe("hyphenateCategory", () => {
+  it("setzt weiche Trennstellen und lässt Text sonst unverändert", async () => {
+    const { hyphenateCategory } = await import("./urls");
+    expect(hyphenateCategory("Ergänzungsfuttermittel Katze")).toBe("Ergänzungs­futter­mittel Katze");
+    expect(hyphenateCategory("Ergänzungsfuttermittel Katze").replace(/­/g, "")).toBe("Ergänzungsfuttermittel Katze");
+    expect(hyphenateCategory(null)).toBe("");
+  });
+});

@@ -10,6 +10,7 @@ import { Reveal } from "@/components/reveal";
 import { JsonLd } from "@/components/json-ld";
 import { NewsletterBox } from "@/components/newsletter-box";
 import { SITE, absoluteUrl } from "@/lib/site";
+import { hyphenateCategory } from "@/lib/urls";
 
 export const revalidate = 3600;
 
@@ -43,9 +44,9 @@ export default async function Home() {
       <div className="mx-auto max-w-6xl px-4">
         <nav aria-label="Testkategorien" className="mt-10 grid grid-cols-2 gap-3 lg:grid-cols-4">
           {categories.map((c) => (
-            <Link key={c.id} href={`/${c.slug}`} className="flex min-h-16 items-center gap-3 rounded-2xl border border-border bg-surface p-4 font-bold shadow-card transition hover:-translate-y-0.5 hover:shadow-lift motion-reduce:hover:translate-y-0">
+            <Link key={c.id} href={`/${c.slug}`} className="flex min-h-16 flex-col items-start gap-1 rounded-2xl border border-border bg-surface p-3.5 font-bold sm:flex-row sm:items-center sm:gap-3 sm:p-4 shadow-card transition hover:-translate-y-0.5 hover:shadow-lift motion-reduce:hover:translate-y-0">
               <span aria-hidden className="text-2xl">{c.animal === "HUND" ? "🐕" : "🐈"}</span>
-              <span className="leading-tight">{c.shortName}</span>
+              <span className="min-w-0 leading-tight">{hyphenateCategory(c.shortName)}</span>
             </Link>
           ))}
         </nav>
