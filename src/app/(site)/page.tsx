@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, ShieldCheck } from "lucide-react";
-import { getLatestPosts, getLatestReviews, getProductOfMonth, getTickerEntries, getCategories } from "@/lib/queries";
+import { getLatestPosts, getLatestReviews, getProductOfMonth, getTickerEntries, getCategories, getCategoryLeaders, getHomeFaq } from "@/lib/queries";
+import { HomeSeo } from "@/components/home-seo";
 import { ProductOfMonthHero } from "@/components/product-of-month";
 import { Ticker } from "@/components/ticker";
 import { ReviewCard } from "@/components/review-card";
@@ -21,7 +22,7 @@ export const metadata: Metadata = {
 export const revalidate = 3600;
 
 export default async function Home() {
-  const [pom, ticker, reviews, posts, categories] = await Promise.all([getProductOfMonth(), getTickerEntries(), getLatestReviews(10), getLatestPosts(5), getCategories()]);
+  const [pom, ticker, reviews, posts, categories, leaders, faq] = await Promise.all([getProductOfMonth(), getTickerEntries(), getLatestReviews(10), getLatestPosts(5), getCategories(), getCategoryLeaders(), getHomeFaq(4)]);
 
   return (
     <>
@@ -100,6 +101,8 @@ export default async function Home() {
             </ul>
           )}
         </section>
+
+        <HomeSeo leaders={leaders} faq={faq} />
 
         <div className="mt-16"><NewsletterBox /></div>
       </div>

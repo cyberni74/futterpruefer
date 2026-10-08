@@ -128,3 +128,22 @@ export async function resolveReviewPath(slug: string): Promise<string | null> {
   }
   return null;
 }
+
+/** Je Kategorie: Anzahl veröffentlichter Tests und der bestbewertete Test (für interne Verlinkung auf der Startseite). */
+export async function getCategoryLeaders() {
+  const categories = await getCategories();
+  return Promise.all(
+    categories.map(async (c) => {
+      const where = { ...publishedWhere(), categoryId: c.id };
+      const [count, top] = await Promise.all([
+        prisma.review.count({ where }),
+        prisma.review.findFirst({ where, orderBy: [{ totalScore: "desc" }, { publishedAt: "desc" }], select: { slug: true, brand: true, productName: true, totalScore: true } }),
+      ]);
+      return { ...c, count, top };
+    }),
+  );
+}
+
+export function getHomeFaq(take = 4) {
+  return prisma.faqItem.findMany({ orderBy: { sortOrder: "asc" }, take });
+}
