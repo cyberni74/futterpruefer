@@ -1,4 +1,5 @@
 import "server-only";
+import { autolinkUrls } from "./autolink";
 import { cache } from "react";
 import { prisma } from "@/lib/db";
 import { blogCardSelect, publishedWhere, reviewCardSelect } from "@/lib/queries";
@@ -39,7 +40,7 @@ export const getLinkTerms = cache(async (): Promise<LinkTerm[]> => {
 /** Artikel-HTML: bereinigen, dann Lexikon-/Glossarbegriffe verlinken. */
 export async function renderArticle(html: string | null | undefined, exclude: string[] = []): Promise<string> {
   const terms = (await getLinkTerms()).filter((t) => !exclude.includes(t.href));
-  return linkify(sanitize(html), terms);
+  return linkify(autolinkUrls(sanitize(html)), terms);
 }
 
 const words = (list: Array<string | null | undefined>) =>
