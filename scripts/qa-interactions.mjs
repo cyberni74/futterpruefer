@@ -16,15 +16,15 @@ await p.getByRole("combobox", { name: "Suchbegriff" }).fill("nordrudl");
 await p.waitForSelector("[role=option]");
 check("Live-Vorschläge mit Tippfehler", (await p.locator("[role=option]").count()) >= 2);
 await p.keyboard.press("ArrowDown"); await p.keyboard.press("Enter");
-await p.waitForURL(/\/tests\//);
-check("Tastaturnavigation öffnet Test", p.url().includes("/tests/nordrudel"));
+await p.waitForURL(/\/alleinfuttermittel-hund\//);
+check("Tastaturnavigation öffnet Test", /\/alleinfuttermittel-hund\/nordrudel/.test(p.url()));
 
 await p.getByRole("button", { name: "Dunklen Modus aktivieren" }).click();
 await p.reload({ waitUntil: "networkidle" });
 check("Dark Mode bleibt nach Reload", await p.evaluate(() => document.documentElement.classList.contains("dark")));
 await p.screenshot({ path: "screenshots/dark-review.png" });
 
-await p.goto(base + "/kategorie/alleinfutter-hund", { waitUntil: "networkidle" });
+await p.goto(base + "/alleinfuttermittel-hund", { waitUntil: "networkidle" });
 const boxes = p.getByRole("checkbox", { name: "Vergleichen" });
 await boxes.nth(0).check(); await boxes.nth(1).check();
 await p.getByRole("link", { name: "Vergleichen", exact: true }).click();

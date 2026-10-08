@@ -38,6 +38,7 @@ const slug = await p.locator("input[name=slug]").inputValue();
 check(`Gespeichert (Slug ${slug})`, !!slug);
 
 const pub = await p.request.get(`${base}/tests/${slug}`);
+console.log("  → ", pub.status(), pub.url());
 check("Testseite sofort öffentlich (200)", pub.status() === 200);
 check("Gesamtpunkte 84 auf Testseite", (await pub.text()).includes("84 von 100"));
 const home = await (await p.request.get(base + "/")).text();
