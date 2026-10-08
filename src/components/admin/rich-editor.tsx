@@ -17,7 +17,10 @@ import {
   Undo2,
   type LucideIcon,
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { autolinkUrls } from "@/lib/autolink";
+
+const escapeText = (t: string) => t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
 type Props = {
   /** Name des versteckten Inputs, über den das HTML an die Server-Action geht */
@@ -159,6 +162,7 @@ export function RichEditor({ name, initialHtml = "", id = name, label = "Inhalt"
     onChange?.(v);
   };
 
+  const editorRef = useRef<Editor | null>(null);
   const editor = useEditor({
     immediatelyRender: false,
     extensions: [
@@ -177,9 +181,26 @@ export function RichEditor({ name, initialHtml = "", id = name, label = "Inhalt"
         role: "textbox",
         class: "prose-fp min-h-72 max-w-none px-4 py-3 focus:outline-none",
       },
+      // Eingefügter Text mit URLs (z. B. Quellenlisten): Links gekürzt anzeigen, Zeilen erhalten
+      handlePaste: (view, event) => {
+        const text = event.clipboardData?.getData("text/plain") ?? "";
+        const htmlData = event.clipboardData?.getData("text/html") ?? "";
+        if (!/https?:\/\//i.test(text + htmlData)) return false;
+        const content = htmlData
+          ? autolinkUrls(htmlData)
+          : text
+              .split(/\r?\n\s*\r?\n/)
+              .map((para) => `<p>${autolinkUrls(escapeText(para))}</p>`)
+              .join("");
+        editorRef.current?.commands.insertContent(content);
+        return true;
+      },
     },
     onUpdate: ({ editor: e }) => update(e.isEmpty ? "" : e.getHTML()),
   });
+  useEffect(() => {
+    editorRef.current = editor;
+  }, [editor]);
 
   const toggleSource = () => {
     if (!editor) return;
@@ -187,7 +208,7 @@ export function RichEditor({ name, initialHtml = "", id = name, label = "Inhalt"
       setSourceText(html);
       setSource(true);
     } else {
-      editor.commands.setContent(sourceText, { emitUpdate: false });
+      editor.commands.setContent(autolinkUrls(sourceText), { emitUpdate: false });
       update(editor.isEmpty ? "" : editor.getHTML());
       setSource(false);
     }

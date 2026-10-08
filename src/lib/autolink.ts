@@ -1,15 +1,19 @@
 /**
- * Macht reine Text-URLs (z. B. Quellenangaben) klickbar und kürzt ihre Anzeige,
- * damit lange Links mobil nicht die Seite verbreitern. Zeilenumbrüche im Fließtext
- * (aus eingefügtem Text) werden zu <br>. Erwartet bereits bereinigtes HTML.
+ * Macht reine Text-URLs (z. B. Quellenangaben) klickbar und zeigt sie gekürzt an
+ * (10 Zeichen + „…“), damit lange Links weder Editor noch Seite verbreitern.
+ * Links, deren sichtbarer Text eine komplette URL ist, werden ebenfalls gekürzt.
+ * Zeilenumbrüche im Fließtext (aus eingefügtem Text) werden zu <br>.
+ * Erwartet bereits bereinigtes HTML; idempotent.
  */
 const SKIP_TAGS = new Set(["a", "code", "pre", "script", "style", "button", "textarea"]);
 const URL_RE = /\bhttps?:\/\/[^\s<>"']+/gi;
 const TRAILING = /[.,;:!?)\]}»“"']+$/;
 
-export function shortUrl(url: string, max = 48): string {
+export const LINK_TEXT_MAX = 10;
+
+export function shortUrl(url: string, max = LINK_TEXT_MAX): string {
   const plain = url.replace(/&amp;/g, "&").replace(/^https?:\/\/(www\.)?/i, "").replace(/\/$/, "");
-  return plain.length > max ? `${plain.slice(0, max - 1)}…` : plain;
+  return plain.length > max ? `${plain.slice(0, max)}…` : plain;
 }
 
 const esc = (s: string) => s.replace(/&(?!amp;|lt;|gt;|quot;|#\d+;)/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
@@ -28,7 +32,11 @@ export function autolinkUrls(html: string | null | undefined): string {
       }
       return tag;
     }
-    if (!text || stack.length) return text ?? "";
+    if (!text) return "";
+    if (stack.length) {
+      // sichtbarer Linktext = komplette URL → kürzen (Ziel bleibt im href)
+      return stack[stack.length - 1] === "a" && /^\s*https?:\/\/\S+\s*$/i.test(text) ? esc(shortUrl(text.trim())) : text;
+    }
     return text
       .replace(URL_RE, (raw) => {
         const tail = raw.match(TRAILING)?.[0] ?? "";

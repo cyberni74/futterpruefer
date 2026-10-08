@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { prisma } from "@/lib/db";
 import { requireAdmin } from "@/auth";
 import { sanitize } from "@/lib/sanitize";
+import { autolinkUrls } from "@/lib/autolink";
 import { totalScore } from "@/lib/scoring";
 import { revalidateContent } from "@/lib/revalidate";
 import { isUniqueViolation, reviewFormToRaw, reviewSchema, toFieldErrors, type ActionResult } from "@/lib/admin/schemas";
@@ -66,7 +67,7 @@ export async function saveReview(id: string | null, _prev: ActionResult | null, 
     claims: v.claims,
     pros: v.pros,
     cons: v.cons,
-    bodyHtml: sanitize(v.bodyHtml),
+    bodyHtml: autolinkUrls(sanitize(v.bodyHtml)),
     metaTitle: v.metaTitle,
     metaDescription: v.metaDescription,
     keywords: v.keywords,

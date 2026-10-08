@@ -8,6 +8,7 @@ import { PrismaClient } from "../src/generated/prisma/client";
 import { totalScore } from "../src/lib/scoring";
 import { slugify } from "../src/lib/slug";
 import { pgConfig } from "../src/lib/pg-config";
+import { autolinkUrls } from "../src/lib/autolink";
 
 const esc = (t: string) => t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
@@ -137,6 +138,7 @@ async function main() {
   }
 
   await seedLexikonAndGlossary();
+  await normalizeStoredLinks();
   if ((await prisma.review.count()) > 0) {
     console.log("Inhalte vorhanden – Demo-Inhalte übersprungen.");
     await ensureDemoDetails();
@@ -306,6 +308,24 @@ function demoBody(title: string, d: Detail, verdict: string) {
 <h2>Bedarfsdeckung</h2><p>Abgleich der Nährstoffgehalte mit dem Bedarf der Tierart und Lebensphase.</p>
 <h2>Preis-Leistung</h2><p>Packung ${esc(d.pkg)} für ca. ${d.price.toFixed(2).replace(".", ",")} €, das entspricht etwa ${d.perDay.toFixed(2).replace(".", ",")} € pro Tagesration.</p>
 <h2>Fazit des Experten</h2><p>${esc(verdict)}</p>`;
+}
+
+/** Lange Text-URLs in gespeicherten Texten (z. B. Quellen) einmalig in kurze Links umwandeln – idempotent. */
+async function normalizeStoredLinks() {
+  let n = 0;
+  for (const r of await prisma.review.findMany({ where: { bodyHtml: { contains: "http" } }, select: { id: true, bodyHtml: true } })) {
+    const next = autolinkUrls(r.bodyHtml);
+    if (next !== r.bodyHtml) { await prisma.review.update({ where: { id: r.id }, data: { bodyHtml: next } }); n++; }
+  }
+  for (const r of await prisma.blogPost.findMany({ where: { bodyHtml: { contains: "http" } }, select: { id: true, bodyHtml: true } })) {
+    const next = autolinkUrls(r.bodyHtml);
+    if (next !== r.bodyHtml) { await prisma.blogPost.update({ where: { id: r.id }, data: { bodyHtml: next } }); n++; }
+  }
+  for (const r of await prisma.lexikonEntry.findMany({ where: { bodyHtml: { contains: "http" } }, select: { id: true, bodyHtml: true } })) {
+    const next = autolinkUrls(r.bodyHtml);
+    if (next !== r.bodyHtml) { await prisma.lexikonEntry.update({ where: { id: r.id }, data: { bodyHtml: next } }); n++; }
+  }
+  if (n) console.log(`Links gekürzt in ${n} Texten.`);
 }
 
 /** Bild 2 (Futter selbst) für Demo-Tests nachrüsten, die noch keins haben. */

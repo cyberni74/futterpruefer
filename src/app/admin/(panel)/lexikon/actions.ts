@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { prisma } from "@/lib/db";
 import { requireAdmin } from "@/auth";
 import { sanitize } from "@/lib/sanitize";
+import { autolinkUrls } from "@/lib/autolink";
 import { isUniqueViolation, toFieldErrors, type ActionResult } from "@/lib/admin/schemas";
 import { lexikonFormToRaw, lexikonSchema } from "@/lib/admin/lexikon";
 import { resolvePublish, statusKey, STATUS_LABEL } from "@/lib/admin/publish";
@@ -32,7 +33,7 @@ export async function saveLexikon(id: string | null, _prev: ActionResult | null,
     concern: v.concern,
     shortDescription: v.shortDescription,
     assessment: v.assessment,
-    bodyHtml: sanitize(v.bodyHtml),
+    bodyHtml: autolinkUrls(sanitize(v.bodyHtml)),
     metaTitle: v.metaTitle,
     metaDescription: v.metaDescription,
     status: pub.status,

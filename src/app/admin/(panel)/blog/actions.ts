@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { prisma } from "@/lib/db";
 import { requireAdmin } from "@/auth";
 import { sanitize } from "@/lib/sanitize";
+import { autolinkUrls } from "@/lib/autolink";
 import { revalidateContent } from "@/lib/revalidate";
 import { blogFormToRaw, blogSchema, isUniqueViolation, toFieldErrors, type ActionResult } from "@/lib/admin/schemas";
 import { resolvePublish, statusKey, STATUS_LABEL } from "@/lib/admin/publish";
@@ -30,7 +31,7 @@ export async function savePost(id: string | null, _prev: ActionResult | null, fo
     imageUrl: v.imageUrl || null,
     imageAlt: v.imageAlt,
     imageBlur: v.imageBlur || null,
-    bodyHtml: sanitize(v.bodyHtml),
+    bodyHtml: autolinkUrls(sanitize(v.bodyHtml)),
     metaTitle: v.metaTitle,
     metaDescription: v.metaDescription,
     keywords: v.keywords,
