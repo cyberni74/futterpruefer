@@ -21,7 +21,7 @@ export default function ImpressumPage() {
           {other[0]}<br />
           {other[1]}
         </p>
-        <p>Vertretungsberechtigt: <Todo>Name der vertretungsberechtigten Person(en) der LLP</Todo></p>
+        <p>Vertretungsberechtigt: Beytullah Coscun</p>
         <p>Vertreter für Europa: {OPERATOR.europeRepresentative}, <Todo>ladungsfähige Anschrift in der EU</Todo></p>
 
         <h2>Kontakt</h2>
