@@ -13,6 +13,7 @@ import { NISCHEN_POSTS } from "./blog-nischen";
 import { RECHERCHE_POSTS } from "./blog-recherche";
 import { BLOG_BODY_IMAGES } from "./blog-bilder";
 import { REVIEW_TEASERS, REVIEW_TEASERS_PREVIOUS } from "./review-teasers";
+import { MEDIDOG_TEST } from "./review-medidog";
 
 const esc = (t: string) => t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
@@ -146,6 +147,7 @@ async function main() {
   await ensureNischenPosts();
   await ensureBlogBodyImages();
   await ensureReviewTeasers();
+  await ensureMedidogTest();
   await normalizeStoredLinks();
   // Demo-Inhalte (fiktive Tests, Blog, Ticker) nur auf ausdrücklichen Wunsch: SEED_DEMO=1.
   // Verhindert, dass sie nach dem Löschen bei einem Deploy wieder auftauchen.
@@ -388,6 +390,38 @@ async function ensureReviewTeasers() {
     n += r.count;
   }
   if (n) console.log(`${n} Test-Teaser gesetzt.`);
+}
+
+/** Legt den Test „Medidog Ulmenrinden Paste“ an, falls der Slug fehlt (Bilder liegen in public/tests). */
+async function ensureMedidogTest() {
+  const t = MEDIDOG_TEST;
+  if (await prisma.review.findUnique({ where: { slug: t.slug }, select: { id: true } })) return;
+  const category = await prisma.category.findUnique({ where: { slug: t.categorySlug }, select: { id: true } });
+  if (!category) return;
+  const blur = async (file: string) => {
+    const b = await sharp(path.join(process.cwd(), "public", "tests", file)).resize(16).webp({ quality: 40 }).toBuffer().catch(() => null);
+    return b ? `data:image/webp;base64,${b.toString("base64")}` : null;
+  };
+  const [imageBlur, contentImageBlur] = await Promise.all([blur(t.image), blur(t.contentImage)]);
+  if (!imageBlur || !contentImageBlur) { console.log("Test Medidog übersprungen: Bilder in public/tests fehlen."); return; }
+  const sc = t.scores;
+  await prisma.review.create({
+    data: {
+      slug: t.slug, title: t.title, brand: t.brand, productName: t.productName, keyword: t.keyword, categoryId: category.id,
+      priceClass: t.priceClass, pricePerKg: t.pricePerKg, packageSize: t.packageSize, price: t.price, pricePerDay: t.pricePerDay,
+      imageUrl: `/tests/${t.image}`, imageAlt: t.imageAlt, imageBlur,
+      contentImageUrl: `/tests/${t.contentImage}`, contentImageAlt: t.contentImageAlt, contentImageBlur,
+      gallery: t.gallery.map((g) => `/tests/${g}`),
+      composition: t.composition, analysis: t.analysis, claims: t.claims,
+      ...sc, totalScore: Object.values(sc).reduce((a, b) => a + b, 0),
+      verdict: t.verdict, teaser: t.teaser, pros: t.pros, cons: t.cons,
+      bodyHtml: autolinkUrls(t.bodyHtml), conclusionHtml: t.conclusionHtml,
+      metaTitle: t.metaTitle, metaDescription: t.metaDescription, keywords: t.keywords,
+      priceDate: new Date("2026-10-09T12:00:00Z"), testedAt: new Date("2026-10-09T12:00:00Z"),
+      status: "PUBLISHED", publishedAt: new Date(),
+    },
+  });
+  console.log("Test Medidog Ulmenrinden Paste angelegt.");
 }
 
 async function ensureFaq() {
