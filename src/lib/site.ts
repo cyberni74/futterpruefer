@@ -40,3 +40,19 @@ export function formatDate(d: Date | string | null | undefined): string {
 
 export const PRICE_CLASS_LABEL = { GUENSTIG: "Günstig", MITTEL: "Mittel", PREMIUM: "Premium" } as const;
 export const ANIMAL_LABEL = { HUND: "Hund", KATZE: "Katze" } as const;
+
+/** Anbieter der Website (Impressum, Datenschutzerklärung). */
+export const OPERATOR = {
+  name: "Teraa International",
+  nameSuffix: "c/o Blue Vale Lifetech LLP",
+  address: [
+    ["No 36, Opp. 09, Arekempanhally, Wilson Garden", "Bengaluru – 560027, Indien"],
+    ["A1, Gouranganagar, North 24 Parganas", "West Bengal – 700162, Indien"],
+  ],
+  email: "contactus@teraa-intl.com",
+  phone: "+91 95350 96718",
+  phoneInternational: "+91 94773 74505",
+  hours: "Mo–Sa 10:00–18:00 Uhr (indische Zeit, IST)",
+  registrationNo: "AAL 6212",
+  gst: ["29ABIFM0599D1Z0", "19ABIFM0599D1Z1"],
+} as const;
