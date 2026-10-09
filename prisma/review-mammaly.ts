@@ -38,7 +38,7 @@ export const MAMMALY_TESTS = [
   {
     ...COMMON,
     slug: "mammaly-lucky-belly-test",
-    title: "mammaly Lucky Belly im Test: 71/100 Punkte",
+    title: "mammaly Lucky Belly im Test: 68/100 Punkte",
     productName: "Lucky Belly",
     keyword: "Darmsnack Hund Probiotika",
     image: "mammaly-lucky-belly-hund-darm-ergaenzung.webp",
@@ -55,10 +55,10 @@ export const MAMMALY_TESTS = [
       { name: "Rohfaser", value: 1.8 },
       { name: "Feuchtigkeit", value: 27.3 },
     ],
-    scores: { scoreRaw: 22, scoreHarmful: 17, scoreNutrients: 14, scoreDeclaration: 10, scoreNeeds: 7, scoreValue: 1 },
+    scores: { scoreRaw: 22, scoreHarmful: 17, scoreNutrients: 14, scoreDeclaration: 7, scoreNeeds: 7, scoreValue: 1 },
     verdict:
-      "Eine ordentlich deklarierte Darm-Ergänzung mit vielen Zutaten samt Prozentangaben. Abzüge: unbenanntes „Konservierungsmittel“, fehlende Mengen bei den ersten Zutaten, Wirkaussagen, die sich auf Zutaten und eine Kundenumfrage statt auf das Produkt stützen, und ein Preis von 142,83 € je Kilogramm. 71 Punkte, Ampel Gelb.",
-    teaser: "Offene Zutatenliste, aber 143 € je kg und Werbung mit Kundenumfrage statt Studie. 71 Punkte.",
+      "Eine ordentlich deklarierte Darm-Ergänzung mit vielen Zutaten samt Prozentangaben. Abzüge: unbenanntes „Konservierungsmittel“, fehlende Mengen bei den ersten Zutaten, Wirkaussagen, die sich auf Zutaten und eine Kundenumfrage statt auf das Produkt stützen, und ein Preis von 142,83 € je Kilogramm. 68 Punkte, Ampel Gelb.",
+    teaser: "Offene Zutatenliste, aber 143 € je kg und Werbung mit Kundenumfrage statt Studie. 68 Punkte.",
     pros: [
       "Zusammensetzung mit Prozentangaben für 10 von 14 Zutaten, vollständige Analyse inklusive Feuchtigkeit (27,3 %)",
       "Zuckerfrei, ohne Farbstoffe; Zusatzstoffe mit Mengen (Vitamin E 2169 mg/kg, Bacillus velezensis 3,4 x 10^10 KBE/kg)",
@@ -81,8 +81,8 @@ export const MAMMALY_TESTS = [
       c("Über 25.000+ 5-Sterne-Bewertungen", "FRAGWUERDIG", "UWG § 5", "Markenbanner ohne Plattform und Datum. Die Produktseite nennt 4,6 Sterne bei 10.824 Bewertungen, ebenfalls ohne Plattform. Die Zahlen lassen sich nicht überprüfen."),
       c("DLG-prämierte Qualität", "FRAGWUERDIG", "UWG § 5", "Die DLG-Prüfung ist verlinkt („Pruefbescheid“), die Prüfkriterien erklärt die Seite nicht. Eine DLG-Auszeichnung bestätigt nach eigener Beschreibung Qualität der Herstellung, nicht die beworbene Wirkung auf die Verdauung."),
     ],
-    metaTitle: "mammaly Lucky Belly im Test: 71/100 Punkte",
-    metaDescription: "mammaly Lucky Belly Darmsnack für Hunde im Test: Zusammensetzung, Analyse, Werbeaussagen-Check, Preis pro Tag und Abo. 71 von 100 Punkten.",
+    metaTitle: "mammaly Lucky Belly im Test: 68/100 Punkte",
+    metaDescription: "mammaly Lucky Belly Darmsnack für Hunde im Test: Zusammensetzung, Analyse, Werbeaussagen-Check, Preis pro Tag und Abo. 68 von 100 Punkten.",
     keywords: ["mammaly Lucky Belly", "Lucky Belly Test", "Darmsnack Hund", "mammaly Erfahrungen", "Probiotika Hund Snack", "Flohsamenschalen Hund"],
     publishedDaysAgo: 8.31,
     bodyHtml: `<p>„Tägliche Ergänzungssnacks mit Prä- &amp; Probiotika, Flohsamen und Fenchel – 95% Kundenzufriedenheit.“ Mit diesem Satz beginnt die Produktseite von <strong>Lucky Belly</strong> (${SRC}). Ein Hund hat dazu keine Meinung, die 95 % kommen aus einer Kundenbefragung. Wir prüfen, was das Etikett wirklich hergibt.</p>
@@ -103,7 +103,7 @@ ${STUDIEN("Die auf der Seite verlinkten Quellen sind echte Veröffentlichungen, 
 
 ${KOSTEN("Rechnet man nur die Zutaten, ist der Preis hoch. Eine kleine Packung Flohsamenschalen und ein probiotisches Präparat kosten zusammen deutlich weniger. Dafür ist die Kombination als Snack praktisch, und Hunde nehmen die weichen Snacks laut Seite gern. Die Seite räumt selbst ein, dass der Preis eine Hürde ist: Kundenbewertungen auf der Produktseite sagen „Einzig der Preis ist ein Manko.“", "lucky")}
 
-<p><strong>Unser Gesamtergebnis: 71 von 100 Punkten.</strong> Nach unserem Bewertungsschema liegt Lucky Belly im gelben Bereich. Wir erkennen die offene Zutatenliste, die vollständige Analyse und die Verzichtserklärung (keine Farbstoffe, kein Zucker) an. Punkte kosten das unbenannte Konservierungsmittel, die fehlenden Mengen der ersten Zutaten, Wirkaussagen ohne Studie am Produkt, die inneren Widersprüche und der Preis.</p>
+<p><strong>Unser Gesamtergebnis: 68 von 100 Punkten.</strong> Nach unserem Bewertungsschema liegt Lucky Belly im gelben Bereich. Wir erkennen die offene Zutatenliste, die vollständige Analyse und die Verzichtserklärung (keine Farbstoffe, kein Zucker) an. Punkte kosten das unbenannte Konservierungsmittel, die fehlenden Mengen der ersten Zutaten, Wirkaussagen ohne Studie am Produkt, die inneren Widersprüche und der Preis.</p>
 ${FOOT}`,
     conclusionHtml: `<p>Lucky Belly ist eine ordentlich deklarierte Ergänzung für Hunde mit empfindlichem Magen-Darm-Trakt, aber nicht der Wundersnack, den die Seite zeichnet. Die Zutaten sind plausibel, belegt ist die Wirkung des fertigen Produkts nicht. Wer es probiert, sollte das mit dem Futter konstant halten und nach vier bis sechs Wochen ehrlich prüfen, ob sich Kot und Bauchgeräusche verändert haben. Bei anhaltenden Beschwerden führt der Weg zur Tierärztin.</p>`,
   },
