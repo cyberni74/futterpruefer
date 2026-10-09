@@ -10,6 +10,7 @@ import { slugify } from "../src/lib/slug";
 import { pgConfig } from "../src/lib/pg-config";
 import { autolinkUrls } from "../src/lib/autolink";
 import { NISCHEN_POSTS } from "./blog-nischen";
+import { RECHERCHE_POSTS } from "./blog-recherche";
 
 const esc = (t: string) => t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
@@ -332,7 +333,7 @@ const MORE_FAQ: Array<{ sortOrder: number; question: string; answer: string }> =
 /** Fachblog-Beiträge aus der Nischenanalyse: nur anlegen, wenn der Slug fehlt (Admin-Änderungen bleiben erhalten). */
 async function ensureNischenPosts() {
   let n = 0;
-  for (const p of NISCHEN_POSTS) {
+  for (const p of [...NISCHEN_POSTS, ...RECHERCHE_POSTS]) {
     if (await prisma.blogPost.findUnique({ where: { slug: p.slug }, select: { id: true } })) continue;
     const file = path.join(process.cwd(), "public", "blog", p.image);
     const blur = await sharp(file).resize(16).webp({ quality: 40 }).toBuffer().catch(() => null);
