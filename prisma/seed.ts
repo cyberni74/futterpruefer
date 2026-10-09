@@ -9,6 +9,7 @@ import { totalScore } from "../src/lib/scoring";
 import { slugify } from "../src/lib/slug";
 import { pgConfig } from "../src/lib/pg-config";
 import { autolinkUrls } from "../src/lib/autolink";
+import { NISCHEN_POSTS } from "./blog-nischen";
 
 const esc = (t: string) => t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
@@ -139,6 +140,7 @@ async function main() {
 
   await seedLexikonAndGlossary();
   await ensureFaq();
+  await ensureNischenPosts();
   await normalizeStoredLinks();
   // Demo-Inhalte (fiktive Tests, Blog, Ticker) nur auf ausdrücklichen Wunsch: SEED_DEMO=1.
   // Verhindert, dass sie nach dem Löschen bei einem Deploy wieder auftauchen.
@@ -327,6 +329,29 @@ const MORE_FAQ: Array<{ sortOrder: number; question: string; answer: string }> =
 ];
 
 /** FAQ-Einträge ergänzen, ohne vorhandene zu überschreiben (Abgleich über die Frage) – idempotent. */
+/** Fachblog-Beiträge aus der Nischenanalyse: nur anlegen, wenn der Slug fehlt (Admin-Änderungen bleiben erhalten). */
+async function ensureNischenPosts() {
+  let n = 0;
+  for (const p of NISCHEN_POSTS) {
+    if (await prisma.blogPost.findUnique({ where: { slug: p.slug }, select: { id: true } })) continue;
+    const file = path.join(process.cwd(), "public", "blog", p.image);
+    const blur = await sharp(file).resize(16).webp({ quality: 40 }).toBuffer().catch(() => null);
+    if (!blur) { console.log(`Fachblog-Beitrag ${p.slug} übersprungen: Titelbild public/blog/${p.image} fehlt.`); continue; }
+    await prisma.blogPost.create({
+      data: {
+        slug: p.slug, title: p.title, excerpt: p.excerpt,
+        bodyHtml: autolinkUrls(p.bodyHtml.trim()),
+        imageUrl: `/blog/${p.image}`, imageAlt: p.imageAlt,
+        imageBlur: `data:image/webp;base64,${blur.toString("base64")}`,
+        metaTitle: p.metaTitle, metaDescription: p.metaDescription, keywords: p.keywords,
+        status: "PUBLISHED", publishedAt: new Date(Date.now() - p.daysAgo * 86400000 - 60000),
+      },
+    });
+    n++;
+  }
+  if (n) console.log(`${n} Fachblog-Beiträge angelegt.`);
+}
+
 async function ensureFaq() {
   let n = 0;
   for (const f of MORE_FAQ) {
