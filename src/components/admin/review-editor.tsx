@@ -36,6 +36,7 @@ export type ReviewEditorData = {
   contentImageBlur: string | null;
   scores: Scores;
   verdict: string;
+  teaser: string;
   harmfulReason: string;
   composition: string;
   analysis: Array<{ name: string; value: number }>;
@@ -99,6 +100,7 @@ export function ReviewEditor({ initial, categories, brands = [], action, badge, 
     () => Object.fromEntries(CRITERIA.map((c) => [c.key, String(initial.scores[c.key] ?? 0)])) as Record<CriterionKey, string>,
   );
   const [verdict, setVerdict] = useState(initial.verdict);
+  const [teaser, setTeaser] = useState(initial.teaser);
   const [harmfulReason, setHarmfulReason] = useState(initial.harmfulReason);
   const [claims, setClaims] = useState<Claim[]>(initial.claims ?? []);
   const [pros, setPros] = useState(() => padList(initial.pros));
@@ -421,6 +423,9 @@ export function ReviewEditor({ initial, categories, brands = [], action, badge, 
             </Section>
 
             <Section title="Fazit, Pro & Contra" id="sec-fazit">
+              <Field id="teaser" label="Teaser für die Vorschau-Karte (neugierig machen, max. 160 Zeichen)" error={errors.teaser} hint={`${teaser.length}/160 Zeichen – erscheint auf Startseite, Testübersicht und Kategorien unter dem Titel`}>
+                <textarea id="teaser" name="teaser" value={teaser} onChange={(e) => setTeaser(e.target.value)} rows={2} maxLength={160} placeholder="z. B. Lachs im Namen – aber nur 4 % in der Dose. Trotzdem 76 Punkte: Was dieses Futter besser macht." className={textareaCls} {...describe("teaser", errors.teaser, true)} />
+              </Field>
               <Field id="verdict" label="Fazit (1–2 Sätze)" error={errors.verdict} hint={`${verdict.length}/400 Zeichen`}>
                 <textarea id="verdict" name="verdict" value={verdict} onChange={(e) => setVerdict(e.target.value)} rows={3} maxLength={400} className={textareaCls} {...describe("verdict", errors.verdict, true)} />
               </Field>

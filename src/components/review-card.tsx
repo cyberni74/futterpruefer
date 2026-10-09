@@ -26,7 +26,11 @@ export function ReviewCard({ review, priority = false }: { review: ReviewCardDat
             {review.title}
           </Link>
         </h3>
-        {review.keyword && <p className="mt-auto pt-3 text-sm text-muted">{review.keyword}</p>}
+        {review.teaser ? (
+          <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-muted">{review.teaser}</p>
+        ) : (
+          review.keyword && <p className="mt-auto pt-3 text-sm text-muted">{review.keyword}</p>
+        )}
       </div>
     </article>
   );

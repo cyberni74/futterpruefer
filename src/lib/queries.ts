@@ -13,6 +13,7 @@ export const reviewCardSelect = {
   brand: true,
   productName: true,
   keyword: true,
+  teaser: true,
   imageUrl: true,
   imageAlt: true,
   imageBlur: true,

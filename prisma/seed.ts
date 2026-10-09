@@ -12,6 +12,7 @@ import { autolinkUrls } from "../src/lib/autolink";
 import { NISCHEN_POSTS } from "./blog-nischen";
 import { RECHERCHE_POSTS } from "./blog-recherche";
 import { BLOG_BODY_IMAGES } from "./blog-bilder";
+import { REVIEW_TEASERS } from "./review-teasers";
 
 const esc = (t: string) => t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
@@ -144,6 +145,7 @@ async function main() {
   await ensureFaq();
   await ensureNischenPosts();
   await ensureBlogBodyImages();
+  await ensureReviewTeasers();
   await normalizeStoredLinks();
   // Demo-Inhalte (fiktive Tests, Blog, Ticker) nur auf ausdrücklichen Wunsch: SEED_DEMO=1.
   // Verhindert, dass sie nach dem Löschen bei einem Deploy wieder auftauchen.
@@ -376,6 +378,16 @@ async function ensureBlogBodyImages() {
     if (html !== post.bodyHtml) { await prisma.blogPost.update({ where: { id: post.id }, data: { bodyHtml: html } }); n++; }
   }
   if (n) console.log(`Bilder in ${n} Blogbeiträgen ergänzt.`);
+}
+
+/** Setzt die Teaser der Test-Karten, aber nur dort, wo im Admin noch keiner steht. */
+async function ensureReviewTeasers() {
+  let n = 0;
+  for (const [slug, teaser] of Object.entries(REVIEW_TEASERS)) {
+    const r = await prisma.review.updateMany({ where: { slug, teaser: "" }, data: { teaser } });
+    n += r.count;
+  }
+  if (n) console.log(`${n} Test-Teaser gesetzt.`);
 }
 
 async function ensureFaq() {

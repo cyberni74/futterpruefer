@@ -85,6 +85,8 @@ model Review {
   totalScore       Int @default(0)
 
   verdict  String   @default("")
+  /// Reißerischer Anreißer für die Vorschau-Karte (max. 160 Zeichen)
+  teaser   String   @default("")
   /// Kurzbegründung für das Schadstoff-Warnsignal
   harmfulReason String @default("")
   pros     String[] @default([])

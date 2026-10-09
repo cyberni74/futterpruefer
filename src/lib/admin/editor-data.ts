@@ -24,6 +24,7 @@ type ReviewRow = {
   contentImageAlt: string;
   contentImageBlur: string | null;
   verdict: string;
+  teaser: string;
   harmfulReason: string;
   composition: string;
   analysis: unknown;
@@ -67,6 +68,7 @@ export function reviewToEditorData(r: ReviewRow, now = new Date()) {
     contentImageBlur: r.contentImageBlur,
     scores: Object.fromEntries(CRITERIA.map((c) => [c.key, r[c.key]])) as Scores,
     verdict: r.verdict,
+    teaser: r.teaser,
     harmfulReason: r.harmfulReason,
     composition: r.composition,
     analysis: parseAnalysis(r.analysis),
@@ -107,6 +109,7 @@ export const EMPTY_REVIEW = {
   contentImageBlur: null,
   scores: Object.fromEntries(CRITERIA.map((c) => [c.key, 0])) as Scores,
   verdict: "",
+  teaser: "",
   harmfulReason: "",
   composition: "",
   analysis: [] as Array<{ name: string; value: number }>,
