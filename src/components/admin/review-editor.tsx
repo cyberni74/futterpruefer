@@ -49,6 +49,7 @@ export type ReviewEditorData = {
   pros: string[];
   cons: string[];
   bodyHtml: string;
+  conclusionHtml: string;
   metaTitle: string;
   metaDescription: string;
   keywords: string[];
@@ -433,6 +434,10 @@ export function ReviewEditor({ initial, categories, brands = [], action, badge, 
             <Section title="Testbericht" id="sec-text">
               <RichEditor name="bodyHtml" id="bodyHtml" label="Testbericht" initialHtml={initial.bodyHtml} onChange={(h) => (bodyRef.current = h)} />
               {errors.bodyHtml && <p className="text-sm font-medium text-bad">{errors.bodyHtml}</p>}
+              <div className="mt-6">
+                <RichEditor name="conclusionHtml" id="conclusionHtml" label="Ausführliches Fazit (optional, erscheint als eigener Abschnitt „Fazit“ nach dem Testbericht)" initialHtml={initial.conclusionHtml} />
+                {errors.conclusionHtml && <p className="text-sm font-medium text-bad">{errors.conclusionHtml}</p>}
+              </div>
             </Section>
 
             <Section title="SEO" id="sec-seo">

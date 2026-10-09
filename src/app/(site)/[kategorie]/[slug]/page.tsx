@@ -87,16 +87,18 @@ export default async function ReviewPage({ params }: PageProps<"/[kategorie]/[sl
   const misleading = misleadingClaims(claims);
   const analysis = parseAnalysis(r.analysis);
 
-  const [related, posts, linked, lexikon, pom] = await Promise.all([
+  const [related, posts, linked, conclusion, lexikon, pom] = await Promise.all([
     getRelatedReviews(r.categoryId, r.id, 3),
     getPostsForReview(r, 2),
     renderArticle(r.bodyHtml),
+    renderArticle(r.conclusionHtml),
     getLexikonEntries(),
     prisma.productOfMonth.findFirst({ where: { reviewId: r.id }, orderBy: [{ year: "desc" }, { month: "desc" }] }),
   ]);
   const { html: body, toc } = enhanceArticle(linked, scores);
   const hasProductData = Boolean(r.composition?.trim() || analysis.length || r.price != null || r.pricePerKg != null || r.pricePerDay != null);
-  const tocItems = [...toc, ...(hasProductData ? [{ id: "produktdaten", text: "Produktdaten" }] : []), ...(claims.length ? [{ id: "werbeaussagen-h", text: "Werbeversprechen im Faktencheck" }] : [])];
+  const hasConclusion = Boolean(conclusion.trim());
+  const tocItems = [...toc, ...(hasConclusion ? [{ id: "fazit", text: "Fazit" }] : []), ...(hasProductData ? [{ id: "produktdaten", text: "Produktdaten" }] : []), ...(claims.length ? [{ id: "werbeaussagen-h", text: "Werbeversprechen im Faktencheck" }] : [])];
   const url = absoluteUrl(reviewPath(r));
   const testedAt = r.testedAt ?? r.publishedAt;
   const minutes = readingMinutes(r.bodyHtml, r.verdict);
@@ -218,6 +220,13 @@ export default async function ReviewPage({ params }: PageProps<"/[kategorie]/[sl
             {body && <div className="prose-fp" dangerouslySetInnerHTML={{ __html: body }} />}
             <p className="mt-6 rounded-2xl bg-bg-soft p-4 text-sm text-muted">Unterstrichene Begriffe sind im <Link href="/lexikon" className="font-semibold text-brand underline">Futter-Lexikon</Link> bzw. im <Link href="/glossar" className="font-semibold text-brand underline">Glossar</Link> erklärt. Der farbige Punkt zeigt die Bedenklichkeits-Ampel.</p>
           </div>
+
+          {hasConclusion && (
+            <section id="fazit" aria-labelledby="fazit-h" className="mt-10 scroll-mt-28 rounded-3xl border border-border bg-bg-soft p-5 md:p-8">
+              <h2 id="fazit-h" className="text-2xl font-extrabold">Fazit</h2>
+              <div className="prose-fp mt-3" dangerouslySetInnerHTML={{ __html: conclusion }} />
+            </section>
+          )}
 
           {/* 7. Produktdaten */}
           {hasProductData && (

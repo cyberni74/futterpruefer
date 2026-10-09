@@ -50,6 +50,9 @@ export default async function ReviewPreviewPage({ params }: { params: Promise<{ 
         <VerdictPanel data={r} />
       </div>
       <div className="prose-fp mt-10" dangerouslySetInnerHTML={{ __html: sanitize(r.bodyHtml) }} />
+      {r.conclusionHtml.trim() && (
+        <section className="mt-10"><h2 className="text-2xl font-extrabold">Fazit</h2><div className="prose-fp mt-3" dangerouslySetInnerHTML={{ __html: sanitize(r.conclusionHtml) }} /></section>
+      )}
     </article>
   );
 }

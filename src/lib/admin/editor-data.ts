@@ -37,6 +37,7 @@ type ReviewRow = {
   pros: string[];
   cons: string[];
   bodyHtml: string;
+  conclusionHtml: string;
   metaTitle: string;
   metaDescription: string;
   keywords: string[];
@@ -79,6 +80,7 @@ export function reviewToEditorData(r: ReviewRow, now = new Date()) {
     pros: r.pros,
     cons: r.cons,
     bodyHtml: r.bodyHtml,
+    conclusionHtml: r.conclusionHtml,
     metaTitle: r.metaTitle,
     metaDescription: r.metaDescription,
     keywords: r.keywords,
@@ -118,6 +120,7 @@ export const EMPTY_REVIEW = {
   pros: [],
   cons: [],
   bodyHtml: "",
+  conclusionHtml: "",
   metaTitle: "",
   metaDescription: "",
   keywords: [],

@@ -90,6 +90,8 @@ model Review {
   pros     String[] @default([])
   cons     String[] @default([])
   bodyHtml String   @default("")
+  /// Ausführliches Fazit (HTML), eigener Abschnitt am Ende des Testtexts
+  conclusionHtml String @default("")
 
   metaTitle       String   @default("")
   metaDescription String   @default("")
