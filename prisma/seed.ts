@@ -140,8 +140,10 @@ async function main() {
   await seedLexikonAndGlossary();
   await ensureFaq();
   await normalizeStoredLinks();
-  if ((await prisma.review.count()) > 0) {
-    console.log("Inhalte vorhanden – Demo-Inhalte übersprungen.");
+  // Demo-Inhalte (fiktive Tests, Blog, Ticker) nur auf ausdrücklichen Wunsch: SEED_DEMO=1.
+  // Verhindert, dass sie nach dem Löschen bei einem Deploy wieder auftauchen.
+  if (process.env.SEED_DEMO !== "1" || (await prisma.review.count()) > 0) {
+    console.log("Demo-Inhalte übersprungen.");
     await ensureDemoDetails();
     await ensureDemoContentImages();
     return;
