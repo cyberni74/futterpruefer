@@ -423,8 +423,8 @@ export function ReviewEditor({ initial, categories, brands = [], action, badge, 
             </Section>
 
             <Section title="Fazit, Pro & Contra" id="sec-fazit">
-              <Field id="teaser" label="Teaser für die Vorschau-Karte (neugierig machen, max. 160 Zeichen)" error={errors.teaser} hint={`${teaser.length}/160 Zeichen – erscheint auf Startseite, Testübersicht und Kategorien unter dem Titel`}>
-                <textarea id="teaser" name="teaser" value={teaser} onChange={(e) => setTeaser(e.target.value)} rows={2} maxLength={160} placeholder="z. B. Lachs im Namen – aber nur 4 % in der Dose. Trotzdem 76 Punkte: Was dieses Futter besser macht." className={textareaCls} {...describe("teaser", errors.teaser, true)} />
+              <Field id="teaser" label="Teaser für die Vorschau-Karte (neugierig machen, max. 100 Zeichen = drei Zeilen)" error={errors.teaser} hint={`${teaser.length}/100 Zeichen – erscheint auf Startseite, Testübersicht und Kategorien unter dem Titel`}>
+                <textarea id="teaser" name="teaser" value={teaser} onChange={(e) => setTeaser(e.target.value)} rows={2} maxLength={100} placeholder="z. B. Lachs im Namen – aber nur 4 % in der Tüte. Trotzdem 76 Punkte." className={textareaCls} {...describe("teaser", errors.teaser, true)} />
               </Field>
               <Field id="verdict" label="Fazit (1–2 Sätze)" error={errors.verdict} hint={`${verdict.length}/400 Zeichen`}>
                 <textarea id="verdict" name="verdict" value={verdict} onChange={(e) => setVerdict(e.target.value)} rows={3} maxLength={400} className={textareaCls} {...describe("verdict", errors.verdict, true)} />

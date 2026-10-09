@@ -12,7 +12,7 @@ import { autolinkUrls } from "../src/lib/autolink";
 import { NISCHEN_POSTS } from "./blog-nischen";
 import { RECHERCHE_POSTS } from "./blog-recherche";
 import { BLOG_BODY_IMAGES } from "./blog-bilder";
-import { REVIEW_TEASERS } from "./review-teasers";
+import { REVIEW_TEASERS, REVIEW_TEASERS_PREVIOUS } from "./review-teasers";
 
 const esc = (t: string) => t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
@@ -384,7 +384,7 @@ async function ensureBlogBodyImages() {
 async function ensureReviewTeasers() {
   let n = 0;
   for (const [slug, teaser] of Object.entries(REVIEW_TEASERS)) {
-    const r = await prisma.review.updateMany({ where: { slug, teaser: "" }, data: { teaser } });
+    const r = await prisma.review.updateMany({ where: { slug, teaser: { in: ["", ...(REVIEW_TEASERS_PREVIOUS[slug] ? [REVIEW_TEASERS_PREVIOUS[slug]] : [])] } }, data: { teaser } });
     n += r.count;
   }
   if (n) console.log(`${n} Test-Teaser gesetzt.`);

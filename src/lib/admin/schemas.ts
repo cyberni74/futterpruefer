@@ -149,7 +149,7 @@ export const reviewSchema = z
     contentImageBlur: imageBlur,
     ...scoreFields,
     verdict: text("Fazit", 400),
-    teaser: text("Teaser", 160),
+    teaser: text("Teaser", 100),
     harmfulReason: text("Begründung Warnhinweis", 400),
     composition: text("Zusammensetzung", 3000),
     analysis: jsonArray(parseAnalysis, "Analytische Bestandteile", 20),
