@@ -34,7 +34,7 @@ export default async function PdmPage() {
 
   return (
     <>
-      <PageHeader title="Produkt des Monats" description="Monatliche Empfehlung aus den veröffentlichten Tests." />
+      <PageHeader title="Produkt des Monats" description="Jeden Monat wird automatisch der Test mit der höchsten Gesamtwertung zum Produkt des Monats (Testsieger). Hier können Sie ihn für einen Monat überschreiben." />
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
         <Section title="Festlegen" id="pdm-new">
           {reviews.length === 0 ? (

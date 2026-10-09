@@ -3,7 +3,7 @@ import type { BlogCardData } from "@/lib/queries";
 import { formatDate } from "@/lib/site";
 import { FpImage } from "./fp-image";
 
-export function BlogCard({ post }: { post: BlogCardData }) {
+export function BlogCard({ post, as: Heading = "h3" }: { post: BlogCardData; as?: "h2" | "h3" }) {
   return (
     <article className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-surface shadow-card transition duration-300 hover:-translate-y-1 hover:shadow-lift motion-reduce:hover:translate-y-0">
       <div className="relative aspect-[16/9] overflow-hidden bg-bg-soft">
@@ -11,9 +11,9 @@ export function BlogCard({ post }: { post: BlogCardData }) {
       </div>
       <div className="flex flex-1 flex-col p-4">
         {post.publishedAt && <time dateTime={post.publishedAt.toISOString()} className="text-xs font-semibold text-muted">{formatDate(post.publishedAt)}</time>}
-        <h3 className="mt-1 text-lg font-bold leading-snug">
+        <Heading className="mt-1 text-lg font-bold leading-snug">
           <Link href={`/blog/${post.slug}`} className="after:absolute after:inset-0">{post.title}</Link>
-        </h3>
+        </Heading>
         {post.excerpt && <p className="mt-2 line-clamp-3 text-sm text-muted">{post.excerpt}</p>}
       </div>
     </article>

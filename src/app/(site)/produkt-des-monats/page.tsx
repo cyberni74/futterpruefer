@@ -9,16 +9,15 @@ import { ScoreBadge } from "@/components/score-badge";
 import { FpImage } from "@/components/fp-image";
 
 export const revalidate = 3600;
-export const metadata: Metadata = { title: "Produkt des Monats – Archiv", description: "Alle bisherigen Produkte des Monats mit Begründung.", alternates: { canonical: "/produkt-des-monats" } };
+export const metadata: Metadata = { title: "Produkt des Monats – Testsieger im Archiv", description: "Der Testsieger jedes Monats mit Begründung: die Produkte mit der höchsten Gesamtwertung.", alternates: { canonical: "/produkt-des-monats" } };
 
 export default async function PomArchive() {
-  const now = new Date();
-  const list = (await getProductOfMonthArchive()).filter((p) => p.year < now.getFullYear() || (p.year === now.getFullYear() && p.month <= now.getMonth() + 1));
+  const list = await getProductOfMonthArchive();
   return (
     <div className="mx-auto max-w-4xl px-4">
       <Breadcrumbs items={[{ label: "Produkt des Monats" }]} />
       <h1 className="mt-4 text-3xl font-extrabold md:text-5xl">Produkt des Monats</h1>
-      <p className="mb-10 mt-3 text-lg text-muted">Jeden Monat küren wir das fachlich überzeugendste Produkt aus unseren Tests.</p>
+      <p className="mb-10 mt-3 text-lg text-muted">Jeden Monat küren wir den Testsieger: das Produkt mit der höchsten Gesamtwertung unter den in diesem Monat veröffentlichten Tests.</p>
       <ol className="space-y-6">
         {list.map((p) => (
           <li key={p.id} className="relative flex flex-col overflow-hidden rounded-3xl border border-border bg-surface shadow-card sm:flex-row">

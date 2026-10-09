@@ -78,7 +78,8 @@ describe("hyphenateCategory", () => {
 describe("team", () => {
   it("Initialen ohne Titel, eindeutige Slugs", async () => {
     const { TEAM, initials } = await import("./team");
-    expect(initials("Dr. Lena Hoffmann")).toBe("LH");
+    expect(initials("Dr. L.")).toBe("L");
+    expect(initials("M. W.")).toBe("MW");
     expect(new Set(TEAM.map((m) => m.slug)).size).toBe(TEAM.length);
   });
 });
@@ -90,5 +91,25 @@ describe("isIndexable", () => {
     expect(isIndexable("http://localhost:3000", undefined)).toBe(false);
     expect(isIndexable("https://futterpruefer.de", undefined)).toBe(true);
     expect(isIndexable("https://futterpruefer.de", "1")).toBe(false);
+  });
+});
+
+describe("Produkt des Monats (Testsieger)", () => {
+  it("wählt je Monat die höchste Wertung, manuell überschreibt, Zukunft zählt nicht", async () => {
+    const { buildMonthlyWinners, currentPom } = await import("./pom");
+    const d = (s: string) => new Date(s);
+    const R = (id: string, at: string, score: number) => ({ id, publishedAt: d(at), totalScore: score });
+    const reviews = [R("a", "2026-09-03", 70), R("b", "2026-09-20", 85), R("c", "2026-10-02", 90), R("d", "2026-10-05", 90), R("e", "2026-11-02", 99)];
+    const now = d("2026-10-09");
+    const items = buildMonthlyWinners(reviews, [], now);
+    expect(items.map((i) => [i.year, i.month, i.review.id, i.auto])).toEqual([[2026, 10, "d", true], [2026, 9, "b", true]]);
+    expect(items[0].reason).toContain("Testsieger im Oktober 2026: 90 von 100");
+    const manual = [{ id: "m", year: 2026, month: 10, reason: "x", review: reviews[0] }, { id: "f", year: 2027, month: 1, reason: "y", review: reviews[0] }];
+    const withManual = buildMonthlyWinners(reviews, manual, now);
+    expect(withManual[0]).toMatchObject({ review: { id: "a" }, auto: false, reason: "x" });
+    expect(withManual).toHaveLength(2);
+    expect(currentPom(withManual, now)?.month).toBe(10);
+    expect(currentPom(buildMonthlyWinners([], [], now), now)).toBeNull();
+    expect(currentPom(buildMonthlyWinners([R("z", "2026-08-01", 60)], [], now), now)?.month).toBe(8);
   });
 });

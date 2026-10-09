@@ -138,9 +138,12 @@ async function main() {
   }
 
   await seedLexikonAndGlossary();
+  await ensureFaq();
   await normalizeStoredLinks();
-  if ((await prisma.review.count()) > 0) {
-    console.log("Inhalte vorhanden – Demo-Inhalte übersprungen.");
+  // Demo-Inhalte (fiktive Tests, Blog, Ticker) nur auf ausdrücklichen Wunsch: SEED_DEMO=1.
+  // Verhindert, dass sie nach dem Löschen bei einem Deploy wieder auftauchen.
+  if (process.env.SEED_DEMO !== "1" || (await prisma.review.count()) > 0) {
+    console.log("Demo-Inhalte übersprungen.");
     await ensureDemoDetails();
     await ensureDemoContentImages();
     return;
@@ -218,6 +221,7 @@ async function main() {
     ],
   });
 
+  await ensureFaq();
   await ensureDemoDetails();
   await ensureDemoContentImages();
   console.log(`Seed fertig: ${ids.length} Tests, ${posts.length} Blogartikel.`);
@@ -308,6 +312,29 @@ function demoBody(title: string, d: Detail, verdict: string) {
 <h2>Bedarfsdeckung</h2><p>Abgleich der Nährstoffgehalte mit dem Bedarf der Tierart und Lebensphase.</p>
 <h2>Preis-Leistung</h2><p>Packung ${esc(d.pkg)} für ca. ${d.price.toFixed(2).replace(".", ",")} €, das entspricht etwa ${d.perDay.toFixed(2).replace(".", ",")} € pro Tagesration.</p>
 <h2>Fazit des Experten</h2><p>${esc(verdict)}</p>`;
+}
+
+const MORE_FAQ: Array<{ sortOrder: number; question: string; answer: string }> = [
+  { sortOrder: 5, question: "Was ist das beste Hundefutter?", answer: "Das eine beste Futter gibt es nicht – es hängt von Alter, Größe, Aktivität und Verträglichkeit des Hundes ab. Gutes Hundefutter hat eine nachvollziehbare Zusammensetzung mit klar benannten Fleischanteilen, kommt ohne Zucker und Farbstoffe aus und deckt den Nährstoffbedarf. In unseren Tests sehen Sie die Punktzahl je Kriterium und können Produkte direkt vergleichen." },
+  { sortOrder: 6, question: "Woran erkenne ich gutes Katzenfutter?", answer: "Katzen sind Fleischfresser. Gutes Katzenfutter hat einen hohen, klar deklarierten Fleischanteil, wenig Getreide und Kohlenhydrate und liefert Taurin in ausreichender Menge. Zucker, Farbstoffe und unspezifische Sammelbegriffe sind Warnzeichen." },
+  { sortOrder: 7, question: "Was ist der Unterschied zwischen Alleinfuttermittel und Ergänzungsfuttermittel?", answer: "Ein Alleinfuttermittel deckt bei alleiniger Fütterung den gesamten Nährstoffbedarf des Tieres. Ein Ergänzungsfuttermittel, etwa ein Snack, Kauartikel oder eine Paste, ergänzt die Ration nur und darf sie nicht ersetzen. Die Bezeichnung steht auf dem Etikett." },
+  { sortOrder: 8, question: "Wie lese ich die Zusammensetzung auf der Verpackung?", answer: "Die Zutaten stehen in absteigender Reihenfolge nach Gewichtsanteil. Eine offene Deklaration nennt jede Zutat mit Prozentangabe, eine geschlossene nur Kategorien wie „Fleisch und tierische Nebenerzeugnisse“. Je genauer die Angaben, desto besser lässt sich das Futter beurteilen." },
+  { sortOrder: 9, question: "Warum rechnet ihr in der Trockensubstanz?", answer: "Nassfutter enthält oft rund 80 % Wasser, Trockenfutter etwa 10 %. Nur umgerechnet auf die Trockensubstanz lassen sich Rohprotein, Rohfett und Rohasche zwischen beiden fair vergleichen. Dafür nutzen wir die angegebene Feuchtigkeit." },
+  { sortOrder: 10, question: "Ist getreidefreies Futter automatisch besser?", answer: "Nein. Getreide ist für viele Hunde gut verträglich. Entscheidend sind Qualität und Anteil der Zutaten insgesamt. Getreidefreie Rezepte ersetzen Getreide oft durch Hülsenfrüchte oder Kartoffeln, was nicht automatisch hochwertiger ist." },
+  { sortOrder: 11, question: "Wie prüft ihr Werbeaussagen der Hersteller?", answer: "Wir prüfen Aussagen auf Verpackung und im Shop auf Zulässigkeit und Richtigkeit, unter anderem nach der VO (EG) 767/2009 und dem UWG. Unsere Einstufung ist eine begründete fachliche Einschätzung und steht im Werbeaussagen-Check jedes Tests." },
+  { sortOrder: 0, question: "Warum sollte jeder Hundehalter prüfen, was er seinem Hund füttert?", answer: "Das Futter ist die wichtigste tägliche Entscheidung für die Gesundheit des Hundes: Hunde fressen über Jahre jeden Tag dasselbe, und Qualität, Nährstoffgehalt und Zusatzstoffe wirken sich auf Verdauung, Haut und Fell, Gewicht und langfristig auch auf Gelenke und Organe aus. Auf der Verpackung steht außerdem vor allem Werbung: Begriffe wie „natürlich“, „Gourmet“ oder „getreidefrei“ sind rechtlich kaum geschützt und sagen wenig über die Qualität aus. Wer die Zusammensetzung versteht, erkennt Zucker, Farbstoffe, unklare Sammelbegriffe und einen zu geringen Fleischanteil und kann Preis und Leistung fair vergleichen. Ein teures Futter ist nicht automatisch gut, ein günstiges nicht automatisch schlecht – das zeigt erst der Blick auf Deklaration und Inhaltsstoffe. Unsere Tests nehmen Ihnen diese Prüfung ab und zeigen transparent, wie jede Note entsteht. Bei Erkrankungen oder besonderen Bedürfnissen ersetzt das keine tierärztliche Beratung." },
+  { sortOrder: 12, question: "Welche Zusatzstoffe sollte ich im Futter meiden?", answer: "Zugesetzter Zucker, Karamell und Farbstoffe haben für Hund und Katze keinen Nutzen. Bei synthetischen Antioxidantien wie BHA, BHT oder Ethoxyquin bevorzugen wir Futter mit natürlichen Alternativen. Jeden Inhaltsstoff ordnen wir im Futter-Lexikon mit einer Ampel ein." },
+];
+
+/** FAQ-Einträge ergänzen, ohne vorhandene zu überschreiben (Abgleich über die Frage) – idempotent. */
+async function ensureFaq() {
+  let n = 0;
+  for (const f of MORE_FAQ) {
+    if (await prisma.faqItem.findFirst({ where: { question: f.question }, select: { id: true } })) continue;
+    await prisma.faqItem.create({ data: f });
+    n++;
+  }
+  if (n) console.log(`FAQ ergänzt: ${n}`);
 }
 
 /** Lange Text-URLs in gespeicherten Texten (z. B. Quellen) einmalig in kurze Links umwandeln – idempotent. */

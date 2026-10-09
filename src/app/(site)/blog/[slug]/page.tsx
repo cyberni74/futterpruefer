@@ -35,7 +35,7 @@ export async function generateMetadata({ params }: PageProps<"/blog/[slug]">): P
     description,
     keywords: p.keywords,
     alternates: { canonical: `/blog/${p.slug}` },
-    openGraph: { type: "article", title, description, url: `/blog/${p.slug}`, publishedTime: p.publishedAt?.toISOString(), modifiedTime: p.updatedAt.toISOString(), ...(p.imageUrl ? { images: [{ url: p.imageUrl }] } : {}) },
+    openGraph: { type: "article", title, description, url: `/blog/${p.slug}`, publishedTime: p.publishedAt?.toISOString(), modifiedTime: p.updatedAt.toISOString(), images: p.imageUrl ? [{ url: p.imageUrl }] : [{ url: "/opengraph-image.png", width: 1200, height: 630 }] },
   };
 }
 

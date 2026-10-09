@@ -26,8 +26,9 @@ export async function generateMetadata({ params }: PageProps<"/lexikon/[slug]">)
   const e = await getLexikonEntry((await params).slug);
   if (!e) return {};
   const title = e.metaTitle || `${e.name} im Tierfutter: ${CONCERN[e.concern].label}?`;
-  const description = e.metaDescription || e.shortDescription;
-  return { title: { absolute: `${title} | ${SITE.name}` }, description, alternates: { canonical: `/lexikon/${e.slug}` }, openGraph: { type: "article", title, description, url: `/lexikon/${e.slug}` } };
+  const base = e.metaDescription || e.shortDescription;
+  const description = base.length >= 70 ? base : `${base} Bewertung und Einordnung im Futter-Lexikon von ${SITE.name}.`.trim();
+  return { title: { absolute: `${title} | ${SITE.name}` }, description, alternates: { canonical: `/lexikon/${e.slug}` }, openGraph: { type: "article", title, description, url: `/lexikon/${e.slug}`, images: [{ url: "/opengraph-image.png", width: 1200, height: 630 }] } };
 }
 
 export default async function LexikonEntryPage({ params }: PageProps<"/lexikon/[slug]">) {

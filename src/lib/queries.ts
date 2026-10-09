@@ -2,6 +2,7 @@ import "server-only";
 import { cache } from "react";
 import { prisma } from "@/lib/db";
 import type { Prisma } from "@/generated/prisma/client";
+import { buildMonthlyWinners, currentPom } from "@/lib/pom";
 
 export const publishedWhere = () => ({ status: "PUBLISHED" as const, publishedAt: { lte: new Date() } });
 
@@ -71,24 +72,17 @@ export function getPostBySlug(slug: string) {
   return prisma.blogPost.findFirst({ where: { slug, ...publishedWhere() } });
 }
 
-export async function getProductOfMonth() {
-  const now = new Date();
-  return prisma.productOfMonth.findFirst({
-    where: {
-      OR: [{ year: { lt: now.getFullYear() } }, { year: now.getFullYear(), month: { lte: now.getMonth() + 1 } }],
-      review: publishedWhere(),
-    },
-    orderBy: [{ year: "desc" }, { month: "desc" }],
-    include: { review: { select: reviewCardSelect } },
-  });
+/** Produkte des Monats (Testsieger je Monat, manuelle Einträge überschreiben), neueste zuerst. */
+export async function getProductOfMonthArchive() {
+  const [reviews, manual] = await Promise.all([
+    prisma.review.findMany({ where: publishedWhere(), select: reviewCardSelect }),
+    prisma.productOfMonth.findMany({ where: { review: publishedWhere() }, include: { review: { select: reviewCardSelect } } }),
+  ]);
+  return buildMonthlyWinners(reviews, manual);
 }
 
-export function getProductOfMonthArchive() {
-  return prisma.productOfMonth.findMany({
-    where: { review: publishedWhere() },
-    orderBy: [{ year: "desc" }, { month: "desc" }],
-    include: { review: { select: reviewCardSelect } },
-  });
+export async function getProductOfMonth() {
+  return currentPom(await getProductOfMonthArchive());
 }
 
 export type TickerEntry = { id: string; text: string; href: string | null; isWarning: boolean };
@@ -138,4 +132,23 @@ export async function resolveReviewPath(slug: string): Promise<string | null> {
     current = next;
   }
   return null;
+}
+
+/** Je Kategorie: Anzahl veröffentlichter Tests und der bestbewertete Test (für interne Verlinkung auf der Startseite). */
+export async function getCategoryLeaders() {
+  const categories = await getCategories();
+  return Promise.all(
+    categories.map(async (c) => {
+      const where = { ...publishedWhere(), categoryId: c.id };
+      const [count, top] = await Promise.all([
+        prisma.review.count({ where }),
+        prisma.review.findFirst({ where, orderBy: [{ totalScore: "desc" }, { publishedAt: "desc" }], select: { slug: true, brand: true, productName: true, totalScore: true } }),
+      ]);
+      return { ...c, count, top };
+    }),
+  );
+}
+
+export function getHomeFaq(take = 4) {
+  return prisma.faqItem.findMany({ orderBy: { sortOrder: "asc" }, take });
 }

@@ -193,3 +193,4 @@ button, [role="button"], summary { cursor: pointer; }
 
 /* Sicherheitsnetz: nichts darf die Seite seitlich verschiebbar machen (clip statt hidden – sticky bleibt intakt) */
 html, body { overflow-x: clip; }
+.prose-fp h2[id] { scroll-margin-top: 7rem; }
