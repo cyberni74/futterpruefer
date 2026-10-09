@@ -116,3 +116,12 @@ describe("Produkt des Monats (Testsieger)", () => {
     expect(currentPom(buildMonthlyWinners([R("z", "2026-08-01", 60)], [], now), now)?.month).toBe(8);
   });
 });
+
+import { stripInvisible } from "./sanitize";
+describe("stripInvisible", () => {
+  it("entfernt Zero-Width, Variation Selector und Sonderleerzeichen", () => {
+    expect(stripInvisible("a​b﻿c⁠d­e️")).toBe("abcde");
+    expect(stripInvisible("24,95 € und 5 kg")).toBe("24,95 € und 5 kg");
+    expect(stripInvisible("normal äöü ß")).toBe("normal äöü ß");
+  });
+});
