@@ -8,10 +8,12 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
     <>
       <a href="#inhalt" className="skip-link">Zum Inhalt springen</a>
       <SiteHeader />
-      <main id="inhalt" className="pt-[calc(env(safe-area-inset-top)+4.5rem)] md:pt-24">{children}</main>
+      <main id="inhalt" className="pt-[calc(env(safe-area-inset-top)+4.5rem)] md:pt-24">
+        <CookieBanner />
+        {children}
+      </main>
       <SiteFooter />
       <BottomBar />
-      <CookieBanner />
     </>
   );
 }
