@@ -93,6 +93,12 @@ export default async function Home() {
               ))}
             </ul>
           )}
+          <div className="mt-8 flex justify-center">
+            <Link href="/tests" className="inline-flex min-h-12 items-center gap-2 rounded-full bg-accent px-6 font-bold text-white transition hover:bg-accent-strong dark:text-black">
+              Alle Futtertests ansehen
+              <ArrowRight className="size-4" aria-hidden />
+            </Link>
+          </div>
         </section>
 
         <section aria-labelledby="home-title" className="mt-16">
@@ -164,6 +170,12 @@ export default async function Home() {
               ))}
             </ul>
           )}
+          <div className="mt-8 flex justify-center">
+            <Link href="/blog" className="inline-flex min-h-12 items-center gap-2 rounded-full bg-accent px-6 font-bold text-white transition hover:bg-accent-strong dark:text-black">
+              Alle Beiträge im Fachblog
+              <ArrowRight className="size-4" aria-hidden />
+            </Link>
+          </div>
         </section>
 
         <section aria-labelledby="home-faq" className="mt-16">

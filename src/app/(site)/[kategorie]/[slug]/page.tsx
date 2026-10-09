@@ -25,6 +25,7 @@ import { FpImage } from "@/components/fp-image";
 import { ReadAloud } from "@/components/read-aloud";
 import { ShareButtons } from "@/components/share-buttons";
 import { ShareBar } from "@/components/share-bar";
+import { AllLink } from "@/components/all-link";
 import { ReviewCard } from "@/components/review-card";
 import { BlogCard } from "@/components/blog-card";
 import { NewsletterBox } from "@/components/newsletter-box";
@@ -284,6 +285,7 @@ export default async function ReviewPage({ params }: PageProps<"/[kategorie]/[sl
             <section aria-labelledby="fachartikel" className="mt-16">
               <h2 id="fachartikel" className="mb-6 text-2xl font-extrabold">Passende Fachartikel</h2>
               <ul className="grid gap-5 sm:grid-cols-2">{posts.map((p) => <li key={p.id}><BlogCard post={p} /></li>)}</ul>
+          <AllLink href="/blog">Alle Beiträge im Fachblog</AllLink>
             </section>
           )}
           <div className="mt-16"><WishBox /></div>

@@ -8,6 +8,7 @@ import { absoluteUrl, formatDate, SITE } from "@/lib/site";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { AuthorCredit } from "@/components/author-credit";
 import { ConcernBadge, ConcernLight, CONCERN } from "@/components/concern-badge";
+import { AllLink } from "@/components/all-link";
 import { ReviewCard } from "@/components/review-card";
 import { ReadAloud } from "@/components/read-aloud";
 import { ShareButtons } from "@/components/share-buttons";
@@ -79,6 +80,7 @@ export default async function LexikonEntryPage({ params }: PageProps<"/lexikon/[
         <section aria-labelledby="in-tests" className="mt-14">
           <h2 id="in-tests" className="mb-6 text-2xl font-extrabold">In diesen Tests erwähnt</h2>
           <ul className="grid gap-x-5 gap-y-8 sm:grid-cols-2">{reviews.map((r) => <li key={r.id}><ReviewCard review={r} /></li>)}</ul>
+          <AllLink href="/tests">Alle Futtertests ansehen</AllLink>
         </section>
       )}
       {sameGroup.length > 0 && (
