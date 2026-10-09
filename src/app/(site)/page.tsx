@@ -95,23 +95,30 @@ export default async function Home() {
         </section>
 
         <section aria-labelledby="home-title" className="mt-16">
-          <h2 id="home-title" className="max-w-3xl text-2xl font-extrabold leading-tight md:text-3xl">
+          <h2 id="home-title" className="max-w-3xl text-lg font-extrabold leading-tight md:text-xl">
             {HOME_H1}
           </h2>
-          <div className="mt-4 max-w-3xl space-y-4 text-lg leading-relaxed text-muted">
-            {INTRO.map((paragraph, index) => (
-              <p key={index}>
-                {paragraph.map((part, partIndex) => {
-                  const content = part.strong ? <strong className="font-semibold text-fg">{part.text}</strong> : part.text;
-                  return part.href ? (
-                    <Link key={partIndex} href={part.href} className={textLink}>
-                      {part.text}
-                    </Link>
-                  ) : (
-                    <span key={partIndex}>{content}</span>
-                  );
-                })}
-              </p>
+          <div className="mt-4 grid gap-3 md:grid-cols-3">
+            {[
+              { title: "So testen wir", parts: INTRO[0] },
+              { title: "Sechs Kriterien", parts: INTRO[1].slice(0, 2) },
+              { title: "Mehr als die Note", parts: INTRO[1].slice(2).map((part, i) => (i === 0 ? { ...part, text: part.text.replace(/^\.\s*/, "") } : part)) },
+            ].map((block) => (
+              <article key={block.title} className="rounded-2xl border border-border bg-surface p-4">
+                <h3 className="text-sm font-bold uppercase tracking-wide text-brand">{block.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-muted">
+                  {block.parts.map((part, partIndex) => {
+                    const content = part.strong ? <strong className="font-semibold text-fg">{part.text}</strong> : part.text;
+                    return part.href ? (
+                      <Link key={partIndex} href={part.href} className={textLink}>
+                        {part.text}
+                      </Link>
+                    ) : (
+                      <span key={partIndex}>{content}</span>
+                    );
+                  })}
+                </p>
+              </article>
             ))}
           </div>
         </section>
