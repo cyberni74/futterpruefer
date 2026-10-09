@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, ShieldCheck } from "lucide-react";
 import type { Metadata } from "next";
-import { getLatestPosts, getLatestReviews, getNewestReviewUpdate, getProductOfMonth, getTickerEntries, getCategoryLeaders } from "@/lib/queries";
+import { getLatestPosts, getLatestReviews, getNewestReviewUpdate, getProductOfMonth, getTickerEntries, getCategoryLeaders, getPublishedCounts } from "@/lib/queries";
 import { HomeHero } from "@/components/home-hero";
 import { ProductOfMonthHero } from "@/components/product-of-month";
 import { Ticker } from "@/components/ticker";
@@ -12,6 +12,7 @@ import { Reveal } from "@/components/reveal";
 import { JsonLd } from "@/components/json-ld";
 import { NewsletterBox } from "@/components/newsletter-box";
 import { WishBox } from "@/components/wish-box";
+import { AllLink } from "@/components/all-link";
 import { DEFAULT_OG_IMAGE, SITE, pageAlternates } from "@/lib/site";
 import { CRITERIA } from "@/lib/scoring";
 import {
@@ -52,13 +53,14 @@ export async function generateMetadata(): Promise<Metadata> {
 export const revalidate = 3600;
 
 export default async function Home() {
-  const [pom, ticker, reviews, posts, leaders, latestUpdate] = await Promise.all([
+  const [pom, ticker, reviews, posts, leaders, latestUpdate, counts] = await Promise.all([
     getProductOfMonth(),
     getTickerEntries(),
     getLatestReviews(10),
     getLatestPosts(5),
     getCategoryLeaders(),
     getNewestReviewUpdate(),
+    getPublishedCounts(),
   ]);
   const guideHrefs = new Set<string>(HOME_GUIDES.map((guide) => guide.href));
   const extraPosts = posts.filter((post) => !guideHrefs.has(`/blog/${post.slug}`));
@@ -93,12 +95,7 @@ export default async function Home() {
               ))}
             </ul>
           )}
-          <div className="mt-8 flex justify-center">
-            <Link href="/tests" className="inline-flex min-h-12 items-center gap-2 rounded-full bg-accent px-6 font-bold text-white transition hover:bg-accent-strong dark:text-black">
-              Alle Futtertests ansehen
-              <ArrowRight className="size-4" aria-hidden />
-            </Link>
-          </div>
+          <AllLink href="/tests" title="Ihr Futter ist nicht dabei?" text={`Über ${counts.tests} Tests mit Punktewertung, Zusammensetzung im Klartext und Werbeaussagen-Check. Finden Sie das passende Futter für Ihr Tier.`}>Alle Futtertests ansehen</AllLink>
         </section>
 
         <section aria-labelledby="home-title" className="mt-16">
@@ -170,12 +167,7 @@ export default async function Home() {
               ))}
             </ul>
           )}
-          <div className="mt-8 flex justify-center">
-            <Link href="/blog" className="inline-flex min-h-12 items-center gap-2 rounded-full bg-accent px-6 font-bold text-white transition hover:bg-accent-strong dark:text-black">
-              Alle Beiträge im Fachblog
-              <ArrowRight className="size-4" aria-hidden />
-            </Link>
-          </div>
+          <AllLink href="/blog" title="Mehr Wissen für den Napf" text={`${counts.posts} Ratgeber zu Zutaten, Fütterung und Gesundheit, verständlich und mit Quellen.`}>Alle Beiträge im Fachblog</AllLink>
         </section>
 
         <section aria-labelledby="home-faq" className="mt-16">

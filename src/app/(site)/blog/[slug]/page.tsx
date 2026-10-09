@@ -107,14 +107,14 @@ export default async function PostPage({ params }: PageProps<"/blog/[slug]">) {
         <section aria-labelledby="passende-tests" className="mt-16">
           <h2 id="passende-tests" className="mb-6 text-2xl font-extrabold">Passende Tests</h2>
           <ul className="grid gap-x-5 gap-y-8 sm:grid-cols-2 lg:grid-cols-3">{reviews.map((r) => <li key={r.id}><ReviewCard review={r} /></li>)}</ul>
-          <AllLink href="/tests">Alle Futtertests ansehen</AllLink>
+          <AllLink href="/tests" title="Ihr Futter ist nicht dabei?" text="Jeder Test zeigt die Punktewertung, die Zusammensetzung im Klartext und den Werbeaussagen-Check. Stöbern Sie in allen Tests und finden Sie das passende Futter für Ihr Tier.">Alle Futtertests ansehen</AllLink>
         </section>
       )}
       {more.length > 0 && (
         <section aria-labelledby="verwandt" className="mt-16">
           <h2 id="verwandt" className="mb-6 text-2xl font-extrabold">Verwandte Artikel</h2>
           <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">{more.map((m) => <li key={m.id}><BlogCard post={m} /></li>)}</ul>
-          <AllLink href="/blog">Alle Beiträge im Fachblog</AllLink>
+          <AllLink href="/blog" title="Mehr Wissen für den Napf" text="Ratgeber zu Zutaten, Fütterung und Gesundheit, verständlich und mit Quellen. Lesen Sie weiter im Fachblog.">Alle Beiträge im Fachblog</AllLink>
         </section>
       )}
       <TopicLinks leaders={leaders} text={`${p.title} ${p.excerpt} ${kw.join(" ")}`} />

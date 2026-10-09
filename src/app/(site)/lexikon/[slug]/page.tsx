@@ -80,7 +80,7 @@ export default async function LexikonEntryPage({ params }: PageProps<"/lexikon/[
         <section aria-labelledby="in-tests" className="mt-14">
           <h2 id="in-tests" className="mb-6 text-2xl font-extrabold">In diesen Tests erwähnt</h2>
           <ul className="grid gap-x-5 gap-y-8 sm:grid-cols-2">{reviews.map((r) => <li key={r.id}><ReviewCard review={r} /></li>)}</ul>
-          <AllLink href="/tests">Alle Futtertests ansehen</AllLink>
+          <AllLink href="/tests" title="Ihr Futter ist nicht dabei?" text="Jeder Test zeigt die Punktewertung, die Zusammensetzung im Klartext und den Werbeaussagen-Check. Stöbern Sie in allen Tests und finden Sie das passende Futter für Ihr Tier.">Alle Futtertests ansehen</AllLink>
         </section>
       )}
       {sameGroup.length > 0 && (

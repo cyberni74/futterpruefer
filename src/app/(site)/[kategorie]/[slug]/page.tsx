@@ -285,7 +285,7 @@ export default async function ReviewPage({ params }: PageProps<"/[kategorie]/[sl
             <section aria-labelledby="fachartikel" className="mt-16">
               <h2 id="fachartikel" className="mb-6 text-2xl font-extrabold">Passende Fachartikel</h2>
               <ul className="grid gap-5 sm:grid-cols-2">{posts.map((p) => <li key={p.id}><BlogCard post={p} /></li>)}</ul>
-          <AllLink href="/blog">Alle Beiträge im Fachblog</AllLink>
+          <AllLink href="/blog" title="Mehr Wissen für den Napf" text="Ratgeber zu Zutaten, Fütterung und Gesundheit, verständlich und mit Quellen. Lesen Sie weiter im Fachblog.">Alle Beiträge im Fachblog</AllLink>
             </section>
           )}
           <div className="mt-16"><WishBox /></div>

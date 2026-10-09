@@ -153,3 +153,9 @@ export async function getCategoryLeaders() {
 export function getHomeFaq(take = 4) {
   return prisma.faqItem.findMany({ orderBy: { sortOrder: "asc" }, take });
 }
+
+/** Anzahl veröffentlichter Tests und Beiträge für Aufrufe unter den Vorschau-Boxen. */
+export async function getPublishedCounts() {
+  const [tests, posts] = await Promise.all([prisma.review.count({ where: publishedWhere() }), prisma.blogPost.count({ where: publishedWhere() })]);
+  return { tests, posts };
+}
