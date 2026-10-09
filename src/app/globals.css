@@ -131,6 +131,8 @@ button, [role="button"], summary { cursor: pointer; }
 .prose-fp figure img { width: 100%; }
 .prose-fp table { width: 100%; border-collapse: collapse; font-size: .95rem; display: block; overflow-x: auto; }
 .prose-fp th, .prose-fp td { border-bottom: 1px solid var(--border); padding: .6em .75em; text-align: left; }
+/* Tabellen am Handy: Wörter nicht mitten im Wort brechen, breite Tabellen seitlich scrollen */
+.prose-fp th, .prose-fp td { min-width: 7rem; overflow-wrap: normal; word-break: normal; hyphens: auto; }
 .prose-fp th { background: var(--bg-soft); font-weight: 700; }
 .prose-fp code { background: var(--bg-soft); padding: .1em .35em; border-radius: .3em; font-size: .9em; }
 
