@@ -63,9 +63,13 @@ export const INTRO: readonly (readonly TextPart[])[] = [
       text: " laut Deklaration die üblichen Nährstoffempfehlungen für Hund oder Katze erfüllt, welche Inhaltsstoffe wir kritisch sehen und wo das Marketing mehr verspricht, als die Deklaration hergibt. ",
     },
     { text: "Hersteller können Produkte einreichen", href: "/fuer-hersteller" },
-    { text: ", auf die Note hat das keinen Einfluss. Begriffe wie offene Deklaration, " },
+    { text: ", auf die Note hat das keinen Einfluss. Begriffe wie " },
+    { text: "offene Deklaration", href: "/blog/futterdeklaration-richtig-lesen" },
+    { text: ", " },
     { text: "Taurin", href: "/lexikon/taurin" },
-    { text: " oder getreidefrei erklären unser " },
+    { text: " oder " },
+    { text: "getreidefrei", href: "/blog/getreidefreies-hundefutter-sinnvoll" },
+    { text: " erklären unser " },
     { text: "Fachblog", href: "/blog" },
     { text: " und das " },
     { text: "Futter-Lexikon", href: "/lexikon" },
@@ -77,7 +81,54 @@ export function introPlain(parts: readonly (readonly TextPart[])[] = INTRO): str
   return parts.map((paragraph) => paragraph.map((part) => part.text).join("")).join("\n\n");
 }
 
-export type HomeFaq = { q: string; a: string; links: readonly (readonly [label: string, href: string])[] };
+/** Veröffentlicht und live mit 200 geprüft. Keine weiteren Blog-Slugs hier hinterlegen. */
+export const HOME_GUIDES = [
+  {
+    href: "/blog/futterdeklaration-richtig-lesen",
+    title: "Futterdeklaration richtig lesen: So verstehen Sie das Etikett von Hunde- und Katzenfutter",
+  },
+  {
+    href: "/blog/alleinfuttermittel-ergaenzungsfuttermittel",
+    title: "Alleinfuttermittel oder Ergänzungsfuttermittel? Der Unterschied einfach erklärt",
+  },
+  {
+    href: "/blog/getreidefreies-hundefutter-sinnvoll",
+    title: "Getreidefreies Hundefutter: Sinnvoll oder nur Marketing?",
+  },
+  {
+    href: "/blog/taurin-katze",
+    title: "Taurin bei Katzen: Warum es lebenswichtig ist und was im Futter stehen sollte",
+  },
+  {
+    href: "/blog/zucker-im-hundefutter-katzenfutter",
+    title: "Zucker im Hunde- und Katzenfutter: So erkennen Sie ihn in der Deklaration",
+  },
+] as const;
+
+export function linkedAnswer(text: string, anchors: readonly { text: string; href: string }[] = []): TextPart[] {
+  const hits = anchors
+    .map((anchor) => ({ ...anchor, index: text.indexOf(anchor.text) }))
+    .filter((hit) => hit.index >= 0 && hit.text.length > 0)
+    .sort((a, b) => a.index - b.index || b.text.length - a.text.length);
+  const parts: TextPart[] = [];
+  let cursor = 0;
+  for (const hit of hits) {
+    if (hit.index < cursor) continue;
+    if (hit.index > cursor) parts.push({ text: text.slice(cursor, hit.index) });
+    parts.push({ text: hit.text, href: hit.href });
+    cursor = hit.index + hit.text.length;
+  }
+  if (cursor < text.length) parts.push({ text: text.slice(cursor) });
+  if (parts.length === 0) parts.push({ text });
+  return parts;
+}
+
+export type HomeFaq = {
+  q: string;
+  a: string;
+  links: readonly (readonly [label: string, href: string])[];
+  anchors?: readonly { text: string; href: string }[];
+};
 
 export const HOME_FAQ: readonly HomeFaq[] = [
   {
@@ -93,6 +144,10 @@ export const HOME_FAQ: readonly HomeFaq[] = [
   {
     q: "Was ist der Unterschied zwischen Alleinfuttermittel und Ergänzungsfuttermittel?",
     a: "Ein Alleinfuttermittel ist laut EU-Futtermittelrecht so zusammengesetzt, dass es für die tägliche Ration ausreicht. Ein Ergänzungsfuttermittel wie Snacks, Kauartikel oder Pasten reicht nur zusammen mit anderen Futtermitteln für die tägliche Ration. Wir bewerten beide Gruppen getrennt.",
+    anchors: [
+      { text: "Alleinfuttermittel", href: "/blog/alleinfuttermittel-ergaenzungsfuttermittel" },
+      { text: "Ergänzungsfuttermittel", href: "/blog/alleinfuttermittel-ergaenzungsfuttermittel" },
+    ],
     links: [
       ["Alleinfuttermittel Hund", "/alleinfuttermittel-hund"],
       ["Alleinfuttermittel Katze", "/alleinfuttermittel-katze"],

@@ -4,9 +4,9 @@ import { describe, expect, it } from "vitest";
 import { suggestedDeclarationDeduction } from "./product-data";
 import { CRITERIA, HARMFUL_FAIL_RATIO, RATING_THRESHOLDS } from "./scoring";
 import { FOOTER_CLAIM, SITE } from "./site";
-import { HOME_DESCRIPTION, HOME_FAQ, HOME_H1, METHODIK_NOTE, OG_DESCRIPTION, homeJsonLd, homeTitle, introPlain } from "./home-seo";
+import { HOME_DESCRIPTION, HOME_FAQ, HOME_GUIDES, HOME_H1, INTRO, METHODIK_NOTE, OG_DESCRIPTION, homeJsonLd, homeTitle, introPlain, linkedAnswer } from "./home-seo";
 
-const INTRO = [
+const INTRO_TEXT = [
   "Welches Hundefutter und welches Katzenfutter ist wirklich gut? Futterprüfer bewertet Trockenfutter, Nassfutter und Snacks für Hunde und Katzen nach einem festen 100-Punkte-Schema. Grundlage jedes Tests sind die veröffentlichten Herstellerangaben: Zusammensetzung, analytische Bestandteile, Zusatzstoffe, Fütterungsempfehlung und Preis. Eigene Laboranalysen gehören nicht zum Test, dafür legen wir jeden Bewertungsschritt offen.",
   "Sechs Kriterien mit fester Gewichtung bestimmen die Gesamtnote: Rohstoffqualität (30 Punkte), Schadstoffe & Bedenkliches (20; bewertet anhand der deklarierten Zutaten und Zusatzstoffe), Nährstoffprofil (20), Deklaration & Transparenz (15), Bedarfsdeckung (10) und Preis-Leistung (5). Zusätzlich prüfen wir die Werbeaussagen auf der Verpackung nach dem Futtermittelrecht. So sehen Sie auf einen Blick, ob ein Alleinfuttermittel laut Deklaration die üblichen Nährstoffempfehlungen für Hund oder Katze erfüllt, welche Inhaltsstoffe wir kritisch sehen und wo das Marketing mehr verspricht, als die Deklaration hergibt. Hersteller können Produkte einreichen, auf die Note hat das keinen Einfluss. Begriffe wie offene Deklaration, Taurin oder getreidefrei erklären unser Fachblog und das Futter-Lexikon.",
 ].join("\n\n");
@@ -31,7 +31,7 @@ describe("Startseiten-Title", () => {
 
 describe("Startseiten-Text", () => {
   it("entspricht Intro, FAQ und Meta aus dem Rechtscheck", () => {
-    expect(introPlain()).toBe(INTRO);
+    expect(introPlain()).toBe(INTRO_TEXT);
     expect(HOME_DESCRIPTION).toBe(
       "Hundefutter und Katzenfutter im Test: Rohstoffe, bedenkliche Zusatzstoffe, Nährstoffe und Deklaration nach 100-Punkte-Schema bewertet – transparent erklärt.",
     );
@@ -111,6 +111,45 @@ describe("JSON-LD", () => {
     const graph = empty["@graph"] as { "@type": string }[];
     expect(graph.some((node) => node["@type"] === "ItemList")).toBe(false);
     expect(graph.some((node) => node["@type"] === "FAQPage")).toBe(true);
+  });
+});
+
+describe("Fachblog-Links", () => {
+  const published = [
+    "/blog/futterdeklaration-richtig-lesen",
+    "/blog/alleinfuttermittel-ergaenzungsfuttermittel",
+    "/blog/getreidefreies-hundefutter-sinnvoll",
+    "/blog/taurin-katze",
+    "/blog/zucker-im-hundefutter-katzenfutter",
+  ];
+
+  it("verlinkt nur die fünf veröffentlichten Artikel und lässt den Wortlaut gleich", () => {
+    expect(HOME_GUIDES.map((guide) => guide.href)).toEqual(published);
+    const hrefs = [
+      ...INTRO.flatMap((paragraph) => paragraph.map((part) => part.href)),
+      ...HOME_FAQ.flatMap((item) => [...item.links.map(([, href]) => href), ...(item.anchors ?? []).map((anchor) => anchor.href)]),
+      ...HOME_GUIDES.map((guide) => guide.href),
+    ].filter(Boolean);
+    for (const href of hrefs) {
+      expect(href).not.toMatch(/^\/team/);
+      if (String(href).startsWith("/blog/") && href !== "/blog") expect(published).toContain(href);
+    }
+    const deklaration = INTRO[1].find((part) => part.text === "offene Deklaration");
+    const getreide = INTRO[1].find((part) => part.text === "getreidefrei");
+    const taurin = INTRO[1].find((part) => part.text === "Taurin");
+    expect(deklaration?.href).toBe("/blog/futterdeklaration-richtig-lesen");
+    expect(getreide?.href).toBe("/blog/getreidefreies-hundefutter-sinnvoll");
+    expect(taurin?.href).toBe("/lexikon/taurin");
+    expect(introPlain()).toBe(INTRO_TEXT);
+  });
+
+  it("setzt FAQ-Anker nur um bestehende Wörter und behält den Antworttext", () => {
+    const faq = HOME_FAQ[2];
+    const parts = linkedAnswer(faq.a, faq.anchors);
+    expect(parts.map((part) => part.text).join("")).toBe(faq.a);
+    expect(parts.filter((part) => part.href).map((part) => part.text)).toEqual(["Alleinfuttermittel", "Ergänzungsfuttermittel"]);
+    expect(new Set(parts.map((part) => part.href).filter(Boolean))).toEqual(new Set(["/blog/alleinfuttermittel-ergaenzungsfuttermittel"]));
+    expect(linkedAnswer("ohne Anker").map((part) => part.text).join("")).toBe("ohne Anker");
   });
 });
 

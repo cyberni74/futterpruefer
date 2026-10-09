@@ -17,8 +17,10 @@ import {
   FALLBACK_HERO,
   HOME_DESCRIPTION,
   HOME_FAQ,
+  HOME_GUIDES,
   HOME_H1,
   INTRO,
+  linkedAnswer,
   METHODIK_NOTE,
   OG_DESCRIPTION,
   OG_TITLE,
@@ -58,6 +60,8 @@ export default async function Home() {
     getCategories(),
     getNewestReviewUpdate(),
   ]);
+  const guideHrefs = new Set<string>(HOME_GUIDES.map((guide) => guide.href));
+  const extraPosts = posts.filter((post) => !guideHrefs.has(`/blog/${post.slug}`));
 
   return (
     <>
@@ -147,11 +151,16 @@ export default async function Home() {
 
         <section aria-labelledby="neueste-artikel" className="mt-16">
           <SectionHeading id="neueste-artikel" kicker="Fachblog" title="Ratgeber: Neues aus dem Fachblog" href="/blog" linkLabel="Zum Fachblog" />
-          {posts.length === 0 ? (
-            <p className="text-muted">Noch keine Artikel veröffentlicht.</p>
-          ) : (
-            <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-              {posts.map((p, i) => (
+          <ul className="grid gap-3 sm:grid-cols-2">
+            {HOME_GUIDES.map((guide) => (
+              <li key={guide.href}>
+                <Link href={guide.href} className={textLink}>{guide.title}</Link>
+              </li>
+            ))}
+          </ul>
+          {extraPosts.length > 0 && (
+            <ul className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              {extraPosts.map((p, i) => (
                 <li key={p.id}>
                   <Reveal delay={(i % 3) * 0.05} className="h-full">
                     <BlogCard post={p} />
@@ -172,7 +181,15 @@ export default async function Home() {
                   <span aria-hidden className="text-xl text-brand transition group-open:rotate-45">+</span>
                 </summary>
                 <div className="px-4 pb-4 text-muted">
-                  <p>{item.a}</p>
+                  <p>
+                    {linkedAnswer(item.a, item.anchors).map((part, partIndex) =>
+                      part.href ? (
+                        <Link key={partIndex} href={part.href} className={textLink}>{part.text}</Link>
+                      ) : (
+                        <span key={partIndex}>{part.text}</span>
+                      ),
+                    )}
+                  </p>
                   <p className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-sm">
                     {item.links.map(([label, href]) => (
                       <Link key={href + label} href={href} className={textLink}>{label}</Link>
