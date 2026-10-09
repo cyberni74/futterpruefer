@@ -75,12 +75,15 @@ describe("hyphenateCategory", () => {
   });
 });
 
-describe("team", () => {
-  it("Initialen ohne Titel, eindeutige Slugs", async () => {
-    const { TEAM, initials } = await import("./team");
-    expect(initials("Dr. L.")).toBe("L");
-    expect(initials("M. W.")).toBe("MW");
-    expect(new Set(TEAM.map((m) => m.slug)).size).toBe(TEAM.length);
+describe("Urheberschaft", () => {
+  it("gibt immer die Organisation aus, auch wenn ein Name gespeichert ist", async () => {
+    const { contentAuthor } = await import("./attribution");
+    const { SITE } = await import("./site");
+    const author = contentAuthor("gespeicherter Name");
+    expect(author).toEqual({ "@type": "Organization", name: SITE.name, url: SITE.url });
+    expect(author["@type"]).toBe("Organization");
+    expect(JSON.stringify(author)).not.toContain("gespeicherter Name");
+    expect(JSON.stringify(contentAuthor(null))).toBe(JSON.stringify(author));
   });
 });
 

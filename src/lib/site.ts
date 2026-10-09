@@ -5,7 +5,7 @@ export const SITE = {
   // „Unabhängig“ und „Schadstoffe“ bewusst nicht: Beleg bzw. Labor stehen aus. Formulierung hier zentral tauschen.
   description:
     "Hunde- und Katzenfutter im Test: Rohstoffe, bedenkliche Zusatzstoffe, Nährstoffprofil und Deklaration – bewertet nach offengelegter 100-Punkte-Methodik.",
-  author: "Futterprüfer-Redaktion",
+  author: "Futterprüfer",
 };
 
 /** Dateibasiertes OG-Bild. Seiten mit eigenem `openGraph` müssen es setzen, sonst fällt es weg. */

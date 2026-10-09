@@ -6,6 +6,8 @@ import { blogCardSelect, findRedirect, getCategoryLeaders, getPostBySlug, publis
 import { TopicLinks } from "@/components/topic-links";
 import { getReviewsForPost, renderArticle } from "@/lib/content";
 import { absoluteUrl, formatDate, SITE } from "@/lib/site";
+import { contentAuthor } from "@/lib/attribution";
+import { AuthorCredit } from "@/components/author-credit";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { FpImage } from "@/components/fp-image";
 import { ReadAloud } from "@/components/read-aloud";
@@ -37,7 +39,7 @@ export async function generateMetadata({ params }: PageProps<"/blog/[slug]">): P
     description,
     keywords: p.keywords,
     alternates: { canonical: `/blog/${p.slug}` },
-    openGraph: { type: "article", title, description, url: `/blog/${p.slug}`, publishedTime: p.publishedAt?.toISOString(), modifiedTime: p.updatedAt.toISOString(), images: p.imageUrl ? [{ url: p.imageUrl }] : [{ url: "/opengraph-image.png", width: 1200, height: 630 }] },
+    openGraph: { type: "article", title, description, url: `/blog/${p.slug}`, publishedTime: p.publishedAt?.toISOString(), modifiedTime: p.updatedAt.toISOString(), authors: [SITE.name], images: p.imageUrl ? [{ url: p.imageUrl }] : [{ url: "/opengraph-image.png", width: 1200, height: 630 }] },
   };
 }
 
@@ -74,14 +76,17 @@ export default async function PostPage({ params }: PageProps<"/blog/[slug]">) {
           inLanguage: "de-DE",
           mainEntityOfPage: url,
           ...(p.imageUrl ? { image: p.imageUrl.startsWith("http") ? p.imageUrl : absoluteUrl(p.imageUrl) } : {}),
-          author: { "@type": "Organization", name: SITE.author, url: absoluteUrl("/team") },
+          author: contentAuthor(),
           publisher: { "@type": "Organization", name: SITE.name, url: SITE.url },
         }}
       />
       <Breadcrumbs items={[{ label: "Fachblog", href: "/blog" }, { label: p.title }]} />
       <header className="mt-4">
         <h1 className="text-3xl font-extrabold leading-tight md:text-5xl">{p.title}</h1>
-        {p.publishedAt && <p className="mt-3 text-sm text-muted"><time dateTime={p.publishedAt.toISOString()}>{formatDate(p.publishedAt)}</time> · Zuletzt aktualisiert: {formatDate(p.updatedAt)}</p>}
+        <p className="mt-3 text-sm text-muted">
+          Von <AuthorCredit />
+          {p.publishedAt && <> · <time dateTime={p.publishedAt.toISOString()}>{formatDate(p.publishedAt)}</time> · Zuletzt aktualisiert: {formatDate(p.updatedAt)}</>}
+        </p>
       </header>
       {p.imageUrl && (
         <figure className="relative mt-6 aspect-[16/9] overflow-hidden rounded-3xl bg-bg-soft">

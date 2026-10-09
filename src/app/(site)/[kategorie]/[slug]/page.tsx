@@ -11,7 +11,9 @@ import { CRITERIA, type Scores } from "@/lib/scoring";
 import { productLabel, seoTitle } from "@/lib/seo";
 import { reviewPath } from "@/lib/urls";
 import { absoluteUrl, ANIMAL_LABEL, formatDate, MONTHS, PRICE_CLASS_LABEL, SITE } from "@/lib/site";
+import { contentAuthor } from "@/lib/attribution";
 import { Breadcrumbs } from "@/components/breadcrumbs";
+import { AuthorCredit } from "@/components/author-credit";
 import { VerdictPanel } from "@/components/verdict-panel";
 import { MisleadingClaimsBanner, WarningBanner } from "@/components/warning-banners";
 import { TableOfContents } from "@/components/table-of-contents";
@@ -55,7 +57,7 @@ export async function generateMetadata({ params }: PageProps<"/[kategorie]/[slug
     description,
     keywords: r.keywords,
     alternates: { canonical: path },
-    openGraph: { type: "article", title, description, url: path, modifiedTime: r.updatedAt.toISOString(), publishedTime: r.publishedAt?.toISOString(), authors: [SITE.author] },
+    openGraph: { type: "article", title, description, url: path, modifiedTime: r.updatedAt.toISOString(), publishedTime: r.publishedAt?.toISOString(), authors: [SITE.name] },
     twitter: { card: "summary_large_image", title, description },
   };
 }
@@ -102,7 +104,7 @@ export default async function ReviewPage({ params }: PageProps<"/[kategorie]/[sl
   const name = productLabel(r.brand, r.productName);
   const gallery = (r.gallery ?? []).filter(Boolean);
   const abs = (u: string) => (u.startsWith("http") ? u : absoluteUrl(u));
-  const author = { "@type": "Organization", name: SITE.author, url: absoluteUrl("/team") };
+  const author = contentAuthor();
 
   return (
     <div className="mx-auto max-w-6xl px-4">
@@ -158,7 +160,7 @@ export default async function ReviewPage({ params }: PageProps<"/[kategorie]/[sl
             </div>
             <h1 className="mt-3 text-3xl font-extrabold leading-tight md:text-5xl">{name} im Test</h1>
             <ul className="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-sm text-muted">
-              <li className="flex items-center gap-1.5"><UserRound className="size-4" aria-hidden />Von <Link href="/team" className="font-semibold text-fg hover:underline">{SITE.author}</Link></li>
+              <li className="flex items-center gap-1.5"><UserRound className="size-4" aria-hidden />Von <AuthorCredit /></li>
               {testedAt && <li className="flex items-center gap-1.5"><CalendarCheck className="size-4" aria-hidden />Getestet am <time dateTime={testedAt.toISOString()}>{formatDate(testedAt)}</time></li>}
               <li className="flex items-center gap-1.5"><RefreshCw className="size-4" aria-hidden />Zuletzt aktualisiert <time dateTime={r.updatedAt.toISOString()}>{formatDate(r.updatedAt)}</time></li>
               <li className="flex items-center gap-1.5"><Clock className="size-4" aria-hidden />{minutes} Min. Lesezeit</li>

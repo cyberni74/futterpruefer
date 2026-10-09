@@ -40,6 +40,8 @@ const nextConfig: NextConfig = {
   async redirects() {
     const rules: Array<{ source: string; destination: string; permanent: boolean; has?: Array<{ type: "host"; value: string }> }> = [
       { source: "/ueber-mich", destination: "/team", permanent: true },
+      // Frühere Profil-URLs unter /team/… gibt es nicht mehr.
+      { source: "/team/:slug", destination: "/team", permanent: true },
     ];
     // Alle bekannten vercel.app-Adressen des Projekts leiten auf die Hauptdomain (nur eine Adresse für Google).
     // Nur aktiv, wenn NEXT_PUBLIC_SITE_URL auf eine echte Domain zeigt; Vorschau-Deployments bleiben erreichbar.
