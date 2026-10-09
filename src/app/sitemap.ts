@@ -6,7 +6,7 @@ import { absoluteUrl } from "@/lib/site";
 export const revalidate = 3600;
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const statics = ["/", "/tests", "/blog", "/methodik", "/team", "/fuer-hersteller", "/kontakt", "/faq", "/produkt-des-monats", "/lexikon", "/glossar", "/impressum", "/datenschutz"].map((p) => ({ url: absoluteUrl(p), changeFrequency: "weekly" as const, priority: p === "/" ? 1 : 0.6 }));
+  const statics = ["/", "/tests", "/blog", "/methodik", "/team", "/fuer-hersteller", "/kontakt", "/faq", "/werbeaussagen", "/produkt-des-monats", "/lexikon", "/glossar", "/impressum", "/datenschutz"].map((p) => ({ url: absoluteUrl(p), changeFrequency: "weekly" as const, priority: p === "/" ? 1 : 0.6 }));
   try {
     const [cats, reviews, posts, lex] = await Promise.all([
       prisma.category.findMany({ select: { slug: true } }),
