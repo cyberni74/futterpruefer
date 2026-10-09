@@ -1,7 +1,8 @@
 import Link from "next/link";
-import { ArrowRight, ShieldCheck } from "lucide-react";
+import { ShieldCheck } from "lucide-react";
 import type { Metadata } from "next";
-import { getLatestPosts, getLatestReviews, getNewestReviewUpdate, getProductOfMonth, getTickerEntries, getCategories } from "@/lib/queries";
+import { getLatestPosts, getLatestReviews, getNewestReviewUpdate, getProductOfMonth, getTickerEntries, getCategoryLeaders } from "@/lib/queries";
+import { HomeHero } from "@/components/home-hero";
 import { ProductOfMonthHero } from "@/components/product-of-month";
 import { Ticker } from "@/components/ticker";
 import { ReviewCard } from "@/components/review-card";
@@ -12,9 +13,7 @@ import { JsonLd } from "@/components/json-ld";
 import { NewsletterBox } from "@/components/newsletter-box";
 import { DEFAULT_OG_IMAGE, SITE, pageAlternates } from "@/lib/site";
 import { CRITERIA } from "@/lib/scoring";
-import { hyphenateCategory } from "@/lib/urls";
 import {
-  FALLBACK_HERO,
   HOME_DESCRIPTION,
   HOME_FAQ,
   HOME_GUIDES,
@@ -52,12 +51,12 @@ export async function generateMetadata(): Promise<Metadata> {
 export const revalidate = 3600;
 
 export default async function Home() {
-  const [pom, ticker, reviews, posts, categories, latestUpdate] = await Promise.all([
+  const [pom, ticker, reviews, posts, leaders, latestUpdate] = await Promise.all([
     getProductOfMonth(),
     getTickerEntries(),
     getLatestReviews(10),
     getLatestPosts(5),
-    getCategories(),
+    getCategoryLeaders(),
     getNewestReviewUpdate(),
   ]);
   const guideHrefs = new Set<string>(HOME_GUIDES.map((guide) => guide.href));
@@ -67,37 +66,8 @@ export default async function Home() {
     <>
       <JsonLd data={homeJsonLd(homeTitle(latestUpdate), reviews)} />
 
-      <section aria-labelledby="home-title" className="mx-auto max-w-6xl px-4">
-        <h1 id="home-title" className="max-w-4xl text-3xl font-extrabold leading-tight md:text-5xl">
-          {HOME_H1}
-        </h1>
-        <div className="mt-4 max-w-3xl space-y-4 text-lg leading-relaxed text-muted">
-          {INTRO.map((paragraph, index) => (
-            <p key={index}>
-              {paragraph.map((part, partIndex) => {
-                const content = part.strong ? <strong className="font-semibold text-fg">{part.text}</strong> : part.text;
-                return part.href ? (
-                  <Link key={partIndex} href={part.href} className={textLink}>
-                    {part.text}
-                  </Link>
-                ) : (
-                  <span key={partIndex}>{content}</span>
-                );
-              })}
-            </p>
-          ))}
-        </div>
-      </section>
-
-      <div className="mx-auto mt-8 max-w-6xl px-4">
-        {pom ? (
-          <ProductOfMonthHero pom={pom} />
-        ) : (
-          <section className="rounded-3xl bg-brand-soft p-8 md:p-12">
-            <p className="text-3xl font-extrabold md:text-5xl">{FALLBACK_HERO}</p>
-            <p className="mt-4 max-w-2xl text-lg text-muted">{HOME_DESCRIPTION}</p>
-          </section>
-        )}
+      <div className="mx-auto max-w-6xl px-4">
+        <HomeHero leaders={leaders} />
       </div>
 
       <div className="mt-8">
@@ -105,18 +75,7 @@ export default async function Home() {
       </div>
 
       <div className="mx-auto max-w-6xl px-4">
-        <h2 id="kategorien" className="sr-only">
-          Futtertests nach Kategorie
-        </h2>
-        <nav aria-labelledby="kategorien" className="mt-10 grid grid-cols-2 gap-3 lg:grid-cols-4">
-          {categories.map((c) => (
-            <Link key={c.id} href={`/${c.slug}`} className="group relative flex min-h-16 flex-col items-start gap-1 overflow-hidden rounded-2xl border border-border bg-surface p-3.5 pr-9 font-bold shadow-card transition duration-300 hover:-translate-y-1 hover:border-brand hover:bg-brand-soft hover:shadow-lift focus-visible:border-brand active:scale-[0.97] sm:flex-row sm:items-center sm:gap-3 sm:p-4 sm:pr-10 motion-reduce:transition-none motion-reduce:hover:translate-y-0 motion-reduce:active:scale-100">
-              <span aria-hidden className="text-2xl transition-transform duration-300 group-hover:-rotate-6 group-hover:scale-125 motion-reduce:transition-none motion-reduce:group-hover:transform-none">{c.animal === "HUND" ? "🐕" : "🐈"}</span>
-              <span className="min-w-0 leading-tight transition-colors group-hover:text-brand-strong">{hyphenateCategory(c.shortName)}</span>
-              <ArrowRight aria-hidden className="absolute right-3 bottom-3.5 size-4 text-brand opacity-0 transition duration-300 -translate-x-1 group-hover:translate-x-0 group-hover:opacity-100 group-focus-visible:opacity-100 sm:top-1/2 sm:bottom-auto sm:-translate-y-1/2 motion-reduce:transition-none" />
-            </Link>
-          ))}
-        </nav>
+        {pom && <div className="mt-10"><ProductOfMonthHero pom={pom} /></div>}
 
         <section aria-labelledby="neueste-tests" className="mt-16">
           <SectionHeading id="neueste-tests" kicker="Frisch geprüft" title="Neueste Futtertests für Hund und Katze" href="/tests" linkLabel="Alle Futtertests" />
@@ -127,12 +86,34 @@ export default async function Home() {
               {reviews.map((r, i) => (
                 <li key={r.id}>
                   <Reveal delay={(i % 4) * 0.05} className="h-full">
-                    <ReviewCard review={r} priority={i < 2 && !pom} />
+                    <ReviewCard review={r} priority={false} />
                   </Reveal>
                 </li>
               ))}
             </ul>
           )}
+        </section>
+
+        <section aria-labelledby="home-title" className="mt-16">
+          <h2 id="home-title" className="max-w-3xl text-2xl font-extrabold leading-tight md:text-3xl">
+            {HOME_H1}
+          </h2>
+          <div className="mt-4 max-w-3xl space-y-4 text-lg leading-relaxed text-muted">
+            {INTRO.map((paragraph, index) => (
+              <p key={index}>
+                {paragraph.map((part, partIndex) => {
+                  const content = part.strong ? <strong className="font-semibold text-fg">{part.text}</strong> : part.text;
+                  return part.href ? (
+                    <Link key={partIndex} href={part.href} className={textLink}>
+                      {part.text}
+                    </Link>
+                  ) : (
+                    <span key={partIndex}>{content}</span>
+                  );
+                })}
+              </p>
+            ))}
+          </div>
         </section>
 
         <section aria-labelledby="methodik-teaser" className="mt-16 flex flex-col items-start gap-4 rounded-3xl border border-border bg-bg-soft p-6 md:flex-row md:p-8">
