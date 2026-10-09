@@ -1,9 +1,9 @@
 /**
- * Team-Profile. ACHTUNG: Alle Personen, Abschlüsse und Stationen sind frei erfunden
- * (Beispielprofile). Vor dem Livegang durch echte Teammitglieder ersetzen und
- * DEMO_TEAM auf false setzen.
+ * Team-Profile der Team-Seite.
+ * PERSON_MARKUP steuert, ob die Personen zusätzlich als strukturierte Daten (schema.org/Person)
+ * für Suchmaschinen ausgegeben werden. Bis zum Livegang aus.
  */
-export const DEMO_TEAM = true;
+export const PERSON_MARKUP = false;
 
 export const TEAM_MOTTO = "Transparent testen. Wissenschaftlich prüfen. Tiere schützen. Halter informieren.";
 

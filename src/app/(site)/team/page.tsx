@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
-import { Info, MapPin, Quote } from "lucide-react";
+import { MapPin, Quote } from "lucide-react";
 import { PageShell } from "@/components/page-shell";
 import { JsonLd } from "@/components/json-ld";
 import { SITE, absoluteUrl } from "@/lib/site";
-import { DEMO_TEAM, TEAM, TEAM_MOTTO, initials } from "@/lib/team";
+import { PERSON_MARKUP, TEAM, TEAM_MOTTO, initials } from "@/lib/team";
 
 export const metadata: Metadata = {
   title: "Team",
@@ -33,16 +33,9 @@ export default function TeamPage() {
           slogan: TEAM_MOTTO,
           knowsAbout: ["Tierernährung", "Futtermittelrecht", "Hundefutter", "Katzenfutter"],
           // Personen erst mit echten Profilen als strukturierte Daten ausgeben
-          ...(DEMO_TEAM ? {} : { member: TEAM.map((m) => ({ "@type": "Person", name: m.name, jobTitle: m.role, url: absoluteUrl(`/team#${m.slug}`) })) }),
+          ...(!PERSON_MARKUP ? {} : { member: TEAM.map((m) => ({ "@type": "Person", name: m.name, jobTitle: m.role, url: absoluteUrl(`/team#${m.slug}`) })) }),
         }}
       />
-
-      {DEMO_TEAM && (
-        <p role="note" className="mb-8 flex gap-3 rounded-2xl border border-mid bg-mid-soft p-4 text-sm">
-          <Info className="mt-0.5 size-5 shrink-0 text-mid" aria-hidden />
-          <span><strong>Beispielprofile:</strong> Die folgenden Personen, Abschlüsse und Stationen sind frei erfunden und dienen als Platzhalter für die Gestaltung dieser Seite.</span>
-        </p>
-      )}
 
       <ul className="grid gap-3 sm:grid-cols-2" aria-label="Teamübersicht">
         {TEAM.map((m) => (
@@ -68,7 +61,6 @@ export default function TeamPage() {
               <div>
                 <h2 id={`${m.slug}-h`} className="text-2xl font-extrabold">{m.name}</h2>
                 <p className="font-semibold text-brand">{m.role}</p>
-                {DEMO_TEAM && <p className="mt-1 inline-block rounded-full bg-mid-soft px-2 py-0.5 text-xs font-bold text-mid">Fiktives Beispielprofil</p>}
               </div>
             </div>
             <dl className="mt-4 grid gap-x-6 gap-y-1 text-sm sm:grid-cols-[auto_1fr]">
