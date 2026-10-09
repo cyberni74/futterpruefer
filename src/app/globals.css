@@ -186,6 +186,11 @@ button, [role="button"], summary { cursor: pointer; }
     /* Buttons & Pill-Links: leicht heller */
     :where(button, a, summary, [role="button"]):where([class*="rounded"]):not(:disabled):not([aria-disabled="true"]):hover { filter: brightness(1.06); }
     .dark :where(button, a, summary, [role="button"]):where([class*="rounded"]):not(:disabled):hover { filter: brightness(1.15); }
+    /* Gefüllte Buttons (Akzent/Marke): deutlich dunkler + Schatten */
+    :where(button, a, [role="button"]):where([class*="bg-accent"], [class*="bg-brand"]):where([class*="rounded"]):not(:disabled):not([aria-disabled="true"]):hover { filter: brightness(.9); box-shadow: var(--shadow-lift); }
+    .dark :where(button, a, [role="button"]):where([class*="bg-accent"], [class*="bg-brand"]):where([class*="rounded"]):not(:disabled):hover { filter: brightness(1.12); }
+    /* FAQ-Zeilen und Aufklapper */
+    :where(summary):hover { color: var(--brand); }
   }
   @media (hover: hover) and (prefers-reduced-motion: no-preference) {
     :where(button, a, [role="button"]):where([class*="rounded-full"], [class*="rounded-xl"]):not(:disabled):not([aria-disabled="true"]):hover { translate: 0 -1px; }
@@ -195,6 +200,15 @@ button, [role="button"], summary { cursor: pointer; }
   }
 }
 .prose-fp a:hover { color: var(--brand-strong); text-decoration-thickness: 2px; }
+/* Ohne @layer, damit die Hover-Farben auch gegen Tailwind-Utilities (border-border, bg-surface) gewinnen. */
+@media (hover: hover) {
+    /* Umrandete/helle Pillen und Karten-Links: Rahmen + Hintergrund in Markenfarbe */
+    :where(button, a, [role="button"]):where([class*="border"]):where([class*="rounded"]):where([class*="bg-surface"], [class*="bg-bg-soft"]):not(:disabled):not([aria-disabled="true"]):hover { border-color: var(--brand); background-color: var(--brand-soft); color: var(--brand-strong); }
+    /* Eingabefelder, Auswahllisten, Checkbox-Zeilen */
+    :where(input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]), select, textarea):not(:disabled):hover { border-color: var(--brand); }
+    :where(label:has(> input[type="checkbox"]), label:has(> input[type="radio"])):hover { color: var(--fg); }
+}
+
 
 /* Sicherheitsnetz: nichts darf die Seite seitlich verschiebbar machen (clip statt hidden – sticky bleibt intakt) */
 html, body { overflow-x: clip; }
