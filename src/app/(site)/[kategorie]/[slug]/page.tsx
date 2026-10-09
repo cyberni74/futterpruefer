@@ -8,6 +8,7 @@ import { getLexikonEntries, getPostsForReview, renderArticle } from "@/lib/conte
 import { enhanceArticle } from "@/lib/article-html";
 import { consWithClaims, misleadingClaims, parseAnalysis, parseClaims, readingMinutes } from "@/lib/product-data";
 import { CRITERIA, type Scores } from "@/lib/scoring";
+import { productLabel, seoTitle } from "@/lib/seo";
 import { reviewPath } from "@/lib/urls";
 import { absoluteUrl, ANIMAL_LABEL, formatDate, MONTHS, PRICE_CLASS_LABEL, SITE } from "@/lib/site";
 import { Breadcrumbs } from "@/components/breadcrumbs";
@@ -46,11 +47,11 @@ export async function generateMetadata({ params }: PageProps<"/[kategorie]/[slug
   const { slug } = await params;
   const r = await getReviewBySlug(slug);
   if (!r) return {};
-  const title = r.metaTitle?.trim() || `${r.brand} ${r.productName} im Test: ${r.totalScore}/100`;
+  const title = r.metaTitle?.trim() || `${productLabel(r.brand, r.productName)} im Test: ${r.totalScore}/100`;
   const description = r.metaDescription?.trim() || autoDescription(r);
   const path = reviewPath(r);
   return {
-    title: { absolute: `${title} | ${SITE.name}` },
+    title: { absolute: seoTitle(title) },
     description,
     keywords: r.keywords,
     alternates: { canonical: path },
@@ -98,7 +99,7 @@ export default async function ReviewPage({ params }: PageProps<"/[kategorie]/[sl
   const testedAt = r.testedAt ?? r.publishedAt;
   const minutes = readingMinutes(r.bodyHtml, r.verdict);
   const images = [r.imageUrl, r.contentImageUrl, ...(r.gallery ?? [])].filter((x): x is string => Boolean(x));
-  const name = `${r.brand} ${r.productName}`;
+  const name = productLabel(r.brand, r.productName);
   const gallery = (r.gallery ?? []).filter(Boolean);
   const abs = (u: string) => (u.startsWith("http") ? u : absoluteUrl(u));
   const author = { "@type": "Organization", name: SITE.author, url: absoluteUrl("/team") };
@@ -110,7 +111,7 @@ export default async function ReviewPage({ params }: PageProps<"/[kategorie]/[sl
           {
             "@context": "https://schema.org",
             "@type": "Product",
-            name: `${r.brand} ${r.productName}`,
+            name,
             brand: { "@type": "Brand", name: r.brand },
             category: r.category.name,
             ...(images.length ? { image: images.map(abs) } : {}),
@@ -130,7 +131,7 @@ export default async function ReviewPage({ params }: PageProps<"/[kategorie]/[sl
           {
             "@context": "https://schema.org",
             "@type": "Article",
-            headline: `${r.brand} ${r.productName} im Test`,
+            headline: `${name} im Test`,
             description: r.metaDescription?.trim() || autoDescription(r),
             datePublished: r.publishedAt?.toISOString(),
             dateModified: r.updatedAt.toISOString(),
@@ -142,7 +143,7 @@ export default async function ReviewPage({ params }: PageProps<"/[kategorie]/[sl
           },
         ]}
       />
-      <Breadcrumbs items={[{ label: r.category.name, href: `/${r.category.slug}` }, { label: `${r.brand} ${r.productName}` }]} />
+      <Breadcrumbs items={[{ label: r.category.name, href: `/${r.category.slug}` }, { label: name }]} />
 
       <div className="mt-4 lg:grid lg:grid-cols-[minmax(0,1fr)_17rem] lg:gap-10">
         <article className="min-w-0">
@@ -155,7 +156,7 @@ export default async function ReviewPage({ params }: PageProps<"/[kategorie]/[sl
                 <Link href="/produkt-des-monats" className="inline-flex items-center gap-1.5 rounded-full bg-accent px-3 py-1 text-xs font-bold text-white dark:text-black hover:bg-accent-strong"><Award className="size-3.5" aria-hidden />Produkt des Monats {MONTHS[pom.month - 1]} {pom.year}</Link>
               )}
             </div>
-            <h1 className="mt-3 text-3xl font-extrabold leading-tight md:text-5xl">{r.brand} {r.productName} im Test</h1>
+            <h1 className="mt-3 text-3xl font-extrabold leading-tight md:text-5xl">{name} im Test</h1>
             <ul className="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-sm text-muted">
               <li className="flex items-center gap-1.5"><UserRound className="size-4" aria-hidden />Von <Link href="/team" className="font-semibold text-fg hover:underline">{SITE.author}</Link></li>
               {testedAt && <li className="flex items-center gap-1.5"><CalendarCheck className="size-4" aria-hidden />Getestet am <time dateTime={testedAt.toISOString()}>{formatDate(testedAt)}</time></li>}
@@ -247,9 +248,9 @@ export default async function ReviewPage({ params }: PageProps<"/[kategorie]/[sl
           {/* 8. Teilen */}
           <div className="mt-12">
             <p className="mb-3 text-sm font-bold">Diesen Test teilen</p>
-            <ShareButtons url={url} title={`${r.brand} ${r.productName} im Test – ${r.totalScore}/100 Punkte`} />
+            <ShareButtons url={url} title={`${name} im Test – ${r.totalScore}/100 Punkte`} />
           </div>
-          <ShareBar url={url} title={`${r.brand} ${r.productName} im Test – ${r.totalScore}/100 Punkte`} />
+          <ShareBar url={url} title={`${name} im Test – ${r.totalScore}/100 Punkte`} />
 
           {/* 9. Call-to-Actions */}
           {related.length > 0 && (

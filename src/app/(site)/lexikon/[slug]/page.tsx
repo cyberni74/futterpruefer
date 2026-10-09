@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { seoTitle } from "@/lib/seo";
 import { notFound, permanentRedirect } from "next/navigation";
 import { getLexikonEntries, getLexikonEntry, getReviewsMentioning, renderArticle } from "@/lib/content";
 import { findRedirect } from "@/lib/queries";
@@ -28,7 +29,7 @@ export async function generateMetadata({ params }: PageProps<"/lexikon/[slug]">)
   const title = e.metaTitle || `${e.name} im Tierfutter: ${CONCERN[e.concern].label}?`;
   const base = e.metaDescription || e.shortDescription;
   const description = base.length >= 70 ? base : `${base} Bewertung und Einordnung im Futter-Lexikon von ${SITE.name}.`.trim();
-  return { title: { absolute: `${title} | ${SITE.name}` }, description, alternates: { canonical: `/lexikon/${e.slug}` }, openGraph: { type: "article", title, description, url: `/lexikon/${e.slug}`, images: [{ url: "/opengraph-image.png", width: 1200, height: 630 }] } };
+  return { title: { absolute: seoTitle(title) }, description, alternates: { canonical: `/lexikon/${e.slug}` }, openGraph: { type: "article", title, description, url: `/lexikon/${e.slug}`, images: [{ url: "/opengraph-image.png", width: 1200, height: 630 }] } };
 }
 
 export default async function LexikonEntryPage({ params }: PageProps<"/lexikon/[slug]">) {

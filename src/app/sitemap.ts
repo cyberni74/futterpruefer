@@ -9,7 +9,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const statics = ["/", "/tests", "/blog", "/methodik", "/team", "/fuer-hersteller", "/kontakt", "/faq", "/produkt-des-monats", "/lexikon", "/glossar", "/impressum", "/datenschutz"].map((p) => ({ url: absoluteUrl(p), changeFrequency: "weekly" as const, priority: p === "/" ? 1 : 0.6 }));
   try {
     const [cats, reviews, posts, lex] = await Promise.all([
-      prisma.category.findMany({ select: { slug: true } }),
+      prisma.category.findMany({ where: { reviews: { some: publishedWhere() } }, select: { slug: true } }),
       prisma.review.findMany({ where: publishedWhere(), select: { slug: true, updatedAt: true, category: { select: { slug: true } } } }),
       prisma.blogPost.findMany({ where: publishedWhere(), select: { slug: true, updatedAt: true } }),
       prisma.lexikonEntry.findMany({ where: publishedWhere(), select: { slug: true, updatedAt: true } }),

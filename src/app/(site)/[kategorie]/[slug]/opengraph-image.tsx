@@ -1,5 +1,6 @@
 import { ImageResponse } from "next/og";
 import sharp from "sharp";
+import { productLabel } from "@/lib/seo";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { getReviewBySlug } from "@/lib/queries";
@@ -44,7 +45,7 @@ export default async function OgImage({ params }: { params: Promise<{ slug: stri
             <img src={LOGO_ROUND_DATA_URL} width={56} height={56} alt="" />
             <div style={{ display: "flex", fontSize: 28, fontWeight: 700, color: "#0a5654" }}>Futterprüfer.de · Fachtest</div>
           </div>
-          <div style={{ display: "flex", fontSize: 54, fontWeight: 800, color: "#12201f", lineHeight: 1.1 }}>{r ? `${r.brand} ${r.productName}` : "Futtertest"}</div>
+          <div style={{ display: "flex", fontSize: 54, fontWeight: 800, color: "#12201f", lineHeight: 1.1 }}>{r ? productLabel(r.brand, r.productName) : "Futtertest"}</div>
           <div style={{ display: "flex", alignItems: "center", gap: 24, marginTop: 8 }}>
             <div style={{ position: "relative", width: 170, height: 170, display: "flex", alignItems: "center", justifyContent: "center" }}>
               <svg width="170" height="170" viewBox="0 0 170 170" style={{ position: "absolute", top: 0, left: 0, transform: "rotate(-90deg)" }}>

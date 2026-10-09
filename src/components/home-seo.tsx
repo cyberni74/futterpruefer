@@ -4,6 +4,7 @@ import { JsonLd } from "@/components/json-ld";
 import { ScoreBadge } from "@/components/score-badge";
 import { absoluteUrl } from "@/lib/site";
 import { hyphenateCategory } from "@/lib/urls";
+import { productLabel } from "@/lib/seo";
 import type { getCategoryLeaders, getHomeFaq } from "@/lib/queries";
 
 type Leaders = Awaited<ReturnType<typeof getCategoryLeaders>>;
@@ -42,7 +43,7 @@ export function HomeSeo({ leaders, faq }: { leaders: Leaders; faq: Faq }) {
             "@context": "https://schema.org",
             "@type": "ItemList",
             name: "Bestbewertete Futter je Kategorie",
-            itemListElement: tops.map((l, i) => ({ "@type": "ListItem", position: i + 1, url: absoluteUrl(`/${l.slug}/${l.top!.slug}`), name: `${l.top!.brand} ${l.top!.productName}` })),
+            itemListElement: tops.map((l, i) => ({ "@type": "ListItem", position: i + 1, url: absoluteUrl(`/${l.slug}/${l.top!.slug}`), name: productLabel(l.top!.brand, l.top!.productName) })),
           }}
         />
       )}
@@ -64,7 +65,7 @@ export function HomeSeo({ leaders, faq }: { leaders: Leaders; faq: Faq }) {
                   <ScoreBadge score={l.top.totalScore} size="sm" />
                   <span className="min-w-0 flex-1">
                     <span className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wide text-muted"><Award className="size-3.5" aria-hidden />Höchste Punktzahl</span>
-                    <span className="block font-semibold group-hover:text-brand-strong">{l.top.brand} {l.top.productName}</span>
+                    <span className="block font-semibold group-hover:text-brand-strong">{productLabel(l.top.brand, l.top.productName)}</span>
                   </span>
                   <ArrowRight className="size-4 shrink-0 text-brand" aria-hidden />
                 </Link>

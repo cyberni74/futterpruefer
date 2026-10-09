@@ -141,3 +141,7 @@ export async function getCategoryLeaders() {
 export function getHomeFaq(take = 4) {
   return prisma.faqItem.findMany({ orderBy: { sortOrder: "asc" }, take });
 }
+
+export function countPublishedReviews(categoryId: string) {
+  return prisma.review.count({ where: { ...publishedWhere(), categoryId } });
+}

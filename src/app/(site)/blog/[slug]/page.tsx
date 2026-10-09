@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { notFound, permanentRedirect } from "next/navigation";
+import { seoTitle } from "@/lib/seo";
 import { prisma } from "@/lib/db";
-import { blogCardSelect, findRedirect, getPostBySlug, publishedWhere } from "@/lib/queries";
+import { blogCardSelect, findRedirect, getCategoryLeaders, getPostBySlug, publishedWhere } from "@/lib/queries";
+import { TopicLinks } from "@/components/topic-links";
 import { getReviewsForPost, renderArticle } from "@/lib/content";
 import { absoluteUrl, formatDate, SITE } from "@/lib/site";
 import { Breadcrumbs } from "@/components/breadcrumbs";
@@ -31,7 +33,7 @@ export async function generateMetadata({ params }: PageProps<"/blog/[slug]">): P
   const title = p.metaTitle || p.title;
   const description = p.metaDescription || p.excerpt;
   return {
-    title: { absolute: `${title} | ${SITE.name}` },
+    title: { absolute: seoTitle(title) },
     description,
     keywords: p.keywords,
     alternates: { canonical: `/blog/${p.slug}` },
@@ -48,12 +50,13 @@ export default async function PostPage({ params }: PageProps<"/blog/[slug]">) {
     notFound();
   }
   const kw = p.keywords.filter(Boolean);
-  const [related, reviews, body] = await Promise.all([
+  const [related, reviews, body, leaders] = await Promise.all([
     kw.length
       ? prisma.blogPost.findMany({ where: { ...publishedWhere(), id: { not: p.id }, OR: kw.map((k) => ({ OR: [{ title: { contains: k, mode: "insensitive" as const } }, { keywords: { has: k } }] })) }, orderBy: { publishedAt: "desc" }, take: 3, select: blogCardSelect })
       : Promise.resolve([]),
     getReviewsForPost(p, 3),
     renderArticle(p.bodyHtml),
+    getCategoryLeaders(),
   ]);
   const fill = related.length < 3 ? await prisma.blogPost.findMany({ where: { ...publishedWhere(), id: { notIn: [p.id, ...related.map((x) => x.id)] } }, orderBy: { publishedAt: "desc" }, take: 3 - related.length, select: blogCardSelect }) : [];
   const more = [...related, ...fill];
@@ -71,7 +74,7 @@ export default async function PostPage({ params }: PageProps<"/blog/[slug]">) {
           inLanguage: "de-DE",
           mainEntityOfPage: url,
           ...(p.imageUrl ? { image: p.imageUrl.startsWith("http") ? p.imageUrl : absoluteUrl(p.imageUrl) } : {}),
-          author: { "@type": "Person", name: SITE.author },
+          author: { "@type": "Organization", name: SITE.author, url: absoluteUrl("/team") },
           publisher: { "@type": "Organization", name: SITE.name, url: SITE.url },
         }}
       />
@@ -105,6 +108,7 @@ export default async function PostPage({ params }: PageProps<"/blog/[slug]">) {
           <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">{more.map((m) => <li key={m.id}><BlogCard post={m} /></li>)}</ul>
         </section>
       )}
+      <TopicLinks leaders={leaders} text={`${p.title} ${p.excerpt} ${kw.join(" ")}`} />
       <div className="mt-16"><NewsletterBox /></div>
     </article>
   );
