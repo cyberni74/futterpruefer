@@ -38,7 +38,18 @@ const nextConfig: NextConfig = {
   // OG-Bilder lesen lokale Produktbilder aus /public
   outputFileTracingIncludes: { "/[kategorie]/[slug]/opengraph-image": ["./public/demo/**", "./public/uploads/**"] },
   async redirects() {
-    return [{ source: "/ueber-mich", destination: "/team", permanent: true }];
+    const rules: Array<{ source: string; destination: string; permanent: boolean; has?: Array<{ type: "host"; value: string }> }> = [
+      { source: "/ueber-mich", destination: "/team", permanent: true },
+    ];
+    // Alle bekannten vercel.app-Adressen des Projekts leiten auf die Hauptdomain (nur eine Adresse für Google).
+    // Nur aktiv, wenn NEXT_PUBLIC_SITE_URL auf eine echte Domain zeigt; Vorschau-Deployments bleiben erreichbar.
+    const site = (process.env.NEXT_PUBLIC_SITE_URL ?? "").replace(/\/$/, "");
+    if (site && !/vercel\.app|localhost|127\.0\.0\.1/.test(site)) {
+      for (const host of ["futterpruefer.vercel.app", "futterpruefer-bernhardehmer-3885s-projects.vercel.app", "futterpruefer-git-main-bernhardehmer-3885s-projects.vercel.app"]) {
+        rules.push({ source: "/:path*", has: [{ type: "host", value: host }], destination: `${site}/:path*`, permanent: true });
+      }
+    }
+    return rules;
   },
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];
