@@ -124,6 +124,8 @@ button, [role="button"], summary { cursor: pointer; }
 .prose-fp li + li { margin-top: .35em; }
 .prose-fp blockquote { border-left: 4px solid var(--brand); padding-left: 1em; color: var(--fg-muted); font-style: italic; }
 .prose-fp img { border-radius: 1rem; max-width: 100%; height: auto; }
+.prose-fp figure { margin: 1.25em 0; }
+.prose-fp figure img { width: 100%; }
 .prose-fp table { width: 100%; border-collapse: collapse; font-size: .95rem; display: block; overflow-x: auto; }
 .prose-fp th, .prose-fp td { border-bottom: 1px solid var(--border); padding: .6em .75em; text-align: left; }
 .prose-fp th { background: var(--bg-soft); font-weight: 700; }

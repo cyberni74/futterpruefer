@@ -11,6 +11,7 @@ import { pgConfig } from "../src/lib/pg-config";
 import { autolinkUrls } from "../src/lib/autolink";
 import { NISCHEN_POSTS } from "./blog-nischen";
 import { RECHERCHE_POSTS } from "./blog-recherche";
+import { BLOG_BODY_IMAGES } from "./blog-bilder";
 
 const esc = (t: string) => t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
@@ -142,6 +143,7 @@ async function main() {
   await seedLexikonAndGlossary();
   await ensureFaq();
   await ensureNischenPosts();
+  await ensureBlogBodyImages();
   await normalizeStoredLinks();
   // Demo-Inhalte (fiktive Tests, Blog, Ticker) nur auf ausdrücklichen Wunsch: SEED_DEMO=1.
   // Verhindert, dass sie nach dem Löschen bei einem Deploy wieder auftauchen.
@@ -351,6 +353,29 @@ async function ensureNischenPosts() {
     n++;
   }
   if (n) console.log(`${n} Fachblog-Beiträge angelegt.`);
+}
+
+/** Fügt die Bilder aus blog-bilder.ts einmalig nach der n-ten H2 ein (idempotent über den Bildpfad). */
+async function ensureBlogBodyImages() {
+  const bySlug = new Map<string, typeof BLOG_BODY_IMAGES>();
+  for (const b of BLOG_BODY_IMAGES) bySlug.set(b.slug, [...(bySlug.get(b.slug) ?? []), b]);
+  let n = 0;
+  for (const [slug, images] of bySlug) {
+    const post = await prisma.blogPost.findUnique({ where: { slug }, select: { id: true, bodyHtml: true } });
+    if (!post) continue;
+    let html = post.bodyHtml;
+    for (const img of images) {
+      const src = `/blog/${img.file}`;
+      if (html.includes(src)) continue;
+      const ends = [...html.matchAll(/<h2[^>]*>[\s\S]*?<\/h2>/g)].map((m) => m.index! + m[0].length);
+      const at = ends[img.afterH2 - 1];
+      if (at === undefined) { console.log(`Blogbild ${img.file} übersprungen: ${slug} hat keine ${img.afterH2}. Überschrift.`); continue; }
+      const figure = `<figure><img src="${src}" alt="${esc(img.alt).replace(/"/g, "&quot;")}" width="1200" height="675" loading="lazy"></figure>`;
+      html = html.slice(0, at) + figure + html.slice(at);
+    }
+    if (html !== post.bodyHtml) { await prisma.blogPost.update({ where: { id: post.id }, data: { bodyHtml: html } }); n++; }
+  }
+  if (n) console.log(`Bilder in ${n} Blogbeiträgen ergänzt.`);
 }
 
 async function ensureFaq() {

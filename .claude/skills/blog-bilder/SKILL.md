@@ -11,3 +11,8 @@ description: Standard-Ablauf für Titelbilder von Blogbeiträgen auf futterprüf
 4. **SEO-Dateiname**: kleingeschrieben, Bindestriche, ohne Umlaute (ae/oe/ue/ss), Thema + Suchbegriff, z. B. `hund-maulkorb-zugfahrt-training.webp`. Kein „image1“, keine IDs.
 5. **Ablage**: `public/blog/<dateiname>.webp`. Im Seed-Eintrag (`prisma/blog-nischen.ts` bzw. `blog-recherche.ts`) `image` und einen **beschreibenden Alt-Text mit Suchbegriff** setzen. Der Seed legt einen Artikel nur an, wenn die Bilddatei existiert, und berechnet das Blur-Placeholder selbst.
 6. **Prüfen**: Bilder ansehen (passt zum Thema, keine Textreste, keine Verzerrungen), dann `tsc`, `eslint`, committen, mit `origin/main` mergen, pushen.
+
+## Bilder im Fließtext
+- Pro Artikel 1–2 Bilder nach der 2.–6. H2, nie bei „Das Wichtigste in Kürze", FAQ, Checkliste, Fazit oder Quellen.
+- Eintrag in `prisma/blog-bilder.ts` (`slug`, `afterH2` 1-basiert, `file`, `alt`). `ensureBlogBodyImages()` im Seed fügt `<figure><img …></figure>` einmalig ein (idempotent über den Bildpfad).
+- Bilddateien liegen in `public/blog/`, 1200×675 WebP, SEO-Dateiname, Alt-Text beschreibend mit Suchbegriff.
