@@ -33,7 +33,7 @@ export default function ImpressumPage() {
         </p>
 
         <h2>Registereintrag</h2>
-        <p>Registernummer (Company Registration No.): {OPERATOR.registrationNo} <Todo>Registerbehörde und Land ergänzen</Todo></p>
+        <p>Registernummer (LLPIN): {OPERATOR.registrationNo}, Registrar of Companies Bangalore, Ministry of Corporate Affairs, Indien</p>
 
         <h2>Steuernummern</h2>
         <p>Es besteht keine deutsche Umsatzsteuer-Identifikationsnummer. Steuerregistrierungen in Indien (GST): {OPERATOR.gst.join(" und ")}.</p>

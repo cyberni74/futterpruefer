@@ -76,6 +76,6 @@ export const OPERATOR = {
   phone: "+91 95350 96718",
   phoneInternational: "+91 94773 74505",
   hours: "Mo–Sa 10:00–18:00 Uhr (indische Zeit, IST)",
-  registrationNo: "AAL 6212",
+  registrationNo: "AAL-6212",
   gst: ["29ABIFM0599D1Z0", "19ABIFM0599D1Z1"],
 } as const;
