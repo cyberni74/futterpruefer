@@ -22,7 +22,7 @@ export default async function BlogPage() {
         <p className="text-muted">Noch keine Artikel veröffentlicht.</p>
       ) : (
         <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {posts.map((p) => <li key={p.id}><BlogCard post={p} /></li>)}
+          {posts.map((p) => <li key={p.id}><BlogCard post={p} as="h2" /></li>)}
         </ul>
       )}
     </div>

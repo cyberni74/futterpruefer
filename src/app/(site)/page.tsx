@@ -15,7 +15,7 @@ import { SITE, absoluteUrl } from "@/lib/site";
 import { reviewPath } from "@/lib/urls";
 import type { Metadata } from "next";
 
-const TITLE = "Hunde- & Katzenfutter im Test – unabhängig bewertet | Futterprüfer";
+const TITLE = "Hunde- & Katzenfutter im Test – unabhängig | Futterprüfer";
 const DESCRIPTION = "Hunde- und Katzenfutter im unabhängigen Fachtest: Rohstoffe, Schadstoffe, Nährstoffprofil und Werbeaussagen nach offener 100-Punkte-Methodik. Tests, Lexikon und Ratgeber.";
 
 export const metadata: Metadata = {

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { PageShell, Todo } from "@/components/page-shell";
 import { OPERATOR } from "@/lib/site";
 
-export const metadata: Metadata = { title: "Datenschutzerklärung", alternates: { canonical: "/datenschutz" } };
+export const metadata: Metadata = { title: "Datenschutzerklärung", description: "Datenschutzerklärung von Futterprüfer.de: Verantwortlicher, Hosting, Reichweitenmessung ohne Cookies, Kontaktformular, Newsletter und Ihre Rechte.", alternates: { canonical: "/datenschutz" } };
 
 export default function DatenschutzPage() {
   return (

@@ -46,7 +46,7 @@ export async function generateMetadata({ params }: PageProps<"/[kategorie]/[slug
   const { slug } = await params;
   const r = await getReviewBySlug(slug);
   if (!r) return {};
-  const title = r.metaTitle?.trim() || `${r.brand} ${r.productName} im Test: ${r.totalScore}/100 Punkte`;
+  const title = r.metaTitle?.trim() || `${r.brand} ${r.productName} im Test: ${r.totalScore}/100`;
   const description = r.metaDescription?.trim() || autoDescription(r);
   const path = reviewPath(r);
   return {

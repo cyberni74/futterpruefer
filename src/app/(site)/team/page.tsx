@@ -8,7 +8,7 @@ import { TEAM, TEAM_MOTTO, initials } from "@/lib/team";
 
 export const metadata: Metadata = {
   title: "Team",
-  description: "Die Redaktion hinter Futterprüfer: Tierärztinnen, Biologin, Testleitung und Redaktion – Rollen, Qualifikationen und Aufgaben. Die Mitglieder arbeiten in der Branche und bleiben namentlich ungenannt.",
+  description: "Die Redaktion hinter Futterprüfer: Tierärztinnen, Biologie, Testleitung und Redaktion mit Rolle und Qualifikation. Die Mitglieder bleiben namentlich ungenannt.",
   alternates: { canonical: "/team" },
 };
 

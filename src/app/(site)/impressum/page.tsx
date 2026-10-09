@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { PageShell, Todo } from "@/components/page-shell";
 import { OPERATOR } from "@/lib/site";
 
-export const metadata: Metadata = { title: "Impressum", robots: { index: true, follow: true }, alternates: { canonical: "/impressum" } };
+export const metadata: Metadata = { title: "Impressum", description: "Anbieterkennzeichnung von Futterprüfer.de nach § 5 DDG: Anbieter, Kontakt, Register und inhaltlich Verantwortliche.", robots: { index: true, follow: true }, alternates: { canonical: "/impressum" } };
 
 export default function ImpressumPage() {
   const [main, other] = OPERATOR.address;
