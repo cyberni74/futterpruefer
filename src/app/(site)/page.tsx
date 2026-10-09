@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ShieldCheck } from "lucide-react";
+import { ArrowRight, ShieldCheck } from "lucide-react";
 import type { Metadata } from "next";
 import { getLatestPosts, getLatestReviews, getNewestReviewUpdate, getProductOfMonth, getTickerEntries, getCategoryLeaders } from "@/lib/queries";
 import { HomeHero } from "@/components/home-hero";
@@ -139,10 +139,16 @@ export default async function Home() {
 
         <section aria-labelledby="neueste-artikel" className="mt-16">
           <SectionHeading id="neueste-artikel" kicker="Fachblog" title="Ratgeber: Neues aus dem Fachblog" href="/blog" linkLabel="Zum Fachblog" />
-          <ul className="grid gap-3 sm:grid-cols-2">
+          <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {HOME_GUIDES.map((guide) => (
               <li key={guide.href}>
-                <Link href={guide.href} className={textLink}>{guide.title}</Link>
+                <Link
+                  href={guide.href}
+                  className="group flex h-full items-start justify-between gap-3 rounded-2xl border border-border bg-surface p-4 shadow-card transition hover:-translate-y-0.5 hover:border-brand hover:bg-brand-soft"
+                >
+                  <span className="text-sm font-semibold leading-snug group-hover:text-brand-strong">{guide.title}</span>
+                  <ArrowRight className="mt-0.5 size-4 shrink-0 text-brand transition group-hover:translate-x-0.5" aria-hidden />
+                </Link>
               </li>
             ))}
           </ul>
