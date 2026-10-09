@@ -11,7 +11,7 @@ export const alt = "Testergebnis";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
-const COLOR = { gut: "#15803d", mittel: "#a16207", schlecht: "#b91c1c" } as const;
+const COLOR = { gut: "#16a34a", mittel: "#eab308", schlecht: "#dc2626" } as const;
 
 /** Produktbild als PNG-Data-URL (Satori kann kein WebP). Lokale Bilder aus /public, externe per fetch. */
 async function productImage(src: string | null | undefined): Promise<string | null> {
@@ -53,7 +53,7 @@ export default async function OgImage({ params }: { params: Promise<{ slug: stri
                 <circle cx="85" cy="85" r="70" fill="none" stroke={color} strokeWidth="16" strokeLinecap="round" strokeDasharray={`${(score / 100) * c} ${c}`} />
               </svg>
               <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-                <div style={{ display: "flex", fontSize: 60, fontWeight: 800, color }}>{score}</div>
+                <div style={{ display: "flex", fontSize: 60, fontWeight: 800, color: "#12201f" }}>{score}</div>
                 <div style={{ display: "flex", fontSize: 20, color: "#4b5f5d" }}>von 100</div>
               </div>
             </div>

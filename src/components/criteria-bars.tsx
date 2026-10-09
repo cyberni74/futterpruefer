@@ -3,7 +3,7 @@ import { motion, useReducedMotion } from "framer-motion";
 import { AlertTriangle } from "lucide-react";
 import { CRITERIA, harmfulFailed, ratioRating, type Scores } from "@/lib/scoring";
 
-const COLOR = { gut: "var(--good)", mittel: "var(--mid)", schlecht: "var(--bad)" } as const;
+const COLOR = { gut: "var(--good)", mittel: "var(--mid-fill)", schlecht: "var(--bad)" } as const;
 
 /** Sechs Kriterien-Balken; füllen sich nacheinander beim Sichtbarwerden (nur transform → flüssig, kein Layout-Shift). */
 export function CriteriaBars({ scores }: { scores: Scores }) {

@@ -2,7 +2,7 @@ import { CONCERN_LABEL, type Concern } from "@/lib/admin/lexikon";
 
 const TONE: Record<Concern, { cls: string; dot: string }> = {
   UNBEDENKLICH: { cls: "bg-good-soft text-good border-good/30", dot: "bg-good" },
-  EINGESCHRAENKT: { cls: "bg-mid-soft text-mid border-mid/30", dot: "bg-mid" },
+  EINGESCHRAENKT: { cls: "bg-mid-soft text-mid border-mid/30", dot: "bg-mid-fill" },
   BEDENKLICH: { cls: "bg-bad-soft text-bad border-bad/30", dot: "bg-bad" },
 };
 

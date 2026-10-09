@@ -18,7 +18,8 @@
   --good: #15803d;
   --good-soft: #dcfce7;
   --mid: #854d0e;
-  --mid-soft: #fef3c7;
+  --mid-fill: #eab308;
+  --mid-soft: #fef9c3;
   --bad: #b91c1c;
   --bad-soft: #fee2e2;
   --ring: #0a5654;
@@ -42,6 +43,7 @@
   --good: #4ade80;
   --good-soft: #12301f;
   --mid: #facc15;
+  --mid-fill: #facc15;
   --mid-soft: #33290c;
   --bad: #f87171;
   --bad-soft: #3a1515;
@@ -66,6 +68,7 @@
   --color-good: var(--good);
   --color-good-soft: var(--good-soft);
   --color-mid: var(--mid);
+  --color-mid-fill: var(--mid-fill);
   --color-mid-soft: var(--mid-soft);
   --color-bad: var(--bad);
   --color-bad-soft: var(--bad-soft);
@@ -152,7 +155,7 @@ button, [role="button"], summary { cursor: pointer; }
 /* Automatisch verlinkte Begriffe */
 .prose-fp a.lex-link, .prose-fp a.gloss-link { text-decoration: none; border-bottom: 2px dotted currentColor; color: inherit; font-weight: 600; }
 .prose-fp a.lex-link::after { content: ""; display: inline-block; width: .5em; height: .5em; border-radius: 9999px; margin-left: .2em; vertical-align: .15em; background: var(--good); }
-.prose-fp a.lex-eingeschraenkt::after { background: var(--mid); }
+.prose-fp a.lex-eingeschraenkt::after { background: var(--mid-fill); }
 .prose-fp a.lex-bedenklich::after { background: var(--bad); }
 .prose-fp a.gloss-link { border-bottom-style: dashed; font-weight: 500; }
 .prose-fp a.lex-link:hover, .prose-fp a.gloss-link:hover { color: var(--brand); }
@@ -161,7 +164,7 @@ button, [role="button"], summary { cursor: pointer; }
 .prose-fp .crit-bar { display: flex; align-items: center; gap: .75rem; margin-top: .5rem; max-width: 22rem; }
 .prose-fp .crit-bar-track { position: relative; flex: 1; height: .55rem; border-radius: 9999px; background: var(--border); overflow: hidden; }
 .prose-fp .crit-bar-fill { position: absolute; inset: 0 auto 0 0; border-radius: 9999px; background: var(--good); }
-.prose-fp .crit-mittel .crit-bar-fill { background: var(--mid); }
+.prose-fp .crit-mittel .crit-bar-fill { background: var(--mid-fill); }
 .prose-fp .crit-schlecht .crit-bar-fill { background: var(--bad); }
 .prose-fp .crit-bar-value { font-weight: 800; font-variant-numeric: tabular-nums; font-size: .95rem; }
 .prose-fp h2[id] { scroll-margin-top: 7rem; }

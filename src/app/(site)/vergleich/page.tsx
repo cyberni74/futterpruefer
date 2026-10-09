@@ -13,7 +13,7 @@ import { FpImage } from "@/components/fp-image";
 
 export const metadata: Metadata = { title: "Produktvergleich", robots: { index: false, follow: true } };
 
-const TONE = { gut: "bg-good", mittel: "bg-mid", schlecht: "bg-bad" } as const;
+const TONE = { gut: "bg-good", mittel: "bg-mid-fill", schlecht: "bg-bad" } as const;
 
 export default async function ComparePage({ searchParams }: PageProps<"/vergleich">) {
   const ids = parseCompareIds((await searchParams).ids);

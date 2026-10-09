@@ -3,7 +3,7 @@ import { animate, motion, useInView, useMotionValue, useReducedMotion, useTransf
 import { useEffect, useRef, useState } from "react";
 import { MAX_TOTAL, RATING_LABEL, ratingFor } from "@/lib/scoring";
 
-const COLOR = { gut: "var(--good)", mittel: "var(--mid)", schlecht: "var(--bad)" } as const;
+const COLOR = { gut: "var(--good)", mittel: "var(--mid-fill)", schlecht: "var(--bad)" } as const;
 
 export function ScoreRing({ score, size = 200 }: { score: number; size?: number }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -31,9 +31,9 @@ export function ScoreRing({ score, size = 200 }: { score: number; size?: number 
         <motion.circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke={COLOR[rating]} strokeWidth={stroke} strokeLinecap="round" strokeDasharray={c} style={{ strokeDashoffset: dash }} />
       </svg>
       <div className="absolute inset-0 flex flex-col items-center justify-center" aria-hidden>
-        <span className="font-display text-6xl font-extrabold tabular-nums leading-none" style={{ color: COLOR[rating] }}>{display}</span>
+        <span className="font-display text-6xl font-extrabold tabular-nums leading-none" style={{ color: "var(--fg)" }}>{display}</span>
         <span className="mt-1 text-sm font-semibold text-muted">von {MAX_TOTAL} Punkten</span>
-        <span className="mt-2 rounded-full px-2.5 py-0.5 text-xs font-bold" style={{ background: `color-mix(in srgb, ${COLOR[rating]} 16%, transparent)`, color: COLOR[rating] }}>{RATING_LABEL[rating]}</span>
+        <span className="mt-2 rounded-full px-2.5 py-0.5 text-xs font-bold" style={{ background: COLOR[rating], color: rating === "mittel" ? "#1b2b29" : "#fff" }}>{RATING_LABEL[rating]}</span>
       </div>
     </div>
   );

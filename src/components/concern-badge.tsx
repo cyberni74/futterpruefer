@@ -2,7 +2,7 @@ import { AlertOctagon, AlertTriangle, CheckCircle2 } from "lucide-react";
 
 export const CONCERN = {
   UNBEDENKLICH: { label: "Unbedenklich", cls: "bg-good-soft text-good", dot: "bg-good", Icon: CheckCircle2 },
-  EINGESCHRAENKT: { label: "Eingeschränkt", cls: "bg-mid-soft text-mid", dot: "bg-mid", Icon: AlertTriangle },
+  EINGESCHRAENKT: { label: "Eingeschränkt", cls: "bg-mid-soft text-mid", dot: "bg-mid-fill", Icon: AlertTriangle },
   BEDENKLICH: { label: "Bedenklich", cls: "bg-bad-soft text-bad", dot: "bg-bad", Icon: AlertOctagon },
 } as const;
 export type ConcernKey = keyof typeof CONCERN;
