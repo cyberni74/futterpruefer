@@ -12,6 +12,7 @@ import { autolinkUrls } from "../src/lib/autolink";
 import { NISCHEN_POSTS } from "./blog-nischen";
 import { RECHERCHE_POSTS } from "./blog-recherche";
 import { ULMENRINDE_POSTS } from "./blog-ulmenrinde";
+import { ULMENRINDE_ANWENDER_HTML, ULMENRINDE_ANWENDER_MARKER } from "./blog-ulmenrinde-anwender";
 import { BLOG_BODY_IMAGES } from "./blog-bilder";
 import { REVIEW_TEASERS, REVIEW_TEASERS_PREVIOUS } from "./review-teasers";
 import { MEDIDOG_TEST, MEDIDOG_V1_SIGNATURE } from "./review-medidog";
@@ -147,6 +148,7 @@ async function main() {
   await ensureFaq();
   await ensureNischenPosts();
   await ensureBlogBodyImages();
+  await ensureUlmenrindeAnwender();
   await ensureReviewTeasers();
   await ensureMedidogTest();
   await normalizeStoredLinks();
@@ -358,6 +360,17 @@ async function ensureNischenPosts() {
     n++;
   }
   if (n) console.log(`${n} Fachblog-Beiträge angelegt.`);
+}
+
+/** Fügt den Abschnitt „Anwenderstimmen“ einmalig vor dem Darm-Tagebuch in den Ulmenrinden-Ratgeber ein (idempotent über die Anker-ID). */
+async function ensureUlmenrindeAnwender() {
+  const post = await prisma.blogPost.findUnique({ where: { slug: "ulmenrinde-hund-darmgesundheit" }, select: { id: true, bodyHtml: true } });
+  if (!post || post.bodyHtml.includes(ULMENRINDE_ANWENDER_MARKER)) return;
+  const at = post.bodyHtml.search(/<h2[^>]*>\s*Ihr Darm-Tagebuch/);
+  if (at < 0) return;
+  const bodyHtml = autolinkUrls(post.bodyHtml.slice(0, at) + ULMENRINDE_ANWENDER_HTML + "\n" + post.bodyHtml.slice(at));
+  await prisma.blogPost.update({ where: { id: post.id }, data: { bodyHtml } });
+  console.log("Ulmenrinden-Ratgeber: Anwenderstimmen ergänzt.");
 }
 
 /** Fügt die Bilder aus blog-bilder.ts einmalig nach der n-ten H2 ein (idempotent über den Bildpfad). */
