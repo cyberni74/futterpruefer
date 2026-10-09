@@ -21,7 +21,7 @@ export default function ImpressumPage() {
           {other[0]}<br />
           {other[1]}
         </p>
-        <p>Vertretungsberechtigt: <Todo>Name der vertretungsberechtigten Person(en), z. B. Designated Partners der LLP</Todo></p>
+        <p>Vertretungsberechtigt: {OPERATOR.representative}</p>
 
         <h2>Kontakt</h2>
         <p>
@@ -38,7 +38,11 @@ export default function ImpressumPage() {
         <p>Es besteht keine deutsche Umsatzsteuer-Identifikationsnummer. Steuerregistrierungen in Indien (GST): {OPERATOR.gst.join(" und ")}.</p>
 
         <h2>Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV</h2>
-        <p><Todo>Vor- und Nachname einer natürlichen Person mit ladungsfähiger Anschrift</Todo></p>
+        <p>
+          {OPERATOR.representative}<br />
+          {OPERATOR.name}, {OPERATOR.nameSuffix}<br />
+          {main[0]}, {main[1]}
+        </p>
 
         <h2>Verbraucherstreitbeilegung</h2>
         <p>Wir sind nicht bereit oder verpflichtet, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.</p>

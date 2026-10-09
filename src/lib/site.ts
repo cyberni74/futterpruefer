@@ -49,6 +49,7 @@ export const OPERATOR = {
     ["No 36, Opp. 09, Arekempanhally, Wilson Garden", "Bengaluru – 560027, Indien"],
     ["A1, Gouranganagar, North 24 Parganas", "West Bengal – 700162, Indien"],
   ],
+  representative: "Beytullah Coscun",
   email: "contactus@teraa-intl.com",
   phone: "+91 95350 96718",
   phoneInternational: "+91 94773 74505",
