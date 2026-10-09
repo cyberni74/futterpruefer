@@ -12,6 +12,7 @@ import { ReviewCard } from "@/components/review-card";
 import { ReadAloud } from "@/components/read-aloud";
 import { ShareButtons } from "@/components/share-buttons";
 import { NewsletterBox } from "@/components/newsletter-box";
+import { WishBox } from "@/components/wish-box";
 import { JsonLd } from "@/components/json-ld";
 
 export const revalidate = 3600;
@@ -90,7 +91,8 @@ export default async function LexikonEntryPage({ params }: PageProps<"/lexikon/[
           </ul>
         </section>
       )}
-      <div className="mt-14"><NewsletterBox /></div>
+      <div className="mt-14"><WishBox /></div>
+        <div className="mt-14"><NewsletterBox /></div>
     </article>
   );
 }

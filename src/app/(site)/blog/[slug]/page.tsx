@@ -16,6 +16,7 @@ import { BlogCard } from "@/components/blog-card";
 import { JsonLd } from "@/components/json-ld";
 import { ReviewCard } from "@/components/review-card";
 import { NewsletterBox } from "@/components/newsletter-box";
+import { WishBox } from "@/components/wish-box";
 
 export const revalidate = 3600;
 
@@ -114,7 +115,8 @@ export default async function PostPage({ params }: PageProps<"/blog/[slug]">) {
         </section>
       )}
       <TopicLinks leaders={leaders} text={`${p.title} ${p.excerpt} ${kw.join(" ")}`} />
-      <div className="mt-16"><NewsletterBox /></div>
+      <div className="mt-16"><WishBox /></div>
+        <div className="mt-16"><NewsletterBox /></div>
     </article>
   );
 }

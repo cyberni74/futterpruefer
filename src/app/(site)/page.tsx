@@ -11,6 +11,7 @@ import { SectionHeading } from "@/components/section-heading";
 import { Reveal } from "@/components/reveal";
 import { JsonLd } from "@/components/json-ld";
 import { NewsletterBox } from "@/components/newsletter-box";
+import { WishBox } from "@/components/wish-box";
 import { DEFAULT_OG_IMAGE, SITE, pageAlternates } from "@/lib/site";
 import { CRITERIA } from "@/lib/scoring";
 import {
@@ -195,6 +196,7 @@ export default async function Home() {
           </div>
         </section>
 
+        <div className="mt-16"><WishBox /></div>
         <div className="mt-16"><NewsletterBox /></div>
       </div>
     </>

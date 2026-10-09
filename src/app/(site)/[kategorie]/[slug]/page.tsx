@@ -28,6 +28,7 @@ import { ShareBar } from "@/components/share-bar";
 import { ReviewCard } from "@/components/review-card";
 import { BlogCard } from "@/components/blog-card";
 import { NewsletterBox } from "@/components/newsletter-box";
+import { WishBox } from "@/components/wish-box";
 import { Disclosure } from "@/components/disclosure";
 import { JsonLd } from "@/components/json-ld";
 
@@ -285,7 +286,8 @@ export default async function ReviewPage({ params }: PageProps<"/[kategorie]/[sl
               <ul className="grid gap-5 sm:grid-cols-2">{posts.map((p) => <li key={p.id}><BlogCard post={p} /></li>)}</ul>
             </section>
           )}
-          <div className="mt-16"><NewsletterBox /></div>
+          <div className="mt-16"><WishBox /></div>
+        <div className="mt-16"><NewsletterBox /></div>
 
           {/* 10. Offenlegung */}
           <div className="mt-8"><Disclosure /></div>

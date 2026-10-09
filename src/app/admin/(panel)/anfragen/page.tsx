@@ -46,16 +46,20 @@ export default async function MessagesPage({ searchParams }: { searchParams: Pro
                 <header className="flex flex-wrap items-center gap-x-3 gap-y-1">
                   {m.read ? <MailOpen className="size-5 text-muted" aria-hidden /> : <Mail className="size-5 text-accent" aria-hidden />}
                   <h2 className="font-bold">{m.name}</h2>
-                  <span className="rounded-md bg-bg-soft px-2 py-0.5 text-xs font-semibold text-muted">{m.kind}</span>
+                  <span className="rounded-md bg-bg-soft px-2 py-0.5 text-xs font-semibold text-muted">{m.kind === "wunsch" ? "Wunschprodukt" : m.kind}</span>
                   {!m.read && <span className="rounded-full bg-accent px-2 py-0.5 text-xs font-semibold text-white">Neu</span>}
                   <time className="ml-auto text-xs text-muted" dateTime={m.createdAt.toISOString()}>
                     {formatDateTime(m.createdAt)}
                   </time>
                 </header>
                 <p className="mt-1 text-sm">
-                  <a href={`mailto:${m.email}`} className="inline-flex min-h-11 items-center font-semibold break-all text-brand underline-offset-4 hover:underline sm:min-h-0">
-                    {m.email}
-                  </a>
+                  {m.email ? (
+                    <a href={`mailto:${m.email}`} className="inline-flex min-h-11 items-center font-semibold break-all text-brand underline-offset-4 hover:underline sm:min-h-0">
+                      {m.email}
+                    </a>
+                  ) : (
+                    <span className="text-muted">Keine E-Mail angegeben</span>
+                  )}
                   {m.company && <span className="text-muted"> · {m.company}</span>}
                 </p>
                 <p className="mt-3 text-sm leading-relaxed whitespace-pre-line">{m.message}</p>
