@@ -19,6 +19,8 @@ import { BLOG_BODY_IMAGES } from "./blog-bilder";
 import { REVIEW_TEASERS, REVIEW_TEASERS_PREVIOUS } from "./review-teasers";
 import { MEDIDOG_TEST, MEDIDOG_V1_SIGNATURE } from "./review-medidog";
 import { MAMMALY_TESTS } from "./review-mammaly";
+import { BUGBELL_TESTS } from "./review-bugbell";
+import { BETTERCAT_TESTS } from "./review-betterkat";
 import { MAMMALY_BLOG_SECTIONS, MAMMALY_BLOGS_MARKER } from "./review-mammaly-blogs";
 
 const esc = (t: string) => t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -415,14 +417,15 @@ async function ensureReviewTeasers() {
 /** Legt den Test „Medidog Ulmenrinden Paste“ an, falls der Slug fehlt (Bilder liegen in public/tests). */
 /** mammaly-Tests: nur anlegen, wenn der Slug fehlt (Admin-Änderungen bleiben erhalten). */
 async function ensureMammalyTests() {
-  const category = await prisma.category.findUnique({ where: { slug: "ergaenzungsfuttermittel-hund" }, select: { id: true } });
-  if (!category) return;
+  const categories = new Map((await prisma.category.findMany({ select: { id: true, slug: true } })).map((c) => [c.slug, c.id]));
   const blur = async (file: string) => {
     const b = await sharp(path.join(process.cwd(), "public", "tests", file)).resize(16).webp({ quality: 40 }).toBuffer().catch(() => null);
     return b ? `data:image/webp;base64,${b.toString("base64")}` : null;
   };
   let n = 0;
-  for (const t of MAMMALY_TESTS) {
+  for (const t of [...MAMMALY_TESTS, ...BUGBELL_TESTS, ...BETTERCAT_TESTS]) {
+    const category = { id: categories.get(t.categorySlug) };
+    if (!category.id) { console.log(`Test ${t.slug} übersprungen: Kategorie ${t.categorySlug} fehlt.`); continue; }
     const existing = await prisma.review.findUnique({ where: { slug: t.slug }, select: { id: true, bodyHtml: true } });
     if (existing) {
       // Überarbeitete (strengere) Wertung einspielen, solange die Kennung der Neufassung im Text fehlt; spätere Admin-Änderungen bleiben unberührt.
