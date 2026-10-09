@@ -1,6 +1,7 @@
 import "server-only";
 import { prisma } from "@/lib/db";
 import type { Prisma } from "@/generated/prisma/client";
+import { buildMonthlyWinners, currentPom } from "@/lib/pom";
 
 export const publishedWhere = () => ({ status: "PUBLISHED" as const, publishedAt: { lte: new Date() } });
 
@@ -60,24 +61,17 @@ export function getPostBySlug(slug: string) {
   return prisma.blogPost.findFirst({ where: { slug, ...publishedWhere() } });
 }
 
-export async function getProductOfMonth() {
-  const now = new Date();
-  return prisma.productOfMonth.findFirst({
-    where: {
-      OR: [{ year: { lt: now.getFullYear() } }, { year: now.getFullYear(), month: { lte: now.getMonth() + 1 } }],
-      review: publishedWhere(),
-    },
-    orderBy: [{ year: "desc" }, { month: "desc" }],
-    include: { review: { select: reviewCardSelect } },
-  });
+/** Produkte des Monats (Testsieger je Monat, manuelle Einträge überschreiben), neueste zuerst. */
+export async function getProductOfMonthArchive() {
+  const [reviews, manual] = await Promise.all([
+    prisma.review.findMany({ where: publishedWhere(), select: reviewCardSelect }),
+    prisma.productOfMonth.findMany({ where: { review: publishedWhere() }, include: { review: { select: reviewCardSelect } } }),
+  ]);
+  return buildMonthlyWinners(reviews, manual);
 }
 
-export function getProductOfMonthArchive() {
-  return prisma.productOfMonth.findMany({
-    where: { review: publishedWhere() },
-    orderBy: [{ year: "desc" }, { month: "desc" }],
-    include: { review: { select: reviewCardSelect } },
-  });
+export async function getProductOfMonth() {
+  return currentPom(await getProductOfMonthArchive());
 }
 
 export type TickerEntry = { id: string; text: string; href: string | null; isWarning: boolean };
