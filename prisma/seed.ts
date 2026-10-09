@@ -415,6 +415,13 @@ async function ensureMedidogTest() {
     if (existing.bodyHtml.includes(MEDIDOG_V1_SIGNATURE)) {
       await prisma.review.update({ where: { id: existing.id }, data: { bodyHtml: autolinkUrls(t.bodyHtml), conclusionHtml: t.conclusionHtml, verdict: t.verdict, pros: t.pros, cons: t.cons, claims: t.claims } });
       console.log("Test Medidog Ulmenrinden Paste aktualisiert.");
+    } else if (!existing.bodyHtml.includes("Bionic Nature")) {
+      // Herstellerhinweis nachrüsten (Hersteller ja, Marke bleibt Medidog); Admin-Änderungen am Rest bleiben erhalten.
+      const from = "<p>Auf dem Etikett stehen";
+      if (existing.bodyHtml.includes(from)) {
+        await prisma.review.update({ where: { id: existing.id }, data: { bodyHtml: existing.bodyHtml.replace(from, "<p>Hersteller der Paste ist die Bionic Nature GmbH; Medidog ist die Marke, unter der sie vertrieben wird. Auf dem Etikett stehen") } });
+        console.log("Test Medidog: Herstellerhinweis ergänzt.");
+      }
     }
     return;
   }
