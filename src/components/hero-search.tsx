@@ -12,7 +12,7 @@ export function HeroSearch() {
     >
       <Search className="size-5 shrink-0 text-brand" aria-hidden />
       <span className="min-w-0 flex-1 truncate">Marke oder Futter suchen<span className="hidden sm:inline">, z. B. „Nordrudel“</span></span>
-      <kbd className="hidden rounded border border-border px-1.5 text-xs md:inline">Strg K</kbd>
+      <kbd className="hidden rounded border border-border px-1.5 text-xs lg:inline">Strg K</kbd>
     </button>
   );
 }
