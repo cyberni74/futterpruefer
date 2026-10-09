@@ -12,6 +12,7 @@ import { autolinkUrls } from "../src/lib/autolink";
 import { NISCHEN_POSTS } from "./blog-nischen";
 import { RECHERCHE_POSTS } from "./blog-recherche";
 import { ULMENRINDE_POSTS } from "./blog-ulmenrinde";
+import { HERSTELLER_POSTS } from "./blog-hersteller";
 import { ULMENRINDE_ANWENDER_HTML, ULMENRINDE_ANWENDER_MARKER } from "./blog-ulmenrinde-anwender";
 import { BLOG_BODY_IMAGES } from "./blog-bilder";
 import { REVIEW_TEASERS, REVIEW_TEASERS_PREVIOUS } from "./review-teasers";
@@ -342,7 +343,7 @@ const MORE_FAQ: Array<{ sortOrder: number; question: string; answer: string }> =
 /** Fachblog-Beiträge aus der Nischenanalyse: nur anlegen, wenn der Slug fehlt (Admin-Änderungen bleiben erhalten). */
 async function ensureNischenPosts() {
   let n = 0;
-  for (const p of [...NISCHEN_POSTS, ...RECHERCHE_POSTS, ...ULMENRINDE_POSTS]) {
+  for (const p of [...NISCHEN_POSTS, ...RECHERCHE_POSTS, ...ULMENRINDE_POSTS, ...HERSTELLER_POSTS]) {
     if (await prisma.blogPost.findUnique({ where: { slug: p.slug }, select: { id: true } })) continue;
     const file = path.join(process.cwd(), "public", "blog", p.image);
     const blur = await sharp(file).resize(16).webp({ quality: 40 }).toBuffer().catch(() => null);
