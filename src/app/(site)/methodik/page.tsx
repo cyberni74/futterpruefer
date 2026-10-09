@@ -60,7 +60,7 @@ const SOURCES = [
   "Das Etikett und die Angaben des Herstellers (Zusammensetzung, analytische Bestandteile, Zusatzstoffe, Fütterungsempfehlung)",
   "Produktseiten des Herstellers und gängiger Händler, auch für Werbeaussagen",
   "Öffentlich zugängliche Ergebnisse unabhängiger Prüfungen, etwa von Öko-Test oder Stiftung Warentest, und amtliche Rückrufmeldungen",
-  "Rechtliche Vorgaben, vor allem VO (EG) 767/2009 (Kennzeichnung von Futtermitteln), VO (EU) Nr. 68/2013 (Katalog der Einzelfuttermittel), VO (EU) 2020/354 (Verzeichnis der vorgesehenen Verwendungen von Futtermitteln für besondere Ernährungszwecke) und das Gesetz gegen den unlauteren Wettbewerb (UWG)",
+  "Rechtliche Vorgaben, vor allem VO (EG) 767/2009 (Kennzeichnung von Futtermitteln), Katalog der Einzelfuttermittel: VO (EU) Nr. 68/2013, geändert durch VO (EU) 2017/1017, Liste der Verwendungszwecke von Diätfuttermitteln: VO (EU) 2020/354 und das Gesetz gegen den unlauteren Wettbewerb (UWG)",
   "Nährstoffempfehlungen der FEDIAF, des europäischen Heimtierfutter-Verbands",
 ];
 
