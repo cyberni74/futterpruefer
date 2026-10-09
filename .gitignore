@@ -45,3 +45,6 @@ next-env.d.ts
 
 /screenshots
 /public/uploads
+
+# Demo-Bilder werden vom Seed (SEED_DEMO=1) bei Bedarf erzeugt
+public/demo/
