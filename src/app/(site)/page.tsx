@@ -1,7 +1,8 @@
 import Link from "next/link";
-import { ArrowRight, ShieldCheck } from "lucide-react";
-import { getLatestPosts, getLatestReviews, getProductOfMonth, getTickerEntries, getCategories, getCategoryLeaders, getHomeFaq } from "@/lib/queries";
+import { ShieldCheck } from "lucide-react";
+import { getLatestPosts, getLatestReviews, getProductOfMonth, getTickerEntries, getCategoryLeaders, getHomeFaq } from "@/lib/queries";
 import { HomeSeo } from "@/components/home-seo";
+import { HomeHero } from "@/components/home-hero";
 import { ProductOfMonthHero } from "@/components/product-of-month";
 import { Ticker } from "@/components/ticker";
 import { ReviewCard } from "@/components/review-card";
@@ -11,7 +12,7 @@ import { Reveal } from "@/components/reveal";
 import { JsonLd } from "@/components/json-ld";
 import { NewsletterBox } from "@/components/newsletter-box";
 import { SITE, absoluteUrl } from "@/lib/site";
-import { hyphenateCategory, reviewPath } from "@/lib/urls";
+import { reviewPath } from "@/lib/urls";
 import type { Metadata } from "next";
 
 const TITLE = "Hunde- & Katzenfutter im Test – unabhängig bewertet | Futterprüfer";
@@ -29,9 +30,7 @@ export const metadata: Metadata = {
 export const revalidate = 3600;
 
 export default async function Home() {
-  const [pom, ticker, reviews, posts, categories, leaders, faq] = await Promise.all([getProductOfMonth(), getTickerEntries(), getLatestReviews(10), getLatestPosts(5), getCategories(), getCategoryLeaders(), getHomeFaq(8)]);
-
-  const total = leaders.reduce((n, l) => n + l.count, 0);
+  const [pom, ticker, reviews, posts, leaders, faq] = await Promise.all([getProductOfMonth(), getTickerEntries(), getLatestReviews(10), getLatestPosts(5), getCategoryLeaders(), getHomeFaq(8)]);
 
   return (
     <>
@@ -43,14 +42,7 @@ export default async function Home() {
         ]}
       />
       <div className="mx-auto max-w-6xl px-4">
-        {pom ? (
-          <ProductOfMonthHero pom={pom} />
-        ) : (
-          <section className="rounded-3xl bg-brand-soft p-8 md:p-12">
-            <p className="text-3xl font-extrabold md:text-5xl">Hunde- und Katzenfutter im Fachtest</p>
-            <p className="mt-4 max-w-2xl text-lg text-muted">{SITE.description}</p>
-          </section>
-        )}
+        <HomeHero leaders={leaders} />
       </div>
 
       <div className="mt-8">
@@ -58,22 +50,7 @@ export default async function Home() {
       </div>
 
       <div className="mx-auto max-w-6xl px-4">
-        <header className="mt-10 max-w-3xl">
-          <h1 className="text-3xl font-extrabold leading-tight text-balance md:text-4xl">Hunde- und Katzenfutter im unabhängigen Fachtest</h1>
-          <p className="mt-3 text-lg text-muted">
-            {total > 0 ? `${total} Futtersorten` : "Futtersorten"} geprüft nach einer offenen{" "}
-            <Link href="/methodik" className="font-semibold text-brand underline">100-Punkte-Methodik</Link>: Rohstoffe, Schadstoffe, Nährstoffprofil, Deklaration und Preis-Leistung – mit Faktencheck der Werbeaussagen. Wählen Sie eine Kategorie oder starten Sie mit den neuesten Tests.
-          </p>
-        </header>
-        <nav aria-label="Testkategorien" className="mt-6 grid grid-cols-2 gap-3 lg:grid-cols-4">
-          {categories.map((c) => (
-            <Link key={c.id} href={`/${c.slug}`} className="group relative flex min-h-16 flex-col items-start gap-1 overflow-hidden rounded-2xl border border-border bg-surface p-3.5 pr-9 font-bold shadow-card transition duration-300 hover:-translate-y-1 hover:border-brand hover:bg-brand-soft hover:shadow-lift focus-visible:border-brand active:scale-[0.97] sm:flex-row sm:items-center sm:gap-3 sm:p-4 sm:pr-10 motion-reduce:transition-none motion-reduce:hover:translate-y-0 motion-reduce:active:scale-100">
-              <span aria-hidden className="text-2xl transition-transform duration-300 group-hover:-rotate-6 group-hover:scale-125 motion-reduce:transition-none motion-reduce:group-hover:transform-none">{c.animal === "HUND" ? "🐕" : "🐈"}</span>
-              <span className="min-w-0 leading-tight transition-colors group-hover:text-brand-strong">{hyphenateCategory(c.shortName)}</span>
-              <ArrowRight aria-hidden className="absolute right-3 bottom-3.5 size-4 text-brand opacity-0 transition duration-300 -translate-x-1 group-hover:translate-x-0 group-hover:opacity-100 group-focus-visible:opacity-100 sm:top-1/2 sm:bottom-auto sm:-translate-y-1/2 motion-reduce:transition-none" />
-            </Link>
-          ))}
-        </nav>
+        {pom && <div className="mt-10"><ProductOfMonthHero pom={pom} /></div>}
 
         <section aria-labelledby="neueste-tests" className="mt-16">
           <SectionHeading id="neueste-tests" kicker="Frisch geprüft" title="Die neuesten Tests" href="/tests" linkLabel="Alle Tests" />
