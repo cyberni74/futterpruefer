@@ -70,8 +70,9 @@ export const OPERATOR = {
     ["No 36, Opp. 09, Arekempanhally, Wilson Garden", "Bengaluru – 560027, Indien"],
     ["A1, Gouranganagar, North 24 Parganas", "West Bengal – 700162, Indien"],
   ],
-  /** Ansprechpartner/Vertreter für Europa (Anschrift in der EU fehlt noch) */
+  /** Ansprechpartner/Vertreter für Europa */
   europeRepresentative: "Beytullah Coscun",
+  europeAddress: "Via della Moscova, 20121 Mailand, Italien",
   email: "contactus@teraa-intl.com",
   phone: "+91 95350 96718",
   phoneInternational: "+91 94773 74505",

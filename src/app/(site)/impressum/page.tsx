@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { PageShell, Todo } from "@/components/page-shell";
+import { PageShell } from "@/components/page-shell";
 import { OPERATOR } from "@/lib/site";
 
 export const metadata: Metadata = { title: "Impressum", description: "Anbieterkennzeichnung von Futterprüfer.de nach § 5 DDG: Anbieter, Kontakt, Register und inhaltlich Verantwortliche.", robots: { index: true, follow: true }, alternates: { canonical: "/impressum" } };
@@ -22,7 +22,7 @@ export default function ImpressumPage() {
           {other[1]}
         </p>
         <p>Vertretungsberechtigt: Beytullah Coscun</p>
-        <p>Vertreter für Europa: {OPERATOR.europeRepresentative}, <Todo>ladungsfähige Anschrift in der EU</Todo></p>
+        <p>Vertreter für Europa: {OPERATOR.europeRepresentative}, {OPERATOR.europeAddress}</p>
 
         <h2>Kontakt</h2>
         <p>
@@ -39,7 +39,7 @@ export default function ImpressumPage() {
         <p>Es besteht keine deutsche Umsatzsteuer-Identifikationsnummer. Steuerregistrierungen in Indien (GST): {OPERATOR.gst.join(" und ")}.</p>
 
         <h2>Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV</h2>
-        <p>{OPERATOR.europeRepresentative}, <Todo>ladungsfähige Anschrift in der EU</Todo></p>
+        <p>{OPERATOR.europeRepresentative}, {OPERATOR.europeAddress}</p>
 
         <h2>Verbraucherstreitbeilegung</h2>
         <p>Wir sind nicht bereit oder verpflichtet, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.</p>
