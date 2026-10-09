@@ -16,7 +16,7 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: PageProps<"/[kategorie]">): Promise<Metadata> {
   const cat = await getCategory((await params).kategorie);
   if (!cat) return {};
-  return { title: `${cat.name} im Test`, description: cat.description, alternates: { canonical: `/${cat.slug}` }, openGraph: { type: "website", locale: "de_DE", siteName: "Futterprüfer", url: `/${cat.slug}`, title: `${cat.name} im Test`, description: cat.description } };
+  return { title: `${cat.name} im Test`, description: cat.description, alternates: { canonical: `/${cat.slug}` }, openGraph: { type: "website", locale: "de_DE", siteName: "Futterprüfer", url: `/${cat.slug}`, title: `${cat.name} im Test`, description: cat.description, images: [{ url: "/opengraph-image.png", width: 1200, height: 630, alt: `${cat.name} im Test – Futterprüfer` }] } };
 }
 
 export default async function CategoryPage({ params, searchParams }: PageProps<"/[kategorie]">) {

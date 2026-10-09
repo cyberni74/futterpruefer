@@ -11,28 +11,37 @@ import { Reveal } from "@/components/reveal";
 import { JsonLd } from "@/components/json-ld";
 import { NewsletterBox } from "@/components/newsletter-box";
 import { SITE, absoluteUrl } from "@/lib/site";
-import { hyphenateCategory } from "@/lib/urls";
+import { hyphenateCategory, reviewPath } from "@/lib/urls";
 import type { Metadata } from "next";
 
+const TITLE = "Hunde- & Katzenfutter im Test – unabhängig bewertet | Futterprüfer";
+const DESCRIPTION = "Hunde- und Katzenfutter im unabhängigen Fachtest: Rohstoffe, Schadstoffe, Nährstoffprofil und Werbeaussagen nach offener 100-Punkte-Methodik. Tests, Lexikon und Ratgeber.";
+
 export const metadata: Metadata = {
+  title: { absolute: TITLE },
+  description: DESCRIPTION,
+  keywords: ["Hundefutter Test", "Katzenfutter Test", "Hundefutter Vergleich", "Katzenfutter Vergleich", "Alleinfuttermittel", "Ergänzungsfuttermittel", "Futter Inhaltsstoffe", "Futterprüfer"],
   alternates: { canonical: "/" },
-  openGraph: { type: "website", locale: "de_DE", siteName: SITE.name, url: "/", title: `${SITE.name} – Hunde- & Katzenfutter im Fachtest`, description: SITE.description },
+  openGraph: { type: "website", locale: "de_DE", siteName: SITE.name, url: "/", title: TITLE, description: DESCRIPTION, images: [{ url: "/opengraph-image.png", width: 1200, height: 630, alt: "Futterprüfer – Hunde- und Katzenfutter im unabhängigen Fachtest" }] },
+  twitter: { card: "summary_large_image", title: TITLE, description: DESCRIPTION, images: ["/opengraph-image.png"] },
 };
 
 export const revalidate = 3600;
 
 export default async function Home() {
-  const [pom, ticker, reviews, posts, categories, leaders, faq] = await Promise.all([getProductOfMonth(), getTickerEntries(), getLatestReviews(10), getLatestPosts(5), getCategories(), getCategoryLeaders(), getHomeFaq(4)]);
+  const [pom, ticker, reviews, posts, categories, leaders, faq] = await Promise.all([getProductOfMonth(), getTickerEntries(), getLatestReviews(10), getLatestPosts(5), getCategories(), getCategoryLeaders(), getHomeFaq(8)]);
+
+  const total = leaders.reduce((n, l) => n + l.count, 0);
 
   return (
     <>
       <JsonLd
         data={[
-          { "@context": "https://schema.org", "@type": "Organization", name: SITE.name, url: SITE.url, logo: absoluteUrl("/brand/logo-round-512.png") },
-          { "@context": "https://schema.org", "@type": "WebSite", name: SITE.name, url: SITE.url, inLanguage: "de-DE", potentialAction: { "@type": "SearchAction", target: `${SITE.url}/suche?q={search_term_string}`, "query-input": "required name=search_term_string" } },
+          { "@context": "https://schema.org", "@type": "Organization", "@id": `${SITE.url}/#organization`, name: SITE.name, url: SITE.url, logo: { "@type": "ImageObject", url: absoluteUrl("/brand/logo-round-512.png"), width: 512, height: 512 }, description: SITE.description, slogan: "Transparent testen. Wissenschaftlich prüfen. Tiere schützen. Halter informieren.", knowsAbout: ["Hundefutter", "Katzenfutter", "Tierernährung", "Futtermittelrecht"], contactPoint: { "@type": "ContactPoint", contactType: "customer support", url: absoluteUrl("/kontakt"), availableLanguage: "de" } },
+          { "@context": "https://schema.org", "@type": "WebSite", "@id": `${SITE.url}/#website`, name: SITE.name, url: SITE.url, inLanguage: "de-DE", publisher: { "@id": `${SITE.url}/#organization` }, potentialAction: { "@type": "SearchAction", target: `${SITE.url}/suche?q={search_term_string}`, "query-input": "required name=search_term_string" } },
+          { "@context": "https://schema.org", "@type": "CollectionPage", "@id": `${SITE.url}/#webpage`, url: SITE.url, name: TITLE, description: DESCRIPTION, inLanguage: "de-DE", isPartOf: { "@id": `${SITE.url}/#website` }, about: { "@id": `${SITE.url}/#organization` }, ...(reviews[0]?.publishedAt ? { dateModified: reviews[0].publishedAt.toISOString() } : {}), mainEntity: { "@type": "ItemList", name: "Die neuesten Futtertests", itemListElement: reviews.slice(0, 10).map((r, i) => ({ "@type": "ListItem", position: i + 1, url: absoluteUrl(reviewPath(r)), name: r.title })) } },
         ]}
       />
-      <h1 className="sr-only">Futterprüfer – Hunde- und Katzenfutter im unabhängigen Fachtest</h1>
       <div className="mx-auto max-w-6xl px-4">
         {pom ? (
           <ProductOfMonthHero pom={pom} />
@@ -49,7 +58,14 @@ export default async function Home() {
       </div>
 
       <div className="mx-auto max-w-6xl px-4">
-        <nav aria-label="Testkategorien" className="mt-10 grid grid-cols-2 gap-3 lg:grid-cols-4">
+        <header className="mt-10 max-w-3xl">
+          <h1 className="text-3xl font-extrabold leading-tight text-balance md:text-4xl">Hunde- und Katzenfutter im unabhängigen Fachtest</h1>
+          <p className="mt-3 text-lg text-muted">
+            {total > 0 ? `${total} Futtersorten` : "Futtersorten"} geprüft nach einer offenen{" "}
+            <Link href="/methodik" className="font-semibold text-brand underline">100-Punkte-Methodik</Link>: Rohstoffe, Schadstoffe, Nährstoffprofil, Deklaration und Preis-Leistung – mit Faktencheck der Werbeaussagen. Wählen Sie eine Kategorie oder starten Sie mit den neuesten Tests.
+          </p>
+        </header>
+        <nav aria-label="Testkategorien" className="mt-6 grid grid-cols-2 gap-3 lg:grid-cols-4">
           {categories.map((c) => (
             <Link key={c.id} href={`/${c.slug}`} className="group relative flex min-h-16 flex-col items-start gap-1 overflow-hidden rounded-2xl border border-border bg-surface p-3.5 pr-9 font-bold shadow-card transition duration-300 hover:-translate-y-1 hover:border-brand hover:bg-brand-soft hover:shadow-lift focus-visible:border-brand active:scale-[0.97] sm:flex-row sm:items-center sm:gap-3 sm:p-4 sm:pr-10 motion-reduce:transition-none motion-reduce:hover:translate-y-0 motion-reduce:active:scale-100">
               <span aria-hidden className="text-2xl transition-transform duration-300 group-hover:-rotate-6 group-hover:scale-125 motion-reduce:transition-none motion-reduce:group-hover:transform-none">{c.animal === "HUND" ? "🐕" : "🐈"}</span>
