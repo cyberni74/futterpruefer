@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { ReviewListing } from "@/components/review-listing";
 import { parseFilters } from "@/lib/filters";
-import { getCategories, getCategory, countPublishedReviews } from "@/lib/queries";
+import { getCategories, getCategory } from "@/lib/queries";
 import { DEFAULT_OG_IMAGE, SITE, pageAlternates } from "@/lib/site";
 
 export async function generateStaticParams() {
@@ -17,11 +17,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: PageProps<"/[kategorie]">): Promise<Metadata> {
   const cat = await getCategory((await params).kategorie);
   if (!cat) return {};
-  const empty = (await countPublishedReviews(cat.id)) === 0;
   const title = `${cat.name} im Test`;
   return {
-    // Leere Kategorien nicht indexieren (dünne Seite), Links werden weiter verfolgt
-    ...(empty ? { robots: { index: false, follow: true } } : {}),
     title,
     description: cat.description,
     alternates: pageAlternates(`/${cat.slug}`),
