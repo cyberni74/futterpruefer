@@ -193,7 +193,7 @@ export const NISCHEN_POSTS: NischenPost[] = [
     excerpt:
       "Silvester kennt jeder, aber auch die Türklingel kann einen Hund aus der Fassung bringen. Wie Sie Auslöser erkennen, einen Ruheplatz anbieten und wann Sie professionelle Hilfe brauchen.",
     image: "hund-geraeusche-tuerklingel-ruheplatz.webp",
-    imageAlt: "Kleiner Hund liegt entspannt auf seiner Decke im Wohnzimmer, im Hintergrund die Haustür",
+    imageAlt: "Hund liegt entspannt auf seiner Decke im Wohnzimmer, im Hintergrund die Haustür",
     metaTitle: "Hund hat Angst vor Geräuschen in der Wohnung: Was hilft im Alltag",
     metaDescription:
       "Hund bellt bei Türklingel oder erschrickt bei Haushaltsgeräuschen? Auslöser notieren, Ruheplatz anbieten, Besuch vorbereiten und erkennen, wann Fachhilfe nötig ist.",
