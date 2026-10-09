@@ -21,11 +21,11 @@ export function Breadcrumbs({ items }: { items: Crumb[] }) {
           <ArrowLeft className="size-4" aria-hidden />
           Zurück zu {parent.label}
         </Link>
-        <ol className="hidden flex-wrap items-center gap-1 md:flex">
+        <ol className="hidden flex-nowrap items-center gap-1 md:flex">
           {all.map((c, i) => {
             const last = i === all.length - 1;
             return (
-              <li key={`${c.label}-${i}`} className="flex items-center gap-1">
+              <li key={`${c.label}-${i}`} className={`flex items-center gap-1 ${last ? "min-w-0" : "shrink-0"}`}>
                 {i > 0 && <ChevronRight className="size-4 text-muted/60" aria-hidden />}
                 {c.href && !last ? (
                   <Link href={c.href} className={pill} aria-label={i === 0 ? "Startseite" : undefined}>
@@ -33,8 +33,8 @@ export function Breadcrumbs({ items }: { items: Crumb[] }) {
                     {i === 0 ? "Start" : c.label}
                   </Link>
                 ) : (
-                  <span aria-current="page" className="inline-flex min-h-10 items-center rounded-full bg-brand-soft px-3.5 text-sm font-bold text-brand-strong">
-                    <span className="line-clamp-1">{c.label}</span>
+                  <span aria-current="page" title={c.label} className="inline-flex min-h-10 min-w-0 items-center rounded-full bg-brand-soft px-3.5 text-sm font-bold text-brand-strong">
+                    <span className="truncate">{c.label}</span>
                   </span>
                 )}
               </li>
