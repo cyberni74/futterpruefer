@@ -13,7 +13,7 @@ import { NISCHEN_POSTS } from "./blog-nischen";
 import { RECHERCHE_POSTS } from "./blog-recherche";
 import { BLOG_BODY_IMAGES } from "./blog-bilder";
 import { REVIEW_TEASERS, REVIEW_TEASERS_PREVIOUS } from "./review-teasers";
-import { MEDIDOG_TEST } from "./review-medidog";
+import { MEDIDOG_TEST, MEDIDOG_V1_SIGNATURE } from "./review-medidog";
 
 const esc = (t: string) => t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
@@ -395,7 +395,15 @@ async function ensureReviewTeasers() {
 /** Legt den Test „Medidog Ulmenrinden Paste“ an, falls der Slug fehlt (Bilder liegen in public/tests). */
 async function ensureMedidogTest() {
   const t = MEDIDOG_TEST;
-  if (await prisma.review.findUnique({ where: { slug: t.slug }, select: { id: true } })) return;
+  const existing = await prisma.review.findUnique({ where: { slug: t.slug }, select: { id: true, bodyHtml: true } });
+  if (existing) {
+    // Erste Fassung noch unverändert im Text? Dann Inhalte aktualisieren; Admin-Änderungen bleiben sonst unberührt.
+    if (existing.bodyHtml.includes(MEDIDOG_V1_SIGNATURE)) {
+      await prisma.review.update({ where: { id: existing.id }, data: { bodyHtml: autolinkUrls(t.bodyHtml), conclusionHtml: t.conclusionHtml, verdict: t.verdict, pros: t.pros, cons: t.cons, claims: t.claims } });
+      console.log("Test Medidog Ulmenrinden Paste aktualisiert.");
+    }
+    return;
+  }
   const category = await prisma.category.findUnique({ where: { slug: t.categorySlug }, select: { id: true } });
   if (!category) return;
   const blur = async (file: string) => {
