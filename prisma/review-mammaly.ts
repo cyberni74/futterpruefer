@@ -38,7 +38,7 @@ export const MAMMALY_TESTS = [
   {
     ...COMMON,
     slug: "mammaly-lucky-belly-test",
-    title: "mammaly Lucky Belly im Test: 68/100 Punkte",
+    title: "mammaly Lucky Belly im Test: 62/100 Punkte",
     productName: "Lucky Belly",
     keyword: "Darmsnack Hund Probiotika",
     image: "mammaly-lucky-belly-hund-darm-ergaenzung.webp",
@@ -55,10 +55,10 @@ export const MAMMALY_TESTS = [
       { name: "Rohfaser", value: 1.8 },
       { name: "Feuchtigkeit", value: 27.3 },
     ],
-    scores: { scoreRaw: 22, scoreHarmful: 17, scoreNutrients: 14, scoreDeclaration: 7, scoreNeeds: 7, scoreValue: 1 },
+    scores: { scoreRaw: 20, scoreHarmful: 15, scoreNutrients: 13, scoreDeclaration: 7, scoreNeeds: 6, scoreValue: 1 },
     verdict:
-      "Eine ordentlich deklarierte Darm-Ergänzung mit vielen Zutaten samt Prozentangaben. Abzüge: unbenanntes „Konservierungsmittel“, fehlende Mengen bei den ersten Zutaten, Wirkaussagen, die sich auf Zutaten und eine Kundenumfrage statt auf das Produkt stützen, und ein Preis von 142,83 € je Kilogramm. 68 Punkte, Ampel Gelb.",
-    teaser: "Offene Zutatenliste, aber 143 € je kg und Werbung mit Kundenumfrage statt Studie. 68 Punkte.",
+      "Eine ordentlich deklarierte Darm-Ergänzung mit vielen Zutaten samt Prozentangaben. Abzüge: unbenanntes „Konservierungsmittel“, fehlende Mengen bei den ersten Zutaten, Wirkaussagen, die sich auf Zutaten und eine Kundenumfrage statt auf das Produkt stützen, und ein Preis von 142,83 € je Kilogramm. 62 Punkte, Ampel Gelb.",
+    teaser: "Offene Zutatenliste, aber 143 € je kg und Werbung mit Kundenumfrage statt Studie. 62 Punkte.",
     pros: [
       "Zusammensetzung mit Prozentangaben für 10 von 14 Zutaten, vollständige Analyse inklusive Feuchtigkeit (27,3 %)",
       "Zuckerfrei, ohne Farbstoffe; Zusatzstoffe mit Mengen (Vitamin E 2169 mg/kg, Bacillus velezensis 3,4 x 10^10 KBE/kg)",
@@ -81,8 +81,8 @@ export const MAMMALY_TESTS = [
       c("Über 25.000+ 5-Sterne-Bewertungen", "FRAGWUERDIG", "UWG § 5", "Markenbanner ohne Plattform und Datum. Die Produktseite nennt 4,6 Sterne bei 10.824 Bewertungen, ebenfalls ohne Plattform. Die Zahlen lassen sich nicht überprüfen."),
       c("DLG-prämierte Qualität", "FRAGWUERDIG", "UWG § 5", "Die DLG-Prüfung ist verlinkt („Pruefbescheid“), die Prüfkriterien erklärt die Seite nicht. Eine DLG-Auszeichnung bestätigt nach eigener Beschreibung Qualität der Herstellung, nicht die beworbene Wirkung auf die Verdauung."),
     ],
-    metaTitle: "mammaly Lucky Belly im Test: 68/100 Punkte",
-    metaDescription: "mammaly Lucky Belly Darmsnack für Hunde im Test: Zusammensetzung, Analyse, Werbeaussagen-Check, Preis pro Tag und Abo. 68 von 100 Punkten.",
+    metaTitle: "mammaly Lucky Belly im Test: 62/100 Punkte",
+    metaDescription: "mammaly Lucky Belly Darmsnack für Hunde im Test: Zusammensetzung, Analyse, Werbeaussagen-Check, Preis pro Tag und Abo. 62 von 100 Punkten.",
     keywords: ["mammaly Lucky Belly", "Lucky Belly Test", "Darmsnack Hund", "mammaly Erfahrungen", "Probiotika Hund Snack", "Flohsamenschalen Hund"],
     publishedDaysAgo: 8.31,
     bodyHtml: `<p>„Tägliche Ergänzungssnacks mit Prä- &amp; Probiotika, Flohsamen und Fenchel – 95% Kundenzufriedenheit.“ Mit diesem Satz beginnt die Produktseite von <strong>Lucky Belly</strong> (${SRC}). Ein Hund hat dazu keine Meinung, die 95 % kommen aus einer Kundenbefragung. Wir prüfen, was das Etikett wirklich hergibt.</p>
@@ -103,14 +103,14 @@ ${STUDIEN("Die auf der Seite verlinkten Quellen sind echte Veröffentlichungen, 
 
 ${KOSTEN("Rechnet man nur die Zutaten, ist der Preis hoch. Eine kleine Packung Flohsamenschalen und ein probiotisches Präparat kosten zusammen deutlich weniger. Dafür ist die Kombination als Snack praktisch, und Hunde nehmen die weichen Snacks laut Seite gern. Die Seite räumt selbst ein, dass der Preis eine Hürde ist: Kundenbewertungen auf der Produktseite sagen „Einzig der Preis ist ein Manko.“", "lucky")}
 
-<p><strong>Unser Gesamtergebnis: 68 von 100 Punkten.</strong> Nach unserem Bewertungsschema liegt Lucky Belly im gelben Bereich. Wir erkennen die offene Zutatenliste, die vollständige Analyse und die Verzichtserklärung (keine Farbstoffe, kein Zucker) an. Punkte kosten das unbenannte Konservierungsmittel, die fehlenden Mengen der ersten Zutaten, Wirkaussagen ohne Studie am Produkt, die inneren Widersprüche und der Preis.</p>
+<p><strong>Unser Gesamtergebnis: 62 von 100 Punkten.</strong> Nach unserem Bewertungsschema liegt Lucky Belly im gelben Bereich, knapp über der roten Grenze. <strong>Strenge Wertung:</strong> Jede fragwürdige Werbeaussage kostet einen Punkt bei der Deklaration, belegbare Widersprüche zusätzlich. Unbenannte Zusatzstoffe senken die Schadstoffnote, Wirkstoffmengen von unter einem Gramm pro Tag die Rohstoffnote, wenn die Werbung eine spürbare Wirkung verspricht. Wir erkennen die offene Zutatenliste, die vollständige Analyse und die Verzichtserklärung (keine Farbstoffe, kein Zucker) an. Punkte kosten das unbenannte Konservierungsmittel, die fehlenden Mengen der ersten Zutaten, Wirkaussagen ohne Studie am Produkt, die inneren Widersprüche und der Preis.</p>
 ${FOOT}`,
     conclusionHtml: `<p>Lucky Belly ist eine ordentlich deklarierte Ergänzung für Hunde mit empfindlichem Magen-Darm-Trakt, aber nicht der Wundersnack, den die Seite zeichnet. Die Zutaten sind plausibel, belegt ist die Wirkung des fertigen Produkts nicht. Wer es probiert, sollte das mit dem Futter konstant halten und nach vier bis sechs Wochen ehrlich prüfen, ob sich Kot und Bauchgeräusche verändert haben. Bei anhaltenden Beschwerden führt der Weg zur Tierärztin.</p>`,
   },
   {
     ...COMMON,
     slug: "mammaly-fresh-smile-test",
-    title: "mammaly Fresh Smile im Test: 67/100 Punkte",
+    title: "mammaly Fresh Smile im Test: 61/100 Punkte",
     productName: "Fresh Smile",
     keyword: "Zahnpflege Snack Hund",
     image: "mammaly-fresh-smile-hund-zahnpflege-snacks.webp",
@@ -127,10 +127,10 @@ ${FOOT}`,
       { name: "Rohfaser", value: 1.7 },
       { name: "Feuchtigkeit", value: 29.3 },
     ],
-    scores: { scoreRaw: 21, scoreHarmful: 16, scoreNutrients: 13, scoreDeclaration: 9, scoreNeeds: 7, scoreValue: 1 },
+    scores: { scoreRaw: 19, scoreHarmful: 15, scoreNutrients: 12, scoreDeclaration: 8, scoreNeeds: 6, scoreValue: 1 },
     verdict:
-      "Eine weiche Zahnpflege-Ergänzung mit nachvollziehbarem Wirkstoffansatz (Hexametaphosphat, Seealge). Abzüge: Werbeaussagen zu Plaque und Zahnstein mit selbst erhobenen Zahlen, widersprüchliche Teilnehmerzahlen der Umfrage, unbenanntes Konservierungsmittel und ein hoher Preis. 67 Punkte, Ampel Gelb.",
-    teaser: "Wirkstoffe plausibel, aber „reguliert Plaque“ ohne Studie am Produkt und 143 € je kg. 67 Punkte.",
+      "Eine weiche Zahnpflege-Ergänzung mit nachvollziehbarem Wirkstoffansatz (Hexametaphosphat, Seealge). Abzüge: Werbeaussagen zu Plaque und Zahnstein mit selbst erhobenen Zahlen, widersprüchliche Teilnehmerzahlen der Umfrage, unbenanntes Konservierungsmittel und ein hoher Preis. 61 Punkte, Ampel Gelb.",
+    teaser: "Wirkstoffe plausibel, aber „reguliert Plaque“ ohne Studie am Produkt und 143 € je kg. 61 Punkte.",
     pros: [
       "Vollständige Zusammensetzung mit Prozentangaben für 8 von 12 Zutaten und vollständige Analyse inklusive Feuchtigkeit (29,3 %)",
       "Natriumhexametaphosphat ist in Studien an Hunden zur Hemmung von Zahnsteinbildung untersucht; Seealge als Zutat hat eine Übersichtsarbeit",
@@ -151,8 +151,8 @@ ${FOOT}`,
       c("Nach wenigen Tagen zeigt sich eine Verbesserung des Maulgeruchs, und erste Veränderungen bei Zahnbelägen sind nach 2-3 Wochen sichtbar.", "FRAGWUERDIG", "UWG § 5", "Zeitangaben stammen aus Einzelbeispielen („Bailey“, „Sophie“) ohne Quelle. Die FAQ nennt dagegen 3 bis 6 Wochen, bei vollständiger Wirkung bis zu 12 Wochen."),
       c("Es ersetzt jedoch keine medizinische Zahnreinigung und regelmäßige tierärztliche Kontrollen sind weiterhin notwendig.", "ZULAESSIG", "UWG § 5", "Ehrlicher Hinweis, der die Aussagen an anderer Stelle relativiert."),
     ],
-    metaTitle: "mammaly Fresh Smile im Test: 67/100 Punkte",
-    metaDescription: "mammaly Fresh Smile Zahnpflege-Snacks für Hunde im Test: Zutaten, Werbeaussagen zu Plaque und Zahnstein, Preis pro Tag. 67 von 100 Punkten.",
+    metaTitle: "mammaly Fresh Smile im Test: 61/100 Punkte",
+    metaDescription: "mammaly Fresh Smile Zahnpflege-Snacks für Hunde im Test: Zutaten, Werbeaussagen zu Plaque und Zahnstein, Preis pro Tag. 61 von 100 Punkten.",
     keywords: ["mammaly Fresh Smile", "Fresh Smile Test", "Zahnpflege Snack Hund", "Zahnstein Hund Snack", "Natriumhexametaphosphat Hund", "mammaly Erfahrungen"],
     publishedDaysAgo: 6.77,
     bodyHtml: `<p>„Einfach. Lecker. Studienbasiert.“ So wirbt die Produktseite von <strong>Fresh Smile</strong> (${SRC}). „Studienbasiert“ ist ein starkes Wort, wir schauen nach, worauf es sich stützt.</p>
@@ -169,14 +169,14 @@ ${STUDIEN("Gut belegt ist, dass Natriumhexametaphosphat die Zahnsteinbildung hem
 
 ${KOSTEN("Für Zahnpflege gibt es günstigere Wege: regelmäßiges Zähneputzen mit Hundezahnpasta, Kauartikel mit nachgewiesener Wirkung (z. B. mit dem Siegel des Veterinary Oral Health Council) und die tierärztliche Zahnkontrolle.", "fresh")}
 
-<p><strong>Unser Gesamtergebnis: 67 von 100 Punkten.</strong> Nach unserem Bewertungsschema liegt Fresh Smile im gelben Bereich. Positiv: offene Zutatenliste, plausible Wirkstoffe, der ehrliche Hinweis auf die Tierarztpraxis. Punkte kosten das unbenannte Konservierungsmittel, die absoluten Formulierungen („reguliert“, „verhindert“), die selbst erhobenen Umfragedaten mit schwankender Teilnehmerzahl, fehlende Studien am fertigen Produkt und der hohe Preis.</p>
+<p><strong>Unser Gesamtergebnis: 61 von 100 Punkten.</strong> Nach unserem Bewertungsschema liegt Fresh Smile im gelben Bereich, knapp über der roten Grenze. <strong>Strenge Wertung:</strong> Jede fragwürdige Werbeaussage kostet einen Punkt bei der Deklaration, belegbare Widersprüche zusätzlich. Unbenannte Zusatzstoffe senken die Schadstoffnote, Wirkstoffmengen von unter einem Gramm pro Tag die Rohstoffnote, wenn die Werbung eine spürbare Wirkung verspricht. Positiv: offene Zutatenliste, plausible Wirkstoffe, der ehrliche Hinweis auf die Tierarztpraxis. Punkte kosten das unbenannte Konservierungsmittel, die absoluten Formulierungen („reguliert“, „verhindert“), die selbst erhobenen Umfragedaten mit schwankender Teilnehmerzahl, fehlende Studien am fertigen Produkt und der hohe Preis.</p>
 ${FOOT}`,
     conclusionHtml: `<p>Fresh Smile ist eine plausible Ergänzung zur Zahnpflege, aber kein Ersatz für Zähneputzen und tierärztliche Kontrolle. Die Wirkstoffe sind für Zahnstein-Hemmung beschrieben, die starken Formulierungen der Seite („reguliert“, „verhindert“) tragen die Belege nicht. Wer es probiert, sollte nach drei Monaten die Zähne von der Tierärztin ansehen lassen.</p>`,
   },
   {
     ...COMMON,
     slug: "mammaly-relax-time-test",
-    title: "mammaly Relax Time im Test: 62/100 Punkte",
+    title: "mammaly Relax Time im Test: 53/100 Punkte",
     productName: "Relax Time",
     keyword: "Beruhigung Snack Hund",
     image: "mammaly-relax-time-hund-entspannung.webp",
@@ -193,10 +193,10 @@ ${FOOT}`,
       { name: "Rohfaser", value: 0.5 },
       { name: "Feuchtigkeit", value: 25.4 },
     ],
-    scores: { scoreRaw: 20, scoreHarmful: 16, scoreNutrients: 12, scoreDeclaration: 7, scoreNeeds: 6, scoreValue: 1 },
+    scores: { scoreRaw: 17, scoreHarmful: 15, scoreNutrients: 11, scoreDeclaration: 5, scoreNeeds: 4, scoreValue: 1 },
     verdict:
-      "Eine Entspannungs-Ergänzung mit L-Tryptophan, Melisse und Baldrian. Abzüge: Verhaltens- und Angstaussagen („bei Angst und Stress“, „Reizbarkeit und Aggression“) ohne Studie am Produkt, das Etikett widerspricht der Allergen-FAQ (Kaseinat), fehlende Mengen, unbenanntes Konservierungsmittel, Preis. 62 Punkte, Ampel Gelb.",
-    teaser: "„Frei von Milchprodukten“ – aber Kaseinat in der Zutatenliste. Dazu Angst-Versprechen. 62 Punkte.",
+      "Eine Entspannungs-Ergänzung mit L-Tryptophan, Melisse und Baldrian. Abzüge: Verhaltens- und Angstaussagen („bei Angst und Stress“, „Reizbarkeit und Aggression“) ohne Studie am Produkt, das Etikett widerspricht der Allergen-FAQ (Kaseinat), fehlende Mengen, unbenanntes Konservierungsmittel, Preis. 53 Punkte, Ampel Rot.",
+    teaser: "„Frei von Milchprodukten“ – aber Kaseinat in der Zutatenliste. Dazu Angst-Versprechen. 53 Punkte.",
     pros: [
       "Vollständige Analyse inklusive Feuchtigkeit (25,4 %); L-Tryptophan als Zusatzstoff mit Menge (43.100 mg/kg)",
       "Zuckerfrei, ohne Farbstoffe; Zutaten der Kräuterbasis mit Prozentangaben (Melisse 5 %, Baldrian 0,4 %)",
@@ -217,8 +217,8 @@ ${FOOT}`,
       c("Nach 4-6 Wochen reagiert Milo viel gelassener auf stressige Situationen.", "FRAGWUERDIG", "UWG § 5", "Einzelbeispiel ohne Quelle, das als Wirkbeleg dargestellt wird."),
       c("für herausfordernden Situationen wie Alleinebleiben, Autofahrten und Silvester", "FRAGWUERDIG", "UWG § 5", "Für diese Anlässe nennt die Seite keine Daten. Bei Silvester-Angst ist tierärztlicher Rat angezeigt; ein Snack allein ersetzt kein Training und keine Medikation."),
     ],
-    metaTitle: "mammaly Relax Time im Test: 62/100 Punkte",
-    metaDescription: "mammaly Relax Time Entspannungs-Snacks für Hunde im Test: Zutaten, Kaseinat-Widerspruch, Werbeaussagen zu Angst und Stress, Preis. 62 von 100 Punkten.",
+    metaTitle: "mammaly Relax Time im Test: 53/100 Punkte",
+    metaDescription: "mammaly Relax Time Entspannungs-Snacks für Hunde im Test: Zutaten, Kaseinat-Widerspruch, Werbeaussagen zu Angst und Stress, Preis. 53 von 100 Punkten.",
     keywords: ["mammaly Relax Time", "Relax Time Test", "Beruhigung Hund Snack", "L-Tryptophan Hund", "Baldrian Hund", "mammaly Erfahrungen"],
     publishedDaysAgo: 3.57,
     bodyHtml: `<p>„Beruhigt und entspannt bei Angst und Stress“: Auf der Produktseite von <strong>Relax Time</strong> (${SRC}) steht das gleich in der Überschrift. Wir prüfen, was die Zutaten dazu hergeben.</p>
@@ -226,7 +226,7 @@ ${METHODE}
 
 <h2>Zusammensetzung: Melisse, Tryptophan, wenig Baldrian</h2>
 <p>Relax Time ist ein „Ergänzungsfuttermittel für Hunde ab 6 Monaten“. Zutaten: Reismehl, Glycerin, hydrolysierte Hühnerleber (10 %), Bierhefe, Melissenblätter (5 %), Hefeerzeugnisse (2,2 %), Geflügelfett, Algenöl, Zichorienwurzel (1,4 %), <strong>Kaseinat (0,7 %)</strong>, Baldrianwurzel (0,4 %). Zusatzstoffe je kg: L-Tryptophan 43.100 mg, Beta-Carotin 300 mg, Vitamin E 9 mg, Bacillus velezensis 3,4 x 10^10 KBE, „Konservierungsmittel“ ohne Namen. Analyse: Rohprotein 16,6 %, Rohfett 5,4 %, Rohasche 4,4 %, Rohfaser 0,5 %, Feuchtigkeit 25,4 %.</p>
-<p>Die Tagesmenge für einen 20-kg-Hund sind vier Snacks, etwa 11,7 g. Darin stecken rechnerisch rund 500 mg L-Tryptophan, ungefähr 25 mg je Kilogramm Körpergewicht (eigene Berechnung). Die Studien zu Tryptophan beim Hund arbeiten mit anderen Mengen und meist über das Futter. Baldrian macht 0,4 % aus, in der Tagesportion unter 50 Milligramm. Dass solche Mengen Hunde in Stresssituationen spürbar beruhigen, zeigt keine der auf der Seite verlinkten Studien.</p>
+<p>Die Tagesmenge für einen 20-kg-Hund sind vier Snacks, etwa 11,7 g. Darin stecken rechnerisch rund 500 mg L-Tryptophan, ungefähr 25 mg je Kilogramm Körpergewicht (eigene Berechnung). Die zitierten Studien lassen sich damit nicht vergleichen: Kato et al. (2012) untersuchten ein Diätfutter, das nach Fachliteratur neben L-Tryptophan auch Alpha-Casozepin enthielt, die Wirkung lässt sich also nicht dem Tryptophan allein zuordnen; DeNapoli et al. (2000) arbeiteten mit elf Hunden mit Dominanzaggression. Laut einer Zusammenfassung von ${a("https://veterinaryevidence.org/index.php/ve/article/view/686", "Veterinary Evidence")} fanden Bosch et al. (2009) keinen signifikanten Einfluss von Tryptophan auf ängstliches Verhalten (Sekundärquelle). Die genauen Tagesmengen der Studien haben wir nicht überprüft. Baldrian macht 0,4 % aus, in der Tagesportion unter 50 Milligramm. Dass solche Mengen Hunde in Stresssituationen spürbar beruhigen, zeigt keine der auf der Seite verlinkten Studien.</p>
 
 <h2>Ein Widerspruch, der Hunde mit Allergie betrifft</h2>
 <p>Die FAQ sagt: „Relax Time ist frei von gängigen Allergenen wie Soja, Weizen und Milchprodukten.“ In der Zusammensetzung steht „Kaseinat 0,7%“. Kaseinat ist das Hauptprotein der Milch. Man kann streiten, ob ein Milchprotein ein „Milchprodukt“ ist. Für einen Hund mit Milcheiweißallergie ist die Aussage trotzdem gefährlich, und für ein Produkt, das „allergikerfreundlich“ bewirbt, ist sie ein deutlicher Fehler.</p>
@@ -238,14 +238,14 @@ ${STUDIEN("Einzelne Zutaten wie Tryptophan sind im Zusammenhang mit Verhalten be
 
 ${KOSTEN("Bei Angst vor Silvester oder Trennungsstress ist eine verhaltenstherapeutische Beratung wirksamer als jeder Snack und oft günstiger.", "relax")}
 
-<p><strong>Unser Gesamtergebnis: 62 von 100 Punkten.</strong> Nach unserem Bewertungsschema liegt Relax Time im gelben Bereich. Für die vollständige Analyse, die Mengenangabe beim Tryptophan und die kräuterbasierte Rezeptur gibt es Anerkennung. Deutlich kosten die Wirkversprechen zu Angst und Aggression, der Widerspruch bei Milchprodukten, die fehlenden Mengen und der Preis.</p>
+<p><strong>Unser Gesamtergebnis: 53 von 100 Punkten.</strong> Nach unserem Bewertungsschema liegt Relax Time im roten Bereich. <strong>Strenge Wertung:</strong> Jede fragwürdige Werbeaussage kostet einen Punkt bei der Deklaration, belegbare Widersprüche zusätzlich. Unbenannte Zusatzstoffe senken die Schadstoffnote, Wirkstoffmengen von unter einem Gramm pro Tag die Rohstoffnote, wenn die Werbung eine spürbare Wirkung verspricht. Hier kommt ein belegbarer Widerspruch dazu (Kaseinat gegen „frei von Milchprodukten“), der zusätzlich Punkte bei Deklaration und Bedarf kostet. Für die vollständige Analyse, die Mengenangabe beim Tryptophan und die kräuterbasierte Rezeptur gibt es Anerkennung. Deutlich kosten die Wirkversprechen zu Angst und Aggression, der Widerspruch bei Milchprodukten, die fehlenden Mengen und der Preis.</p>
 ${FOOT}`,
     conclusionHtml: `<p>Relax Time kann als Teil eines Plans für entspanntere Hunde dienen, ersetzt aber weder Training noch tierärztliche Abklärung. Wer ein Milcheiweiß-Problem bei seinem Hund hat, sollte wegen des Kaseinats die Finger davon lassen. Bei Angst, Aggression oder Silvester-Panik hilft zuerst die Tierarztpraxis oder eine Verhaltenstherapeutin.</p>`,
   },
   {
     ...COMMON,
     slug: "mammaly-active-hips-test",
-    title: "mammaly Active Hips im Test: 68/100 Punkte",
+    title: "mammaly Active Hips im Test: 63/100 Punkte",
     productName: "Active Hips",
     keyword: "Gelenk Snack Hund",
     image: "mammaly-active-hips-hund-gelenke-tierarzt.webp",
@@ -262,10 +262,10 @@ ${FOOT}`,
       { name: "Rohfaser", value: 0.5 },
       { name: "Feuchtigkeit", value: 30.2 },
     ],
-    scores: { scoreRaw: 22, scoreHarmful: 16, scoreNutrients: 14, scoreDeclaration: 8, scoreNeeds: 7, scoreValue: 1 },
+    scores: { scoreRaw: 21, scoreHarmful: 15, scoreNutrients: 13, scoreDeclaration: 7, scoreNeeds: 6, scoreValue: 1 },
     verdict:
-      "Eine Gelenk-Ergänzung mit Grünlippmuschel, MSM, Glucosamin und Omega-3, alle mit Prozentangaben. Abzüge: Studien betreffen Extrakte oder Kombinationen mit Chondroitin, das nicht enthalten ist; das Wort „nachweislich“; unbenanntes Konservierungsmittel; Preis. 68 Punkte, Ampel Gelb.",
-    teaser: "Wirkstoffe mit Mengen, aber „nachweislich“ stützt sich auf Studien zu anderen Stoffen. 68 Punkte.",
+      "Eine Gelenk-Ergänzung mit Grünlippmuschel, MSM, Glucosamin und Omega-3, alle mit Prozentangaben. Abzüge: Studien betreffen Extrakte oder Kombinationen mit Chondroitin, das nicht enthalten ist; das Wort „nachweislich“; unbenanntes Konservierungsmittel; Preis. 63 Punkte, Ampel Gelb.",
+    teaser: "Wirkstoffe mit Mengen, aber „nachweislich“ stützt sich auf Studien zu anderen Stoffen. 63 Punkte.",
     pros: [
       "Gelenkrelevante Zutaten mit Mengen: Grünlippmuschelmehl 6 %, MSM 3,5 %, Glucosamin 2 %, Algenöl 4 %, Algen 4 %",
       "Vollständige Analyse inklusive Feuchtigkeit (30,2 %); Vitamin C 10.000 mg/kg und L-Carnitin 5.200 mg/kg ausgewiesen",
@@ -283,11 +283,11 @@ ${FOOT}`,
       c("MSM kann die Funktion von Gelenken und Bändern fördern", "FRAGWUERDIG", "VO (EG) 767/2009 Art. 13 Abs. 1; UWG § 5", "Die genannte Quelle ist ein deutschsprachiger Übersichtstext zu MSM beim Menschen („Untersuchungen deuten darauf hin …“). Für Hunde nennt die Seite keine Studie."),
       c("80% unserer Kunden beobachten weniger Anzeichen von Gelenkauffälligkeiten, seit ihr Hund Active Hips bekommt.", "FRAGWUERDIG", "VO (EG) 767/2009 Art. 13 Abs. 3; UWG § 5", "„Gelenkauffälligkeiten“ sind Krankheitszeichen. Ein Ergänzungsfuttermittel darf nicht den Eindruck erwecken, solche zu lindern. Umfrage ohne Vergleichsgruppe."),
       c("Durch das hydrolysierte Hühnerlebermehl ist Active Hips besonders gut verträglich für Futtermittelallergiker.", "FRAGWUERDIG", "UWG § 5", "Allgemeine Eignung für Allergiker ist nicht belegt; die Zutatenliste enthält zudem Geflügelfett. Bei Allergien entscheidet die Tierarztpraxis."),
-      c("Alle Hunde ab dem 6. Lebensmonat können von den Active Hips Gelenk-Snacks profitieren – insbesondere größere Rassen.", "FRAGWUERDIG", "UWG § 5", "Für junge, wachsende Hunde größerer Rassen sind Mengen an Glucosamin, MSM und Vitamin C nicht ohne Weiteres unbedenklich; ein Nutzen für gesunde junge Hunde wird nicht belegt. Rat der Tierarztpraxis einholen."),
+      c("Alle Hunde ab dem 6. Lebensmonat können von den Active Hips Gelenk-Snacks profitieren – insbesondere größere Rassen.", "FRAGWUERDIG", "UWG § 5", "Ein Nutzen für gesunde junge Hunde wird nicht belegt, und für wachsende Hunde größerer Rassen nennt die Seite keine Eignung. Rat der Tierarztpraxis einholen."),
       c("Die beschriebenen Eigenschaften beziehen sich auf die jeweils genannten Inhaltsstoffe und deren wissenschaftlich untersuchte Eigenschaften – nicht auf ein pauschales Wirkversprechen für das Gesamtprodukt.", "ZULAESSIG", "UWG § 5", "Ehrliche Fußnote, die die Werbeaussagen deutlich relativiert. Sie steht allerdings klein unter den Aussagen und widerspricht dem Wort „nachweislich“."),
     ],
-    metaTitle: "mammaly Active Hips im Test: 68/100 Punkte",
-    metaDescription: "mammaly Active Hips Gelenk-Snacks für Hunde im Test: Grünlippmuschel, MSM, Glucosamin, Werbeaussagen-Check, Preis. 68 von 100 Punkten.",
+    metaTitle: "mammaly Active Hips im Test: 63/100 Punkte",
+    metaDescription: "mammaly Active Hips Gelenk-Snacks für Hunde im Test: Grünlippmuschel, MSM, Glucosamin, Werbeaussagen-Check, Preis. 63 von 100 Punkten.",
     keywords: ["mammaly Active Hips", "Active Hips Test", "Gelenk Snack Hund", "Grünlippmuschel Hund", "MSM Hund", "Glucosamin Hund", "mammaly Erfahrungen"],
     publishedDaysAgo: 2.2,
     bodyHtml: `<p>„Die Nährstoffe in Active Hips können nachweislich dazu beitragen, die Flexibilität deines Hundes zu erhalten.“ Das steht so auf der Produktseite von <strong>Active Hips</strong> (${SRC}). Wir schauen, was „nachweislich“ hier trägt.</p>
@@ -295,7 +295,7 @@ ${METHODE}
 
 <h2>Zusammensetzung: Wirkstoffe mit Mengen</h2>
 <p>Active Hips ist ein „Ergänzungsfuttermittel für Hunde ab 6 Monaten“. Die Zutatenliste ist offen: Reismehl, Glycerin, hydrolysierte Hühnerleber (8 %), Grünlippmuschelmehl (6 %), Algenöl (4 %), Algen (4 %), MSM (3,5 %), Naturmoor, Glucosamin (2 %), Zichorienwurzel (0,9 %), Hefeerzeugnisse (0,6 %). Zusatzstoffe je kg: Vitamin C 10.000 mg, L-Carnitin 5.200 mg, Vitamin E 1.700 mg, Bacillus velezensis 3,4 x 10^10 KBE und ein „Konservierungsmittel“ ohne Namen. Analyse: Rohprotein 13,3 %, Rohfett 5,4 %, Rohasche 3,3 %, Rohfaser 0,5 %, Feuchtigkeit 30,2 %.</p>
-<p>Bei den gelenkrelevanten Zutaten ist die Liste ehrlich: Man sieht, wie viel Muschelmehl, MSM und Glucosamin enthalten sind. Für einen 20-kg-Hund (4 Snacks, etwa 11,7 g am Tag) sind das rechnerisch rund 700 mg Muschelmehl, 400 mg MSM und 230 mg Glucosamin täglich (eigene Berechnung). Das liegt weit unter den Mengen, die in Studien eingesetzt werden (dort meist ein Vielfaches).</p>
+<p>Bei den gelenkrelevanten Zutaten ist die Liste ehrlich: Man sieht, wie viel Muschelmehl, MSM und Glucosamin enthalten sind. Für einen 20-kg-Hund (4 Snacks, etwa 11,7 g am Tag) sind das rechnerisch rund 700 mg Muschelmehl, 400 mg MSM und 230 mg Glucosamin täglich (eigene Berechnung). Welche Tagesmengen die zitierten Studien eingesetzt haben, nennt die Seite nicht, und die Originalarbeiten haben wir nicht eingesehen; ein Mengenvergleich ist uns daher nicht möglich. Fest steht: Die Tagesportion enthält jeweils weniger als ein Gramm der Wirkstoffe.</p>
 
 <h2>„Nachweislich“: Was die Studien wirklich zeigen</h2>
 <p>Die Seite verweist auf vier Studien. Die Studie zur Grünlippmuschel (Pollard et al. 2006) war doppelblind und placebokontrolliert mit 81 Hunden über 56 Tage, getestet wurde ein <em>Extrakt</em>, im Produkt steckt <em>Mehl</em>. Die Studie zu Glucosamin (McCarthy et al. 2007) untersuchte die Kombination mit <em>Chondroitinsulfat</em> über 70 Tage; Chondroitin steht nicht in der Zusammensetzung. Die Omega-3-Quellen (Roush 2010, Bauer 2011) betreffen eine angereicherte Diät und eine Übersicht. Für MSM verweist die Seite auf einen deutschen Übersichtstext zum Menschen. Eine Studie mit Active Hips gibt es nach den Angaben der Seite nicht.</p>
@@ -303,11 +303,11 @@ ${METHODE}
 ${STUDIEN("Gelenkprodukte beim Hund haben eine gemischte Studienlage: Einzelne Studien zeigen Verbesserungen bei Hunden mit Arthrose, andere nicht, und die Wirkung hängt von Stoff, Dosis und Dauer ab. Das gilt für Muschelextrakt und Glucosamin ebenso wie für Omega-3. Wirklich belegt ist, dass Gewichtskontrolle, Bewegung und eine tierärztliche Diagnose bei Gelenkproblemen am meisten bringen. Ein Snack ist allenfalls eine Ergänzung.")}
 
 <h2>Für wen taugt das Produkt?</h2>
-<p>Die Seite empfiehlt Active Hips für „alle Hunde ab dem 6. Lebensmonat … insbesondere größere Rassen“. Bei wachsenden Hunden großer Rassen sind zusätzliche Mineralstoffe und Nährstoffe nicht automatisch ungefährlich. Wir raten, vor der Gabe an junge Hunde die Tierarztpraxis zu fragen. Sinnvoller ist der Einsatz bei älteren Hunden oder bei Hunden mit diagnostizierten Gelenkproblemen, immer neben tierärztlicher Behandlung.</p>
+<p>Die Seite empfiehlt Active Hips für „alle Hunde ab dem 6. Lebensmonat … insbesondere größere Rassen“. Ob zusätzliche Wirkstoffe für wachsende Hunde großer Rassen sinnvoll sind, belegt die Seite nicht. Wir raten, vor der Gabe an junge Hunde die Tierarztpraxis zu fragen. Sinnvoller ist der Einsatz bei älteren Hunden oder bei Hunden mit diagnostizierten Gelenkproblemen, immer neben tierärztlicher Behandlung.</p>
 
 ${KOSTEN("Eine Alternative ist, die einzelnen Wirkstoffe in Pulverform zu kaufen. Das ist oft deutlich günstiger, aber unpraktischer. Bei Gelenkproblemen sind Gewichtsreduktion, angepasste Bewegung und die Behandlung durch die Tierarztpraxis wirksamer als jede Ergänzung.", "hips")}
 
-<p><strong>Unser Gesamtergebnis: 68 von 100 Punkten.</strong> Nach unserem Bewertungsschema liegt Active Hips im gelben Bereich. Positiv: offene Zutatenliste mit Mengen, ehrliche Fußnote. Punkte kosten das Wort „nachweislich“, Studien zu anderen Stoffen und Darreichungen, das unbenannte Konservierungsmittel und der Preis.</p>
+<p><strong>Unser Gesamtergebnis: 63 von 100 Punkten.</strong> Nach unserem Bewertungsschema liegt Active Hips im gelben Bereich, knapp über der roten Grenze. <strong>Strenge Wertung:</strong> Jede fragwürdige Werbeaussage kostet einen Punkt bei der Deklaration, belegbare Widersprüche zusätzlich. Unbenannte Zusatzstoffe senken die Schadstoffnote, Wirkstoffmengen von unter einem Gramm pro Tag die Rohstoffnote, wenn die Werbung eine spürbare Wirkung verspricht. Positiv: offene Zutatenliste mit Mengen, ehrliche Fußnote. Punkte kosten das Wort „nachweislich“, Studien zu anderen Stoffen und Darreichungen, das unbenannte Konservierungsmittel und der Preis.</p>
 ${FOOT}`,
     conclusionHtml: `<p>Active Hips ist eine offen deklarierte Gelenk-Ergänzung, deren Werbung mehr verspricht, als die zitierten Studien hergeben. Bei älteren Hunden kann ein Versuch über drei Monate sinnvoll sein, immer begleitend zur tierärztlichen Behandlung. Wer sparen will, kauft die Wirkstoffe einzeln und setzt auf Gewichtskontrolle.</p>`,
   },
