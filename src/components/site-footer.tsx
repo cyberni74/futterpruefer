@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { FOOTER_CLAIM } from "@/lib/site";
 import { Logo } from "./logo";
 
 const COLS = [
@@ -13,11 +14,11 @@ export function SiteFooter() {
       <div className="mx-auto grid max-w-6xl gap-10 px-4 py-12 sm:grid-cols-2 lg:grid-cols-4">
         <div>
           <Logo />
-          <p className="mt-3 max-w-xs text-sm text-muted">Unabhängige Fachbewertungen für Hunde- und Katzenfutter. Eine Einreichung kauft keine Note.</p>
+          <p className="mt-3 max-w-xs text-sm text-muted">{FOOTER_CLAIM}</p>
         </div>
         {COLS.map((col) => (
           <nav key={col.title} aria-label={col.title}>
-            <h2 className="text-sm font-bold uppercase tracking-wide">{col.title}</h2>
+            <p className="text-sm font-bold uppercase tracking-wide">{col.title}</p>
             <ul className="mt-3 space-y-1">
               {col.links.map(([label, href]) => (
                 <li key={href}><Link href={href} className="inline-flex min-h-9 items-center text-sm text-muted hover:text-fg hover:underline">{label}</Link></li>
