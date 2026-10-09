@@ -5,6 +5,7 @@ import { getLexikonEntries, getLexikonEntry, getReviewsMentioning, renderArticle
 import { findRedirect } from "@/lib/queries";
 import { absoluteUrl, formatDate, SITE } from "@/lib/site";
 import { Breadcrumbs } from "@/components/breadcrumbs";
+import { AuthorCredit } from "@/components/author-credit";
 import { ConcernBadge, ConcernLight, CONCERN } from "@/components/concern-badge";
 import { ReviewCard } from "@/components/review-card";
 import { ReadAloud } from "@/components/read-aloud";
@@ -28,7 +29,7 @@ export async function generateMetadata({ params }: PageProps<"/lexikon/[slug]">)
   const title = e.metaTitle || `${e.name} im Tierfutter: ${CONCERN[e.concern].label}?`;
   const base = e.metaDescription || e.shortDescription;
   const description = base.length >= 70 ? base : `${base} Bewertung und Einordnung im Futter-Lexikon von ${SITE.name}.`.trim();
-  return { title: { absolute: `${title} | ${SITE.name}` }, description, alternates: { canonical: `/lexikon/${e.slug}` }, openGraph: { type: "article", title, description, url: `/lexikon/${e.slug}`, images: [{ url: "/opengraph-image.png", width: 1200, height: 630 }] } };
+  return { title: { absolute: `${title} | ${SITE.name}` }, description, alternates: { canonical: `/lexikon/${e.slug}` }, openGraph: { type: "article", title, description, url: `/lexikon/${e.slug}`, authors: [SITE.name], images: [{ url: "/opengraph-image.png", width: 1200, height: 630 }] } };
 }
 
 export default async function LexikonEntryPage({ params }: PageProps<"/lexikon/[slug]">) {
@@ -70,7 +71,7 @@ export default async function LexikonEntryPage({ params }: PageProps<"/lexikon/[
         <ShareButtons url={url} title={`${e.name} im Futter-Lexikon`} />
       </div>
       <div id="lexikon-text" className="prose-fp mt-6" dangerouslySetInnerHTML={{ __html: body }} />
-      <p className="mt-6 text-xs text-muted">Zuletzt aktualisiert: {formatDate(e.updatedAt)}</p>
+      <p className="mt-6 text-xs text-muted">Von <AuthorCredit /> · Zuletzt aktualisiert: {formatDate(e.updatedAt)}</p>
 
       {reviews.length > 0 && (
         <section aria-labelledby="in-tests" className="mt-14">

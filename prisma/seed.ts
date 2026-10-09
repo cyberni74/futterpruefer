@@ -162,7 +162,7 @@ async function main() {
         imageUrl: img.url, imageBlur: img.blur, imageAlt: `Verpackung von ${title}`,
         ...scores, totalScore: totalScore(scores),
         verdict: d.verdict, pros: d.pros, cons: d.cons,
-        bodyHtml: `${DEMO_NOTE}<h2>Zusammensetzung</h2><p>${title} wurde anhand der deklarierten Zusammensetzung, der analytischen Bestandteile und der Zusatzstoffe bewertet.</p><h2>Rohstoffe im Detail</h2><p>${d.verdict}</p><h3>Analytische Bestandteile</h3><table><thead><tr><th scope="col">Bestandteil</th><th scope="col">Gehalt</th></tr></thead><tbody><tr><td>Rohprotein</td><td>${(9 + (i % 5) * 2).toFixed(1)} %</td></tr><tr><td>Rohfett</td><td>${(5 + (i % 4)).toFixed(1)} %</td></tr><tr><td>Rohasche</td><td>${(1.8 + (i % 3) * 0.3).toFixed(1)} %</td></tr></tbody></table><h2>Fazit des Experten</h2><p>${d.verdict}</p>`,
+        bodyHtml: `${DEMO_NOTE}<h2>Zusammensetzung</h2><p>${title} wurde anhand der deklarierten Zusammensetzung, der analytischen Bestandteile und der Zusatzstoffe bewertet.</p><h2>Rohstoffe im Detail</h2><p>${d.verdict}</p><h3>Analytische Bestandteile</h3><table><thead><tr><th scope="col">Bestandteil</th><th scope="col">Gehalt</th></tr></thead><tbody><tr><td>Rohprotein</td><td>${(9 + (i % 5) * 2).toFixed(1)} %</td></tr><tr><td>Rohfett</td><td>${(5 + (i % 4)).toFixed(1)} %</td></tr><tr><td>Rohasche</td><td>${(1.8 + (i % 3) * 0.3).toFixed(1)} %</td></tr></tbody></table><h2>Fazit</h2><p>${d.verdict}</p>`,
         metaTitle: `${title} im Test: ${totalScore(scores)}/100 Punkte`,
         metaDescription: `${title} im Fachtest: ${d.verdict}`.slice(0, 158),
         keywords: [d.brand, d.product, ...d.keyword.split(", ")],
@@ -311,7 +311,7 @@ function demoBody(title: string, d: Detail, verdict: string) {
 <h2>Deklaration &amp; Transparenz</h2><p>Wir prüfen, ob die Deklaration nachvollziehbar ist und ob die Werbeaussagen halten, was sie versprechen. Details im Werbeaussagen-Check unten.</p>
 <h2>Bedarfsdeckung</h2><p>Abgleich der Nährstoffgehalte mit dem Bedarf der Tierart und Lebensphase.</p>
 <h2>Preis-Leistung</h2><p>Packung ${esc(d.pkg)} für ca. ${d.price.toFixed(2).replace(".", ",")} €, das entspricht etwa ${d.perDay.toFixed(2).replace(".", ",")} € pro Tagesration.</p>
-<h2>Fazit des Experten</h2><p>${esc(verdict)}</p>`;
+<h2>Fazit</h2><p>${esc(verdict)}</p>`;
 }
 
 const MORE_FAQ: Array<{ sortOrder: number; question: string; answer: string }> = [

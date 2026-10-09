@@ -4,7 +4,7 @@ export const SITE = {
   url: (process.env.NEXT_PUBLIC_SITE_URL ?? "https://futterpruefer.de").replace(/\/$/, ""),
   description:
     "Unabhängige Fachbewertungen von Hunde- und Katzenfutter: Rohstoffe, Schadstoffe, Nährstoffprofil und Deklaration – transparent nach 100-Punkte-Methodik.",
-  author: "Futterprüfer-Redaktion",
+  author: "Futterprüfer",
 };
 
 /** Indexierung nur auf der echten Domain – Vercel-Subdomains, localhost und SITE_NOINDEX=1 bleiben noindex. */
