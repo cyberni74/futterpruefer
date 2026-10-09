@@ -18,6 +18,7 @@ import { BLOG_BODY_IMAGES } from "./blog-bilder";
 import { REVIEW_TEASERS, REVIEW_TEASERS_PREVIOUS } from "./review-teasers";
 import { MEDIDOG_TEST, MEDIDOG_V1_SIGNATURE } from "./review-medidog";
 import { MAMMALY_TESTS } from "./review-mammaly";
+import { MAMMALY_BLOG_SECTIONS, MAMMALY_BLOGS_MARKER } from "./review-mammaly-blogs";
 
 const esc = (t: string) => t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
@@ -154,6 +155,7 @@ async function main() {
   await ensureReviewTeasers();
   await ensureMedidogTest();
   await ensureMammalyTests();
+  await ensureMammalyBlogs();
   await normalizeStoredLinks();
   // Demo-Inhalte (fiktive Tests, Blog, Ticker) nur auf ausdrücklichen Wunsch: SEED_DEMO=1.
   // Verhindert, dass sie nach dem Löschen bei einem Deploy wieder auftauchen.
@@ -444,6 +446,18 @@ async function ensureMammalyTests() {
     n++;
   }
   if (n) console.log(`${n} mammaly-Tests angelegt.`);
+}
+
+/** Fügt den Abschnitt „Was Blogger und Halter berichten“ einmalig vor dem Preis-Abschnitt ein (idempotent über die Anker-ID). */
+async function ensureMammalyBlogs() {
+  for (const [slug, html] of Object.entries(MAMMALY_BLOG_SECTIONS)) {
+    const r = await prisma.review.findUnique({ where: { slug }, select: { id: true, bodyHtml: true } });
+    if (!r || r.bodyHtml.includes(MAMMALY_BLOGS_MARKER)) continue;
+    const at = r.bodyHtml.search(/<h2[^>]*>\s*Preis pro Tag, Abo und Garantie/);
+    if (at < 0) continue;
+    await prisma.review.update({ where: { id: r.id }, data: { bodyHtml: autolinkUrls(r.bodyHtml.slice(0, at) + html + "\n\n" + r.bodyHtml.slice(at)) } });
+    console.log(`Test ${slug}: Abschnitt Stimmen ergänzt.`);
+  }
 }
 
 async function ensureMedidogTest() {
