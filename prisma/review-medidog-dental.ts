@@ -10,7 +10,7 @@ export const MEDIDOG_DENTAL_TESTS = [
     categorySlug: "ergaenzungsfuttermittel-hund",
     brand: "Medidog",
     slug: "medidog-dental-fresh-clean-test",
-    syncMarker: 'id="sicherheit"',
+    syncMarker: 'id="sicherheit-alkohol"',
     title: "Medidog Dental Fresh & Clean im Test: 60/100 Punkte",
     productName: "Dental Fresh & Clean",
     keyword: "Dentalspray Hund",
@@ -66,7 +66,6 @@ export const MEDIDOG_DENTAL_TESTS = [
 <li>Das Spray ist ein Wasserauszug aus zehn Kräutern mit Ölsaatenextrakt, Alkohol (Weingeist), Calciumchlorid und Minzöl. Mengen nennt die Shopseite nicht.</li>
 <li>Die Anwendung ist einfach: Lefzen oder Trinknapf. Die Angaben dazu widersprechen sich aber zwischen Shop und Vergleichsportalen.</li>
 <li>Für Wirkung auf Plaque oder Zahnstein haben wir keinen Beleg gefunden, weder eine Studie noch eine VOHC-Anerkennung.</li>
-<li>Vergleichsportale beschreiben die Zusammensetzung teils anders (Xylit, Meeresalgen). Xylit ist für Hunde gefährlich; prüfen Sie daher immer das Etikett der Packung, die Sie kaufen.</li>
 <li>Der Preis ist mit rund 10 Cent je Milliliter hoch, die Tageskosten aber gering, weil nur wenig Spray gebraucht wird.</li>
 </ul>
 
@@ -80,14 +79,13 @@ export const MEDIDOG_DENTAL_TESTS = [
 <h2>Analytische Bestandteile: Wasser mit Spuren</h2>
 <p>Rohprotein, Rohfett, Rohasche und Rohfaser liegen jeweils unter 1 %, die Feuchtigkeit bei 98 %. Das bestätigt, dass es sich nicht um ein Futter mit Nährwert handelt, sondern um ein Pflegeprodukt. Die Nährstoffwertung fällt deshalb neutral aus: Wir geben weder Pluspunkte noch Abzüge für Nährstoffe, die ein Zahnspray nicht liefern soll, und bewerten dafür die Angaben, die ein Halter braucht (Anwendung, Dosierung, Sicherheit).</p>
 
-<h2 id="sicherheit">Sicherheit: Alkohol, Minzöl und Xylit</h2>
+<h2 id="sicherheit-alkohol">Sicherheit: Alkohol und Minzöl</h2>
 <p><strong>Weingeist</strong> ist Alkohol (Ethanol). In einem Auszug dient er als Lösungsmittel für die Pflanzenstoffe. Wie viel enthalten ist, nennt die Seite nicht. Bei ein bis zwei Pumpstößen ist die Menge sehr klein, ein Grund zur Sorge ergibt sich daraus nicht. Sie ist aber nicht beurteilbar, und wer sein Tier täglich damit behandelt, sollte es wissen. Für Hunde mit Lebererkrankungen und für sehr kleine Hunde sollten Sie vorher die Tierarztpraxis fragen.</p>
 <p><strong>Minzöl</strong> (und Pfefferminze im Kräutersaft) sorgen für den frischen Geschmack. Auch hier fehlt die Menge. Ätherische Öle sollten Hunde nur in geringen Mengen bekommen; ob diese Menge gering ist, können wir nicht prüfen.</p>
-<p><strong>Xylit:</strong> Mehrere Vergleichsportale führen in ihren Beschreibungen Xylit (Xylitol) auf, andere nennen Meeresalgen und Kokosöl. Beides steht nicht in der Zusammensetzung der Shopseite. Xylit ist für Hunde schon in kleinen Mengen gefährlich (Unterzuckerung, Leberschäden). Wir gehen davon aus, dass die Portalbeschreibungen fehlerhaft sind, weil sie auch bei der Anwendung und Dosierung von der Shopseite abweichen. Ausschließen können wir es für jede Charge nicht. Prüfen Sie deshalb die Zusammensetzung auf der Packung, die bei Ihnen ankommt, und füttern Sie das Spray bei Xylit-Angabe nicht.</p>
 
 <h2>Anwendung und Dosierung: widersprüchliche Angaben</h2>
 <p>Laut Shopseite: 1x täglich in die Lefzen sprühen, bei Bedarf 2x täglich; ein bis zwei Pumpstöße je Anwendung. Wenn der Hund das Sprühen nicht toleriert, lässt sich das Spray dem Wasser im Trinknapf zugeben. Das ist die Angabe, die wir für den Test zugrunde legen.</p>
-<p>Das Vergleichsportal beste-testsieger.de beschreibt es ganz anders: 10 bis 15 Sprühstöße direkt auf Zähne und Zahnfleisch, danach 10 bis 15 Minuten nichts fressen oder trinken, anwenden „2-3 Mal pro Woche“. Eine Quelle dafür nennt das Portal nicht. Es schreibt außerdem, das Spray enthalte Xylit. Diese Seite ist ein Vergleichsportal mit Kaufverweis zu Amazon; wir halten die Anwendungsangaben dort für nicht verlässlich. Halter sollten sich an die Gebrauchsanweisung auf der Packung halten.</p>
+<p>Das Vergleichsportal beste-testsieger.de beschreibt es ganz anders: 10 bis 15 Sprühstöße direkt auf Zähne und Zahnfleisch, danach 10 bis 15 Minuten nichts fressen oder trinken, anwenden „2-3 Mal pro Woche“. Eine Quelle dafür nennt das Portal nicht. Diese Seite ist ein Vergleichsportal mit Kaufverweis zu Amazon; wir halten die Anwendungsangaben dort für nicht verlässlich. Halter sollten sich an die Gebrauchsanweisung auf der Packung halten.</p>
 <p>Was in beiden Fällen fehlt: eine Dosierung nach Körpergewicht, ein Hinweis zur Menge im Trinknapf und die Menge je Pumpstoß. Ob ein Chihuahua und ein Sennenhund dieselbe Menge bekommen sollen, bleibt offen. Praktisch beachten sollten Sie: Wird das Spray ins Trinkwasser gegeben, sprühen Sie nur in einen frisch gefüllten Napf und lassen dem Hund eine zweite Wasserquelle, falls er das aromatisierte Wasser verweigert.</p>
 
 <h2>Die Werbung: Wirkung ohne Beleg</h2>
@@ -125,6 +123,6 @@ export const MEDIDOG_DENTAL_TESTS = [
 
 <p><strong>Unser Gesamtergebnis: 60 von 100 Punkten.</strong> Nach unserem Bewertungsschema liegt das Spray an der Grenze zwischen Gelb und Rot, noch im gelben Bereich. <strong>Strenge Wertung:</strong> Jede fragwürdige Werbeaussage kostet einen Punkt bei der Deklaration, jede unzulässige drei, höchstens 15; hier sind es 4 fragwürdige und 0 unzulässige Aussagen. Punkte kosten außerdem die fehlenden Mengenangaben, der Alkohol ohne Mengenangabe, die fehlende Wirkungsbelegung, die fehlende Dosierung nach Gewicht und der Literpreis. Positiv zählen die einfache Anwendung, die vollständig benannten Kräuter und die geringen Tageskosten.</p>
 <p><em>Hinweis:</em> Alle Zitate stammen von den genannten Seiten (Stand 10.10.2026). Preise und Texte können sich ändern.</p>`,
-    conclusionHtml: `<p>Das Medidog-Spray ist bequem anzuwenden und kostet am Tag wenig, ein Beleg für die Wirkung fehlt aber. Wer eine Zahnbürste einsetzen kann, putzt wirksamer. Prüfen Sie das Etikett auf Xylit, lassen Sie bei Vorerkrankungen vorher die Tierarztpraxis entscheiden und suchen Sie bei Zahnstein, Zahnfleischbluten oder anhaltendem Mundgeruch die Praxis auf; ein Spray ersetzt weder Untersuchung noch Zahnbehandlung.</p>`,
+    conclusionHtml: `<p>Das Medidog-Spray ist bequem anzuwenden und kostet am Tag wenig, ein Beleg für die Wirkung fehlt aber. Wer eine Zahnbürste einsetzen kann, putzt wirksamer. Lassen Sie bei Vorerkrankungen vorher die Tierarztpraxis entscheiden und suchen Sie bei Zahnstein, Zahnfleischbluten oder anhaltendem Mundgeruch die Praxis auf; ein Spray ersetzt weder Untersuchung noch Zahnbehandlung.</p>`,
   },
 ];
