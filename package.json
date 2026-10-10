@@ -10,7 +10,7 @@
     "db:seed": "tsx prisma/seed.ts",
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate && node scripts/trim-polyfills.mjs"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.10.0",

@@ -30,7 +30,7 @@ export function HomeHero({ leaders }: { leaders: Leaders }) {
       <div className="relative">
         {/* Handy: Bild als Banner oben; ab Tablet: Hintergrundbild rechts mit Verlauf zum Text */}
         <div className="relative aspect-[16/10] md:absolute md:inset-y-0 md:right-0 md:aspect-auto md:w-[60%]">
-          <FpImage src={HERO_IMAGE} alt={HERO_ALT} blur={HERO_BLUR} sizes="(min-width:1152px) 670px, (min-width:768px) 58vw, 100vw" priority className="object-[50%_62%]" />
+          <FpImage src={HERO_IMAGE} alt={HERO_ALT} blur={HERO_BLUR} sizes="(min-width:1152px) 670px, (min-width:768px) 58vw, calc(100vw - 32px)" quality={50} priority className="object-[50%_62%]" />
           <div aria-hidden className="absolute inset-y-0 left-0 hidden w-1/4 bg-gradient-to-r from-brand-soft to-transparent md:block" />
           <div aria-hidden className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-brand-soft to-transparent md:hidden" />
         </div>

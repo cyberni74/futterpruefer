@@ -22,7 +22,7 @@ export function ProductOfMonthHero({ pom }: { pom: { year: number; month: number
     <section aria-labelledby="pdm-heading" className="relative overflow-hidden rounded-3xl bg-brand-strong text-white shadow-lift dark:bg-brand-soft">
       <div className="grid md:grid-cols-2">
         <div className="relative aspect-[4/3] md:aspect-auto md:min-h-[26rem]">
-          <FpImage src={r.imageUrl} alt={r.imageAlt || r.title} blur={r.imageBlur} sizes="(min-width:768px) 50vw, 100vw" priority />
+          <FpImage src={r.imageUrl} alt={r.imageAlt || r.title} blur={r.imageBlur} sizes="(min-width:768px) 50vw, 100vw" />
           <MonthSeal month={pom.month} year={pom.year} className="absolute left-4 top-4 md:left-6 md:top-6" />
         </div>
         <div className="flex flex-col justify-center gap-4 p-6 md:p-10">
