@@ -14,7 +14,6 @@ import { RECHERCHE_POSTS } from "./blog-recherche";
 import { ULMENRINDE_POSTS } from "./blog-ulmenrinde";
 import { HERSTELLER_POSTS } from "./blog-hersteller";
 import { WERBUNG_POSTS } from "./blog-werbung";
-import { DENTAL_POSTS } from "./blog-dental";
 import { ULMENRINDE_ANWENDER_HTML, ULMENRINDE_ANWENDER_MARKER } from "./blog-ulmenrinde-anwender";
 import { BLOG_BODY_IMAGES } from "./blog-bilder";
 import { REVIEW_TEASERS, REVIEW_TEASERS_PREVIOUS } from "./review-teasers";
@@ -23,6 +22,7 @@ import { MAMMALY_TESTS } from "./review-mammaly";
 import { BUGBELL_TESTS } from "./review-bugbell";
 import { BETTERCAT_TESTS } from "./review-betterkat";
 import { WOLFSBLUT_TESTS } from "./review-wolfsblut";
+import { MEDIDOG_DENTAL_TESTS } from "./review-medidog-dental";
 import { MAMMALY_BLOG_SECTIONS, MAMMALY_BLOGS_MARKER } from "./review-mammaly-blogs";
 
 const esc = (t: string) => t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -159,6 +159,7 @@ async function main() {
   await ensureUlmenrindeAnwender();
   await ensureReviewTeasers();
   await ensureMedidogTest();
+  await removeWithdrawnPosts();
   await ensureMammalyTests();
   await ensureMammalyBlogs();
   await normalizeStoredLinks();
@@ -352,7 +353,7 @@ const MORE_FAQ: Array<{ sortOrder: number; question: string; answer: string }> =
 /** Fachblog-Beiträge aus der Nischenanalyse: nur anlegen, wenn der Slug fehlt (Admin-Änderungen bleiben erhalten). */
 async function ensureNischenPosts() {
   let n = 0;
-  for (const p of [...NISCHEN_POSTS, ...RECHERCHE_POSTS, ...ULMENRINDE_POSTS, ...HERSTELLER_POSTS, ...WERBUNG_POSTS, ...DENTAL_POSTS]) {
+  for (const p of [...NISCHEN_POSTS, ...RECHERCHE_POSTS, ...ULMENRINDE_POSTS, ...HERSTELLER_POSTS, ...WERBUNG_POSTS]) {
     if (await prisma.blogPost.findUnique({ where: { slug: p.slug }, select: { id: true } })) continue;
     const file = path.join(process.cwd(), "public", "blog", p.image);
     const blur = await sharp(file).resize(16).webp({ quality: 40 }).toBuffer().catch(() => null);
@@ -418,6 +419,11 @@ async function ensureReviewTeasers() {
 
 /** Legt den Test „Medidog Ulmenrinden Paste“ an, falls der Slug fehlt (Bilder liegen in public/tests). */
 /** mammaly-Tests: nur anlegen, wenn der Slug fehlt (Admin-Änderungen bleiben erhalten). */
+async function removeWithdrawnPosts() {
+  const r = await prisma.blogPost.deleteMany({ where: { slug: "dental-produktcheck-hund-medidog-fresh-clean" } });
+  if (r.count) console.log("Zurückgezogener Beitrag entfernt.");
+}
+
 async function ensureMammalyTests() {
   const categories = new Map((await prisma.category.findMany({ select: { id: true, slug: true } })).map((c) => [c.slug, c.id]));
   const blur = async (file: string) => {
@@ -425,7 +431,7 @@ async function ensureMammalyTests() {
     return b ? `data:image/webp;base64,${b.toString("base64")}` : null;
   };
   let n = 0;
-  for (const t of [...MAMMALY_TESTS, ...BUGBELL_TESTS, ...BETTERCAT_TESTS, ...WOLFSBLUT_TESTS]) {
+  for (const t of [...MAMMALY_TESTS, ...BUGBELL_TESTS, ...BETTERCAT_TESTS, ...WOLFSBLUT_TESTS, ...MEDIDOG_DENTAL_TESTS]) {
     const category = { id: categories.get(t.categorySlug) };
     if (!category.id) { console.log(`Test ${t.slug} übersprungen: Kategorie ${t.categorySlug} fehlt.`); continue; }
     const existing = await prisma.review.findUnique({ where: { slug: t.slug }, select: { id: true, bodyHtml: true } });
