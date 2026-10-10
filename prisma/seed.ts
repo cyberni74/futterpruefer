@@ -437,12 +437,13 @@ async function ensureMammalyTests() {
     const existing = await prisma.review.findUnique({ where: { slug: t.slug }, select: { id: true, bodyHtml: true } });
     if (existing) {
       // Überarbeitete (strengere) Wertung einspielen, solange die Kennung der Neufassung im Text fehlt; spätere Admin-Änderungen bleiben unberührt.
-      if (!existing.bodyHtml.includes("Strenge Wertung")) {
+      const marker = (t as { syncMarker?: string }).syncMarker;
+      if (!existing.bodyHtml.includes("Strenge Wertung") || (marker && !existing.bodyHtml.includes(marker))) {
         const sc2 = t.scores;
         await prisma.review.update({
           where: { id: existing.id },
           data: {
-            title: t.title, ...sc2, totalScore: Object.values(sc2).reduce((a, b) => a + b, 0),
+            title: t.title, pricePerKg: t.pricePerKg, packageSize: t.packageSize, price: t.price, pricePerDay: t.pricePerDay, ...sc2, totalScore: Object.values(sc2).reduce((a, b) => a + b, 0),
             verdict: t.verdict, teaser: t.teaser, pros: t.pros, cons: t.cons, claims: t.claims,
             bodyHtml: autolinkUrls(t.bodyHtml), conclusionHtml: t.conclusionHtml,
             metaTitle: t.metaTitle, metaDescription: t.metaDescription,
