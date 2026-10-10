@@ -21,6 +21,7 @@ import { MEDIDOG_TEST, MEDIDOG_V1_SIGNATURE } from "./review-medidog";
 import { MAMMALY_TESTS } from "./review-mammaly";
 import { BUGBELL_TESTS } from "./review-bugbell";
 import { BETTERCAT_TESTS } from "./review-betterkat";
+import { WOLFSBLUT_TESTS } from "./review-wolfsblut";
 import { MAMMALY_BLOG_SECTIONS, MAMMALY_BLOGS_MARKER } from "./review-mammaly-blogs";
 
 const esc = (t: string) => t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -423,7 +424,7 @@ async function ensureMammalyTests() {
     return b ? `data:image/webp;base64,${b.toString("base64")}` : null;
   };
   let n = 0;
-  for (const t of [...MAMMALY_TESTS, ...BUGBELL_TESTS, ...BETTERCAT_TESTS]) {
+  for (const t of [...MAMMALY_TESTS, ...BUGBELL_TESTS, ...BETTERCAT_TESTS, ...WOLFSBLUT_TESTS]) {
     const category = { id: categories.get(t.categorySlug) };
     if (!category.id) { console.log(`Test ${t.slug} übersprungen: Kategorie ${t.categorySlug} fehlt.`); continue; }
     const existing = await prisma.review.findUnique({ where: { slug: t.slug }, select: { id: true, bodyHtml: true } });
