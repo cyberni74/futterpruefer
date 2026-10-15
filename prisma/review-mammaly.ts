@@ -14,7 +14,7 @@ const KOSTEN = (p: string, tag: string) => `<h2>Preis pro Tag, Abo und Garantie<
 <p>Erfahrungsberichte zum Bestellvorgang sind uneinheitlich. Auf ${a("https://www.trustedshops.de/bewertung/mammaly-de", "Trusted Shops")} (Profil laut Seite nicht vom Unternehmen beansprucht, am 09.10.2026 nur zwei Einzelbewertungen sichtbar) schreibt ein Nutzer am 13.08.2026: „Wie andere angemerkt haben, ist die default Bestellung ein Abo, man muss etwas aufpassen, wenn man einmalig bestellen will.“ Ein weiterer Beitrag vom 25.04.2026 nennt das Bestellverfahren „Absolut unseriös“. Das sind Erfahrungen einzelner Nutzer, keine Feststellung. Wie die Auswahl „Spar-Abo“ oder „Einmalkauf“ auf der Produktseite voreingestellt ist, haben wir nicht im Browser geprüft. Behördliche oder gerichtliche Verfahren gegen mammaly haben wir bei unserer Suche nicht gefunden; das ist keine Garantie, dass es keine gibt.</p>`;
 
 const METHODE = `<h2>Wie wir getestet haben</h2>
-<p>Wir haben das Produkt nicht im Labor analysiert und nicht an Hunden erprobt. Grundlage sind die Angaben von mammaly (${SRC}), die wir nach unserem 100-Punkte-Schema und nach den Regeln der Futtermittelkennzeichnung (VO (EG) 767/2009) und des Wettbewerbsrechts (UWG) prüfen. Die Einstufung der Werbeaussagen ist unsere begründete Einschätzung und keine rechtsverbindliche Feststellung. Mammaly ist die Marke der Peturo GmbH in Berlin (Impressum: Geschäftsführer Stanislav Nazarenus, Amtsgericht Charlottenburg, HRB 256286 B). Bilder in diesem Test sind neutrale Illustrationen, keine Herstellerfotos.</p>`;
+<p>Wir haben das Produkt nicht im Labor analysiert und nicht an Hunden erprobt. Grundlage sind die Angaben von mammaly (${SRC}), die wir nach unserem 100-Punkte-Schema und nach den Regeln der Futtermittelkennzeichnung (VO (EG) 767/2009) und des Wettbewerbsrechts (UWG) prüfen. Die Einstufung der Werbeaussagen ist unsere begründete Einschätzung und keine rechtsverbindliche Feststellung. Mammaly ist die Marke der Peturo GmbH in Berlin (Impressum: Geschäftsführer Stanislav Nazarenus, Amtsgericht Charlottenburg, HRB 256286 B). Die Produktbilder in diesem Test stammen aus dem Presse-Kit von mammaly (Foto: mammaly, honorarfrei für die redaktionelle Berichterstattung freigegeben).</p>`;
 
 const STUDIEN = (t: string) => `<h2>Was die Studien belegen, und was nicht</h2>
 <p>${t}</p>`;
@@ -41,10 +41,10 @@ export const MAMMALY_TESTS = [
     title: "mammaly Lucky Belly im Test: 62/100 Punkte",
     productName: "Lucky Belly",
     keyword: "Darmsnack Hund Probiotika",
-    image: "mammaly-lucky-belly-hund-darm-ergaenzung.webp",
-    imageAlt: "Hund liegt entspannt neben einem Napf, Thema Darmgesundheit (Illustration)",
-    contentImage: "mammaly-lucky-belly-hund-darmgesundheit-tierarzt.webp",
-    contentImageAlt: "Tierärztin untersucht den Bauch eines Hundes (Illustration)",
+    image: "mammaly-lucky-belly-dose-packshot-presse.webp",
+    imageAlt: "Dose mammaly Lucky Belly (Foto: mammaly, Presse-Kit)",
+    contentImage: "mammaly-lucky-belly-snack-hand-presse.webp",
+    contentImageAlt: "Hand hält einen mammaly Lucky Belly Snack (Foto: mammaly, Presse-Kit)",
     gallery: [] as string[],
     composition:
       "Pflanzliches Glycerin, Reismehl, hydrolysierte Hühnerleber gemahlen 10,5 %, Karotte gemahlen, Zichorienwurzel gemahlen (Fibrofos™ 60) 4,5 %, Flohsamenschalen gemahlen 4,0 %, Alge (DHAgold™) 3 %, Leinsamen gemahlen 2,8 %, Kamillenblüten gemahlen 2,5 %, Fenchel gemahlen 2,5 %, Hefenerzeugnisse (BIOLEX® MB40) 2 %, Geflügelfett, Naturmoor getrocknet, Kümmel gemahlen 0,5 %",
@@ -113,10 +113,10 @@ ${FOOT}`,
     title: "mammaly Fresh Smile im Test: 61/100 Punkte",
     productName: "Fresh Smile",
     keyword: "Zahnpflege Snack Hund",
-    image: "mammaly-fresh-smile-hund-zahnpflege-snacks.webp",
-    imageAlt: "Schale mit kleinen Ergänzungsfutter-Snacks auf einem Holztisch, Hund im Hintergrund (Illustration)",
-    contentImage: "mammaly-fresh-smile-hund-kauen-aufsicht.webp",
-    contentImageAlt: "Hund kaut unter Aufsicht einer Halterin (Illustration)",
+    image: "mammaly-fresh-smile-dose-packshot-presse.webp",
+    imageAlt: "Dose mammaly Fresh Smile (Foto: mammaly, Presse-Kit)",
+    contentImage: "mammaly-fresh-smile-snack-hand-presse.webp",
+    contentImageAlt: "Hand hält einen mammaly Fresh Smile Snack (Foto: mammaly, Presse-Kit)",
     gallery: [] as string[],
     composition:
       "Reismehl, pflanzliches Glycerin, hydrolysierte Hühnerleber gemahlen 8,7 %, Petersilie gemahlen 6 %, Alge gemahlen (Ascophyllum nodosum) 5 %, Geflügelfett, Naturmoor getrocknet, Karotte gemahlen, Pfefferminzblätter gemahlen 2 %, Natriumhexametaphosphat (Prayphos™) 1,7 %, Algenöl (Veramaris®) 1,3 %, Zichorienwurzel gemahlen (Fibrofos™ 60) 0,7 %, Hefenerzeugnisse (BIOLEX® MB40) 0,6 %",
@@ -179,10 +179,10 @@ ${FOOT}`,
     title: "mammaly Relax Time im Test: 53/100 Punkte",
     productName: "Relax Time",
     keyword: "Beruhigung Snack Hund",
-    image: "mammaly-relax-time-hund-entspannung.webp",
-    imageAlt: "Hund schläft ruhig in einem Hundebett im Wohnzimmer (Illustration)",
-    contentImage: "mammaly-relax-time-hund-kraeuter-baldrian-melisse.webp",
-    contentImageAlt: "Getrocknete Kräuter in Holzschalen neben einer neutralen Dose (Illustration)",
+    image: "mammaly-relax-time-dose-packshot-presse.webp",
+    imageAlt: "Dose mammaly Relax Time (Foto: mammaly, Presse-Kit)",
+    contentImage: "mammaly-relax-time-snack-hand-presse.webp",
+    contentImageAlt: "Hand hält einen mammaly Relax Time Snack (Foto: mammaly, Presse-Kit)",
     gallery: [] as string[],
     composition:
       "Reismehl, pflanzliches Glycerin, hydrolysierte Hühnerleber gemahlen 10 %, Bierhefe, Melissenblätter gemahlen 5 %, Hefenerzeugnisse (BIOLEX® MB40) 2,2 %, Geflügelfett, Algenöl (Veramaris®), Zichorienwurzel gemahlen (Fibrofos™ 60) 1,4 %, Kaseinat 0,7 %, Baldrianwurzel gemahlen 0,4 %",
@@ -248,10 +248,10 @@ ${FOOT}`,
     title: "mammaly Active Hips im Test: 63/100 Punkte",
     productName: "Active Hips",
     keyword: "Gelenk Snack Hund",
-    image: "mammaly-active-hips-hund-gelenke-tierarzt.webp",
-    imageAlt: "Tierärztin tastet die Hüfte eines älteren Hundes ab (Illustration)",
-    contentImage: "mammaly-active-hips-aelterer-hund-bewegung.webp",
-    contentImageAlt: "Älterer Hund steigt eine Treppe hinauf (Illustration)",
+    image: "mammaly-active-hips-dose-packshot-presse.webp",
+    imageAlt: "Dose mammaly Active Hips (Foto: mammaly, Presse-Kit)",
+    contentImage: "mammaly-active-hips-snack-hand-presse.webp",
+    contentImageAlt: "Hand hält einen mammaly Active Hips Snack (Foto: mammaly, Presse-Kit)",
     gallery: [] as string[],
     composition:
       "Reismehl, pflanzliches Glycerin, hydrolysierte Hühnerleber gemahlen 8 %, Grünlippmuschelmehl 6 %, Algenöl (Veramaris®) 4 %, Algen gemahlen (DHAgold™) 4 %, Methylsulfonylmethan (MSM) 3,5 %, Naturmoor getrocknet, Glucosamin 2 %, Zichorienwurzel gemahlen (Fibrofos™ 60) 0,9 %, Hefenerzeugnisse (BIOLEX® MB40) 0,6 %",
