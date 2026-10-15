@@ -438,7 +438,8 @@ async function ensureMammalyTests() {
     if (existing) {
       // Überarbeitete (strengere) Wertung einspielen, solange die Kennung der Neufassung im Text fehlt; spätere Admin-Änderungen bleiben unberührt.
       const marker = (t as { syncMarker?: string }).syncMarker;
-      const pressImages = t.bodyHtml.includes("Presse-Kit") && !existing.bodyHtml.includes("Presse-Kit");
+      const imgMarker = (t as { imageMarker?: string }).imageMarker ?? "Presse-Kit";
+      const pressImages = t.bodyHtml.includes(imgMarker) && !existing.bodyHtml.includes(imgMarker);
       if (pressImages) {
         const [ib, cb] = await Promise.all([blur(t.image), blur(t.contentImage)]);
         if (ib && cb) await prisma.review.update({ where: { id: existing.id }, data: { imageUrl: `/tests/${t.image}`, imageAlt: t.imageAlt, imageBlur: ib, contentImageUrl: `/tests/${t.contentImage}`, contentImageAlt: t.contentImageAlt, contentImageBlur: cb } });

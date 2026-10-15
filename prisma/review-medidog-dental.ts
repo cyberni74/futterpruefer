@@ -10,6 +10,7 @@ export const MEDIDOG_DENTAL_TESTS = [
     categorySlug: "ergaenzungsfuttermittel-hund",
     brand: "Medidog",
     slug: "medidog-dental-fresh-clean-test",
+    imageMarker: "Foto: Medipet",
     syncMarker: 'id="sicherheit-alkohol"',
     title: "Medidog Dental Fresh & Clean im Test: 60/100 Punkte",
     productName: "Dental Fresh & Clean",
@@ -19,10 +20,10 @@ export const MEDIDOG_DENTAL_TESTS = [
     packageSize: "250 ml Spray",
     price: 24.95,
     pricePerDay: null as number | null,
-    image: "medidog-dental-fresh-clean-hund-zahnpflege-spray.webp",
-    imageAlt: "Etikett eines Dentalsprays für Hunde, Illustration",
-    contentImage: "medidog-dental-fresh-clean-hund-maul-anwendung.webp",
-    contentImageAlt: "Hund wird beim Zähneputzen untersucht, Illustration",
+    image: "medidog-dental-fresh-clean-packshot-hersteller.webp",
+    imageAlt: "Medidog Dental Fresh & Clean Zahnpflegespray 250 ml mit Kräutern und Honig als Dekoration (Foto: Medipet / Bionic Nature GmbH)",
+    contentImage: "medidog-dental-fresh-clean-hund-hersteller.webp",
+    contentImageAlt: "Irish Setter mit geöffnetem Maul, Motiv zur Zahnpflege (Foto: Medipet / Bionic Nature GmbH)",
     gallery: [] as string[],
     composition:
       "Gereinigtes Wasser, Extrakt aus Ölsaaten, Kräutersaft (aus Holunderblüten, Wasserdorst, Majoran, Fenchel, Schlüsselblumenblüten, isländisches Moos, Hagebutten, Lindenblüten, Pfefferminze, Spitzwegerich), Weingeist, Kalziumchlorid, Minzöl",
@@ -70,7 +71,7 @@ export const MEDIDOG_DENTAL_TESTS = [
 </ul>
 
 <h2>Wie wir getestet haben</h2>
-<p>Wir haben das Spray nicht im Labor analysiert und nicht an Hunden erprobt. Grundlage sind die Angaben auf der Produktseite von ${a(URL_SA, "Shop-Apotheke")} (${SRC}), ergänzt durch Angaben weiterer Händler und Vergleichsportale, die wir ausdrücklich als solche kennzeichnen. Wir prüfen sie nach unserem 100-Punkte-Schema und nach den Regeln der Futtermittelkennzeichnung (VO (EG) 767/2009) und des Wettbewerbsrechts (UWG). Die Einstufung der Werbeaussagen ist unsere begründete Einschätzung und keine rechtsverbindliche Feststellung. Als Hersteller nennt die Shopseite „MEDIDOG“; eine verantwortliche Person in der EU ist dort nicht angegeben. Bei unserem Test der ${a("/ergaenzungsfuttermittel-hund/medidog-ulmenrinden-paste", "Medidog Ulmenrinden Paste")} nannten wir die Bionic Nature GmbH als Hersteller; ob sie auch dieses Spray herstellt, geht aus den Angaben der Händler nicht hervor. Die Bilder sind neutrale Illustrationen, keine Herstellerfotos.</p>
+<p>Wir haben das Spray nicht im Labor analysiert und nicht an Hunden erprobt. Grundlage sind die Angaben auf der Produktseite von ${a(URL_SA, "Shop-Apotheke")} (${SRC}), ergänzt durch Angaben weiterer Händler und Vergleichsportale, die wir ausdrücklich als solche kennzeichnen. Wir prüfen sie nach unserem 100-Punkte-Schema und nach den Regeln der Futtermittelkennzeichnung (VO (EG) 767/2009) und des Wettbewerbsrechts (UWG). Die Einstufung der Werbeaussagen ist unsere begründete Einschätzung und keine rechtsverbindliche Feststellung. Als Hersteller nennt die Shopseite „MEDIDOG“; eine verantwortliche Person in der EU ist dort nicht angegeben. Bei unserem Test der ${a("/ergaenzungsfuttermittel-hund/medidog-ulmenrinden-paste", "Medidog Ulmenrinden Paste")} nannten wir die Bionic Nature GmbH als Hersteller; ob sie auch dieses Spray herstellt, geht aus den Angaben der Händler nicht hervor. Die Produktbilder stammen vom Hersteller (Foto: Medipet / Bionic Nature GmbH, mit dessen Genehmigung). Auf dem Packshot sind Honig, Süßholz, Salbei und Melisse (nach Augenschein) als Dekoration abgebildet; sie stehen nicht in der Zusammensetzung der Shopseite.</p>
 
 <h2>Zusammensetzung: ein Kräuterauszug in Wasser</h2>
 <p>Die Zusammensetzung laut Shopseite: gereinigtes Wasser, Extrakt aus Ölsaaten, Kräutersaft (aus Holunderblüten, Wasserdorst, Majoran, Fenchel, Schlüsselblumenblüten, isländisches Moos, Hagebutten, Lindenblüten, Pfefferminze, Spitzwegerich), Weingeist, Kalziumchlorid und Minzöl. Die Reihenfolge entspricht bei Futtermitteln üblicherweise dem Gewichtsanteil, Wasser steht also vorn. Die Kräuter sind vollständig und einzeln benannt, das ist für ein Ergänzungsprodukt vorbildlich. Nicht genannt sind dagegen die Mengen der einzelnen Bestandteile. Ein Kräuterauszug mit 10 Pflanzen kann viel oder sehr wenig von jeder Pflanze enthalten, das lässt sich der Liste nicht entnehmen.</p>
