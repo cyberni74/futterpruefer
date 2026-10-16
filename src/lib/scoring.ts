@@ -12,6 +12,28 @@ export type Scores = Record<CriterionKey, number>;
 
 export const MAX_TOTAL = CRITERIA.reduce((s, c) => s + c.max, 0);
 
+/**
+ * Veröffentlichte Gewichtung ab 16.10.2026 für Methodik-Seite und Kriterienlisten.
+ * `previousMax` ist der bisherige Höchstwert. CRITERIA bleibt die Skala bereits
+ * gespeicherter Tests; deren Punktzahlen werden nicht umgerechnet.
+ */
+export const METHODOLOGY_STAND = "16.10.2026";
+
+export const METHODOLOGY_CHANGELOG =
+  "16.10.2026 – Neues Kriterium „Transparenz / Herstellerunterlagen“ (max. 10 Punkte, abgestuft nach Beweiswert). Die übrigen Kriterien wurden anteilig auf 90 Punkte angepasst, die Ampelgrenzen bleiben gleich. Das Kriterium gilt für neue und aktualisierte Tests ab diesem Datum.";
+
+export const PUBLISHED_CRITERIA = [
+  { key: "scoreRaw", label: "Rohstoffqualität", description: "Sinnhaftigkeit und Qualität der Rohstoffe", max: 27, previousMax: 30 },
+  { key: "scoreHarmful", label: "Schadstoffe & Bedenkliches", description: "Ungeeignete oder problematische Inhaltsstoffe", max: 18, previousMax: 20 },
+  { key: "scoreNutrients", label: "Nährstoffprofil", description: "Protein, Fett, Vitamine, Mineralstoffe", max: 18, previousMax: 20 },
+  { key: "scoreDeclaration", label: "Deklaration & Transparenz", description: "Nachvollziehbare Angaben auf Etikett und Website, ehrliche statt unzulässiger Werbeaussagen", max: 13, previousMax: 15 },
+  { key: "scoreNeeds", label: "Bedarfsdeckung", description: "Passt das Produkt zum Bedarf des Tiers?", max: 9, previousMax: 10 },
+  { key: "scoreValue", label: "Preis-Leistung", description: "Preis-Leistungs-Verhältnis", max: 5, previousMax: 5 },
+  { key: "scoreTransparency", label: "Transparenz / Herstellerunterlagen", description: "Belegt der Hersteller seine Angaben mit prüfbaren Unterlagen?", max: 10, previousMax: null },
+] as const;
+
+export const PUBLISHED_MAX_TOTAL = PUBLISHED_CRITERIA.reduce((sum, criterion) => sum + criterion.max, 0);
+
 /** Unter diesem Anteil gilt „Schadstoffe & Bedenkliches“ als durchgefallen. */
 export const HARMFUL_FAIL_RATIO = 0.5;
 

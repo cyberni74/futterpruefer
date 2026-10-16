@@ -2,13 +2,13 @@ import { readFileSync } from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { suggestedDeclarationDeduction } from "./product-data";
-import { CRITERIA, HARMFUL_FAIL_RATIO, RATING_THRESHOLDS } from "./scoring";
+import { CRITERIA, HARMFUL_FAIL_RATIO, PUBLISHED_CRITERIA, RATING_THRESHOLDS } from "./scoring";
 import { FOOTER_CLAIM, SITE } from "./site";
 import { HOME_DESCRIPTION, HOME_FAQ, HOME_GUIDES, HOME_H1, INTRO, METHODIK_NOTE, OG_DESCRIPTION, homeJsonLd, homeTitle, introPlain, linkedAnswer } from "./home-seo";
 
 const INTRO_TEXT = [
   "Welches Hundefutter und welches Katzenfutter ist wirklich gut? Futterprüfer bewertet Trockenfutter, Nassfutter und Snacks für Hunde und Katzen nach einem festen 100-Punkte-Schema. Grundlage jedes Tests sind die veröffentlichten Herstellerangaben: Zusammensetzung, analytische Bestandteile, Zusatzstoffe, Fütterungsempfehlung und Preis. Eigene Laboranalysen gehören nicht zum Test, dafür legen wir jeden Bewertungsschritt offen.",
-  "Sechs Kriterien mit fester Gewichtung bestimmen die Gesamtnote: Rohstoffqualität (30 Punkte), Schadstoffe & Bedenkliches (20; bewertet anhand der deklarierten Zutaten und Zusatzstoffe), Nährstoffprofil (20), Deklaration & Transparenz (15), Bedarfsdeckung (10) und Preis-Leistung (5). Zusätzlich prüfen wir die Werbeaussagen auf der Verpackung nach dem Futtermittelrecht. So sehen Sie auf einen Blick, ob ein Alleinfuttermittel laut Deklaration die üblichen Nährstoffempfehlungen für Hund oder Katze erfüllt, welche Inhaltsstoffe wir kritisch sehen und wo das Marketing mehr verspricht, als die Deklaration hergibt. Hersteller können Produkte einreichen, auf die Note hat das keinen Einfluss. Begriffe wie offene Deklaration, Taurin oder getreidefrei erklären unser Fachblog und das Futter-Lexikon.",
+  "Sieben Kriterien mit fester Gewichtung bestimmen die Gesamtnote: Rohstoffqualität (27 Punkte), Schadstoffe & Bedenkliches (18; bewertet anhand der deklarierten Zutaten und Zusatzstoffe), Nährstoffprofil (18), Deklaration & Transparenz (13), Bedarfsdeckung (9), Preis-Leistung (5) und Transparenz / Herstellerunterlagen (10). Zusätzlich prüfen wir die Werbeaussagen auf der Verpackung nach dem Futtermittelrecht. So sehen Sie auf einen Blick, ob ein Alleinfuttermittel laut Deklaration die üblichen Nährstoffempfehlungen für Hund oder Katze erfüllt, welche Inhaltsstoffe wir kritisch sehen und wo das Marketing mehr verspricht, als die Deklaration hergibt. Hersteller können Produkte einreichen, auf die Note hat das keinen Einfluss. Begriffe wie offene Deklaration, Taurin oder getreidefrei erklären unser Fachblog und das Futter-Lexikon.",
 ].join("\n\n");
 
 describe("Startseiten-Title", () => {
@@ -50,16 +50,17 @@ describe("Startseiten-Text", () => {
 
   it("Gewichte, Ampel und Werbeaussagen-Abzug folgen dem Code", () => {
     const intro = introPlain();
-    for (const criterion of CRITERIA) {
+    for (const criterion of PUBLISHED_CRITERIA) {
       expect(intro).toContain(criterion.label);
       expect(intro).toContain(String(criterion.max));
     }
-    const harmful = CRITERIA.find((c) => c.key === "scoreHarmful")!;
+    const harmful = PUBLISHED_CRITERIA.find((c) => c.key === "scoreHarmful")!;
     expect(intro).toContain(`${harmful.label} (${harmful.max}; bewertet anhand der deklarierten Zutaten und Zusatzstoffe)`);
     expect(HOME_FAQ[1].a).toContain(`Ab ${RATING_THRESHOLDS.gut} Punkten`);
     expect(HOME_FAQ[1].a).toContain(`von ${RATING_THRESHOLDS.mittel} bis ${RATING_THRESHOLDS.gut - 1} Punkten`);
     expect(HOME_FAQ[1].a).toContain(`unter ${RATING_THRESHOLDS.mittel} Punkten`);
-    expect(harmful.max * HARMFUL_FAIL_RATIO).toBe(10);
+    const storedHarmful = CRITERIA.find((c) => c.key === "scoreHarmful")!;
+    expect(storedHarmful.max * HARMFUL_FAIL_RATIO).toBe(10);
     expect(HOME_FAQ[1].a).toContain("weniger als die Hälfte");
 
     const declaration = CRITERIA.find((c) => c.key === "scoreDeclaration")!;

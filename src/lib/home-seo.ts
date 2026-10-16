@@ -11,7 +11,7 @@ export const HOME_DESCRIPTION =
 
 export const OG_TITLE = `Hundefutter & Katzenfutter im Test – ${SITE.name}`;
 export const OG_DESCRIPTION =
-  "Trocken- und Nassfutter für Hund und Katze, bewertet nach sechs offengelegten Kriterien und 100 Punkten. Mit Werbeaussagen-Check und Futter-Lexikon.";
+  "Trocken- und Nassfutter für Hund und Katze, bewertet nach sieben offengelegten Kriterien und 100 Punkten. Mit Werbeaussagen-Check und Futter-Lexikon.";
 
 export const HOME_H1 = "Hundefutter und Katzenfutter im Test – transparent nach 100 Punkten bewertet";
 export const FALLBACK_HERO = "Hunde- und Katzenfutter im Test";
@@ -50,9 +50,9 @@ export const INTRO: readonly (readonly TextPart[])[] = [
     },
   ],
   [
-    { text: "Sechs Kriterien mit fester Gewichtung bestimmen die Gesamtnote: " },
+    { text: "Sieben Kriterien mit fester Gewichtung bestimmen die Gesamtnote: " },
     {
-      text: "Rohstoffqualität (30 Punkte), Schadstoffe & Bedenkliches (20; bewertet anhand der deklarierten Zutaten und Zusatzstoffe), Nährstoffprofil (20), Deklaration & Transparenz (15), Bedarfsdeckung (10) und Preis-Leistung (5)",
+      text: "Rohstoffqualität (27 Punkte), Schadstoffe & Bedenkliches (18; bewertet anhand der deklarierten Zutaten und Zusatzstoffe), Nährstoffprofil (18), Deklaration & Transparenz (13), Bedarfsdeckung (9), Preis-Leistung (5) und Transparenz / Herstellerunterlagen (10)",
       strong: true,
     },
     { text: ". Zusätzlich prüfen wir die " },
@@ -133,7 +133,7 @@ export type HomeFaq = {
 export const HOME_FAQ: readonly HomeFaq[] = [
   {
     q: "Wie testet Futterprüfer Hunde- und Katzenfutter?",
-    a: "Wir werten die veröffentlichten Herstellerangaben aus: Zusammensetzung, analytische Bestandteile, Zusatzstoffe, Fütterungsempfehlung und Preis. Jedes Produkt wird nach denselben sechs Kriterien mit maximal 100 Punkten bewertet. Eigene Laboranalysen führen wir nicht durch.",
+    a: "Wir werten die veröffentlichten Herstellerangaben aus: Zusammensetzung, analytische Bestandteile, Zusatzstoffe, Fütterungsempfehlung und Preis. Jedes Produkt wird nach sieben Kriterien mit maximal 100 Punkten bewertet, darunter „Transparenz / Herstellerunterlagen“. Eigene Laboranalysen führen wir nicht durch.",
     links: [["Zur Methodik", "/methodik"]],
   },
   {

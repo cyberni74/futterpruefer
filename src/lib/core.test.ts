@@ -1,11 +1,19 @@
 import { describe, expect, it } from "vitest";
-import { clampScore, harmfulFailed, MAX_TOTAL, ratingFor, totalScore } from "./scoring";
+import { clampScore, CRITERIA, harmfulFailed, MAX_TOTAL, METHODOLOGY_STAND, PUBLISHED_CRITERIA, PUBLISHED_MAX_TOTAL, ratingFor, totalScore } from "./scoring";
 import { slugify } from "./slug";
 import { sanitize, stripHtml } from "./sanitize";
 import { formatDate } from "./site";
 
 describe("scoring", () => {
   it("Maximum ist 100", () => expect(MAX_TOTAL).toBe(100));
+  it("veröffentlicht 27/18/18/13/9/5/10 und rechnet gespeicherte Noten nicht um", () => {
+    expect(METHODOLOGY_STAND).toBe("16.10.2026");
+    expect(PUBLISHED_CRITERIA.map((criterion) => criterion.max)).toEqual([27, 18, 18, 13, 9, 5, 10]);
+    expect(PUBLISHED_MAX_TOTAL).toBe(100);
+    expect(CRITERIA.map((criterion) => criterion.max)).toEqual([30, 20, 20, 15, 10, 5]);
+    expect(totalScore({ scoreRaw: 30, scoreHarmful: 20, scoreNutrients: 20, scoreDeclaration: 15, scoreNeeds: 10, scoreValue: 5 })).toBe(100);
+    expect(clampScore("scoreRaw", 30)).toBe(30);
+  });
   it("summiert und begrenzt pro Kriterium", () => {
     expect(totalScore({ scoreRaw: 99, scoreHarmful: 20, scoreNutrients: 20, scoreDeclaration: 15, scoreNeeds: 10, scoreValue: 5 })).toBe(100);
     expect(totalScore({ scoreRaw: -5, scoreHarmful: 10 })).toBe(10);
