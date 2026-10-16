@@ -26,6 +26,8 @@ import { WOLFSBLUT_TESTS } from "./review-wolfsblut";
 import { MEDIDOG_DENTAL_TESTS } from "./review-medidog-dental";
 import { KAUARTIKEL_FUNKTION_TESTS } from "./review-kauartikel-funktion";
 import { KAUARTIKEL_BILDER } from "./bilder-kauartikel-funktion";
+import { TREND_OKT_TESTS } from "./review-trend-oktober";
+import { TREND_OKT_BILDER } from "./bilder-trend-oktober";
 import { MAMMALY_BLOG_SECTIONS, MAMMALY_BLOGS_MARKER } from "./review-mammaly-blogs";
 
 const esc = (t: string) => t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -429,7 +431,7 @@ async function removeWithdrawnPosts() {
 
 async function ensureMammalyTests() {
   // Eingebettete Herstellerbilder (Kauartikel-Tests) nach public/tests schreiben, falls sie fehlen.
-  for (const [name, b64] of Object.entries(KAUARTIKEL_BILDER)) {
+  for (const [name, b64] of Object.entries({ ...KAUARTIKEL_BILDER, ...TREND_OKT_BILDER })) {
     const file = path.join(process.cwd(), "public", "tests", name);
     if (!fs.existsSync(file)) fs.writeFileSync(file, Buffer.from(b64, "base64"));
   }
@@ -439,7 +441,7 @@ async function ensureMammalyTests() {
     return b ? `data:image/webp;base64,${b.toString("base64")}` : null;
   };
   let n = 0;
-  for (const t of [...MAMMALY_TESTS, ...BUGBELL_TESTS, ...BETTERCAT_TESTS, ...WOLFSBLUT_TESTS, ...MEDIDOG_DENTAL_TESTS, ...KAUARTIKEL_FUNKTION_TESTS]) {
+  for (const t of [...MAMMALY_TESTS, ...BUGBELL_TESTS, ...BETTERCAT_TESTS, ...WOLFSBLUT_TESTS, ...MEDIDOG_DENTAL_TESTS, ...KAUARTIKEL_FUNKTION_TESTS, ...TREND_OKT_TESTS]) {
     const category = { id: categories.get(t.categorySlug) };
     if (!category.id) { console.log(`Test ${t.slug} übersprungen: Kategorie ${t.categorySlug} fehlt.`); continue; }
     const existing = await prisma.review.findUnique({ where: { slug: t.slug }, select: { id: true, bodyHtml: true } });
