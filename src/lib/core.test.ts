@@ -81,6 +81,14 @@ describe("sanitize", () => {
     const storage = sanitize('<a href="https://s3.amazonaws.com/bucket/bild.webp">Bild</a>');
     expect(storage).not.toContain("sponsored");
   });
+  it("behält cta-box und Button-Klassen, entfernt Inline-Styles", () => {
+    const out = sanitize('<div class="cta-box" style="border:1px solid red"><span class="werbung">Werbung</span><a class="button" href="https://www.amazon.de/dp/B07D4T5XVT?tag=cyberni7400-21" rel="sponsored nofollow">Zu Amazon</a></div>');
+    expect(out).toContain('class="cta-box"');
+    expect(out).toContain('class="werbung"');
+    expect(out).toContain('class="button"');
+    expect(out).not.toContain("style=");
+    expect(out).toContain('rel="noopener noreferrer nofollow sponsored"');
+  });
   it("h1 wird zu h2", () => expect(sanitize("<h1>T</h1>")).toBe("<h2>T</h2>"));
   it("stripHtml", () => expect(stripHtml("<p>a <b>b</b></p>\n<p>c</p>")).toBe("a b c"));
   it("null-sicher", () => expect(sanitize(null)).toBe(""));

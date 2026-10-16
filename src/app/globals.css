@@ -171,6 +171,87 @@ button, [role="button"], summary { cursor: pointer; }
 .prose-fp .crit-bar-value { font-weight: 800; font-variant-numeric: tabular-nums; font-size: .95rem; }
 .prose-fp h2[id] { scroll-margin-top: 7rem; }
 
+/* Amazon-CTA im Fließtext: der Editor entfernt Inline-Styles, die Klasse bleibt. */
+.cta-box {
+  margin: 1.5rem 0;
+  padding: 1.15rem 1.15rem 1.25rem;
+  border: 2px solid var(--border);
+  border-radius: 1rem;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+.cta-box > * + * { margin-top: .85rem; }
+.cta-box p { margin: 0; }
+.cta-box .werbung,
+.cta-box .cta-label,
+.cta-box .label {
+  display: inline-block;
+  margin: 0 0 .35rem;
+  padding: .15rem .55rem;
+  border-radius: 9999px;
+  background: var(--mid-soft);
+  color: var(--mid);
+  font-size: .72rem;
+  font-weight: 800;
+  letter-spacing: .04em;
+  line-height: 1.3;
+  text-transform: uppercase;
+}
+.cta-box a[href^="http"],
+.cta-box a.button,
+.cta-box a.cta-button,
+.cta-box a.btn,
+.cta-box .button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 100%;
+  min-height: 3rem;
+  margin-top: .35rem;
+  padding: .8rem 1.15rem;
+  border-radius: 9999px;
+  background: var(--accent);
+  color: #fff;
+  font-weight: 800;
+  line-height: 1.35;
+  text-align: center;
+  text-decoration: none;
+  box-shadow: var(--shadow);
+  overflow-wrap: anywhere;
+}
+.dark .cta-box a[href^="http"],
+.dark .cta-box a.button,
+.dark .cta-box a.cta-button,
+.dark .cta-box a.btn,
+.dark .cta-box .button { color: #1c1008; }
+.cta-box a[href^="http"] strong,
+.cta-box a.button strong { font-weight: 800; color: inherit; }
+.cta-box p:last-child {
+  color: var(--fg-muted);
+  font-size: .85rem;
+  line-height: 1.5;
+}
+.cta-box a[href^="http"]:hover,
+.cta-box a.button:hover,
+.cta-box a.cta-button:hover,
+.cta-box a.btn:hover {
+  color: #fff;
+  background: var(--accent-strong);
+  text-decoration: none;
+}
+.dark .cta-box a[href^="http"]:hover,
+.dark .cta-box a.button:hover,
+.dark .cta-box a.cta-button:hover,
+.dark .cta-box a.btn:hover { color: #1c1008; }
+@media (min-width: 40rem) {
+  .cta-box a[href^="http"],
+  .cta-box a.button,
+  .cta-box a.cta-button,
+  .cta-box a.btn,
+  .cta-box .button { width: auto; min-width: 16rem; }
+}
+
 /* ---------------------------------------------------------------------------
    Einheitliches Hover-/Tap-Feedback für alles Klickbare.
    :where() hat Spezifität 0 – eigene hover:-Utilities der Komponenten gewinnen.
