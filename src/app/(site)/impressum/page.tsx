@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { PageShell } from "@/components/page-shell";
-import { OPERATOR } from "@/lib/site";
+import { AMAZON_PARTNER_NOTICE, OPERATOR } from "@/lib/site";
 
 export const metadata: Metadata = { title: "Impressum", description: "Anbieterkennzeichnung von Futterprüfer.de nach § 5 DDG: Anbieter, Kontakt, Register und inhaltlich Verantwortliche.", robots: { index: true, follow: true }, alternates: { canonical: "/impressum" } };
 
@@ -43,6 +43,9 @@ export default function ImpressumPage() {
 
         <h2>Verbraucherstreitbeilegung</h2>
         <p>Wir sind nicht bereit oder verpflichtet, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.</p>
+
+        <h2>Amazon-Partnerprogramm</h2>
+        <p>{AMAZON_PARTNER_NOTICE}</p>
       </div>
     </PageShell>
   );
