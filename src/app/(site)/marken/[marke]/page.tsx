@@ -3,6 +3,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { ReviewCard } from "@/components/review-card";
+import { BrandProfile } from "@/components/brand-profile";
+import { getBrandInfo } from "@/lib/brand-info";
 import { getBrandBySlug, getBrandReviews } from "@/lib/brands";
 import { trimMetaDescription } from "@/lib/seo";
 
@@ -22,6 +24,7 @@ export default async function BrandPage({ params }: PageProps<"/marken/[marke]">
   const b = await getBrandBySlug((await params).marke);
   if (!b) notFound();
   const reviews = await getBrandReviews(b.brand);
+  const info = getBrandInfo(b.slug);
   const best = reviews[0];
   const worst = reviews[reviews.length - 1];
   return (
@@ -39,6 +42,7 @@ export default async function BrandPage({ params }: PageProps<"/marken/[marke]">
           <li key={r.id}><ReviewCard review={r} /></li>
         ))}
       </ul>
+      {info && <BrandProfile info={info} />}
       <p className="mt-10 flex flex-wrap gap-x-6 gap-y-2 text-sm font-semibold">
         <Link href="/marken" className="text-brand hover:underline">Alle Marken</Link>
         <Link href={`/tests?marke=${encodeURIComponent(b.brand)}`} className="text-brand hover:underline">Tests von {b.brand} filtern und sortieren</Link>
