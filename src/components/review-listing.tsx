@@ -7,10 +7,18 @@ import { ReviewCard } from "./review-card";
 import { CompareProvider, CompareToggle } from "./compare";
 
 export async function ReviewListing({ basePath, filters, categoryId, showAnimal }: { basePath: string; filters: ReviewFilters; categoryId?: string; showAnimal?: boolean }) {
+  const scope = {
+    ...publishedWhere(),
+    ...(categoryId ? { categoryId } : {}),
+    ...(filters.tier ? { category: { animal: filters.tier } } : {}),
+  };
+  const brandRows = await prisma.review.findMany({ where: scope, select: { brand: true }, distinct: ["brand"], orderBy: { brand: "asc" } });
+  const brands = brandRows.map((b) => b.brand).filter(Boolean);
   const reviews = await prisma.review.findMany({
     where: {
       ...publishedWhere(),
       ...(categoryId ? { categoryId } : {}),
+      ...(filters.marke ? { brand: filters.marke } : {}),
       ...(filters.preis ? { priceClass: filters.preis } : {}),
       ...(filters.tier ? { category: { animal: filters.tier } } : {}),
       ...(filters.min > 0 ? { totalScore: { gte: filters.min } } : {}),
@@ -37,6 +45,16 @@ export async function ReviewListing({ basePath, filters, categoryId, showAnimal 
             {PRICE_CLASSES.map((p) => <option key={p} value={p}>{PRICE_CLASS_LABEL[p]}</option>)}
           </select>
         </label>
+        {brands.length > 1 && (
+          <label className="flex flex-col gap-1 text-xs font-bold uppercase tracking-wide text-muted">
+            Marke
+            <select name="marke" defaultValue={filters.marke ?? ""} className={field}>
+              <option value="">Alle Marken</option>
+              {filters.marke && !brands.includes(filters.marke) && <option value={filters.marke}>{filters.marke}</option>}
+              {brands.map((b) => <option key={b} value={b}>{b}</option>)}
+            </select>
+          </label>
+        )}
         {showAnimal && (
           <label className="flex flex-col gap-1 text-xs font-bold uppercase tracking-wide text-muted">
             Tierart

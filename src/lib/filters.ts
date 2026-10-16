@@ -9,7 +9,7 @@ export type SortKey = keyof typeof SORTS;
 export const PRICE_CLASSES = ["GUENSTIG", "MITTEL", "PREMIUM"] as const;
 export type PriceClassKey = (typeof PRICE_CLASSES)[number];
 
-export type ReviewFilters = { sort: SortKey; preis: PriceClassKey | null; tier: "HUND" | "KATZE" | null; min: number };
+export type ReviewFilters = { sort: SortKey; preis: PriceClassKey | null; tier: "HUND" | "KATZE" | null; min: number; marke: string | null };
 
 type Raw = Record<string, string | string[] | undefined> | null | undefined;
 const one = (v: string | string[] | undefined) => (Array.isArray(v) ? v[0] : v);
@@ -19,11 +19,13 @@ export function parseFilters(sp: Raw): ReviewFilters {
   const preis = one(sp?.preis);
   const tier = one(sp?.tier);
   const min = Number(one(sp?.min));
+  const marke = one(sp?.marke)?.trim().slice(0, 80) || null;
   return {
     sort: sort && sort in SORTS ? (sort as SortKey) : "punkte",
     preis: preis && (PRICE_CLASSES as readonly string[]).includes(preis) ? (preis as PriceClassKey) : null,
     tier: tier === "HUND" || tier === "KATZE" ? tier : null,
     min: Number.isFinite(min) ? Math.min(100, Math.max(0, Math.round(min))) : 0,
+    marke,
   };
 }
 

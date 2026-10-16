@@ -3,15 +3,17 @@ import { orderByFor, parseCompareIds, parseFilters } from "./filters";
 
 describe("parseFilters", () => {
   it("Defaults bei leer/null", () => {
-    expect(parseFilters(null)).toEqual({ sort: "punkte", preis: null, tier: null, min: 0 });
-    expect(parseFilters({})).toEqual({ sort: "punkte", preis: null, tier: null, min: 0 });
+    expect(parseFilters(null)).toEqual({ sort: "punkte", preis: null, tier: null, min: 0, marke: null });
+    expect(parseFilters({})).toEqual({ sort: "punkte", preis: null, tier: null, min: 0, marke: null });
   });
   it("ignoriert ungültige Werte", () => {
-    expect(parseFilters({ sort: "drop table", preis: "BILLIG", tier: "PFERD", min: "abc" })).toEqual({ sort: "punkte", preis: null, tier: null, min: 0 });
+    expect(parseFilters({ sort: "drop table", preis: "BILLIG", tier: "PFERD", min: "abc" })).toEqual({ sort: "punkte", preis: null, tier: null, min: 0, marke: null });
   });
   it("übernimmt gültige Werte und begrenzt min", () => {
-    expect(parseFilters({ sort: "neu", preis: "PREMIUM", tier: "KATZE", min: "150" })).toEqual({ sort: "neu", preis: "PREMIUM", tier: "KATZE", min: 100 });
+    expect(parseFilters({ sort: "neu", preis: "PREMIUM", tier: "KATZE", min: "150" })).toEqual({ sort: "neu", preis: "PREMIUM", tier: "KATZE", min: 100, marke: null });
     expect(parseFilters({ sort: ["preis_auf", "neu"] }).sort).toBe("preis_auf");
+    expect(parseFilters({ marke: "  mammaly " }).marke).toBe("mammaly");
+    expect(parseFilters({ marke: "" }).marke).toBeNull();
   });
   it("orderBy", () => expect(orderByFor("punkte")[0]).toEqual({ totalScore: "desc" }));
 });
