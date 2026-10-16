@@ -46,7 +46,8 @@ const OPTIONS: sanitizeHtml.IOptions = {
     "table", "thead", "tbody", "tr", "th", "td", "code", "pre", "span", "div",
   ],
   allowedAttributes: {
-    a: ["href", "title", "target", "rel"],
+    // class liegt zusätzlich auf "*": .cta-box und Button-Klassen bleiben, style nicht.
+    a: ["href", "title", "target", "rel", "class"],
     img: ["src", "alt", "width", "height", "loading"],
     th: ["colspan", "rowspan", "scope"],
     td: ["colspan", "rowspan"],
