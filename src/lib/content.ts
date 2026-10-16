@@ -3,7 +3,7 @@ import { autolinkUrls } from "./autolink";
 import { cache } from "react";
 import { prisma } from "@/lib/db";
 import { blogCardSelect, publishedWhere, reviewCardSelect } from "@/lib/queries";
-import { fitsAnimal, mentionedAnimals, type AnimalKind } from "@/lib/animals";
+import { fitsAnimal, subjectAnimal, type AnimalKind } from "@/lib/animals";
 import { sanitize, stripHtml } from "@/lib/sanitize";
 import { linkify, type LinkTerm } from "@/lib/linkify";
 
@@ -75,8 +75,8 @@ export async function getPostsForReview(r: { brand: string; keyword: string; key
 
 /** Tests zum Fachartikel über Tags, eingeschränkt auf die genannte Tierart. */
 export async function getReviewsForPost(p: { title: string; keywords: string[]; excerpt?: string; bodyHtml: string }, take = 3) {
-  const animals = mentionedAnimals([p.title, p.excerpt ?? "", ...p.keywords].join(" "));
-  const animalWhere = animals.length === 1 ? { category: { animal: animals[0] } } : {};
+  const animal = subjectAnimal(p.title, p.excerpt, p.keywords);
+  const animalWhere = animal ? { category: { animal } } : {};
   const tags = tagsOf(p.keywords);
   if (tags.length) {
     const tagged = await prisma.review.findMany({
