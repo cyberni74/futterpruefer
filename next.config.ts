@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import type { Redirect } from "next/dist/lib/load-custom-routes";
 import { CANONICAL_ORIGIN, REDIRECT_HOSTS } from "./src/lib/site";
 
 const isDev = process.env.NODE_ENV !== "production";
@@ -41,7 +42,7 @@ const nextConfig: NextConfig = {
   // OG-Bilder lesen lokale Produktbilder aus /public
   outputFileTracingIncludes: { "/[kategorie]/[slug]/opengraph-image": ["./public/demo/**", "./public/uploads/**"] },
   async redirects() {
-    const rules: Array<{ source: string; destination: string; statusCode?: 301; permanent?: boolean; has?: Array<{ type: "host"; value: string }> }> = [
+    const rules: Redirect[] = [
       { source: "/ueber-mich", destination: "/team", permanent: true },
       // Frühere Profil-URLs unter /team/… gibt es nicht mehr.
       { source: "/team/:slug", destination: "/team", permanent: true },

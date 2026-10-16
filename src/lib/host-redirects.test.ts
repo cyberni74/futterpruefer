@@ -4,6 +4,7 @@ import { CANONICAL_ORIGIN, REDIRECT_HOSTS } from "./site";
 
 describe("Host-Weiterleitungen", () => {
   it("schickt www und vercel.app per 301 auf https://futterpruefer.de, nicht auf die Umlaut-Domain", async () => {
+    if (!nextConfig.redirects) throw new Error("redirects fehlen in next.config");
     const rules = await nextConfig.redirects();
     const hostRules = rules.filter((rule) => rule.has?.some((h) => h.type === "host"));
     expect(hostRules).toHaveLength(REDIRECT_HOSTS.length);
