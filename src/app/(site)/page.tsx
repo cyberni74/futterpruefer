@@ -56,14 +56,13 @@ export default async function Home() {
   const [pom, ticker, reviews, posts, leaders, latestUpdate, counts] = await Promise.all([
     getProductOfMonth(),
     getTickerEntries(),
-    getLatestReviews(10),
-    getLatestPosts(5),
+    getLatestReviews(21),
+    getLatestPosts(21),
     getCategoryLeaders(),
     getNewestReviewUpdate(),
     getPublishedCounts(),
   ]);
-  const guideHrefs = new Set<string>(HOME_GUIDES.map((guide) => guide.href));
-  const extraPosts = posts.filter((post) => !guideHrefs.has(`/blog/${post.slug}`));
+  const extraPosts = posts;
 
   return (
     <>
@@ -85,11 +84,11 @@ export default async function Home() {
           {reviews.length === 0 ? (
             <p className="text-muted">Noch keine Tests veröffentlicht.</p>
           ) : (
-            <ul className="grid gap-x-5 gap-y-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            <ul className="grid grid-cols-3 gap-x-2 gap-y-6 sm:gap-x-4 sm:gap-y-8 lg:gap-x-5">
               {reviews.map((r, i) => (
                 <li key={r.id}>
-                  <Reveal delay={(i % 4) * 0.05} className="h-full">
-                    <ReviewCard review={r} priority={false} />
+                  <Reveal delay={(i % 3) * 0.05} className="h-full">
+                    <ReviewCard review={r} priority={false} variant="tile" />
                   </Reveal>
                 </li>
               ))}
@@ -157,11 +156,11 @@ export default async function Home() {
             ))}
           </ul>
           {extraPosts.length > 0 && (
-            <ul className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            <ul className="mt-8 grid grid-cols-3 gap-2 sm:gap-4 lg:gap-5">
               {extraPosts.map((p, i) => (
                 <li key={p.id}>
                   <Reveal delay={(i % 3) * 0.05} className="h-full">
-                    <BlogCard post={p} />
+                    <BlogCard post={p} variant="tile" />
                   </Reveal>
                 </li>
               ))}
