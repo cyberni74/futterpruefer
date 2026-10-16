@@ -10,6 +10,7 @@ import { ImageField } from "./image-field";
 import { PublishField } from "./publish-field";
 import { RichEditor } from "./rich-editor";
 import { SeoPanel } from "./seo-panel";
+import { AuthorField } from "./author-field";
 import { Field, Section, describe, inputCls, textareaCls } from "./ui";
 
 export type BlogEditorData = {
@@ -24,6 +25,7 @@ export type BlogEditorData = {
   metaTitle: string;
   metaDescription: string;
   keywords: string[];
+  authorSlug: string;
   publishMode: PublishMode;
   scheduledAt: string;
 };
@@ -139,6 +141,7 @@ export function BlogEditor({
           <Field id="excerpt" label="Anreißer" error={errors.excerpt} hint={`${excerpt.length}/400 Zeichen – erscheint in Übersichten und Teasern.`}>
             <textarea id="excerpt" name="excerpt" value={excerpt} onChange={(e) => setExcerpt(e.target.value)} rows={3} maxLength={400} className={textareaCls} {...describe("excerpt", errors.excerpt, true)} />
           </Field>
+          <AuthorField value={initial.authorSlug} error={errors.authorSlug} />
         </Section>
 
         <Section title="Titelbild" id="sec-bild">

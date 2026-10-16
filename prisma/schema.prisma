@@ -98,6 +98,8 @@ model Review {
   metaTitle       String   @default("")
   metaDescription String   @default("")
   keywords        String[] @default([])
+  /// Slug aus src/lib/authors.ts. Leer = Standardautor.
+  authorSlug  String?
 
   status      Status    @default(DRAFT)
   publishedAt DateTime?
@@ -122,6 +124,8 @@ model BlogPost {
   metaTitle       String    @default("")
   metaDescription String    @default("")
   keywords        String[]  @default([])
+  /// Slug aus src/lib/authors.ts. Leer = Standardautor.
+  authorSlug      String?
   status          Status    @default(DRAFT)
   publishedAt     DateTime?
   createdAt       DateTime  @default(now())

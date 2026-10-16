@@ -1,15 +1,20 @@
-import { SITE } from "./site";
+import { authorPath, resolveAuthor } from "./authors";
+import { absoluteUrl } from "./site";
 
 /**
- * Öffentliche Urheberschaft für Tests, Blog und Lexikon.
- * Ein in der Datenbank oder im Freitext gespeicherter Personenname wird nicht ausgegeben.
+ * Autor als schema.org Person.
+ * Entspricht den Autoren-Empfehlungen für Article/Review:
+ * @type Person, name nur der Name, url zur sichtbaren Stelle, jobTitle getrennt.
+ * sameAs nur, wenn ein Profil bereits auf der Seite steht – das ist nicht der Fall.
  */
-export function contentAuthor(storedName?: string | null) {
-  // Gespeicherte Personennamen werden nicht ausgegeben.
-  void storedName;
+export function contentAuthor(storedSlug?: string | null) {
+  const author = resolveAuthor(storedSlug);
+  const url = absoluteUrl(authorPath(author));
   return {
-    "@type": "Organization" as const,
-    name: SITE.name,
-    url: SITE.url,
+    "@type": "Person" as const,
+    "@id": url,
+    name: author.name,
+    url,
+    jobTitle: author.jobTitle,
   };
 }

@@ -240,6 +240,14 @@ describe("reviewSchema", () => {
     const r = reviewSchema.safeParse(reviewFormToRaw(reviewFd({ imageUrl: "/uploads/x.webp", imageAlt: "" })));
     expect(r.success).toBe(false);
   });
+  it("lässt den Autor leer für den Standard und lehnt unbekannte Namen ab", () => {
+    const empty = reviewSchema.safeParse(reviewFormToRaw(reviewFd()));
+    expect(empty.success && empty.data.authorSlug).toBe(null);
+    const known = reviewSchema.safeParse(reviewFormToRaw(reviewFd({ authorSlug: "beytullah-coscun" })));
+    expect(known.success && known.data.authorSlug).toBe("beytullah-coscun");
+    const bad = reviewSchema.safeParse(reviewFormToRaw(reviewFd({ authorSlug: "Dr. L." })));
+    expect(bad.success).toBe(false);
+  });
 });
 
 describe("weitere Schemas", () => {
@@ -249,6 +257,12 @@ describe("weitere Schemas", () => {
     fd.set("slug", "getreide-im-hundefutter");
     fd.set("publishMode", "draft");
     expect(blogSchema.safeParse(blogFormToRaw(fd)).success).toBe(true);
+    fd.set("authorSlug", "beytullah-coscun");
+    const known = blogSchema.safeParse(blogFormToRaw(fd));
+    expect(known.success && known.data.authorSlug).toBe("beytullah-coscun");
+    fd.set("authorSlug", "erfundene Person");
+    expect(blogSchema.safeParse(blogFormToRaw(fd)).success).toBe(false);
+    fd.set("authorSlug", "");
     fd.set("publishMode", "now");
     expect(blogSchema.safeParse(blogFormToRaw(fd)).success).toBe(false);
   });

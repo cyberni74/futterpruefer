@@ -7,6 +7,7 @@ import { FpImage } from "@/components/fp-image";
 import { PreviewBanner } from "@/components/admin/preview-banner";
 import { STATUS_LABEL, statusKey } from "@/lib/admin/publish";
 import { formatDateTime } from "@/lib/admin/datetime";
+import { resolveAuthor } from "@/lib/authors";
 import { PRICE_CLASS_LABEL } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
@@ -31,6 +32,7 @@ export default async function ReviewPreviewPage({ params }: { params: Promise<{ 
       <p className="mt-2 text-sm text-muted">
         {r.productName} · Preisklasse {PRICE_CLASS_LABEL[r.priceClass]}
         {r.pricePerKg ? ` · ${r.pricePerKg.toString().replace(".", ",")} €/kg` : ""}
+        {` · Von ${resolveAuthor(r.authorSlug).name}`}
       </p>
       <div className="mt-6 grid gap-3 sm:grid-cols-2">
         <figure>

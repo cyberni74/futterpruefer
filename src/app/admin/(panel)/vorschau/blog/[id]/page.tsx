@@ -6,6 +6,7 @@ import { FpImage } from "@/components/fp-image";
 import { PreviewBanner } from "@/components/admin/preview-banner";
 import { STATUS_LABEL, statusKey } from "@/lib/admin/publish";
 import { formatDateTime } from "@/lib/admin/datetime";
+import { resolveAuthor } from "@/lib/authors";
 
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = { title: "Vorschau Blogartikel" };
@@ -24,6 +25,7 @@ export default async function BlogPreviewPage({ params }: { params: Promise<{ id
       />
       <p className="text-sm font-semibold text-brand">Fachblog</p>
       <h1 className="mt-1 text-3xl font-extrabold md:text-4xl">{p.title}</h1>
+      <p className="mt-2 text-sm text-muted">Von {resolveAuthor(p.authorSlug).name}</p>
       {p.excerpt && <p className="mt-3 text-lg text-muted">{p.excerpt}</p>}
       <div className="relative mt-6 aspect-[16/9] overflow-hidden rounded-3xl border border-border bg-bg-soft">
         <FpImage src={p.imageUrl} alt={p.imageAlt} blur={p.imageBlur} sizes="(min-width: 768px) 768px, 100vw" priority />

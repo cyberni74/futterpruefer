@@ -16,6 +16,7 @@ import { ListInput } from "./list-input";
 import { PublishField } from "./publish-field";
 import { RichEditor } from "./rich-editor";
 import { SeoPanel } from "./seo-panel";
+import { AuthorField } from "./author-field";
 import { Field, Section, describe, inputCls, textareaCls } from "./ui";
 
 export type ReviewEditorData = {
@@ -54,6 +55,7 @@ export type ReviewEditorData = {
   metaTitle: string;
   metaDescription: string;
   keywords: string[];
+  authorSlug: string;
   publishMode: PublishMode;
   scheduledAt: string;
   updatedAt: string | null;
@@ -296,6 +298,7 @@ export function ReviewEditor({ initial, categories, brands = [], action, badge, 
                   />
                 </Field>
               </div>
+              <AuthorField value={initial.authorSlug} error={errors.authorSlug} />
             </Section>
 
             <Section title="Produktbilder" id="sec-bild" description="Zwei Pflichtbilder je Test: die Verpackung (Hauptbild, Vorschaukarten, Social-Media-Bild) und das Futter selbst ohne Verpackung (Kroketten, Brocken, Tropfen …).">
