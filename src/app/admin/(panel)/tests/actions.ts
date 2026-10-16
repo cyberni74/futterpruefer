@@ -73,6 +73,7 @@ export async function saveReview(id: string | null, _prev: ActionResult | null, 
     metaTitle: v.metaTitle,
     metaDescription: v.metaDescription,
     keywords: v.keywords,
+    authorSlug: v.authorSlug,
     status: pub.status,
     publishedAt: pub.publishedAt,
   };

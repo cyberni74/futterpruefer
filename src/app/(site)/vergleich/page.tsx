@@ -11,7 +11,7 @@ import { Breadcrumbs } from "@/components/breadcrumbs";
 import { ScoreBadge } from "@/components/score-badge";
 import { FpImage } from "@/components/fp-image";
 
-export const metadata: Metadata = { title: "Produktvergleich", robots: { index: false, follow: true } };
+export const metadata: Metadata = { title: "Produktvergleich", robots: { index: false, follow: true }, alternates: { canonical: "/vergleich" } };
 
 const TONE = { gut: "bg-good", mittel: "bg-mid-fill", schlecht: "bg-bad" } as const;
 
@@ -23,7 +23,7 @@ export default async function ComparePage({ searchParams }: PageProps<"/vergleic
 
   return (
     <div className="mx-auto max-w-6xl px-4">
-      <Breadcrumbs items={[{ label: "Tests", href: "/tests" }, { label: "Vergleich" }]} />
+      <Breadcrumbs items={[{ label: "Tests", href: "/tests" }, { label: "Vergleich", href: "/vergleich" }]} />
       <h1 className="mt-4 text-3xl font-extrabold md:text-5xl">Produktvergleich</h1>
       {items.length < 2 ? (
         <p className="mt-6 text-lg text-muted">Wählen Sie in einer <Link href="/tests" className="font-semibold text-brand underline">Testübersicht</Link> zwei bis drei Produkte zum Vergleich aus.</p>

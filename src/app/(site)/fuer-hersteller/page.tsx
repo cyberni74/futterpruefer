@@ -7,7 +7,7 @@ export const metadata: Metadata = { title: "Für Hersteller", description: "Prod
 
 export default function ManufacturerPage() {
   return (
-    <PageShell crumb="Für Hersteller" title="Für Hersteller" intro="Sie möchten ein Produkt prüfen lassen? Wir freuen uns über Einreichungen.">
+    <PageShell crumb="Für Hersteller" path="/fuer-hersteller" title="Für Hersteller" intro="Sie möchten ein Produkt prüfen lassen? Wir freuen uns über Einreichungen.">
       <div role="note" className="flex gap-3 rounded-2xl border-2 border-accent bg-surface p-5">
         <ShieldAlert className="size-7 shrink-0 text-accent" aria-hidden />
         <p className="font-semibold">Wichtig: Eine Einreichung kauft keine Note. Bewertet wird ausschließlich nach der offengelegten Methodik – auch dann, wenn das Ergebnis schlecht ausfällt. Eingereichte Produkte werden nicht bevorzugt behandelt.</p>
@@ -16,7 +16,7 @@ export default function ManufacturerPage() {
         <h2>So funktioniert die Einreichung</h2>
         <ol>
           <li>Anfrage über das Kontaktformular (Typ „Herstelleranfrage“) senden</li>
-          <li>Vollständige Deklaration, analytische Bestandteile und Zusatzstoffe bereitstellen</li>
+          <li>Vollständige Deklaration, analytische Bestandteile und Zusatzstoffe bereitstellen. Sie können zusätzlich prüfbare Unterlagen einreichen (z. B. unterschriebene Herstellererklärungen oder Laboranalysen des Endprodukts). Diese bewerten wir im Kriterium „Transparenz / Herstellerunterlagen“ nach festen Stufen. Eine Einreichung kauft auch hier keine Note.</li>
           <li>Prüfung nach der <Link href="/methodik">Methodik</Link> – der Zeitpunkt der Veröffentlichung liegt bei der Redaktion</li>
           <li>Bei sachlichen Fehlern können Sie eine Korrektur anregen; die Bewertung selbst ist nicht verhandelbar</li>
         </ol>

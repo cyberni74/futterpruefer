@@ -5,11 +5,29 @@ import { absoluteUrl } from "@/lib/site";
 
 export type Crumb = { label: string; href?: string };
 
+/** Start plus übergebene Krümel. Die aktuelle Seite trägt `href`, wird aber nicht verlinkt. */
+export function breadcrumbTrail(items: Crumb[]): Crumb[] {
+  return [{ label: "Start", href: "/" }, ...items];
+}
+
+export function breadcrumbList(items: Crumb[]) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList" as const,
+    itemListElement: breadcrumbTrail(items).map((crumb, index) => ({
+      "@type": "ListItem" as const,
+      position: index + 1,
+      name: crumb.label,
+      ...(crumb.href ? { item: absoluteUrl(crumb.href) } : {}),
+    })),
+  };
+}
+
 const pill = "inline-flex min-h-10 items-center gap-1.5 rounded-full px-3.5 text-sm font-semibold text-muted transition-colors hover:bg-brand-soft hover:text-brand-strong";
 
 /** Handy: große Zurück-Pille zur übergeordneten Seite. Desktop: Pfad aus Pillen mit hervorgehobener aktueller Seite. */
 export function Breadcrumbs({ items }: { items: Crumb[] }) {
-  const all: Crumb[] = [{ label: "Start", href: "/" }, ...items];
+  const all = breadcrumbTrail(items);
   const parent = [...all].slice(0, -1).reverse().find((c) => c.href) ?? all[0];
   return (
     <>
@@ -42,13 +60,7 @@ export function Breadcrumbs({ items }: { items: Crumb[] }) {
           })}
         </ol>
       </nav>
-      <JsonLd
-        data={{
-          "@context": "https://schema.org",
-          "@type": "BreadcrumbList",
-          itemListElement: all.map((c, i) => ({ "@type": "ListItem", position: i + 1, name: c.label, ...(c.href ? { item: absoluteUrl(c.href) } : {}) })),
-        }}
-      />
+      <JsonLd data={breadcrumbList(items)} />
     </>
   );
 }

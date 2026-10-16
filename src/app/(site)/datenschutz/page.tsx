@@ -6,7 +6,7 @@ export const metadata: Metadata = { title: "Datenschutzerklärung", description:
 
 export default function DatenschutzPage() {
   return (
-    <PageShell crumb="Datenschutz" title="Datenschutzerklärung">
+    <PageShell crumb="Datenschutz" path="/datenschutz" title="Datenschutzerklärung">
       <div className="prose-fp">
         <h2>1. Verantwortlicher</h2>
         <p>

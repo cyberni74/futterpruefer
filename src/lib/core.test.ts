@@ -1,11 +1,19 @@
 import { describe, expect, it } from "vitest";
-import { clampScore, harmfulFailed, MAX_TOTAL, ratingFor, totalScore } from "./scoring";
+import { clampScore, CRITERIA, harmfulFailed, MAX_TOTAL, METHODOLOGY_STAND, PUBLISHED_CRITERIA, PUBLISHED_MAX_TOTAL, ratingFor, totalScore } from "./scoring";
 import { slugify } from "./slug";
 import { sanitize, stripHtml } from "./sanitize";
 import { formatDate } from "./site";
 
 describe("scoring", () => {
   it("Maximum ist 100", () => expect(MAX_TOTAL).toBe(100));
+  it("veröffentlicht 27/18/18/13/9/5/10 und rechnet gespeicherte Noten nicht um", () => {
+    expect(METHODOLOGY_STAND).toBe("16.10.2026");
+    expect(PUBLISHED_CRITERIA.map((criterion) => criterion.max)).toEqual([27, 18, 18, 13, 9, 5, 10]);
+    expect(PUBLISHED_MAX_TOTAL).toBe(100);
+    expect(CRITERIA.map((criterion) => criterion.max)).toEqual([30, 20, 20, 15, 10, 5]);
+    expect(totalScore({ scoreRaw: 30, scoreHarmful: 20, scoreNutrients: 20, scoreDeclaration: 15, scoreNeeds: 10, scoreValue: 5 })).toBe(100);
+    expect(clampScore("scoreRaw", 30)).toBe(30);
+  });
   it("summiert und begrenzt pro Kriterium", () => {
     expect(totalScore({ scoreRaw: 99, scoreHarmful: 20, scoreNutrients: 20, scoreDeclaration: 15, scoreNeeds: 10, scoreValue: 5 })).toBe(100);
     expect(totalScore({ scoreRaw: -5, scoreHarmful: 10 })).toBe(10);
@@ -53,6 +61,34 @@ describe("sanitize", () => {
   it("externe Links bekommen rel/target", () => {
     expect(sanitize('<a href="https://x.de">x</a>')).toContain('rel="noopener noreferrer nofollow"');
   });
+  it("behält sponsored und nofollow an Affiliate-Links", () => {
+    const out = sanitize('<a href="https://shop.example/p" rel="sponsored nofollow">zum Shop</a>');
+    expect(out).toContain('rel="noopener noreferrer nofollow sponsored"');
+    expect(out).toContain('target="_blank"');
+  });
+  it("setzt sponsored bei Amazon-Tag und bei amazon.de, nicht bei anderen Shops", () => {
+    const tagOnly = sanitize('<a href="https://www.amazon.de/dp/B07KCS7YX1?tag=cyberni7400-21">Amazon</a>');
+    expect(tagOnly).toContain('rel="noopener noreferrer nofollow sponsored"');
+    const encoded = sanitize('<a href="https://www.amazon.de/dp/B07KCS7YX1?tag=cyberni7400-21&amp;th=1">Amazon</a>');
+    expect(encoded).toContain("sponsored");
+    const liveProduct = sanitize('<a href="https://www.amazon.de/dp/B07KCS7YX1">amazon.de</a>');
+    const liveRank = sanitize('<a href="https://www.amazon.de/gp/bestsellers/pet-supplies/470653031">Bestseller</a>');
+    expect(liveProduct).toContain('rel="noopener noreferrer nofollow sponsored"');
+    expect(liveRank).toContain('rel="noopener noreferrer nofollow sponsored"');
+    const shop = sanitize('<a href="https://www.fressnapf.de/p">Fressnapf</a>');
+    expect(shop).toContain('rel="noopener noreferrer nofollow"');
+    expect(shop).not.toContain("sponsored");
+    const storage = sanitize('<a href="https://s3.amazonaws.com/bucket/bild.webp">Bild</a>');
+    expect(storage).not.toContain("sponsored");
+  });
+  it("behält cta-box und Button-Klassen, entfernt Inline-Styles", () => {
+    const out = sanitize('<div class="cta-box" style="border:1px solid red"><span class="werbung">Werbung</span><a class="button" href="https://www.amazon.de/dp/B07D4T5XVT?tag=cyberni7400-21" rel="sponsored nofollow">Zu Amazon</a></div>');
+    expect(out).toContain('class="cta-box"');
+    expect(out).toContain('class="werbung"');
+    expect(out).toContain('class="button"');
+    expect(out).not.toContain("style=");
+    expect(out).toContain('rel="noopener noreferrer nofollow sponsored"');
+  });
   it("h1 wird zu h2", () => expect(sanitize("<h1>T</h1>")).toBe("<h2>T</h2>"));
   it("stripHtml", () => expect(stripHtml("<p>a <b>b</b></p>\n<p>c</p>")).toBe("a b c"));
   it("null-sicher", () => expect(sanitize(null)).toBe(""));
@@ -76,14 +112,46 @@ describe("hyphenateCategory", () => {
 });
 
 describe("Urheberschaft", () => {
-  it("gibt immer die Organisation aus, auch wenn ein Name gespeichert ist", async () => {
+  it("nennt eine Person aus der Autorenliste und übernimmt keine freien Namen", async () => {
     const { contentAuthor } = await import("./attribution");
-    const { SITE } = await import("./site");
-    const author = contentAuthor("gespeicherter Name");
-    expect(author).toEqual({ "@type": "Organization", name: SITE.name, url: SITE.url });
-    expect(author["@type"]).toBe("Organization");
-    expect(JSON.stringify(author)).not.toContain("gespeicherter Name");
-    expect(JSON.stringify(contentAuthor(null))).toBe(JSON.stringify(author));
+    const { DEFAULT_AUTHOR, authorPath } = await import("./authors");
+    const { absoluteUrl, SITE } = await import("./site");
+    const author = contentAuthor(null);
+    const url = absoluteUrl(authorPath(DEFAULT_AUTHOR));
+    expect(author).toEqual({
+      "@type": "Person",
+      "@id": url,
+      name: DEFAULT_AUTHOR.name,
+      url,
+      jobTitle: DEFAULT_AUTHOR.jobTitle,
+    });
+    expect(author.name).toBe("Beytullah Coscun");
+    expect(author.name).not.toMatch(/von |Futterprüfer/i);
+    expect(author.url).toMatch(/^https:\/\/.+\/team#beytullah-coscun$/);
+    expect(author).not.toHaveProperty("sameAs");
+    expect(author.jobTitle).not.toBe(author.name);
+    const unknown = contentAuthor("gespeicherter Name");
+    expect(JSON.stringify(unknown)).not.toContain("gespeicherter Name");
+    expect(unknown).toEqual(author);
+    expect(contentAuthor(DEFAULT_AUTHOR.slug)).toEqual(author);
+    expect(SITE.name).toBe("Futterprüfer");
+  });
+});
+
+describe("resolveSiteUrl", () => {
+  it("setzt Umlaut-, www- und Produktionshosts auf die Hauptdomain", async () => {
+    const { resolveSiteUrl, CANONICAL_ORIGIN } = await import("./site");
+    expect(CANONICAL_ORIGIN).toBe("https://futterpruefer.de");
+    expect(resolveSiteUrl(undefined)).toBe(CANONICAL_ORIGIN);
+    expect(resolveSiteUrl("")).toBe(CANONICAL_ORIGIN);
+    expect(resolveSiteUrl("https://futterpruefer.de/")).toBe(CANONICAL_ORIGIN);
+    expect(resolveSiteUrl("https://www.futterpruefer.de")).toBe(CANONICAL_ORIGIN);
+    expect(resolveSiteUrl("https://xn--futterprfer-0hb.de")).toBe(CANONICAL_ORIGIN);
+    expect(resolveSiteUrl("https://futterprüfer.de/")).toBe(CANONICAL_ORIGIN);
+    expect(resolveSiteUrl("https://www.xn--futterprfer-0hb.de")).toBe(CANONICAL_ORIGIN);
+    expect(resolveSiteUrl("https://futterpruefer.vercel.app")).toBe(CANONICAL_ORIGIN);
+    expect(resolveSiteUrl("http://localhost:3001")).toBe("http://localhost:3001");
+    expect(resolveSiteUrl("https://futterpruefer-git-feature.vercel.app")).toBe("https://futterpruefer-git-feature.vercel.app");
   });
 });
 

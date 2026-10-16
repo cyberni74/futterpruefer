@@ -1,4 +1,6 @@
 import type { NextConfig } from "next";
+import type { Redirect } from "next/dist/lib/load-custom-routes";
+import { CANONICAL_ORIGIN, REDIRECT_HOSTS } from "./src/lib/site";
 
 const isDev = process.env.NODE_ENV !== "production";
 
@@ -40,18 +42,23 @@ const nextConfig: NextConfig = {
   // OG-Bilder lesen lokale Produktbilder aus /public
   outputFileTracingIncludes: { "/[kategorie]/[slug]/opengraph-image": ["./public/demo/**", "./public/uploads/**"] },
   async redirects() {
-    const rules: Array<{ source: string; destination: string; permanent: boolean; has?: Array<{ type: "host"; value: string }> }> = [
+    const rules: Redirect[] = [
       { source: "/ueber-mich", destination: "/team", permanent: true },
       // Frühere Profil-URLs unter /team/… gibt es nicht mehr.
       { source: "/team/:slug", destination: "/team", permanent: true },
     ];
-    // Alle bekannten vercel.app-Adressen des Projekts leiten auf die Hauptdomain (nur eine Adresse für Google).
-    // Nur aktiv, wenn NEXT_PUBLIC_SITE_URL auf eine echte Domain zeigt; Vorschau-Deployments bleiben erreichbar.
-    const site = (process.env.NEXT_PUBLIC_SITE_URL ?? "").replace(/\/$/, "");
-    if (site && !/vercel\.app|localhost|127\.0\.0\.1/.test(site)) {
-      for (const host of ["futterpruefer.vercel.app", "futterpruefer-bernhardehmer-3885s-projects.vercel.app", "futterpruefer-git-main-bernhardehmer-3885s-projects.vercel.app"]) {
-        rules.push({ source: "/:path*", has: [{ type: "host", value: host }], destination: `${site}/:path*`, permanent: true });
-      }
+    // www und die festen Produktions-vercel.app-Hosts → Hauptdomain, gleicher Pfad.
+    // Vorschau-URLs (*.vercel.app außer den festen Hosts) bleiben erreichbar.
+    // Die Umlaut-Domain selbst wird hier nicht umgeleitet: Vercel leitet futterpruefer.de
+    // derzeit an der Kante dorthin. Die Gegenrichtung in der App ergäbe eine Schleife,
+    // bis futterpruefer.de in den Domain-Einstellungen die Primärdomain ohne Redirect ist.
+    for (const host of REDIRECT_HOSTS) {
+      rules.push({
+        source: "/:path*",
+        has: [{ type: "host", value: host }],
+        destination: `${CANONICAL_ORIGIN}/:path*`,
+        statusCode: 301,
+      });
     }
     return rules;
   },

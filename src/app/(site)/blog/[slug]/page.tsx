@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import { notFound, permanentRedirect } from "next/navigation";
-import { seoTitle } from "@/lib/seo";
+import { seoTitle, trimMetaDescription } from "@/lib/seo";
 import { prisma } from "@/lib/db";
 import { blogCardSelect, findRedirect, getCategoryLeaders, getPostBySlug, publishedWhere } from "@/lib/queries";
 import { TopicLinks } from "@/components/topic-links";
 import { getReviewsForPost, renderArticle } from "@/lib/content";
 import { absoluteUrl, formatDate, SITE } from "@/lib/site";
 import { contentAuthor } from "@/lib/attribution";
+import { resolveAuthor } from "@/lib/authors";
 import { AuthorCredit } from "@/components/author-credit";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { FpImage } from "@/components/fp-image";
@@ -35,13 +36,13 @@ export async function generateMetadata({ params }: PageProps<"/blog/[slug]">): P
   const p = await getPostBySlug(slug);
   if (!p) return {};
   const title = p.metaTitle || p.title;
-  const description = p.metaDescription || p.excerpt;
+  const description = trimMetaDescription(p.metaDescription || p.excerpt);
   return {
     title: { absolute: seoTitle(title) },
     description,
     keywords: p.keywords,
     alternates: { canonical: `/blog/${p.slug}` },
-    openGraph: { type: "article", title, description, url: `/blog/${p.slug}`, publishedTime: p.publishedAt?.toISOString(), modifiedTime: p.updatedAt.toISOString(), authors: [SITE.name], images: p.imageUrl ? [{ url: p.imageUrl }] : [{ url: "/opengraph-image.png", width: 1200, height: 630 }] },
+    openGraph: { type: "article", title, description, url: `/blog/${p.slug}`, publishedTime: p.publishedAt?.toISOString(), modifiedTime: p.updatedAt.toISOString(), authors: [resolveAuthor(p.authorSlug).name], images: p.imageUrl ? [{ url: p.imageUrl }] : [{ url: "/opengraph-image.png", width: 1200, height: 630 }] },
   };
 }
 
@@ -78,21 +79,21 @@ export default async function PostPage({ params }: PageProps<"/blog/[slug]">) {
           inLanguage: "de-DE",
           mainEntityOfPage: url,
           ...(p.imageUrl ? { image: p.imageUrl.startsWith("http") ? p.imageUrl : absoluteUrl(p.imageUrl) } : {}),
-          author: contentAuthor(),
+          author: contentAuthor(p.authorSlug),
           publisher: { "@type": "Organization", name: SITE.name, url: SITE.url },
         }}
       />
-      <Breadcrumbs items={[{ label: "Fachblog", href: "/blog" }, { label: p.title }]} />
+      <Breadcrumbs items={[{ label: "Fachblog", href: "/blog" }, { label: p.title, href: `/blog/${p.slug}` }]} />
       <header className="mt-4">
         <h1 className="text-3xl font-extrabold leading-tight md:text-5xl">{p.title}</h1>
         <p className="mt-3 text-sm text-muted">
-          Von <AuthorCredit />
+          Von <AuthorCredit slug={p.authorSlug} />
           {p.publishedAt && <> · <time dateTime={p.publishedAt.toISOString()}>{formatDate(p.publishedAt)}</time> · Zuletzt aktualisiert: {formatDate(p.updatedAt)}</>}
         </p>
       </header>
       {p.imageUrl && (
         <figure className="relative mt-6 aspect-[16/9] overflow-hidden rounded-3xl bg-bg-soft">
-          <FpImage src={p.imageUrl} alt={p.imageAlt || p.title} blur={p.imageBlur} sizes="(min-width:768px) 736px, 100vw" priority />
+          <FpImage src={p.imageUrl} alt={p.imageAlt.trim() || `Titelbild: ${p.title}`} blur={p.imageBlur} sizes="(min-width:768px) 736px, 100vw" priority />
         </figure>
       )}
       <div className="mt-6 flex flex-wrap items-center justify-between gap-3">

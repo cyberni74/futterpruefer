@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { resolveSiteUrl } from "@/lib/site";
 
 export const newsletterSchema = z.object({
   email: z.string().trim().toLowerCase().email("Bitte gültige E-Mail-Adresse angeben.").max(200),
@@ -14,7 +15,7 @@ export function brevoConfig(env: Record<string, string | undefined>): BrevoConfi
   const apiKey = env.BREVO_API_KEY?.trim();
   const listId = Number(env.BREVO_LIST_ID);
   const templateId = Number(env.BREVO_DOI_TEMPLATE_ID);
-  const site = (env.NEXT_PUBLIC_SITE_URL ?? "").replace(/\/$/, "");
-  if (!apiKey || !Number.isInteger(listId) || listId <= 0 || !Number.isInteger(templateId) || templateId <= 0 || !site) return null;
-  return { apiKey, listId, templateId, redirectUrl: `${site}/newsletter/bestaetigt` };
+  const configured = env.NEXT_PUBLIC_SITE_URL?.trim();
+  if (!apiKey || !Number.isInteger(listId) || listId <= 0 || !Number.isInteger(templateId) || templateId <= 0 || !configured) return null;
+  return { apiKey, listId, templateId, redirectUrl: `${resolveSiteUrl(configured)}/newsletter/bestaetigt` };
 }

@@ -8,10 +8,12 @@ import { getLexikonEntries, getPostsForReview, renderArticle } from "@/lib/conte
 import { enhanceArticle } from "@/lib/article-html";
 import { consWithClaims, misleadingClaims, parseAnalysis, parseClaims, readingMinutes } from "@/lib/product-data";
 import { CRITERIA, type Scores } from "@/lib/scoring";
-import { productLabel, seoTitle } from "@/lib/seo";
+import { productReviewJsonLd, reviewHeadline } from "@/lib/review-schema";
+import { productLabel, seoTitle, trimMetaDescription } from "@/lib/seo";
 import { reviewPath } from "@/lib/urls";
 import { absoluteUrl, ANIMAL_LABEL, formatDate, MONTHS, PRICE_CLASS_LABEL, SITE } from "@/lib/site";
 import { contentAuthor } from "@/lib/attribution";
+import { resolveAuthor } from "@/lib/authors";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { AuthorCredit } from "@/components/author-credit";
 import { VerdictPanel } from "@/components/verdict-panel";
@@ -45,21 +47,21 @@ export async function generateStaticParams() {
 }
 
 const autoDescription = (r: { title: string; totalScore: number; verdict: string }) =>
-  (r.verdict?.trim() ? `${r.title} im Fachtest: ${r.totalScore}/100 Punkte. ${r.verdict}` : `${r.title} im Fachtest: ${r.totalScore}/100 Punkte. Rohstoffe, Schadstoffe, Nährstoffprofil, Deklaration und Preis-Leistung unabhängig bewertet.`).slice(0, 158);
+  trimMetaDescription(r.verdict?.trim() ? `${r.title} im Fachtest: ${r.totalScore}/100 Punkte. ${r.verdict}` : `${r.title} im Fachtest: ${r.totalScore}/100 Punkte. Rohstoffe, Schadstoffe, Nährstoffprofil, Deklaration und Preis-Leistung bewertet.`);
 
 export async function generateMetadata({ params }: PageProps<"/[kategorie]/[slug]">): Promise<Metadata> {
   const { slug } = await params;
   const r = await getReviewBySlug(slug);
   if (!r) return {};
   const title = r.metaTitle?.trim() || `${productLabel(r.brand, r.productName)} im Test: ${r.totalScore}/100`;
-  const description = r.metaDescription?.trim() || autoDescription(r);
+  const description = trimMetaDescription(r.metaDescription?.trim() || autoDescription(r));
   const path = reviewPath(r);
   return {
     title: { absolute: seoTitle(title) },
     description,
     keywords: r.keywords,
     alternates: { canonical: path },
-    openGraph: { type: "article", title, description, url: path, modifiedTime: r.updatedAt.toISOString(), publishedTime: r.publishedAt?.toISOString(), authors: [SITE.name] },
+    openGraph: { type: "article", title, description, url: path, modifiedTime: r.updatedAt.toISOString(), publishedTime: r.publishedAt?.toISOString(), authors: [resolveAuthor(r.authorSlug).name] },
     twitter: { card: "summary_large_image", title, description },
   };
 }
@@ -108,37 +110,30 @@ export default async function ReviewPage({ params }: PageProps<"/[kategorie]/[sl
   const name = productLabel(r.brand, r.productName);
   const gallery = (r.gallery ?? []).filter(Boolean);
   const abs = (u: string) => (u.startsWith("http") ? u : absoluteUrl(u));
-  const author = contentAuthor();
+  const author = contentAuthor(r.authorSlug);
 
   return (
     <div className="mx-auto max-w-6xl px-4">
       <JsonLd
         data={[
-          {
-            "@context": "https://schema.org",
-            "@type": "Product",
-            name,
-            brand: { "@type": "Brand", name: r.brand },
-            category: r.category.name,
-            ...(images.length ? { image: images.map(abs) } : {}),
-            review: {
-              "@type": "Review",
-              name: `${r.title} im Test`,
-              reviewBody: r.verdict || undefined,
-              datePublished: r.publishedAt?.toISOString(),
-              dateModified: r.updatedAt.toISOString(),
-              author,
-              publisher: { "@type": "Organization", name: SITE.name, url: SITE.url },
-              reviewRating: { "@type": "Rating", ratingValue: r.totalScore, bestRating: 100, worstRating: 0 },
-              positiveNotes: r.pros.length ? { "@type": "ItemList", itemListElement: r.pros.map((p, i) => ({ "@type": "ListItem", position: i + 1, name: p })) } : undefined,
-              negativeNotes: r.cons.length ? { "@type": "ItemList", itemListElement: consWithClaims(r.cons, claims).map((p, i) => ({ "@type": "ListItem", position: i + 1, name: p })) } : undefined,
-            },
-          },
+          productReviewJsonLd({
+            brand: r.brand,
+            productName: r.productName,
+            categoryName: r.category.name,
+            totalScore: r.totalScore,
+            verdict: r.verdict,
+            publishedAt: r.publishedAt,
+            updatedAt: r.updatedAt,
+            authorSlug: r.authorSlug,
+            images,
+            pros: r.pros,
+            cons: consWithClaims(r.cons, claims),
+          }),
           {
             "@context": "https://schema.org",
             "@type": "Article",
-            headline: `${name} im Test`,
-            description: r.metaDescription?.trim() || autoDescription(r),
+            headline: reviewHeadline(name),
+            description: trimMetaDescription(r.metaDescription?.trim() || autoDescription(r)),
             datePublished: r.publishedAt?.toISOString(),
             dateModified: r.updatedAt.toISOString(),
             inLanguage: "de-DE",
@@ -149,7 +144,7 @@ export default async function ReviewPage({ params }: PageProps<"/[kategorie]/[sl
           },
         ]}
       />
-      <Breadcrumbs items={[{ label: r.category.name, href: `/${r.category.slug}` }, { label: name }]} />
+      <Breadcrumbs items={[{ label: r.category.name, href: `/${r.category.slug}` }, { label: name, href: reviewPath(r) }]} />
 
       <div className="mt-4 lg:grid lg:grid-cols-[minmax(0,1fr)_17rem] lg:gap-10">
         <article className="min-w-0">
@@ -164,7 +159,7 @@ export default async function ReviewPage({ params }: PageProps<"/[kategorie]/[sl
             </div>
             <h1 className="mt-3 text-3xl font-extrabold leading-tight md:text-5xl">{name} im Test</h1>
             <ul className="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-sm text-muted">
-              <li className="flex items-center gap-1.5"><UserRound className="size-4" aria-hidden />Von <AuthorCredit /></li>
+              <li className="flex items-center gap-1.5"><UserRound className="size-4" aria-hidden />Von <AuthorCredit slug={r.authorSlug} /></li>
               {testedAt && <li className="flex items-center gap-1.5"><CalendarCheck className="size-4" aria-hidden />Getestet am <time dateTime={testedAt.toISOString()}>{formatDate(testedAt)}</time></li>}
               <li className="flex items-center gap-1.5"><RefreshCw className="size-4" aria-hidden />Zuletzt aktualisiert <time dateTime={r.updatedAt.toISOString()}>{formatDate(r.updatedAt)}</time></li>
               <li className="flex items-center gap-1.5"><Clock className="size-4" aria-hidden />{minutes} Min. Lesezeit</li>
@@ -174,7 +169,7 @@ export default async function ReviewPage({ params }: PageProps<"/[kategorie]/[sl
                 {r.imageUrl && (
                   <figure>
                     <div className="relative aspect-[4/3] overflow-hidden rounded-3xl bg-bg-soft">
-                      <FpImage src={r.imageUrl} alt={r.imageAlt || `Verpackung von ${name}`} blur={r.imageBlur} sizes={r.contentImageUrl ? "(min-width:1024px) 380px, (min-width:640px) 50vw, 100vw" : "(min-width:1024px) 760px, 100vw"} priority />
+                      <FpImage src={r.imageUrl} alt={r.imageAlt.trim() || `Verpackung von ${name}`} blur={r.imageBlur} sizes={r.contentImageUrl ? "(min-width:1024px) 380px, (min-width:640px) 50vw, 100vw" : "(min-width:1024px) 760px, 100vw"} priority />
                     </div>
                     <figcaption className="mt-1.5 text-sm text-muted">Verpackung</figcaption>
                   </figure>
@@ -182,7 +177,7 @@ export default async function ReviewPage({ params }: PageProps<"/[kategorie]/[sl
                 {r.contentImageUrl && (
                   <figure>
                     <div className="relative aspect-[4/3] overflow-hidden rounded-3xl bg-bg-soft">
-                      <FpImage src={r.contentImageUrl} alt={r.contentImageAlt || `Inhalt von ${name} ohne Verpackung`} blur={r.contentImageBlur} sizes={r.imageUrl ? "(min-width:1024px) 380px, (min-width:640px) 50vw, 100vw" : "(min-width:1024px) 760px, 100vw"} priority={!r.imageUrl} />
+                      <FpImage src={r.contentImageUrl} alt={r.contentImageAlt.trim() || `Inhalt von ${name} ohne Verpackung`} blur={r.contentImageBlur} sizes={r.imageUrl ? "(min-width:1024px) 380px, (min-width:640px) 50vw, 100vw" : "(min-width:1024px) 760px, 100vw"} priority={!r.imageUrl} />
                     </div>
                     <figcaption className="mt-1.5 text-sm text-muted">Das Futter selbst</figcaption>
                   </figure>

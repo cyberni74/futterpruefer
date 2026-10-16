@@ -5,7 +5,7 @@ import { search } from "@/lib/search";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { ScoreBadge } from "@/components/score-badge";
 
-export const metadata: Metadata = { title: "Suche", robots: { index: false, follow: true } };
+export const metadata: Metadata = { title: "Suche", robots: { index: false, follow: true }, alternates: { canonical: "/suche" } };
 
 export default async function SearchPage({ searchParams }: PageProps<"/suche">) {
   const raw = (await searchParams).q;
@@ -13,7 +13,7 @@ export default async function SearchPage({ searchParams }: PageProps<"/suche">) 
   const hits = q.length >= 2 ? await search(q, 40) : [];
   return (
     <div className="mx-auto max-w-3xl px-4">
-      <Breadcrumbs items={[{ label: "Suche" }]} />
+      <Breadcrumbs items={[{ label: "Suche", href: "/suche" }]} />
       <h1 className="mt-4 text-3xl font-extrabold md:text-4xl">Suche</h1>
       <form role="search" action="/suche" className="mt-6 flex gap-2">
         <label htmlFor="q" className="sr-only">Suchbegriff</label>

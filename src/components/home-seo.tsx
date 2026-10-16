@@ -4,6 +4,7 @@ import { JsonLd } from "@/components/json-ld";
 import { ScoreBadge } from "@/components/score-badge";
 import { absoluteUrl } from "@/lib/site";
 import { hyphenateCategory } from "@/lib/urls";
+import { faqPageJsonLd } from "@/lib/faq-schema";
 import { productLabel } from "@/lib/seo";
 import type { getCategoryLeaders, getHomeFaq } from "@/lib/queries";
 
@@ -101,7 +102,10 @@ export function HomeSeo({ leaders, faq }: { leaders: Leaders; faq: Faq }) {
 
       {faq.length > 0 && (
         <section aria-labelledby="home-faq" className="mt-16">
-          <JsonLd data={{ "@context": "https://schema.org", "@type": "FAQPage", mainEntity: faq.map((f) => ({ "@type": "Question", name: f.question, acceptedAnswer: { "@type": "Answer", text: f.answer } })) }} />
+          {(() => {
+            const data = faqPageJsonLd(faq);
+            return data ? <JsonLd data={data} /> : null;
+          })()}
           <div className="flex flex-wrap items-end justify-between gap-3">
             <div>
               <p className="text-sm font-bold uppercase tracking-wide text-brand">Häufige Fragen</p>
