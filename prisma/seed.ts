@@ -1,4 +1,5 @@
 import "dotenv/config";
+import fs from "node:fs";
 import { mkdir } from "node:fs/promises";
 import path from "node:path";
 import bcrypt from "bcryptjs";
@@ -23,6 +24,8 @@ import { BUGBELL_TESTS } from "./review-bugbell";
 import { BETTERCAT_TESTS } from "./review-betterkat";
 import { WOLFSBLUT_TESTS } from "./review-wolfsblut";
 import { MEDIDOG_DENTAL_TESTS } from "./review-medidog-dental";
+import { KAUARTIKEL_FUNKTION_TESTS } from "./review-kauartikel-funktion";
+import { KAUARTIKEL_BILDER } from "./bilder-kauartikel-funktion";
 import { MAMMALY_BLOG_SECTIONS, MAMMALY_BLOGS_MARKER } from "./review-mammaly-blogs";
 
 const esc = (t: string) => t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -425,13 +428,18 @@ async function removeWithdrawnPosts() {
 }
 
 async function ensureMammalyTests() {
+  // Eingebettete Herstellerbilder (Kauartikel-Tests) nach public/tests schreiben, falls sie fehlen.
+  for (const [name, b64] of Object.entries(KAUARTIKEL_BILDER)) {
+    const file = path.join(process.cwd(), "public", "tests", name);
+    if (!fs.existsSync(file)) fs.writeFileSync(file, Buffer.from(b64, "base64"));
+  }
   const categories = new Map((await prisma.category.findMany({ select: { id: true, slug: true } })).map((c) => [c.slug, c.id]));
   const blur = async (file: string) => {
     const b = await sharp(path.join(process.cwd(), "public", "tests", file)).resize(16).webp({ quality: 40 }).toBuffer().catch(() => null);
     return b ? `data:image/webp;base64,${b.toString("base64")}` : null;
   };
   let n = 0;
-  for (const t of [...MAMMALY_TESTS, ...BUGBELL_TESTS, ...BETTERCAT_TESTS, ...WOLFSBLUT_TESTS, ...MEDIDOG_DENTAL_TESTS]) {
+  for (const t of [...MAMMALY_TESTS, ...BUGBELL_TESTS, ...BETTERCAT_TESTS, ...WOLFSBLUT_TESTS, ...MEDIDOG_DENTAL_TESTS, ...KAUARTIKEL_FUNKTION_TESTS]) {
     const category = { id: categories.get(t.categorySlug) };
     if (!category.id) { console.log(`Test ${t.slug} übersprungen: Kategorie ${t.categorySlug} fehlt.`); continue; }
     const existing = await prisma.review.findUnique({ where: { slug: t.slug }, select: { id: true, bodyHtml: true } });
@@ -475,7 +483,7 @@ async function ensureMammalyTests() {
         verdict: t.verdict, teaser: t.teaser, pros: t.pros, cons: t.cons,
         bodyHtml: autolinkUrls(t.bodyHtml), conclusionHtml: t.conclusionHtml,
         metaTitle: t.metaTitle, metaDescription: t.metaDescription, keywords: t.keywords,
-        priceDate: new Date("2026-10-09T12:00:00Z"), testedAt: new Date(published.getTime() - 5 * 86400000),
+        priceDate: new Date((t as { priceDate?: string }).priceDate ?? "2026-10-09T12:00:00Z"), testedAt: (t as { testedAt?: string }).testedAt ? new Date((t as { testedAt?: string }).testedAt!) : new Date(published.getTime() - 5 * 86400000),
         status: "PUBLISHED", publishedAt: published,
       },
     });
