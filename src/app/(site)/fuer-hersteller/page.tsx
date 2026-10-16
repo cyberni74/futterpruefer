@@ -16,7 +16,7 @@ export default function ManufacturerPage() {
         <h2>So funktioniert die Einreichung</h2>
         <ol>
           <li>Anfrage über das Kontaktformular (Typ „Herstelleranfrage“) senden</li>
-          <li>Vollständige Deklaration, analytische Bestandteile und Zusatzstoffe bereitstellen</li>
+          <li>Vollständige Deklaration, analytische Bestandteile und Zusatzstoffe bereitstellen. Sie können zusätzlich prüfbare Unterlagen einreichen (z. B. unterschriebene Herstellererklärungen oder Laboranalysen des Endprodukts). Diese bewerten wir im Kriterium „Transparenz / Herstellerunterlagen“ nach festen Stufen. Eine Einreichung kauft auch hier keine Note.</li>
           <li>Prüfung nach der <Link href="/methodik">Methodik</Link> – der Zeitpunkt der Veröffentlichung liegt bei der Redaktion</li>
           <li>Bei sachlichen Fehlern können Sie eine Korrektur anregen; die Bewertung selbst ist nicht verhandelbar</li>
         </ol>
