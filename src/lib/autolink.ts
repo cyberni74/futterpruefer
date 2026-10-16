@@ -1,3 +1,5 @@
+import { externalRel, isSponsoredHref } from "./sanitize";
+
 /**
  * Macht reine Text-URLs (z. B. Quellenangaben) klickbar und zeigt sie gekürzt an
  * (10 Zeichen + „…“), damit lange Links weder Editor noch Seite verbreitern.
@@ -42,7 +44,8 @@ export function autolinkUrls(html: string | null | undefined): string {
         const tail = raw.match(TRAILING)?.[0] ?? "";
         const url = tail ? raw.slice(0, -tail.length) : raw;
         if (url.length < 12) return raw;
-        return `<a href="${esc(url)}" class="src-link" target="_blank" rel="noopener nofollow" title="${esc(url)}">${esc(shortUrl(url))}</a>${tail}`;
+        const rel = isSponsoredHref(url) ? externalRel(undefined, url) : "noopener nofollow";
+        return `<a href="${esc(url)}" class="src-link" target="_blank" rel="${rel}" title="${esc(url)}">${esc(shortUrl(url))}</a>${tail}`;
       })
       .replace(/(\S)[ \t]*\r?\n\s*(?=\S)/g, "$1<br>");
   });

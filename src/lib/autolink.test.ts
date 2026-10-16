@@ -29,4 +29,9 @@ describe("autolinkUrls", () => {
     expect(shortUrl("https://kurz.de")).toBe("kurz.de");
   });
   it("null-sicher", () => expect(autolinkUrls(null)).toBe(""));
+  it("markiert eine nackte Amazon-URL mit Partner-Tag als sponsored", () => {
+    const out = autolinkUrls("<p>https://www.amazon.de/dp/B07KCS7YX1?tag=cyberni7400-21</p>");
+    expect(out).toContain('rel="noopener noreferrer nofollow sponsored"');
+    expect(out).toContain("tag=cyberni7400-21");
+  });
 });
