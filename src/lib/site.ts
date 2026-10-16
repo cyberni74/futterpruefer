@@ -1,7 +1,47 @@
+/** Hauptdomain ohne Umlaut. Canonical, Sitemap, robots, OG, Schema und RSS zeigen hierhin. */
+export const CANONICAL_ORIGIN = "https://futterpruefer.de";
+
+/**
+ * Hosts, die per 301 auf die Hauptdomain zeigen.
+ * Die Hauptdomain selbst steht nicht in der Liste.
+ * Die Umlaut-Domain (xn--futterprfer-0hb.de) leitet Vercel an der Kante um;
+ * solange dort die Gegenrichtung eingestellt ist, würde eine App-Weiterleitung eine Schleife erzeugen.
+ * www- und vercel.app-Hosts erreichen die App bzw. werden hier zusätzlich abgefangen.
+ */
+export const REDIRECT_HOSTS = [
+  "www.futterpruefer.de",
+  "www.xn--futterprfer-0hb.de",
+  "www.futterprüfer.de",
+  "futterpruefer.vercel.app",
+  "futterpruefer-bernhardehmer-3885s-projects.vercel.app",
+  "futterpruefer-git-main-bernhardehmer-3885s-projects.vercel.app",
+] as const;
+
+/** Hosts, deren konfigurierte Site-URL auf die Hauptdomain normalisiert wird. */
+const CANONICAL_HOSTS = new Set<string>([
+  "futterpruefer.de",
+  "xn--futterprfer-0hb.de",
+  "futterprüfer.de",
+  ...REDIRECT_HOSTS,
+]);
+
+/** Lokale und Vorschau-URLs bleiben. Umlaut-, www- und Produktions-vercel.app-Hosts werden zur Hauptdomain. */
+export function resolveSiteUrl(raw = process.env.NEXT_PUBLIC_SITE_URL): string {
+  const value = (raw ?? "").trim().replace(/\/$/, "");
+  if (!value) return CANONICAL_ORIGIN;
+  try {
+    const host = new URL(value).hostname.toLowerCase();
+    if (CANONICAL_HOSTS.has(host)) return CANONICAL_ORIGIN;
+    return value;
+  } catch {
+    return CANONICAL_ORIGIN;
+  }
+}
+
 export const SITE = {
   name: "Futterprüfer",
   domain: "futterpruefer.de",
-  url: (process.env.NEXT_PUBLIC_SITE_URL ?? "https://futterpruefer.de").replace(/\/$/, ""),
+  url: resolveSiteUrl(),
   // „Unabhängig“ und „Schadstoffe“ bewusst nicht: Beleg bzw. Labor stehen aus. Formulierung hier zentral tauschen.
   description:
     "Hunde- und Katzenfutter im Test: Rohstoffe, bedenkliche Zusatzstoffe, Nährstoffprofil und Deklaration – bewertet nach offengelegter 100-Punkte-Methodik.",

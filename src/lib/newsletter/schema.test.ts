@@ -11,5 +11,6 @@ describe("Newsletter", () => {
     expect(brevoConfig({})).toBeNull();
     expect(brevoConfig({ BREVO_API_KEY: "k", BREVO_LIST_ID: "3", BREVO_DOI_TEMPLATE_ID: "x", NEXT_PUBLIC_SITE_URL: "https://a.de" })).toBeNull();
     expect(brevoConfig({ BREVO_API_KEY: "k", BREVO_LIST_ID: "3", BREVO_DOI_TEMPLATE_ID: "7", NEXT_PUBLIC_SITE_URL: "https://a.de/" })).toEqual({ apiKey: "k", listId: 3, templateId: 7, redirectUrl: "https://a.de/newsletter/bestaetigt" });
+    expect(brevoConfig({ BREVO_API_KEY: "k", BREVO_LIST_ID: "3", BREVO_DOI_TEMPLATE_ID: "7", NEXT_PUBLIC_SITE_URL: "https://xn--futterprfer-0hb.de" })?.redirectUrl).toBe("https://futterpruefer.de/newsletter/bestaetigt");
   });
 });

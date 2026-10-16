@@ -102,6 +102,23 @@ describe("Urheberschaft", () => {
   });
 });
 
+describe("resolveSiteUrl", () => {
+  it("setzt Umlaut-, www- und Produktionshosts auf die Hauptdomain", async () => {
+    const { resolveSiteUrl, CANONICAL_ORIGIN } = await import("./site");
+    expect(CANONICAL_ORIGIN).toBe("https://futterpruefer.de");
+    expect(resolveSiteUrl(undefined)).toBe(CANONICAL_ORIGIN);
+    expect(resolveSiteUrl("")).toBe(CANONICAL_ORIGIN);
+    expect(resolveSiteUrl("https://futterpruefer.de/")).toBe(CANONICAL_ORIGIN);
+    expect(resolveSiteUrl("https://www.futterpruefer.de")).toBe(CANONICAL_ORIGIN);
+    expect(resolveSiteUrl("https://xn--futterprfer-0hb.de")).toBe(CANONICAL_ORIGIN);
+    expect(resolveSiteUrl("https://futterprüfer.de/")).toBe(CANONICAL_ORIGIN);
+    expect(resolveSiteUrl("https://www.xn--futterprfer-0hb.de")).toBe(CANONICAL_ORIGIN);
+    expect(resolveSiteUrl("https://futterpruefer.vercel.app")).toBe(CANONICAL_ORIGIN);
+    expect(resolveSiteUrl("http://localhost:3001")).toBe("http://localhost:3001");
+    expect(resolveSiteUrl("https://futterpruefer-git-feature.vercel.app")).toBe("https://futterpruefer-git-feature.vercel.app");
+  });
+});
+
 describe("isIndexable", () => {
   it("nur echte Domain wird indexiert", async () => {
     const { isIndexable } = await import("./site");
