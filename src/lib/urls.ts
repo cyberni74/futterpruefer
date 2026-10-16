@@ -1,3 +1,5 @@
+import { slugify } from "@/lib/slug";
+
 /** Zentrale URL-Bildung: Tests liegen unter /{kategorie-slug}/{test-slug}. */
 export const categoryPath = (slug: string) => `/${slug}`;
 export const reviewPath = (r: { slug: string; category: { slug: string } }) => `/${r.category.slug}/${r.slug}`;
@@ -14,3 +16,5 @@ export const OLD_CATEGORY_SLUGS: Record<string, string> = {
 export function hyphenateCategory(name: string | null | undefined): string {
   return (name ?? "").replace(/futtermittel/gi, (m) => `­${m.slice(0, 6)}­${m.slice(6)}`).replace(/^­/, "");
 }
+
+export const brandPath = (brand: string) => `/marken/${slugify(brand)}`;

@@ -10,7 +10,7 @@ import { consWithClaims, misleadingClaims, parseAnalysis, parseClaims, readingMi
 import { CRITERIA, type Scores } from "@/lib/scoring";
 import { productReviewJsonLd, reviewHeadline } from "@/lib/review-schema";
 import { productLabel, seoTitle, trimMetaDescription } from "@/lib/seo";
-import { reviewPath } from "@/lib/urls";
+import { brandPath, reviewPath } from "@/lib/urls";
 import { absoluteUrl, ANIMAL_LABEL, formatDate, MONTHS, PRICE_CLASS_LABEL, SITE } from "@/lib/site";
 import { contentAuthor } from "@/lib/attribution";
 import { resolveAuthor } from "@/lib/authors";
@@ -153,6 +153,7 @@ export default async function ReviewPage({ params }: PageProps<"/[kategorie]/[sl
             <div className="flex flex-wrap gap-2">
               <span className="inline-flex items-center gap-1.5 rounded-full bg-brand-soft px-3 py-1 text-xs font-bold text-brand-strong"><PawPrint className="size-3.5" aria-hidden />{ANIMAL_LABEL[r.category.animal]}</span>
               <Link href={`/${r.category.slug}`} className="inline-flex items-center rounded-full border border-border px-3 py-1 text-xs font-bold hover:bg-bg-soft">{r.category.name}</Link>
+              {r.brand && <Link href={brandPath(r.brand)} className="inline-flex items-center rounded-full border border-border px-3 py-1 text-xs font-bold hover:bg-bg-soft">Marke: {r.brand}</Link>}
               {pom && (
                 <Link href="/produkt-des-monats" className="inline-flex items-center gap-1.5 rounded-full bg-accent px-3 py-1 text-xs font-bold text-white dark:text-black hover:bg-accent-strong"><Award className="size-3.5" aria-hidden />Produkt des Monats {MONTHS[pom.month - 1]} {pom.year}</Link>
               )}

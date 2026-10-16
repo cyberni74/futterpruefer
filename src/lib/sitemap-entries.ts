@@ -3,6 +3,7 @@ export type SitemapRecord = { slug: string; updatedAt: Date; categorySlug?: stri
 const STATIC_PATHS = [
   "/",
   "/tests",
+  "/marken",
   "/blog",
   "/methodik",
   "/team",
@@ -39,6 +40,7 @@ export function sitemapEntries(input: {
   posts: SitemapRecord[];
   lexikon: SitemapRecord[];
   glossary: SitemapRecord[];
+  brands?: SitemapRecord[];
 }): SitemapEntry[] {
   const reviewDates = input.reviews.map((row) => row.updatedAt);
   const postDates = input.posts.map((row) => row.updatedAt);
@@ -47,6 +49,7 @@ export function sitemapEntries(input: {
   const byPath: Record<string, Date | undefined> = {
     "/": latest([...reviewDates, ...postDates, ...lexDates, ...glossDates]),
     "/tests": latest(reviewDates),
+    "/marken": latest(reviewDates),
     "/blog": latest(postDates),
     "/lexikon": latest(lexDates),
     "/glossar": latest(glossDates),
@@ -72,6 +75,9 @@ export function sitemapEntries(input: {
   }
   for (const post of input.posts) {
     entries.push({ path: `/blog/${post.slug}`, lastModified: post.updatedAt, priority: 0.7 });
+  }
+  for (const brand of input.brands ?? []) {
+    entries.push({ path: `/marken/${brand.slug}`, lastModified: brand.updatedAt, priority: 0.7 });
   }
   for (const entry of input.lexikon) {
     entries.push({ path: `/lexikon/${entry.slug}`, lastModified: entry.updatedAt, priority: 0.6 });

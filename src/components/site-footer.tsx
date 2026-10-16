@@ -3,7 +3,7 @@ import { AMAZON_PARTNER_NOTICE, FOOTER_CLAIM } from "@/lib/site";
 import { Logo } from "./logo";
 
 const COLS = [
-  { title: "Tests", links: [["Alleinfuttermittel Hund", "/alleinfuttermittel-hund"], ["Alleinfuttermittel Katze", "/alleinfuttermittel-katze"], ["Ergänzungsfuttermittel Hund", "/ergaenzungsfuttermittel-hund"], ["Ergänzungsfuttermittel Katze", "/ergaenzungsfuttermittel-katze"], ["Produkt des Monats", "/produkt-des-monats"]] },
+  { title: "Tests", links: [["Alleinfuttermittel Hund", "/alleinfuttermittel-hund"], ["Alleinfuttermittel Katze", "/alleinfuttermittel-katze"], ["Ergänzungsfuttermittel Hund", "/ergaenzungsfuttermittel-hund"], ["Ergänzungsfuttermittel Katze", "/ergaenzungsfuttermittel-katze"], ["Alle Marken", "/marken"], ["Produkt des Monats", "/produkt-des-monats"]] },
   { title: "Wissen", links: [["Fachblog", "/blog"], ["Futter-Lexikon", "/lexikon"], ["Glossar", "/glossar"], ["Methodik", "/methodik"], ["Werbeaussagen-Check", "/werbeaussagen"], ["FAQ", "/faq"], ["RSS-Feed", "/rss.xml"]] },
   { title: "Kontakt", links: [["Team", "/team"], ["Für Hersteller", "/fuer-hersteller"], ["Kontakt", "/kontakt"], ["Impressum", "/impressum"], ["Datenschutz", "/datenschutz"]] },
 ] as const;

@@ -2,18 +2,20 @@ import type { MetadataRoute } from "next";
 import { prisma } from "@/lib/db";
 import { publishedWhere } from "@/lib/queries";
 import { absoluteUrl } from "@/lib/site";
+import { getBrands } from "@/lib/brands";
 import { sitemapEntries } from "@/lib/sitemap-entries";
 
 export const revalidate = 3600;
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   try {
-    const [categories, reviews, posts, lexikon, glossary] = await Promise.all([
+    const [categories, reviews, posts, lexikon, glossary, brands] = await Promise.all([
       prisma.category.findMany({ select: { slug: true } }),
       prisma.review.findMany({ where: publishedWhere(), select: { slug: true, updatedAt: true, category: { select: { slug: true } } } }),
       prisma.blogPost.findMany({ where: publishedWhere(), select: { slug: true, updatedAt: true } }),
       prisma.lexikonEntry.findMany({ where: publishedWhere(), select: { slug: true, updatedAt: true } }),
       prisma.glossaryTerm.findMany({ select: { slug: true, updatedAt: true } }),
+      getBrands(),
     ]);
     return sitemapEntries({
       categories,
@@ -21,6 +23,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       posts,
       lexikon,
       glossary,
+      brands: brands.flatMap((b) => (b.updatedAt ? [{ slug: b.slug, updatedAt: b.updatedAt }] : [])),
     }).map((entry) => ({
       url: absoluteUrl(entry.path),
       ...(entry.lastModified ? { lastModified: entry.lastModified } : {}),
