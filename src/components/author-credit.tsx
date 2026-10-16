@@ -1,11 +1,12 @@
 import Link from "next/link";
-import { SITE } from "@/lib/site";
+import { authorPath, resolveAuthor } from "@/lib/authors";
 
-/** Sichtbare Autorenzeile: immer die Organisation, nie eine Person. */
-export function AuthorCredit({ className = "font-semibold text-fg hover:underline" }: { className?: string }) {
+/** Sichtbare Autorenzeile: Name der zugeordneten Person, Link zum Team-Anker. */
+export function AuthorCredit({ slug, className = "font-semibold text-fg hover:underline" }: { slug?: string | null; className?: string }) {
+  const author = resolveAuthor(slug);
   return (
-    <Link href="/team" className={className}>
-      {SITE.name}
+    <Link href={authorPath(author)} className={className}>
+      {author.name}
     </Link>
   );
 }

@@ -1,3 +1,4 @@
+import { isAuthorSlug } from "@/lib/authors";
 import { parseAnalysis, parseClaims } from "@/lib/product-data";
 import { z } from "zod";
 import { CRITERIA, type CriterionKey } from "@/lib/scoring";
@@ -49,6 +50,14 @@ const seoFields = {
 };
 
 const bodyHtml = z.string().max(300_000, { error: "Der Text ist zu lang (max. 300.000 Zeichen)." });
+
+/** Leer = Standardautor. Nur Slugs aus der öffentlichen Autorenliste. */
+const authorSlug = z
+  .string()
+  .trim()
+  .max(80, { error: "Autor: höchstens 80 Zeichen." })
+  .refine((v) => v === "" || isAuthorSlug(v), { error: "Bitte einen vorhandenen Autor wählen." })
+  .transform((v) => (v === "" ? null : v));
 
 const scoreFields = Object.fromEntries(
   CRITERIA.map((c) => [
@@ -165,6 +174,7 @@ export const reviewSchema = z
     bodyHtml,
     conclusionHtml: bodyHtml,
     ...seoFields,
+    authorSlug,
     publishMode,
     scheduledAt: z.string().max(30),
   })
@@ -197,6 +207,7 @@ export const blogSchema = z
     imageBlur,
     bodyHtml,
     ...seoFields,
+    authorSlug,
     publishMode,
     scheduledAt: z.string().max(30),
   })
@@ -297,6 +308,7 @@ export function reviewFormToRaw(fd: FormData) {
     metaTitle: str(fd, "metaTitle"),
     metaDescription: str(fd, "metaDescription"),
     keywords: str(fd, "keywords"),
+    authorSlug: str(fd, "authorSlug"),
     publishMode: str(fd, "publishMode"),
     scheduledAt: str(fd, "scheduledAt"),
   };
@@ -314,6 +326,7 @@ export function blogFormToRaw(fd: FormData) {
     metaTitle: str(fd, "metaTitle"),
     metaDescription: str(fd, "metaDescription"),
     keywords: str(fd, "keywords"),
+    authorSlug: str(fd, "authorSlug"),
     publishMode: str(fd, "publishMode"),
     scheduledAt: str(fd, "scheduledAt"),
   };

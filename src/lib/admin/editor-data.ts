@@ -42,6 +42,7 @@ type ReviewRow = {
   metaTitle: string;
   metaDescription: string;
   keywords: string[];
+  authorSlug: string | null;
   status: ContentStatus;
   publishedAt: Date | null;
   updatedAt: Date;
@@ -86,6 +87,7 @@ export function reviewToEditorData(r: ReviewRow, now = new Date()) {
     metaTitle: r.metaTitle,
     metaDescription: r.metaDescription,
     keywords: r.keywords,
+    authorSlug: r.authorSlug ?? "",
     publishMode: mode,
     scheduledAt: mode === "scheduled" ? dateToBerlinLocal(r.publishedAt) : "",
     updatedAt: r.updatedAt.toISOString(),
@@ -127,6 +129,7 @@ export const EMPTY_REVIEW = {
   metaTitle: "",
   metaDescription: "",
   keywords: [],
+  authorSlug: "",
   publishMode: "draft" as const,
   scheduledAt: "",
   updatedAt: null,
@@ -144,6 +147,7 @@ type PostRow = {
   metaTitle: string;
   metaDescription: string;
   keywords: string[];
+  authorSlug: string | null;
   status: ContentStatus;
   publishedAt: Date | null;
 };
@@ -162,6 +166,7 @@ export function postToEditorData(p: PostRow, now = new Date()) {
     metaTitle: p.metaTitle,
     metaDescription: p.metaDescription,
     keywords: p.keywords,
+    authorSlug: p.authorSlug ?? "",
     publishMode: mode,
     scheduledAt: mode === "scheduled" ? dateToBerlinLocal(p.publishedAt) : "",
   };
@@ -178,6 +183,7 @@ export const EMPTY_POST = {
   metaTitle: "",
   metaDescription: "",
   keywords: [],
+  authorSlug: "",
   publishMode: "draft" as const,
   scheduledAt: "",
 };

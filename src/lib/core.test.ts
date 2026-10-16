@@ -76,14 +76,29 @@ describe("hyphenateCategory", () => {
 });
 
 describe("Urheberschaft", () => {
-  it("gibt immer die Organisation aus, auch wenn ein Name gespeichert ist", async () => {
+  it("nennt eine Person aus der Autorenliste und übernimmt keine freien Namen", async () => {
     const { contentAuthor } = await import("./attribution");
-    const { SITE } = await import("./site");
-    const author = contentAuthor("gespeicherter Name");
-    expect(author).toEqual({ "@type": "Organization", name: SITE.name, url: SITE.url });
-    expect(author["@type"]).toBe("Organization");
-    expect(JSON.stringify(author)).not.toContain("gespeicherter Name");
-    expect(JSON.stringify(contentAuthor(null))).toBe(JSON.stringify(author));
+    const { DEFAULT_AUTHOR, authorPath } = await import("./authors");
+    const { absoluteUrl, SITE } = await import("./site");
+    const author = contentAuthor(null);
+    const url = absoluteUrl(authorPath(DEFAULT_AUTHOR));
+    expect(author).toEqual({
+      "@type": "Person",
+      "@id": url,
+      name: DEFAULT_AUTHOR.name,
+      url,
+      jobTitle: DEFAULT_AUTHOR.jobTitle,
+    });
+    expect(author.name).toBe("Beytullah Coscun");
+    expect(author.name).not.toMatch(/von |Futterprüfer/i);
+    expect(author.url).toMatch(/^https:\/\/.+\/team#beytullah-coscun$/);
+    expect(author).not.toHaveProperty("sameAs");
+    expect(author.jobTitle).not.toBe(author.name);
+    const unknown = contentAuthor("gespeicherter Name");
+    expect(JSON.stringify(unknown)).not.toContain("gespeicherter Name");
+    expect(unknown).toEqual(author);
+    expect(contentAuthor(DEFAULT_AUTHOR.slug)).toEqual(author);
+    expect(SITE.name).toBe("Futterprüfer");
   });
 });
 

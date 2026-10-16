@@ -7,6 +7,7 @@ import { TopicLinks } from "@/components/topic-links";
 import { getReviewsForPost, renderArticle } from "@/lib/content";
 import { absoluteUrl, formatDate, SITE } from "@/lib/site";
 import { contentAuthor } from "@/lib/attribution";
+import { resolveAuthor } from "@/lib/authors";
 import { AuthorCredit } from "@/components/author-credit";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { FpImage } from "@/components/fp-image";
@@ -41,7 +42,7 @@ export async function generateMetadata({ params }: PageProps<"/blog/[slug]">): P
     description,
     keywords: p.keywords,
     alternates: { canonical: `/blog/${p.slug}` },
-    openGraph: { type: "article", title, description, url: `/blog/${p.slug}`, publishedTime: p.publishedAt?.toISOString(), modifiedTime: p.updatedAt.toISOString(), authors: [SITE.name], images: p.imageUrl ? [{ url: p.imageUrl }] : [{ url: "/opengraph-image.png", width: 1200, height: 630 }] },
+    openGraph: { type: "article", title, description, url: `/blog/${p.slug}`, publishedTime: p.publishedAt?.toISOString(), modifiedTime: p.updatedAt.toISOString(), authors: [resolveAuthor(p.authorSlug).name], images: p.imageUrl ? [{ url: p.imageUrl }] : [{ url: "/opengraph-image.png", width: 1200, height: 630 }] },
   };
 }
 
@@ -78,7 +79,7 @@ export default async function PostPage({ params }: PageProps<"/blog/[slug]">) {
           inLanguage: "de-DE",
           mainEntityOfPage: url,
           ...(p.imageUrl ? { image: p.imageUrl.startsWith("http") ? p.imageUrl : absoluteUrl(p.imageUrl) } : {}),
-          author: contentAuthor(),
+          author: contentAuthor(p.authorSlug),
           publisher: { "@type": "Organization", name: SITE.name, url: SITE.url },
         }}
       />
@@ -86,7 +87,7 @@ export default async function PostPage({ params }: PageProps<"/blog/[slug]">) {
       <header className="mt-4">
         <h1 className="text-3xl font-extrabold leading-tight md:text-5xl">{p.title}</h1>
         <p className="mt-3 text-sm text-muted">
-          Von <AuthorCredit />
+          Von <AuthorCredit slug={p.authorSlug} />
           {p.publishedAt && <> · <time dateTime={p.publishedAt.toISOString()}>{formatDate(p.publishedAt)}</time> · Zuletzt aktualisiert: {formatDate(p.updatedAt)}</>}
         </p>
       </header>
