@@ -8,6 +8,7 @@ import { getLexikonEntries, getPostsForReview, renderArticle } from "@/lib/conte
 import { enhanceArticle } from "@/lib/article-html";
 import { consWithClaims, misleadingClaims, parseAnalysis, parseClaims, readingMinutes } from "@/lib/product-data";
 import { CRITERIA, type Scores } from "@/lib/scoring";
+import { productReviewJsonLd, reviewHeadline } from "@/lib/review-schema";
 import { productLabel, seoTitle } from "@/lib/seo";
 import { reviewPath } from "@/lib/urls";
 import { absoluteUrl, ANIMAL_LABEL, formatDate, MONTHS, PRICE_CLASS_LABEL, SITE } from "@/lib/site";
@@ -115,30 +116,23 @@ export default async function ReviewPage({ params }: PageProps<"/[kategorie]/[sl
     <div className="mx-auto max-w-6xl px-4">
       <JsonLd
         data={[
-          {
-            "@context": "https://schema.org",
-            "@type": "Product",
-            name,
-            brand: { "@type": "Brand", name: r.brand },
-            category: r.category.name,
-            ...(images.length ? { image: images.map(abs) } : {}),
-            review: {
-              "@type": "Review",
-              name: `${r.title} im Test`,
-              reviewBody: r.verdict || undefined,
-              datePublished: r.publishedAt?.toISOString(),
-              dateModified: r.updatedAt.toISOString(),
-              author,
-              publisher: { "@type": "Organization", name: SITE.name, url: SITE.url },
-              reviewRating: { "@type": "Rating", ratingValue: r.totalScore, bestRating: 100, worstRating: 0 },
-              positiveNotes: r.pros.length ? { "@type": "ItemList", itemListElement: r.pros.map((p, i) => ({ "@type": "ListItem", position: i + 1, name: p })) } : undefined,
-              negativeNotes: r.cons.length ? { "@type": "ItemList", itemListElement: consWithClaims(r.cons, claims).map((p, i) => ({ "@type": "ListItem", position: i + 1, name: p })) } : undefined,
-            },
-          },
+          productReviewJsonLd({
+            brand: r.brand,
+            productName: r.productName,
+            categoryName: r.category.name,
+            totalScore: r.totalScore,
+            verdict: r.verdict,
+            publishedAt: r.publishedAt,
+            updatedAt: r.updatedAt,
+            authorSlug: r.authorSlug,
+            images,
+            pros: r.pros,
+            cons: consWithClaims(r.cons, claims),
+          }),
           {
             "@context": "https://schema.org",
             "@type": "Article",
-            headline: `${name} im Test`,
+            headline: reviewHeadline(name),
             description: r.metaDescription?.trim() || autoDescription(r),
             datePublished: r.publishedAt?.toISOString(),
             dateModified: r.updatedAt.toISOString(),
