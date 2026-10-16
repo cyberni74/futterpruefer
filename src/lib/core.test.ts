@@ -58,6 +58,21 @@ describe("sanitize", () => {
     expect(out).toContain('rel="noopener noreferrer nofollow sponsored"');
     expect(out).toContain('target="_blank"');
   });
+  it("setzt sponsored bei Amazon-Tag und bei amazon.de, nicht bei anderen Shops", () => {
+    const tagOnly = sanitize('<a href="https://www.amazon.de/dp/B07KCS7YX1?tag=cyberni7400-21">Amazon</a>');
+    expect(tagOnly).toContain('rel="noopener noreferrer nofollow sponsored"');
+    const encoded = sanitize('<a href="https://www.amazon.de/dp/B07KCS7YX1?tag=cyberni7400-21&amp;th=1">Amazon</a>');
+    expect(encoded).toContain("sponsored");
+    const liveProduct = sanitize('<a href="https://www.amazon.de/dp/B07KCS7YX1">amazon.de</a>');
+    const liveRank = sanitize('<a href="https://www.amazon.de/gp/bestsellers/pet-supplies/470653031">Bestseller</a>');
+    expect(liveProduct).toContain('rel="noopener noreferrer nofollow sponsored"');
+    expect(liveRank).toContain('rel="noopener noreferrer nofollow sponsored"');
+    const shop = sanitize('<a href="https://www.fressnapf.de/p">Fressnapf</a>');
+    expect(shop).toContain('rel="noopener noreferrer nofollow"');
+    expect(shop).not.toContain("sponsored");
+    const storage = sanitize('<a href="https://s3.amazonaws.com/bucket/bild.webp">Bild</a>');
+    expect(storage).not.toContain("sponsored");
+  });
   it("h1 wird zu h2", () => expect(sanitize("<h1>T</h1>")).toBe("<h2>T</h2>"));
   it("stripHtml", () => expect(stripHtml("<p>a <b>b</b></p>\n<p>c</p>")).toBe("a b c"));
   it("null-sicher", () => expect(sanitize(null)).toBe(""));
