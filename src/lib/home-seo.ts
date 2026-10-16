@@ -223,14 +223,17 @@ export function homeJsonLd(title: string, reviews: ListedReview[]): Record<strin
       })),
     });
   }
-  graph.push({
-    "@type": "FAQPage",
-    "@id": `${base}#faq`,
-    mainEntity: HOME_FAQ.map((item) => ({
-      "@type": "Question",
-      name: item.q,
-      acceptedAnswer: { "@type": "Answer", text: item.a },
-    })),
-  });
+  const faq = HOME_FAQ.filter((item) => item.q.trim() && item.a.trim());
+  if (faq.length > 0) {
+    graph.push({
+      "@type": "FAQPage",
+      "@id": `${base}#faq`,
+      mainEntity: faq.map((item) => ({
+        "@type": "Question",
+        name: item.q,
+        acceptedAnswer: { "@type": "Answer", text: item.a },
+      })),
+    });
+  }
   return { "@context": "https://schema.org", "@graph": graph };
 }

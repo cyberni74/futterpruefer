@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { seoTitle } from "@/lib/seo";
+import { seoTitle, trimMetaDescription } from "@/lib/seo";
 import { notFound, permanentRedirect } from "next/navigation";
 import { getLexikonEntries, getLexikonEntry, getReviewsMentioning, renderArticle } from "@/lib/content";
 import { findRedirect } from "@/lib/queries";
@@ -32,7 +32,7 @@ export async function generateMetadata({ params }: PageProps<"/lexikon/[slug]">)
   if (!e) return {};
   const title = e.metaTitle || `${e.name} im Tierfutter: ${CONCERN[e.concern].label}?`;
   const base = e.metaDescription || e.shortDescription;
-  const description = base.length >= 70 ? base : `${base} Bewertung und Einordnung im Futter-Lexikon von ${SITE.name}.`.trim();
+  const description = trimMetaDescription(base.length >= 70 ? base : `${base} Bewertung und Einordnung im Futter-Lexikon von ${SITE.name}.`);
   return { title: { absolute: seoTitle(title) }, description, alternates: { canonical: `/lexikon/${e.slug}` }, openGraph: { type: "article", title, description, url: `/lexikon/${e.slug}`, authors: [DEFAULT_AUTHOR.name], images: [{ url: "/opengraph-image.png", width: 1200, height: 630 }] } };
 }
 
@@ -51,7 +51,7 @@ export default async function LexikonEntryPage({ params }: PageProps<"/lexikon/[
   return (
     <article className="mx-auto max-w-3xl px-4">
       <JsonLd data={{ "@context": "https://schema.org", "@type": "DefinedTerm", name: e.name, alternateName: e.synonyms, description: e.shortDescription, url, inDefinedTermSet: { "@type": "DefinedTermSet", name: "Futter-Lexikon", url: absoluteUrl("/lexikon") } }} />
-      <Breadcrumbs items={[{ label: "Futter-Lexikon", href: "/lexikon" }, { label: e.name }]} />
+      <Breadcrumbs items={[{ label: "Futter-Lexikon", href: "/lexikon" }, { label: e.name, href: `/lexikon/${e.slug}` }]} />
       <header className="mt-4 flex items-start gap-5">
         <ConcernLight concern={e.concern} />
         <div className="min-w-0 flex-1">

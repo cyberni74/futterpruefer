@@ -15,7 +15,7 @@ export default async function TestsPage({ searchParams }: PageProps<"/tests">) {
   const [sp, categories] = await Promise.all([searchParams, getCategories()]);
   return (
     <div className="mx-auto max-w-6xl px-4">
-      <Breadcrumbs items={[{ label: "Tests" }]} />
+      <Breadcrumbs items={[{ label: "Tests", href: "/tests" }]} />
       <h1 className="mt-4 text-3xl font-extrabold md:text-5xl">Alle Futtertests</h1>
       <p className="mt-3 max-w-2xl text-lg text-muted">Jedes Produkt wird nach derselben 100-Punkte-Methodik bewertet.</p>
       <nav aria-label="Kategorien" className="my-8 grid grid-cols-2 gap-3 lg:grid-cols-4">

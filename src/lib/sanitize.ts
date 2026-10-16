@@ -1,5 +1,22 @@
 import sanitizeHtml from "sanitize-html";
 
+const REL_ORDER = ["noopener", "noreferrer", "nofollow", "sponsored", "ugc"] as const;
+
+/** Externe Links: noopener/noreferrer/nofollow ergänzen, gesetztes sponsored/nofollow/ugc behalten. */
+export function externalRel(existing: string | undefined): string {
+  const keep = new Set<string>(REL_ORDER);
+  const tokens = new Set(
+    (existing ?? "")
+      .toLowerCase()
+      .split(/\s+/)
+      .filter((token) => keep.has(token)),
+  );
+  tokens.add("noopener");
+  tokens.add("noreferrer");
+  tokens.add("nofollow");
+  return REL_ORDER.filter((token) => tokens.has(token)).join(" ");
+}
+
 const OPTIONS: sanitizeHtml.IOptions = {
   allowedTags: [
     "h2", "h3", "h4", "p", "br", "hr", "strong", "b", "em", "i", "u", "s", "mark", "sup", "sub",
@@ -20,10 +37,8 @@ const OPTIONS: sanitizeHtml.IOptions = {
     h1: "h2",
     a: (tagName, attribs) => {
       const external = /^https?:\/\//.test(attribs.href ?? "");
-      return {
-        tagName,
-        attribs: external ? { ...attribs, target: "_blank", rel: "noopener noreferrer nofollow" } : attribs,
-      };
+      if (!external) return { tagName, attribs };
+      return { tagName, attribs: { ...attribs, target: "_blank", rel: externalRel(attribs.rel) } };
     },
     img: (tagName, attribs) => ({ tagName, attribs: { ...attribs, loading: "lazy" } }),
   },

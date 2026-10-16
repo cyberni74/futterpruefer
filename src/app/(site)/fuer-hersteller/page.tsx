@@ -7,7 +7,7 @@ export const metadata: Metadata = { title: "Für Hersteller", description: "Prod
 
 export default function ManufacturerPage() {
   return (
-    <PageShell crumb="Für Hersteller" title="Für Hersteller" intro="Sie möchten ein Produkt prüfen lassen? Wir freuen uns über Einreichungen.">
+    <PageShell crumb="Für Hersteller" path="/fuer-hersteller" title="Für Hersteller" intro="Sie möchten ein Produkt prüfen lassen? Wir freuen uns über Einreichungen.">
       <div role="note" className="flex gap-3 rounded-2xl border-2 border-accent bg-surface p-5">
         <ShieldAlert className="size-7 shrink-0 text-accent" aria-hidden />
         <p className="font-semibold">Wichtig: Eine Einreichung kauft keine Note. Bewertet wird ausschließlich nach der offengelegten Methodik – auch dann, wenn das Ergebnis schlecht ausfällt. Eingereichte Produkte werden nicht bevorzugt behandelt.</p>

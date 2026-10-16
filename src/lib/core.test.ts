@@ -53,6 +53,11 @@ describe("sanitize", () => {
   it("externe Links bekommen rel/target", () => {
     expect(sanitize('<a href="https://x.de">x</a>')).toContain('rel="noopener noreferrer nofollow"');
   });
+  it("behält sponsored und nofollow an Affiliate-Links", () => {
+    const out = sanitize('<a href="https://shop.example/p" rel="sponsored nofollow">zum Shop</a>');
+    expect(out).toContain('rel="noopener noreferrer nofollow sponsored"');
+    expect(out).toContain('target="_blank"');
+  });
   it("h1 wird zu h2", () => expect(sanitize("<h1>T</h1>")).toBe("<h2>T</h2>"));
   it("stripHtml", () => expect(stripHtml("<p>a <b>b</b></p>\n<p>c</p>")).toBe("a b c"));
   it("null-sicher", () => expect(sanitize(null)).toBe(""));

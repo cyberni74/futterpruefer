@@ -9,7 +9,7 @@ import { enhanceArticle } from "@/lib/article-html";
 import { consWithClaims, misleadingClaims, parseAnalysis, parseClaims, readingMinutes } from "@/lib/product-data";
 import { CRITERIA, type Scores } from "@/lib/scoring";
 import { productReviewJsonLd, reviewHeadline } from "@/lib/review-schema";
-import { productLabel, seoTitle } from "@/lib/seo";
+import { productLabel, seoTitle, trimMetaDescription } from "@/lib/seo";
 import { reviewPath } from "@/lib/urls";
 import { absoluteUrl, ANIMAL_LABEL, formatDate, MONTHS, PRICE_CLASS_LABEL, SITE } from "@/lib/site";
 import { contentAuthor } from "@/lib/attribution";
@@ -47,14 +47,14 @@ export async function generateStaticParams() {
 }
 
 const autoDescription = (r: { title: string; totalScore: number; verdict: string }) =>
-  (r.verdict?.trim() ? `${r.title} im Fachtest: ${r.totalScore}/100 Punkte. ${r.verdict}` : `${r.title} im Fachtest: ${r.totalScore}/100 Punkte. Rohstoffe, Schadstoffe, Nährstoffprofil, Deklaration und Preis-Leistung unabhängig bewertet.`).slice(0, 158);
+  trimMetaDescription(r.verdict?.trim() ? `${r.title} im Fachtest: ${r.totalScore}/100 Punkte. ${r.verdict}` : `${r.title} im Fachtest: ${r.totalScore}/100 Punkte. Rohstoffe, Schadstoffe, Nährstoffprofil, Deklaration und Preis-Leistung bewertet.`);
 
 export async function generateMetadata({ params }: PageProps<"/[kategorie]/[slug]">): Promise<Metadata> {
   const { slug } = await params;
   const r = await getReviewBySlug(slug);
   if (!r) return {};
   const title = r.metaTitle?.trim() || `${productLabel(r.brand, r.productName)} im Test: ${r.totalScore}/100`;
-  const description = r.metaDescription?.trim() || autoDescription(r);
+  const description = trimMetaDescription(r.metaDescription?.trim() || autoDescription(r));
   const path = reviewPath(r);
   return {
     title: { absolute: seoTitle(title) },
@@ -133,7 +133,7 @@ export default async function ReviewPage({ params }: PageProps<"/[kategorie]/[sl
             "@context": "https://schema.org",
             "@type": "Article",
             headline: reviewHeadline(name),
-            description: r.metaDescription?.trim() || autoDescription(r),
+            description: trimMetaDescription(r.metaDescription?.trim() || autoDescription(r)),
             datePublished: r.publishedAt?.toISOString(),
             dateModified: r.updatedAt.toISOString(),
             inLanguage: "de-DE",
@@ -144,7 +144,7 @@ export default async function ReviewPage({ params }: PageProps<"/[kategorie]/[sl
           },
         ]}
       />
-      <Breadcrumbs items={[{ label: r.category.name, href: `/${r.category.slug}` }, { label: name }]} />
+      <Breadcrumbs items={[{ label: r.category.name, href: `/${r.category.slug}` }, { label: name, href: reviewPath(r) }]} />
 
       <div className="mt-4 lg:grid lg:grid-cols-[minmax(0,1fr)_17rem] lg:gap-10">
         <article className="min-w-0">
@@ -169,7 +169,7 @@ export default async function ReviewPage({ params }: PageProps<"/[kategorie]/[sl
                 {r.imageUrl && (
                   <figure>
                     <div className="relative aspect-[4/3] overflow-hidden rounded-3xl bg-bg-soft">
-                      <FpImage src={r.imageUrl} alt={r.imageAlt || `Verpackung von ${name}`} blur={r.imageBlur} sizes={r.contentImageUrl ? "(min-width:1024px) 380px, (min-width:640px) 50vw, 100vw" : "(min-width:1024px) 760px, 100vw"} priority />
+                      <FpImage src={r.imageUrl} alt={r.imageAlt.trim() || `Verpackung von ${name}`} blur={r.imageBlur} sizes={r.contentImageUrl ? "(min-width:1024px) 380px, (min-width:640px) 50vw, 100vw" : "(min-width:1024px) 760px, 100vw"} priority />
                     </div>
                     <figcaption className="mt-1.5 text-sm text-muted">Verpackung</figcaption>
                   </figure>
@@ -177,7 +177,7 @@ export default async function ReviewPage({ params }: PageProps<"/[kategorie]/[sl
                 {r.contentImageUrl && (
                   <figure>
                     <div className="relative aspect-[4/3] overflow-hidden rounded-3xl bg-bg-soft">
-                      <FpImage src={r.contentImageUrl} alt={r.contentImageAlt || `Inhalt von ${name} ohne Verpackung`} blur={r.contentImageBlur} sizes={r.imageUrl ? "(min-width:1024px) 380px, (min-width:640px) 50vw, 100vw" : "(min-width:1024px) 760px, 100vw"} priority={!r.imageUrl} />
+                      <FpImage src={r.contentImageUrl} alt={r.contentImageAlt.trim() || `Inhalt von ${name} ohne Verpackung`} blur={r.contentImageBlur} sizes={r.imageUrl ? "(min-width:1024px) 380px, (min-width:640px) 50vw, 100vw" : "(min-width:1024px) 760px, 100vw"} priority={!r.imageUrl} />
                     </div>
                     <figcaption className="mt-1.5 text-sm text-muted">Das Futter selbst</figcaption>
                   </figure>

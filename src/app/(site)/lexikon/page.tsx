@@ -2,12 +2,13 @@ import type { Metadata } from "next";
 import { getLexikonEntries } from "@/lib/content";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { LexikonBrowser } from "@/components/lexikon-browser";
+import { trimMetaDescription } from "@/lib/seo";
 import { CONCERN } from "@/components/concern-badge";
 
 export const revalidate = 3600;
 export const metadata: Metadata = {
   title: "Futter-Lexikon: Inhaltsstoffe erklärt",
-  description: "Durchsuchbares Lexikon der Inhaltsstoffe in Hunde- und Katzenfutter – mit Erklärung, fachlicher Einschätzung und Bedenklichkeits-Ampel.",
+  description: trimMetaDescription("Durchsuchbares Lexikon der Inhaltsstoffe in Hunde- und Katzenfutter – mit Erklärung, fachlicher Einschätzung und Bedenklichkeits-Ampel."),
   alternates: { canonical: "/lexikon" },
 };
 
@@ -15,7 +16,7 @@ export default async function LexikonPage() {
   const entries = await getLexikonEntries();
   return (
     <div className="mx-auto max-w-4xl px-4">
-      <Breadcrumbs items={[{ label: "Futter-Lexikon" }]} />
+      <Breadcrumbs items={[{ label: "Futter-Lexikon", href: "/lexikon" }]} />
       <h1 className="mt-4 text-3xl font-extrabold md:text-5xl">Futter-Lexikon</h1>
       <p className="mt-3 max-w-2xl text-lg text-muted">Was steckt hinter den Begriffen auf dem Etikett? Jeder Inhaltsstoff mit Erklärung und Ampel-Bewertung.</p>
       <ul className="mb-6 mt-4 flex flex-wrap gap-x-5 gap-y-1 text-sm text-muted">

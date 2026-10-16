@@ -15,7 +15,7 @@ export default async function BlogPage() {
   const posts = await prisma.blogPost.findMany({ where: publishedWhere(), orderBy: { publishedAt: "desc" }, select: blogCardSelect, take: 100 });
   return (
     <div className="mx-auto max-w-6xl px-4">
-      <Breadcrumbs items={[{ label: "Fachblog" }]} />
+      <Breadcrumbs items={[{ label: "Fachblog", href: "/blog" }]} />
       <h1 className="mt-4 text-3xl font-extrabold md:text-5xl">Fachblog</h1>
       <p className="mb-10 mt-3 max-w-2xl text-lg text-muted">Hintergrundwissen zur Tierernährung – unabhängig von den Produkttests.</p>
       {posts.length === 0 ? (

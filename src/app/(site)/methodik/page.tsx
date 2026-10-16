@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { trimMetaDescription } from "@/lib/seo";
 import { CRITERIA, HARMFUL_FAIL_RATIO, MAX_TOTAL, RATING_THRESHOLDS, type CriterionKey } from "@/lib/scoring";
 import { PageShell } from "@/components/page-shell";
 
 export const metadata: Metadata = {
   title: "Methodik: So bewerten wir Hunde- und Katzenfutter",
-  description: "Sechs Kriterien, 100 Punkte, offene Gewichtung: So prüfen wir Rohstoffe, Zusatzstoffe, Nährstoffprofil, Deklaration und Werbeaussagen von Hunde- und Katzenfutter.",
+  description: trimMetaDescription("Sechs Kriterien, 100 Punkte, offene Gewichtung: So prüfen wir Rohstoffe, Zusatzstoffe, Nährstoffprofil, Deklaration und Werbeaussagen von Hunde- und Katzenfutter."),
   alternates: { canonical: "/methodik" },
   openGraph: { type: "article", url: "/methodik", title: "Methodik: So bewerten wir Hunde- und Katzenfutter", images: [{ url: "/opengraph-image.png", width: 1200, height: 630 }] },
 };
@@ -66,7 +67,7 @@ const SOURCES = [
 
 export default function MethodikPage() {
   return (
-    <PageShell crumb="Methodik" title="Unsere Methodik" intro={`Jedes Produkt durchläuft dieselbe Prüfung mit sechs Kriterien und maximal ${MAX_TOTAL} Punkten. Hier steht, was wir prüfen, woher die Informationen stammen und wo die Grenzen eines Tests liegen.`}>
+    <PageShell crumb="Methodik" path="/methodik" title="Unsere Methodik" intro={`Jedes Produkt durchläuft dieselbe Prüfung mit sechs Kriterien und maximal ${MAX_TOTAL} Punkten. Hier steht, was wir prüfen, woher die Informationen stammen und wo die Grenzen eines Tests liegen.`}>
       <nav aria-label="Inhalt dieser Seite" className="rounded-2xl border border-border bg-surface p-5 shadow-card">
         <p className="text-sm font-bold uppercase tracking-wide text-muted">Auf dieser Seite</p>
         <ol className="mt-3 grid gap-x-6 gap-y-1 sm:grid-cols-2">
