@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { FOOTER_CLAIM } from "@/lib/site";
+import { AMAZON_PARTNER_NOTICE, FOOTER_CLAIM } from "@/lib/site";
 import { Logo } from "./logo";
 
 const COLS = [
@@ -27,7 +27,10 @@ export function SiteFooter() {
           </nav>
         ))}
       </div>
-      <p className="border-t border-border px-4 py-5 text-center text-xs text-muted">© {new Date().getFullYear()} Futterprüfer.de · Alle Bewertungen nach offengelegter Methodik</p>
+      <p className="border-t border-border px-4 py-5 text-center text-xs text-muted">
+        © {new Date().getFullYear()} Futterprüfer.de · Alle Bewertungen nach offengelegter Methodik
+        <span className="mt-1 block">{AMAZON_PARTNER_NOTICE}</span>
+      </p>
     </footer>
   );
 }

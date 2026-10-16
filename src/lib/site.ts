@@ -60,6 +60,9 @@ export const DEFAULT_OG_IMAGE = {
 export const FOOTER_CLAIM =
   "Transparente Bewertungen für Hunde- und Katzenfutter. Eine Einreichung kauft keine Note.";
 
+/** Pflichttext Amazon-PartnerNet, Footer und Impressum. */
+export const AMAZON_PARTNER_NOTICE = "Als Amazon-Partner verdiene ich an qualifizierten Verkäufen.";
+
 /** Indexierung nur auf der echten Domain – Vercel-Subdomains, localhost und SITE_NOINDEX=1 bleiben noindex. */
 export function isIndexable(url = SITE.url, flag = process.env.SITE_NOINDEX): boolean {
   if (flag === "1") return false;
