@@ -18,7 +18,7 @@ export default async function GlossarPage() {
   return (
     <div className="mx-auto max-w-3xl px-4">
       <JsonLd data={{ "@context": "https://schema.org", "@type": "DefinedTermSet", name: "Glossar Tierernährung", url: absoluteUrl("/glossar"), hasDefinedTerm: terms.map((t) => ({ "@type": "DefinedTerm", name: t.term, description: t.definition, url: absoluteUrl(`/glossar#${t.slug}`) })) }} />
-      <Breadcrumbs items={[{ label: "Glossar" }]} />
+      <Breadcrumbs items={[{ label: "Glossar", href: "/glossar" }]} />
       <h1 className="mt-4 text-3xl font-extrabold md:text-5xl">Glossar</h1>
       <p className="mt-3 text-lg text-muted">Fachbegriffe aus Tests und Fachblog kurz erklärt. Inhaltsstoffe mit Ampel-Bewertung stehen im <Link href="/lexikon" className="font-semibold text-brand underline">Futter-Lexikon</Link>.</p>
       <nav aria-label="Alphabet" className="mt-6 flex flex-wrap gap-1.5">

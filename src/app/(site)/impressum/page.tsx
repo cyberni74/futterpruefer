@@ -7,7 +7,7 @@ export const metadata: Metadata = { title: "Impressum", description: "Anbieterke
 export default function ImpressumPage() {
   const [main, other] = OPERATOR.address;
   return (
-    <PageShell crumb="Impressum" title="Impressum">
+    <PageShell crumb="Impressum" path="/impressum" title="Impressum">
       <div className="prose-fp">
         <h2>Angaben gemäß § 5 DDG</h2>
         <p>

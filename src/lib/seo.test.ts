@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { productLabel, seoTitle } from "./seo";
+import { productLabel, seoTitle, trimMetaDescription } from "./seo";
 
 describe("productLabel", () => {
   it("vermeidet die doppelte Marke", () => {
@@ -10,6 +10,21 @@ describe("productLabel", () => {
     expect(productLabel("Bosch", "Boschfutter X")).toBe("Boschfutter X");
     expect(productLabel("", "Solo")).toBe("Solo");
     expect(productLabel(null, null)).toBe("");
+  });
+});
+
+describe("trimMetaDescription", () => {
+  it("kürzt über 160 Zeichen an der Wortgrenze", () => {
+    const text = "Sechs Kriterien, 100 Punkte, offene Gewichtung: So prüfen wir Rohstoffe, Zusatzstoffe, Nährstoffprofil, Deklaration und Werbeaussagen von Hunde- und Katzenfutter.";
+    expect(text.length).toBeGreaterThan(160);
+    const trimmed = trimMetaDescription(text);
+    expect(trimmed.length).toBeLessThanOrEqual(160);
+    expect(trimmed.endsWith(" ")).toBe(false);
+    expect(text.startsWith(trimmed)).toBe(true);
+    expect(text[trimmed.length]).toBe(" ");
+  });
+  it("lässt kurze Texte stehen", () => {
+    expect(trimMetaDescription("Kurz und klar.")).toBe("Kurz und klar.");
   });
 });
 

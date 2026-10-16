@@ -2,15 +2,17 @@ import type { Metadata } from "next";
 import { prisma } from "@/lib/db";
 import { PageShell } from "@/components/page-shell";
 import { JsonLd } from "@/components/json-ld";
+import { faqPageJsonLd } from "@/lib/faq-schema";
 
 export const revalidate = 3600;
 export const metadata: Metadata = { title: "Häufige Fragen", description: "Antworten auf häufige Fragen zu Futterprüfer, Bewertungen und Methodik.", alternates: { canonical: "/faq" } };
 
 export default async function FaqPage() {
   const items = await prisma.faqItem.findMany({ orderBy: { sortOrder: "asc" } });
+  const faqLd = faqPageJsonLd(items);
   return (
-    <PageShell crumb="FAQ" title="Häufige Fragen">
-      {items.length > 0 && <JsonLd data={{ "@context": "https://schema.org", "@type": "FAQPage", mainEntity: items.map((i) => ({ "@type": "Question", name: i.question, acceptedAnswer: { "@type": "Answer", text: i.answer } })) }} />}
+    <PageShell crumb="FAQ" path="/faq" title="Häufige Fragen">
+      {faqLd && <JsonLd data={faqLd} />}
       <div className="space-y-3">
         {items.map((i) => (
           <details key={i.id} className="group rounded-2xl border border-border bg-surface shadow-card">

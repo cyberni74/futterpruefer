@@ -3,6 +3,7 @@ import { autolinkUrls } from "./autolink";
 import { cache } from "react";
 import { prisma } from "@/lib/db";
 import { blogCardSelect, publishedWhere, reviewCardSelect } from "@/lib/queries";
+import { fitsAnimal, mentionedAnimals, type AnimalKind } from "@/lib/animals";
 import { sanitize, stripHtml } from "@/lib/sanitize";
 import { linkify, type LinkTerm } from "@/lib/linkify";
 
@@ -46,31 +47,63 @@ export async function renderArticle(html: string | null | undefined, exclude: st
 const words = (list: Array<string | null | undefined>) =>
   [...new Set(list.flatMap((s) => (s ?? "").split(/[,;/]|\s+/)).map((w) => w.trim()).filter((w) => w.length >= 5))].slice(0, 12);
 
-/** Fachartikel passend zu einem Test (Stichwörter, Marke, Tierart). */
+const tagsOf = (values: Array<string | null | undefined>) =>
+  [...new Set(values.map((value) => (value ?? "").trim()).filter((value) => value.length >= 3))];
+
+/** Fachartikel zum Test über gemeinsame Tags (keywords, Marke). Keine fremden Artikel nur zum Auffüllen. */
 export async function getPostsForReview(r: { brand: string; keyword: string; keywords: string[]; category: { animal: string } }, take = 3) {
-  const terms = words([r.brand, r.keyword, ...r.keywords, r.category.animal === "HUND" ? "Hunde" : "Katzen"]);
-  const matches = terms.length
-    ? await prisma.blogPost.findMany({
-        where: { ...publishedWhere(), OR: terms.flatMap((t) => [{ title: { contains: t, mode: "insensitive" as const } }, { excerpt: { contains: t, mode: "insensitive" as const } }, { bodyHtml: { contains: t, mode: "insensitive" as const } }]) },
-        orderBy: { publishedAt: "desc" },
-        take,
-        select: blogCardSelect,
-      })
-    : [];
-  if (matches.length >= take) return matches;
-  const fill = await prisma.blogPost.findMany({ where: { ...publishedWhere(), id: { notIn: matches.map((m) => m.id) } }, orderBy: { publishedAt: "desc" }, take: take - matches.length, select: blogCardSelect });
-  return [...matches, ...fill];
+  const tags = tagsOf([r.brand, r.keyword, ...r.keywords]);
+  if (!tags.length) return [];
+  const animal: AnimalKind = r.category.animal === "KATZE" ? "KATZE" : "HUND";
+  const rows = await prisma.blogPost.findMany({
+    where: {
+      ...publishedWhere(),
+      OR: [
+        { keywords: { hasSome: tags } },
+        ...tags.flatMap((tag) => [
+          { title: { contains: tag, mode: "insensitive" as const } },
+          { excerpt: { contains: tag, mode: "insensitive" as const } },
+        ]),
+      ],
+    },
+    orderBy: { publishedAt: "desc" },
+    take: 24,
+    select: { ...blogCardSelect, keywords: true },
+  });
+  return rows.filter((post) => fitsAnimal(`${post.title} ${post.excerpt} ${post.keywords.join(" ")}`, animal)).slice(0, take);
 }
 
-/** Tests passend zu einem Fachartikel. */
-export async function getReviewsForPost(p: { title: string; keywords: string[]; bodyHtml: string }, take = 3) {
+/** Tests zum Fachartikel über Tags, eingeschränkt auf die genannte Tierart. */
+export async function getReviewsForPost(p: { title: string; keywords: string[]; excerpt?: string; bodyHtml: string }, take = 3) {
+  const animals = mentionedAnimals([p.title, p.excerpt ?? "", ...p.keywords].join(" "));
+  const animalWhere = animals.length === 1 ? { category: { animal: animals[0] } } : {};
+  const tags = tagsOf(p.keywords);
+  if (tags.length) {
+    const tagged = await prisma.review.findMany({
+      where: {
+        ...publishedWhere(),
+        ...animalWhere,
+        OR: [
+          { keywords: { hasSome: tags } },
+          ...tags.flatMap((tag) => [
+            { title: { contains: tag, mode: "insensitive" as const } },
+            { keyword: { contains: tag, mode: "insensitive" as const } },
+          ]),
+        ],
+      },
+      orderBy: { totalScore: "desc" },
+      take,
+      select: reviewCardSelect,
+    });
+    if (tagged.length) return tagged;
+  }
   const lex = await getLexikonEntries();
   const body = stripHtml(p.bodyHtml).toLowerCase();
   const lexHits = lex.filter((e) => [e.name, ...e.synonyms].some((n) => body.includes(n.toLowerCase()))).map((e) => e.name);
   const terms = words([...p.keywords, ...lexHits, ...p.title.split(" ")]).filter((w) => !/^(warum|werden|sollten|richtig|zwingend|brauchen|sinnvoll|marketing|unterschied)$/i.test(w));
   if (!terms.length) return [];
   return prisma.review.findMany({
-    where: { ...publishedWhere(), OR: terms.flatMap((t) => [{ title: { contains: t, mode: "insensitive" as const } }, { keyword: { contains: t, mode: "insensitive" as const } }, { verdict: { contains: t, mode: "insensitive" as const } }, { bodyHtml: { contains: t, mode: "insensitive" as const } }]) },
+    where: { ...publishedWhere(), ...animalWhere, OR: terms.flatMap((t) => [{ title: { contains: t, mode: "insensitive" as const } }, { keyword: { contains: t, mode: "insensitive" as const } }, { verdict: { contains: t, mode: "insensitive" as const } }, { bodyHtml: { contains: t, mode: "insensitive" as const } }]) },
     orderBy: { totalScore: "desc" },
     take,
     select: reviewCardSelect,

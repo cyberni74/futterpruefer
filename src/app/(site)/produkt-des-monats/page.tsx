@@ -15,7 +15,7 @@ export default async function PomArchive() {
   const list = await getProductOfMonthArchive();
   return (
     <div className="mx-auto max-w-4xl px-4">
-      <Breadcrumbs items={[{ label: "Produkt des Monats" }]} />
+      <Breadcrumbs items={[{ label: "Produkt des Monats", href: "/produkt-des-monats" }]} />
       <h1 className="mt-4 text-3xl font-extrabold md:text-5xl">Produkt des Monats</h1>
       <p className="mb-10 mt-3 text-lg text-muted">Jeden Monat küren wir den Testsieger: das Produkt mit der höchsten Gesamtwertung unter den in diesem Monat veröffentlichten Tests.</p>
       <ol className="space-y-6">

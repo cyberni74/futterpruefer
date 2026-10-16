@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 export default function TeamPage() {
   const person = contentAuthor();
   return (
-    <PageShell crumb="Team" title="Team">
+    <PageShell crumb="Team" path="/team" title="Team">
       <JsonLd
         data={[
           {

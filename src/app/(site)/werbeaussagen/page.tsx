@@ -3,6 +3,7 @@ import Link from "next/link";
 import { prisma } from "@/lib/db";
 import { publishedWhere } from "@/lib/queries";
 import { reviewPath } from "@/lib/urls";
+import { trimMetaDescription } from "@/lib/seo";
 import { parseClaims } from "@/lib/product-data";
 import { PageShell } from "@/components/page-shell";
 
@@ -10,8 +11,9 @@ export const revalidate = 3600;
 
 export const metadata: Metadata = {
   title: "Werbeaussagen-Check: Irreführende Werbung bei Tierfutter",
-  description:
+  description: trimMetaDescription(
     "Welche Werbeaussagen auf Hunde- und Katzenfutter halten dem Etikett nicht stand? Unsere Auswertung aller Tests nach Marke, mit Begründung und Hinweisen, wie Sie fragwürdige Werbung melden.",
+  ),
   alternates: { canonical: "/werbeaussagen" },
   openGraph: { type: "article", url: "/werbeaussagen", title: "Werbeaussagen-Check: Irreführende Werbung bei Tierfutter", images: [{ url: "/opengraph-image.png", width: 1200, height: 630 }] },
 };
@@ -44,6 +46,7 @@ export default async function WerbeaussagenPage() {
   return (
     <PageShell
       crumb="Werbeaussagen-Check"
+      path="/werbeaussagen"
       title="Werbeaussagen-Check: Was die Werbung verspricht"
       intro="In jedem unserer Tests prüfen wir Werbeaussagen der Hersteller auf Zulässigkeit und Richtigkeit. Hier steht die Auswertung über alle Tests."
     >
