@@ -1,3 +1,4 @@
+import { canonicalBrand } from "@/lib/brand-alias";
 import { slugify } from "@/lib/slug";
 
 /** Zentrale URL-Bildung: Tests liegen unter /{kategorie-slug}/{test-slug}. */
@@ -17,4 +18,4 @@ export function hyphenateCategory(name: string | null | undefined): string {
   return (name ?? "").replace(/futtermittel/gi, (m) => `­${m.slice(0, 6)}­${m.slice(6)}`).replace(/^­/, "");
 }
 
-export const brandPath = (brand: string) => `/marken/${slugify(brand)}`;
+export const brandPath = (brand: string) => `/marken/${slugify(canonicalBrand(brand))}`;

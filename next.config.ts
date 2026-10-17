@@ -44,6 +44,9 @@ const nextConfig: NextConfig = {
   async redirects() {
     const rules: Redirect[] = [
       { source: "/ueber-mich", destination: "/team", permanent: true },
+      // Zusammengeführte Marken (siehe src/lib/brand-alias.ts)
+      { source: "/marken/purina-gourmet", destination: "/marken/purina", permanent: true },
+      { source: "/marken/purina-pro-plan", destination: "/marken/purina", permanent: true },
       // Frühere Profil-URLs unter /team/… gibt es nicht mehr.
       { source: "/team/:slug", destination: "/team", permanent: true },
     ];

@@ -23,7 +23,7 @@ export async function generateMetadata({ params }: PageProps<"/marken/[marke]">)
 export default async function BrandPage({ params }: PageProps<"/marken/[marke]">) {
   const b = await getBrandBySlug((await params).marke);
   if (!b) notFound();
-  const reviews = await getBrandReviews(b.brand);
+  const reviews = await getBrandReviews(b.variants);
   const info = getBrandInfo(b.slug);
   const best = reviews[0];
   const worst = reviews[reviews.length - 1];

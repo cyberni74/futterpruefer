@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { prisma } from "@/lib/db";
+import { canonicalBrand } from "@/lib/brand-alias";
 import { publishedWhere, reviewCardSelect } from "@/lib/queries";
 import { orderByFor, PRICE_CLASSES, SORTS, type ReviewFilters } from "@/lib/filters";
 import { PRICE_CLASS_LABEL } from "@/lib/site";
@@ -13,12 +14,14 @@ export async function ReviewListing({ basePath, filters, categoryId, showAnimal 
     ...(filters.tier ? { category: { animal: filters.tier } } : {}),
   };
   const brandRows = await prisma.review.findMany({ where: scope, select: { brand: true }, distinct: ["brand"], orderBy: { brand: "asc" } });
-  const brands = brandRows.map((b) => b.brand).filter(Boolean);
+  const rawBrands = brandRows.map((b) => b.brand).filter(Boolean);
+  const brands = [...new Set(rawBrands.map(canonicalBrand))].sort((a, b) => a.localeCompare(b, "de", { sensitivity: "base" }));
+  const markeVariants = filters.marke ? rawBrands.filter((b) => canonicalBrand(b).toLowerCase() === filters.marke!.toLowerCase()) : [];
   const reviews = await prisma.review.findMany({
     where: {
       ...publishedWhere(),
       ...(categoryId ? { categoryId } : {}),
-      ...(filters.marke ? { brand: filters.marke } : {}),
+      ...(filters.marke ? { brand: { in: markeVariants.length ? markeVariants : [filters.marke] } } : {}),
       ...(filters.preis ? { priceClass: filters.preis } : {}),
       ...(filters.tier ? { category: { animal: filters.tier } } : {}),
       ...(filters.min > 0 ? { totalScore: { gte: filters.min } } : {}),
