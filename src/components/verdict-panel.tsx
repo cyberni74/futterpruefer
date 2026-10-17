@@ -5,6 +5,7 @@ import { CriteriaBars } from "./criteria-bars";
 import { WarningBanner } from "./warning-banners";
 import { CRITERIA, type Scores } from "@/lib/scoring";
 import { formatDate } from "@/lib/site";
+import type { CriteriaBarItem } from "./criteria-bars";
 
 export type VerdictData = Scores & {
   totalScore: number;
@@ -16,7 +17,7 @@ export type VerdictData = Scores & {
 };
 
 /** Fazit-Box: Punkte-Ring, Kriterien-Balken, Klartext-Fazit, Pro/Contra. */
-export function VerdictPanel({ data, showWarning = false }: { data: VerdictData; showWarning?: boolean }) {
+export function VerdictPanel({ data, showWarning = false, bars, capNote, safetyWarning }: { data: VerdictData; showWarning?: boolean; bars?: CriteriaBarItem[]; capNote?: string; safetyWarning?: string }) {
   const scores = Object.fromEntries(CRITERIA.map((c) => [c.key, Number(data?.[c.key] ?? 0) || 0])) as Scores;
   const pros = (data?.pros ?? []).map((p) => p?.trim()).filter(Boolean);
   const cons = (data?.cons ?? []).map((p) => p?.trim()).filter(Boolean);
@@ -24,6 +25,7 @@ export function VerdictPanel({ data, showWarning = false }: { data: VerdictData;
   return (
     <section aria-labelledby="fazit-heading" className="overflow-hidden rounded-3xl border border-border bg-surface shadow-card">
       {showWarning && <WarningBanner scoreHarmful={scores.scoreHarmful} reason={data?.harmfulReason} flush />}
+      {safetyWarning ? <WarningBanner scoreHarmful={0} title="Warnhinweis: Sicherheit" reason={safetyWarning} flush /> : null}
       <div className="p-5 md:p-8">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <h2 id="fazit-heading" className="text-2xl font-extrabold">Fazit</h2>
@@ -37,9 +39,10 @@ export function VerdictPanel({ data, showWarning = false }: { data: VerdictData;
         <div className="mt-6 flex flex-col items-center gap-8 md:flex-row md:items-center md:gap-10">
           <ScoreRing score={Number(data?.totalScore ?? 0) || 0} />
           <div className="w-full flex-1">
-            <CriteriaBars scores={scores} />
+            <CriteriaBars scores={scores} items={bars} />
           </div>
         </div>
+        {capNote ? <p className="mt-4 text-sm text-muted">{capNote}</p> : null}
         {data?.verdict?.trim() && <p className="mt-8 text-lg font-medium leading-relaxed">{data.verdict}</p>}
         {(pros.length > 0 || cons.length > 0) && (
           <div className="mt-6 grid gap-4 md:grid-cols-2">

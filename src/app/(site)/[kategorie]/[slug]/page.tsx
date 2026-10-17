@@ -8,6 +8,7 @@ import { getLexikonEntries, getPostsForReview, renderArticle } from "@/lib/conte
 import { enhanceArticle } from "@/lib/article-html";
 import { consWithClaims, misleadingClaims, parseAnalysis, parseClaims, readingMinutes } from "@/lib/product-data";
 import { CRITERIA, type Scores } from "@/lib/scoring";
+import { capNote, efBars, prepareErgaenzungArticle, renderStudienListe, scoreErgaenzung, studieDosisText, type EfInput } from "@/lib/ergaenzung";
 import { productReviewJsonLd, reviewHeadline } from "@/lib/review-schema";
 import { productLabel, seoTitle, trimMetaDescription } from "@/lib/seo";
 import { brandPath, reviewPath } from "@/lib/urls";
@@ -87,6 +88,19 @@ export default async function ReviewPage({ params }: PageProps<"/[kategorie]/[sl
   if (r.category.slug !== kategorie) permanentRedirect(reviewPath(r));
 
   const scores = Object.fromEntries(CRITERIA.map((c) => [c.key, r[c.key]])) as Scores;
+  const efInput: EfInput | null = r.bewertungsart === "ERGAENZUNGSFUTTER" ? {
+    auswahl: r.efWirkstoffAuswahl ?? 0,
+    dosierung: r.efWirkstoffDosierung ?? 0,
+    werbung: r.efWerbung ?? 0,
+    traeger: r.efTraeger ?? 0,
+    mengen: r.efTransparenzMengen ?? 0,
+    unterlagen: r.efTransparenzUnterlagen ?? 0,
+    alibi: r.efAlibiDosierung,
+    keineReferenzdosis: r.efKeineReferenzdosis,
+    heilaussage: r.efHeilaussage,
+    sicherheit: r.efSicherheit,
+  } : null;
+  const efResult = efInput ? scoreErgaenzung(efInput) : null;
   const claims = parseClaims(r.claims);
   const misleading = misleadingClaims(claims);
   const analysis = parseAnalysis(r.analysis);
@@ -99,7 +113,29 @@ export default async function ReviewPage({ params }: PageProps<"/[kategorie]/[sl
     getLexikonEntries(),
     prisma.productOfMonth.findFirst({ where: { reviewId: r.id }, orderBy: [{ year: "desc" }, { month: "desc" }] }),
   ]);
-  const { html: body, toc } = enhanceArticle(linked, scores);
+  const articleSource = efResult
+    ? prepareErgaenzungArticle(linked, {
+        studienHtml: renderStudienListe(r.studien.map((s) => ({
+          wirkstoff: s.wirkstoff.name,
+          autoren: s.autoren,
+          jahr: s.jahr,
+          titel: s.titel,
+          zeitschrift: s.zeitschrift,
+          tierart: s.tierart,
+          evidenzstufe: s.evidenzstufe,
+          dosis: studieDosisText({
+            studiendosisJeKg: s.studiendosisJeKg == null ? null : Number(s.studiendosisJeKg.toString()),
+            einheit: s.einheit ?? "",
+            studiendosisOriginal: s.studiendosisOriginal,
+          }),
+          ergebnis: s.ergebnisKurz,
+          link: s.link,
+        }))),
+        tierschutz: r.efTierschutzText,
+        rot: efResult.ampel === "ROT",
+      })
+    : linked;
+  const { html: body, toc } = enhanceArticle(articleSource, efResult ? undefined : scores);
   const hasProductData = Boolean(r.composition?.trim() || analysis.length || r.price != null || r.pricePerKg != null || r.pricePerDay != null);
   const hasConclusion = Boolean(conclusion.trim());
   const tocItems = [...toc, ...(hasConclusion ? [{ id: "fazit", text: "Fazit" }] : []), ...(hasProductData ? [{ id: "produktdaten", text: "Produktdaten" }] : []), ...(claims.length ? [{ id: "werbeaussagen-h", text: "Werbeversprechen im Faktencheck" }] : [])];
@@ -198,16 +234,24 @@ export default async function ReviewPage({ params }: PageProps<"/[kategorie]/[sl
           </header>
 
           {/* 3. / 3b. Warnhinweise */}
-          {(misleading.length > 0 || r.scoreHarmful < 10) && (
+          {(misleading.length > 0 || (efResult ? efResult.warnsignal : r.scoreHarmful < 10)) && (
             <div className="mt-6 space-y-3">
-              <WarningBanner scoreHarmful={r.scoreHarmful} reason={r.harmfulReason} />
+              {efResult ? (
+                efResult.warnsignal ? <WarningBanner scoreHarmful={0} title="Warnhinweis: Sicherheit" reason={r.efSicherheitBegruendung} /> : null
+              ) : (
+                <WarningBanner scoreHarmful={r.scoreHarmful} reason={r.harmfulReason} />
+              )}
               <MisleadingClaimsBanner count={misleading.length} />
             </div>
           )}
 
           {/* 4. Fazit */}
           <div className="mt-6">
-            <VerdictPanel data={{ ...scores, totalScore: r.totalScore, verdict: r.verdict, pros: r.pros, cons: consWithClaims(r.cons, claims), updatedAt: r.updatedAt }} />
+            <VerdictPanel
+              data={{ ...scores, totalScore: r.totalScore, verdict: r.verdict, pros: r.pros, cons: consWithClaims(r.cons, claims), updatedAt: r.updatedAt }}
+              bars={efInput && efResult ? efBars(efInput, efResult) : undefined}
+              capNote={efResult ? capNote(efResult) || undefined : undefined}
+            />
           </div>
 
           {/* 5. Inhaltsverzeichnis (mobil) */}

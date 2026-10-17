@@ -2,13 +2,13 @@ import { AlertOctagon, Megaphone } from "lucide-react";
 import { harmfulFailed } from "@/lib/scoring";
 
 /** Rote Warnbox, wenn „Schadstoffe & Bedenkliches“ unter dem Schwellenwert liegt. */
-export function WarningBanner({ scoreHarmful, reason, flush = false }: { scoreHarmful: number | null | undefined; reason?: string | null; flush?: boolean }) {
-  if (!harmfulFailed(scoreHarmful)) return null;
+export function WarningBanner({ scoreHarmful, reason, flush = false, title }: { scoreHarmful: number | null | undefined; reason?: string | null; flush?: boolean; title?: string }) {
+  if (!title && !harmfulFailed(scoreHarmful)) return null;
   return (
     <div role="alert" className={`flex items-start gap-3 bg-bad px-5 py-4 text-white ${flush ? "" : "rounded-2xl"}`}>
       <AlertOctagon className="mt-0.5 size-7 shrink-0" aria-hidden />
       <div>
-        <p className="font-bold">Warnhinweis: Schadstoffe &amp; Bedenkliches – {scoreHarmful ?? 0} von 20 Punkten</p>
+        <p className="font-bold">{title ?? `Warnhinweis: Schadstoffe & Bedenkliches – ${scoreHarmful ?? 0} von 20 Punkten`}</p>
         <p className="mt-1 text-sm leading-snug text-white/95">{reason?.trim() || "Das Produkt enthält nach unserer Einschätzung ungeeignete oder problematische Inhaltsstoffe."}</p>
       </div>
     </div>

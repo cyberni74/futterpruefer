@@ -1,5 +1,7 @@
 import { CRITERIA, type Scores } from "@/lib/scoring";
 import { parseAnalysis, parseClaims } from "@/lib/product-data";
+import { EMPTY_EF_FORM, efFormFromReview, type EfFormState } from "./ergaenzung-form";
+import type { EfSicherheit } from "@/lib/ergaenzung";
 
 const money = (v: { toString(): string } | null | undefined) => (v == null ? "" : Number(v.toString()).toFixed(2).replace(".", ","));
 const day = (d: Date | null | undefined) => (d ? d.toISOString().slice(0, 10) : "");
@@ -46,6 +48,29 @@ type ReviewRow = {
   status: ContentStatus;
   publishedAt: Date | null;
   updatedAt: Date;
+  bewertungsart?: "ALLEINFUTTER" | "ERGAENZUNGSFUTTER";
+  methodikVersion?: string;
+  efWirkstoffAuswahl?: number | null;
+  efWirkstoffAuswahlBegruendung?: string;
+  efWirkstoffDosierung?: number | null;
+  efWirkstoffDosierungBegruendung?: string;
+  efWerbung?: number | null;
+  efWerbungBegruendung?: string;
+  efTraeger?: number | null;
+  efTraegerBegruendung?: string;
+  efTransparenzMengen?: number | null;
+  efTransparenzMengenBegruendung?: string;
+  efTransparenzUnterlagen?: number | null;
+  efTransparenzUnterlagenBegruendung?: string;
+  efAlibiDosierung?: boolean;
+  efKeineReferenzdosis?: boolean;
+  efHeilaussage?: boolean;
+  efSicherheit?: EfSicherheit;
+  efSicherheitBegruendung?: string;
+  efTierschutzText?: string;
+  efTraegerAbzuege?: string[];
+  efPreisTagesdosisEur?: { toString(): string } | null;
+  wirkstoffe?: Parameters<typeof efFormFromReview>[0]["wirkstoffe"];
 } & Scores;
 
 /** Prisma-Datensatz → serialisierbare Editor-Daten (Decimal → String, Daten → Berlin-Ortszeit). */
@@ -91,6 +116,30 @@ export function reviewToEditorData(r: ReviewRow, now = new Date()) {
     publishMode: mode,
     scheduledAt: mode === "scheduled" ? dateToBerlinLocal(r.publishedAt) : "",
     updatedAt: r.updatedAt.toISOString(),
+    bewertungsart: r.bewertungsart ?? "ALLEINFUTTER",
+    ef: r.efWirkstoffAuswahl === undefined && r.bewertungsart === undefined ? EMPTY_EF_FORM : efFormFromReview({
+      efWirkstoffAuswahl: r.efWirkstoffAuswahl ?? null,
+      efWirkstoffAuswahlBegruendung: r.efWirkstoffAuswahlBegruendung ?? "",
+      efWirkstoffDosierung: r.efWirkstoffDosierung ?? null,
+      efWirkstoffDosierungBegruendung: r.efWirkstoffDosierungBegruendung ?? "",
+      efWerbung: r.efWerbung ?? null,
+      efWerbungBegruendung: r.efWerbungBegruendung ?? "",
+      efTraeger: r.efTraeger ?? null,
+      efTraegerBegruendung: r.efTraegerBegruendung ?? "",
+      efTransparenzMengen: r.efTransparenzMengen ?? null,
+      efTransparenzMengenBegruendung: r.efTransparenzMengenBegruendung ?? "",
+      efTransparenzUnterlagen: r.efTransparenzUnterlagen ?? null,
+      efTransparenzUnterlagenBegruendung: r.efTransparenzUnterlagenBegruendung ?? "",
+      efAlibiDosierung: r.efAlibiDosierung ?? false,
+      efKeineReferenzdosis: r.efKeineReferenzdosis ?? false,
+      efHeilaussage: r.efHeilaussage ?? false,
+      efSicherheit: r.efSicherheit ?? "OK",
+      efSicherheitBegruendung: r.efSicherheitBegruendung ?? "",
+      efTierschutzText: r.efTierschutzText ?? "",
+      efTraegerAbzuege: r.efTraegerAbzuege ?? [],
+      efPreisTagesdosisEur: r.efPreisTagesdosisEur ?? null,
+      wirkstoffe: r.wirkstoffe,
+    }),
   };
 }
 
@@ -133,6 +182,8 @@ export const EMPTY_REVIEW = {
   publishMode: "draft" as const,
   scheduledAt: "",
   updatedAt: null,
+  bewertungsart: "ALLEINFUTTER" as const,
+  ef: EMPTY_EF_FORM satisfies EfFormState,
 };
 
 type PostRow = {
