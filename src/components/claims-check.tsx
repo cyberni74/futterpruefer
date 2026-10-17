@@ -30,12 +30,12 @@ function Badge({ rating }: { rating: ClaimRating }) {
 }
 
 /** Werbeaussagen-Check: Aussage → Bewertung → Begründung. Mobil Karten, Desktop Tabelle. */
-export function ClaimsCheck({ claims, brand }: { claims: Claim[]; brand: string }) {
+export function ClaimsCheck({ claims, brand, sourceLabel }: { claims: Claim[]; brand: string; sourceLabel?: string }) {
   if (!claims?.length) return null;
   return (
     <section id="werbeaussagen" aria-labelledby="werbeaussagen-h" className="scroll-mt-28">
       <h2 id="werbeaussagen-h" className="text-2xl font-extrabold">Werbeversprechen im Faktencheck</h2>
-      <p className="mt-2 text-muted">Wir haben die Werbeaussagen von {brand} auf der Verpackung und im Shop geprüft. Die Bewertungen sind unsere begründete fachliche Einschätzung.</p>
+      <p className="mt-2 text-muted">{sourceLabel ?? `Wir haben die Werbeaussagen von ${brand} auf der Verpackung und im Shop geprüft.`} Die Bewertungen sind unsere begründete fachliche Einschätzung.</p>
 
       <ul className="mt-5 space-y-3 md:hidden">
         {claims.map((c, i) => (

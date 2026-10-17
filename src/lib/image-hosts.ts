@@ -2,6 +2,8 @@
 
 export const SUPABASE_IMAGE_HOST = "cotopvhmsqztjtdsdnoc.supabase.co";
 export const BILDER_BUCKET = "bilder";
+/** Amazon-Galerie, nur Hotlink. Kein Rehost über den Next-Image-Optimizer. */
+export const AMAZON_IMAGE_HOST = "m.media-amazon.com";
 const BLOB_HOST_SUFFIX = ".public.blob.vercel-storage.com";
 
 function httpsUrl(value: string): URL | null {
@@ -15,7 +17,14 @@ function httpsUrl(value: string): URL | null {
   return url;
 }
 
-/** Leere Angabe, eigene relative Uploads, bisherige Blob-URLs oder der öffentliche Supabase-Bucket. */
+/** Galeriebild von m.media-amazon.com/images/I/…, https, ohne Zugangsdaten. */
+export function isAmazonHotlink(value: string): boolean {
+  const url = httpsUrl(value.trim());
+  if (!url) return false;
+  return url.hostname === AMAZON_IMAGE_HOST && url.pathname.startsWith("/images/I/");
+}
+
+/** Leere Angabe, eigene relative Uploads, bisherige Blob-URLs, der öffentliche Supabase-Bucket oder ein Amazon-Galerie-Hotlink. */
 export function isAllowedImageUrl(value: string): boolean {
   const v = value.trim();
   if (v === "" || v.startsWith("/uploads/") || v.startsWith("/demo/")) return true;
@@ -23,5 +32,6 @@ export function isAllowedImageUrl(value: string): boolean {
   if (!url) return false;
   const host = url.hostname;
   if (host.endsWith(BLOB_HOST_SUFFIX) && host.length > BLOB_HOST_SUFFIX.length) return true;
+  if (host === AMAZON_IMAGE_HOST && url.pathname.startsWith("/images/I/")) return true;
   return host === SUPABASE_IMAGE_HOST && url.pathname.startsWith(`/storage/v1/object/public/${BILDER_BUCKET}/`);
 }

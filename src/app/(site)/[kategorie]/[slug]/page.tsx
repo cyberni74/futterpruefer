@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound, permanentRedirect } from "next/navigation";
 import { ArrowRight, Award, CalendarCheck, Clock, PawPrint, RefreshCw, Scale, UserRound } from "lucide-react";
 import { prisma } from "@/lib/db";
-import { getRelatedReviews, getReviewBySlug, publishedWhere, resolveReviewPath } from "@/lib/queries";
+import { getRelatedReviews, getReviewBySlug, previewDraftsEnabled, publishedWhere, resolveReviewPath } from "@/lib/queries";
 import { getLexikonEntries, getPostsForReview, renderArticle } from "@/lib/content";
 import { enhanceArticle } from "@/lib/article-html";
 import { consWithClaims, misleadingClaims, parseAnalysis, parseClaims, readingMinutes } from "@/lib/product-data";
@@ -25,6 +25,7 @@ import { AnalysisTable } from "@/components/analysis-table";
 import { PriceBlock } from "@/components/price-block";
 import { ClaimsCheck } from "@/components/claims-check";
 import { FpImage } from "@/components/fp-image";
+import { isAmazonHotlink } from "@/lib/image-hosts";
 import { ReadAloud } from "@/components/read-aloud";
 import { ShareButtons } from "@/components/share-buttons";
 import { ShareBar } from "@/components/share-bar";
@@ -37,6 +38,11 @@ import { Disclosure } from "@/components/disclosure";
 import { JsonLd } from "@/components/json-ld";
 
 export const revalidate = 3600;
+/** Draft-Slugs stehen nicht in generateStaticParams und rendern auf der Preview on-demand. */
+export const dynamicParams = true;
+
+const isPublicReview = (r: { status: string; publishedAt: Date | null }) =>
+  r.status === "PUBLISHED" && r.publishedAt != null && r.publishedAt.getTime() <= Date.now();
 
 export async function generateStaticParams() {
   try {
@@ -52,8 +58,10 @@ const autoDescription = (r: { title: string; totalScore: number; verdict: string
 
 export async function generateMetadata({ params }: PageProps<"/[kategorie]/[slug]">): Promise<Metadata> {
   const { slug } = await params;
-  const r = await getReviewBySlug(slug);
+  const allowDrafts = previewDraftsEnabled();
+  const r = await getReviewBySlug(slug, { includeDrafts: allowDrafts });
   if (!r) return {};
+  const draft = allowDrafts && !isPublicReview(r);
   const title = r.metaTitle?.trim() || `${productLabel(r.brand, r.productName)} im Test: ${r.totalScore}/100`;
   const description = trimMetaDescription(r.metaDescription?.trim() || autoDescription(r));
   const path = reviewPath(r);
@@ -64,6 +72,7 @@ export async function generateMetadata({ params }: PageProps<"/[kategorie]/[slug
     alternates: { canonical: path },
     openGraph: { type: "article", title, description, url: path, modifiedTime: r.updatedAt.toISOString(), publishedTime: r.publishedAt?.toISOString(), authors: [resolveAuthor(r.authorSlug).name] },
     twitter: { card: "summary_large_image", title, description },
+    ...(draft ? { robots: { index: false, follow: false, googleBot: { index: false, follow: false } } } : {}),
   };
 }
 
@@ -78,7 +87,8 @@ function Section({ id, title, children }: { id: string; title: string; children:
 
 export default async function ReviewPage({ params }: PageProps<"/[kategorie]/[slug]">) {
   const { kategorie, slug } = await params;
-  const r = await getReviewBySlug(slug);
+  const allowDrafts = previewDraftsEnabled();
+  const r = await getReviewBySlug(slug, { includeDrafts: allowDrafts });
   if (!r) {
     const path = await resolveReviewPath(slug);
     if (path) permanentRedirect(path);
@@ -147,9 +157,16 @@ export default async function ReviewPage({ params }: PageProps<"/[kategorie]/[sl
   const gallery = (r.gallery ?? []).filter(Boolean);
   const abs = (u: string) => (u.startsWith("http") ? u : absoluteUrl(u));
   const author = contentAuthor(r.authorSlug);
+  const draftPreview = allowDrafts && !isPublicReview(r);
+  const amazonListing = [r.imageUrl, r.contentImageUrl].some((src) => src != null && isAmazonHotlink(src));
 
   return (
     <div className="mx-auto max-w-6xl px-4">
+      {draftPreview && (
+        <p role="status" className="mt-4 rounded-2xl border-2 border-bad bg-bad-soft p-5 text-lg font-extrabold text-bad">
+          Entwurf – nicht veröffentlicht, Rechtsprüfung ausstehend
+        </p>
+      )}
       <JsonLd
         data={[
           productReviewJsonLd({
@@ -298,7 +315,7 @@ export default async function ReviewPage({ params }: PageProps<"/[kategorie]/[sl
 
           {/* 7b. Werbeaussagen-Check */}
           {claims.length > 0 && (
-            <div className="mt-12"><ClaimsCheck claims={claims} brand={r.brand} /></div>
+            <div className="mt-12"><ClaimsCheck claims={claims} brand={r.brand} sourceLabel={amazonListing ? `Die folgenden Sätze stehen im Amazon-Listing zu ${r.brand}. Wer sie dort eingetragen hat, ist uns nicht bekannt.` : undefined} /></div>
           )}
 
           {/* 8. Teilen */}

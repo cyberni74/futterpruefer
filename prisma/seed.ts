@@ -29,6 +29,7 @@ import { KAUARTIKEL_BILDER } from "./bilder-kauartikel-funktion";
 import { TREND_OKT_TESTS } from "./review-trend-oktober";
 import { TREND_OKT_BILDER } from "./bilder-trend-oktober";
 import { DAILY_OKT16_TESTS } from "./review-daily-2026-10-16";
+import { DAILY_OKT17_TESTS } from "./review-daily-2026-10-17";
 import { DAILY_OKT16_BILDER } from "./bilder-daily-2026-10-16";
 import { REFERENZDOSEN } from "./referenzdosen";
 import { MAMMALY_BLOG_SECTIONS, MAMMALY_BLOGS_MARKER } from "./review-mammaly-blogs";
@@ -172,6 +173,7 @@ async function main() {
   await ensureMammalyTests();
   await ensureMammalyBlogs();
   await normalizeStoredLinks();
+  await ensureDailyOkt17Drafts();
   // Demo-Inhalte (fiktive Tests, Blog, Ticker) nur auf ausdrücklichen Wunsch: SEED_DEMO=1.
   // Verhindert, dass sie nach dem Löschen bei einem Deploy wieder auftauchen.
   if (process.env.SEED_DEMO !== "1" || (await prisma.review.count()) > 0) {
@@ -631,6 +633,60 @@ async function ensureDemoDetails() {
     });
   }
   if (demos.length) console.log(`Demo-Produktdaten ergänzt: ${demos.length}`);
+}
+
+/**
+ * Fünf Tests vom 17.10.2026. Legt nur fehlende Slugs als DRAFT an (publishedAt null).
+ * Bestehende Datensätze bleiben unangetastet. Veröffentlichung nur, wenn im Datensatz
+ * freigegeben === true, VERCEL_ENV production ist und der Eintrag noch DRAFT ist.
+ * Liegt publishedAtPlan dann noch in der Zukunft, gilt der Freigabezeitpunkt mit abweichender Uhrzeit.
+ */
+function publishedAtForRelease(planIso: string, index: number): Date {
+  const planned = new Date(planIso);
+  const now = new Date();
+  if (!Number.isNaN(planned.getTime()) && planned.getTime() <= now.getTime()) return planned;
+  return new Date(now.getTime() - (index + 1) * 37 * 60 * 1000);
+}
+
+async function ensureDailyOkt17Drafts() {
+  const categories = new Map((await prisma.category.findMany({ select: { id: true, slug: true } })).map((c) => [c.slug, c.id]));
+  let created = 0;
+  for (const [index, t] of DAILY_OKT17_TESTS.entries()) {
+    const categoryId = categories.get(t.categorySlug);
+    if (!categoryId) { console.log(`Test ${t.slug} übersprungen: Kategorie ${t.categorySlug} fehlt.`); continue; }
+    const existing = await prisma.review.findUnique({ where: { slug: t.slug }, select: { id: true, status: true } });
+    if (existing) {
+      const freigegeben = t.freigegeben as boolean;
+      if (freigegeben && process.env.VERCEL_ENV === "production" && existing.status === "DRAFT") {
+        await prisma.review.update({
+          where: { id: existing.id },
+          data: { status: "PUBLISHED", publishedAt: publishedAtForRelease(t.publishedAtPlan, index) },
+        });
+        console.log(`Test ${t.slug}: Entwurf freigegeben.`);
+      }
+      continue;
+    }
+    const sc = t.scores;
+    const total = sc.scoreRaw + sc.scoreHarmful + sc.scoreNutrients + sc.scoreDeclaration + sc.scoreNeeds + sc.scoreValue;
+    await prisma.review.create({
+      data: {
+        slug: t.slug, title: t.title, brand: t.brand, productName: t.productName, keyword: t.keyword, categoryId,
+        priceClass: t.priceClass, pricePerKg: t.pricePerKg, packageSize: t.packageSize, price: t.price, pricePerDay: t.pricePerDay,
+        imageUrl: t.imageUrl, imageAlt: t.imageAlt, imageBlur: null,
+        contentImageUrl: t.contentImageUrl, contentImageAlt: t.contentImageAlt, contentImageBlur: null,
+        gallery: [],
+        composition: t.composition, analysis: t.analysis, claims: t.claims,
+        ...sc, totalScore: total,
+        verdict: t.verdict, teaser: t.teaser, pros: t.pros, cons: t.cons,
+        bodyHtml: autolinkUrls(t.bodyHtml), conclusionHtml: autolinkUrls(t.conclusionHtml),
+        metaTitle: t.metaTitle, metaDescription: t.metaDescription, keywords: t.keywords,
+        priceDate: new Date(t.priceDate), testedAt: new Date(t.testedAt),
+        status: "DRAFT", publishedAt: null,
+      },
+    });
+    created++;
+  }
+  if (created) console.log(`${created} Entwürfe vom 17.10.2026 angelegt (nicht veröffentlicht).`);
 }
 
 main().catch((e) => { console.error(e); process.exit(1); }).finally(() => prisma.$disconnect());
