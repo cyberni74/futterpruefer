@@ -21,20 +21,20 @@ export function ProductOfMonthHero({ pom }: { pom: { year: number; month: number
   return (
     <section aria-labelledby="pdm-heading" className="relative overflow-hidden rounded-3xl bg-brand-strong text-white shadow-lift dark:bg-brand-soft">
       <div className="grid md:grid-cols-2">
-        <div className="relative aspect-[4/3] md:aspect-auto md:min-h-[26rem]">
+        <div className="relative aspect-[16/9] md:aspect-auto md:min-h-[18rem]">
           <FpImage src={r.imageUrl} alt={r.imageAlt || r.title} blur={r.imageBlur} sizes="(min-width:768px) 50vw, 100vw" />
-          <MonthSeal month={pom.month} year={pom.year} className="absolute left-4 top-4 md:left-6 md:top-6" />
+          <MonthSeal month={pom.month} year={pom.year} className="absolute left-3 top-3 origin-top-left scale-75 md:left-4 md:top-4" />
         </div>
-        <div className="flex flex-col justify-center gap-4 p-6 md:p-10">
+        <div className="flex flex-col justify-center gap-3 p-5 md:p-7">
           <p className="text-sm font-bold uppercase tracking-widest text-white/80 dark:text-fg/80">Produkt des Monats</p>
           <div className="flex items-start gap-4">
-            <h2 id="pdm-heading" className="flex-1 text-3xl font-extrabold leading-tight md:text-4xl dark:text-fg">
+            <h2 id="pdm-heading" className="flex-1 text-2xl font-extrabold leading-tight md:text-3xl dark:text-fg">
               <span className="sr-only">Produkt des Monats: </span>{r.title}
             </h2>
-            <ScoreBadge score={r.totalScore} size="lg" />
+            <ScoreBadge score={r.totalScore} size="md" />
           </div>
-          <p className="text-lg leading-relaxed text-white/90 dark:text-fg/90">{pom.reason}</p>
-          <div className="flex flex-wrap gap-3 pt-2">
+          <p className="line-clamp-4 leading-relaxed text-white/90 dark:text-fg/90">{pom.reason}</p>
+          <div className="flex flex-wrap gap-3 pt-1">
             <Link href={reviewPath(r)} className="inline-flex min-h-12 items-center gap-2 rounded-full bg-accent px-6 font-bold text-white hover:bg-accent-strong dark:text-black">
               Zum Testbericht <ArrowRight className="size-5" aria-hidden />
             </Link>
