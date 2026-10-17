@@ -1,5 +1,6 @@
 import type { NextConfig } from "next";
 import type { Redirect } from "next/dist/lib/load-custom-routes";
+import { SUPABASE_IMAGE_HOST } from "./src/lib/image-hosts";
 import { CANONICAL_ORIGIN, REDIRECT_HOSTS } from "./src/lib/site";
 
 const isDev = process.env.NODE_ENV !== "production";
@@ -8,7 +9,7 @@ const csp = [
   "default-src 'self'",
   `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""} https://va.vercel-scripts.com https://challenges.cloudflare.com`,
   "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' data: blob: https://*.public.blob.vercel-storage.com",
+  `img-src 'self' data: blob: https://*.public.blob.vercel-storage.com https://${SUPABASE_IMAGE_HOST}`,
   "font-src 'self' data:",
   "connect-src 'self' https://va.vercel-scripts.com https://vitals.vercel-insights.com",
   "frame-src https://challenges.cloudflare.com",
@@ -36,7 +37,10 @@ const nextConfig: NextConfig = {
     formats: ["image/avif", "image/webp"],
     qualities: [50, 75],
     deviceSizes: [360, 480, 640, 700, 750, 828, 1080, 1200, 1920],
-    remotePatterns: [{ protocol: "https", hostname: "*.public.blob.vercel-storage.com" }],
+    remotePatterns: [
+      { protocol: "https", hostname: "*.public.blob.vercel-storage.com" },
+      { protocol: "https", hostname: SUPABASE_IMAGE_HOST, pathname: "/storage/v1/object/public/bilder/**" },
+    ],
   },
   serverExternalPackages: ["sharp"],
   // OG-Bilder lesen lokale Produktbilder aus /public

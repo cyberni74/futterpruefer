@@ -15,5 +15,5 @@
    - `DIRECT_URL`   = `postgres://prisma.cotopvhmsqztjtdsdnoc:PW@HOST:5432/postgres?sslmode=require`
    - HOST = Supavisor-Host aus Supabase → Connect (aws-0- oder aws-1-eu-central-1.pooler.supabase.com)
    - `AUTH_SECRET` (openssl rand -base64 32), `NEXT_PUBLIC_SITE_URL`, `ADMIN_EMAIL`, `ADMIN_PASSWORD` (≥ 12 Zeichen)
-4. Blob-Store anlegen und mit dem Projekt verbinden (`BLOB_READ_WRITE_TOKEN`)
+4. Bild-Upload: `SUPABASE_URL` und `SUPABASE_SERVICE_ROLE_KEY` (nur Server, Bucket `bilder`). Vercel Blob wird für neue Uploads nicht mehr verwendet.
 5. Deploy, Build-Logs prüfen, Live-Seite + `/admin` testen
