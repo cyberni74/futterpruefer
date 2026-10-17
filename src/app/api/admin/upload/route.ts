@@ -1,9 +1,7 @@
-import { mkdir, writeFile } from "node:fs/promises";
-import path from "node:path";
 import sharp from "sharp";
-import { put } from "@vercel/blob";
 import { auth } from "@/auth";
 import { MAX_IMAGE_WIDTH, MAX_UPLOAD_BYTES, altSuggestion, buildImageFileName, isAllowedSharpFormat, parseVariant } from "@/lib/admin/upload";
+import { uploadPublicImage } from "@/lib/supabase-storage";
 
 export const dynamic = "force-dynamic";
 
@@ -52,21 +50,8 @@ export async function POST(request: Request) {
   const blur = `data:image/webp;base64,${blurBuf.toString("base64")}`;
   const fileName = buildImageFileName(variant ? `${name} ${variant}` : name);
 
-  let url: string;
-  try {
-    if (process.env.BLOB_READ_WRITE_TOKEN) {
-      const res = await put(`bilder/${fileName}`, output, { access: "public", contentType: "image/webp", addRandomSuffix: false });
-      url = res.url;
-    } else {
-      const dir = path.join(process.cwd(), "public", "uploads");
-      await mkdir(dir, { recursive: true });
-      await writeFile(path.join(dir, fileName), output);
-      url = `/uploads/${fileName}`;
-    }
-  } catch (e) {
-    console.error("upload: storage", e);
-    return error("Speichern des Bildes fehlgeschlagen.", 500);
-  }
+  const stored = await uploadPublicImage(fileName, output);
+  if ("error" in stored) return error(stored.error, stored.status);
 
-  return Response.json({ url, blur, altSuggestion: altSuggestion(kind, name, variant) });
+  return Response.json({ url: stored.url, blur, altSuggestion: altSuggestion(kind, name, variant) });
 }

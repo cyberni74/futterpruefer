@@ -1,4 +1,5 @@
 /** Produktdaten eines Tests: Zusammensetzung, Analyse, Werbeaussagen, Lesezeit – alles null-sicher. */
+import { isAllowedImageUrl } from "./image-hosts";
 import { slugify } from "./slug";
 
 // ---------- Werbeaussagen ----------
@@ -14,10 +15,10 @@ export const CLAIM_LABEL: Record<ClaimRating, string> = {
 
 const str = (v: unknown, max = 1000) => (typeof v === "string" ? v.trim().slice(0, max) : "");
 
-/** Nur eigene Uploads, Demo-Bilder oder https – verhindert javascript:-Links aus JSON-Daten. */
+/** Nur eigene Uploads, Demo-Bilder, bisherige Blob-URLs oder den öffentlichen Supabase-Bucket. */
 export function safeImageUrl(v: unknown): string {
   const u = str(v, 500);
-  return u.startsWith("/uploads/") || u.startsWith("/demo/") || /^https:\/\/[^\s]+$/.test(u) ? u : "";
+  return isAllowedImageUrl(u) ? u : "";
 }
 
 export function parseClaims(json: unknown): Claim[] {

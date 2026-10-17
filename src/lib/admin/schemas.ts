@@ -1,4 +1,5 @@
 import { isAuthorSlug } from "@/lib/authors";
+import { isAllowedImageUrl } from "@/lib/image-hosts";
 import { parseAnalysis, parseClaims } from "@/lib/product-data";
 import { z } from "zod";
 import { CRITERIA, type CriterionKey } from "@/lib/scoring";
@@ -34,7 +35,7 @@ const imageUrl = z
   .string()
   .trim()
   .max(500)
-  .refine((v) => v === "" || v.startsWith("/uploads/") || v.startsWith("/demo/") || /^https:\/\/[^\s]+$/.test(v), { error: "Ungültige Bild-URL." });
+  .refine((v) => isAllowedImageUrl(v), { error: "Ungültige Bild-URL." });
 
 const imageBlur = z
   .string()
@@ -138,7 +139,7 @@ const jsonArray = <T,>(parse: (j: unknown) => T[], label: string, max: number) =
 const galleryUrls = z
   .array(z.string().trim().max(500))
   .transform((a) => a.filter(Boolean))
-  .pipe(z.array(z.string().refine((v) => v.startsWith("/uploads/") || v.startsWith("/demo/") || /^https:\/\/[^\s]+$/.test(v), { error: "Ungültige Bild-URL in der Galerie." })).max(8, { error: "Höchstens 8 weitere Bilder." }));
+  .pipe(z.array(z.string().refine((v) => isAllowedImageUrl(v), { error: "Ungültige Bild-URL in der Galerie." })).max(8, { error: "Höchstens 8 weitere Bilder." }));
 
 export const reviewSchema = z
   .object({

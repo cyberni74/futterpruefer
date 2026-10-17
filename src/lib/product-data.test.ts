@@ -22,8 +22,18 @@ describe("Werbeaussagen", () => {
       { claim: "a", rating: "ZULAESSIG", imageUrl: "javascript:alert(1)" },
       { claim: "b", rating: "ZULAESSIG", imageUrl: "/uploads/x.webp" },
       { claim: "c", rating: "ZULAESSIG", imageUrl: "http://x.de/a.jpg" },
+      { claim: "d", rating: "ZULAESSIG", imageUrl: "https://xwpsp3svpsdhnsdw.public.blob.vercel-storage.com/bilder/a.webp" },
+      { claim: "e", rating: "ZULAESSIG", imageUrl: "https://cotopvhmsqztjtdsdnoc.supabase.co/storage/v1/object/public/bilder/a.webp" },
+      { claim: "f", rating: "ZULAESSIG", imageUrl: "https://evil.example/a.webp" },
     ]);
-    expect(c.map((x) => x.imageUrl)).toEqual(["", "/uploads/x.webp", ""]);
+    expect(c.map((x) => x.imageUrl)).toEqual([
+      "",
+      "/uploads/x.webp",
+      "",
+      "https://xwpsp3svpsdhnsdw.public.blob.vercel-storage.com/bilder/a.webp",
+      "https://cotopvhmsqztjtdsdnoc.supabase.co/storage/v1/object/public/bilder/a.webp",
+      "",
+    ]);
   });
   it("Abzugsvorschlag und Contra-Übernahme", () => {
     const c = parseClaims(raw);

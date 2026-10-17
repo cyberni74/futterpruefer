@@ -9,7 +9,7 @@ const fail = (m) => { console.error(`[futterpruefer-build] FEHLER: ${m}`); proce
 
 const required = ["DATABASE_URL", "AUTH_SECRET"];
 const missing = required.filter((k) => !process.env[k]);
-log(`Variablen gesetzt: ${["DATABASE_URL", "DIRECT_URL", "AUTH_SECRET", "NEXT_PUBLIC_SITE_URL", "ADMIN_EMAIL", "ADMIN_PASSWORD", "BLOB_READ_WRITE_TOKEN"].map((k) => `${k}=${process.env[k] ? "ja" : "nein"}`).join(", ")}`);
+log(`Variablen gesetzt: ${["DATABASE_URL", "DIRECT_URL", "AUTH_SECRET", "NEXT_PUBLIC_SITE_URL", "ADMIN_EMAIL", "ADMIN_PASSWORD", "SUPABASE_URL", "SUPABASE_SERVICE_ROLE_KEY"].map((k) => `${k}=${process.env[k] ? "ja" : "nein"}`).join(", ")}`);
 if (missing.length) fail(`Fehlende Umgebungsvariablen: ${missing.join(", ")}`);
 
 const parse = (s) => { try { return new URL(s); } catch { return null; } };
