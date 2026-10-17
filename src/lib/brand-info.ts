@@ -12,7 +12,6 @@ export type BrandInfo = {
   geschichte: { jahr: string; text: string; quelle: string }[];
   vorfaelle: BrandIncident[];
   vorfaelle_hinweis: string;
-  quellen: { name: string; url: string }[];
 };
 
 const INFO = raw as unknown as Record<string, BrandInfo>;

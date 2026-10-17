@@ -1,1 +1,1125 @@
-{}
+{
+ "animonda": {
+  "slug": "animonda",
+  "name": "animonda",
+  "unternehmen": "animonda petcare gmbh",
+  "sitz": "Bad Rothenfelde, Deutschland",
+  "konzern": "heristo aktiengesellschaft (familiengeführte Unternehmensgruppe, Bad Rothenfelde)",
+  "gegruendet": "1991",
+  "ueberblick": "animonda petcare ist ein Heimtiernahrungsunternehmen aus Bad Rothenfelde mit den Marken Carny, GranCarno und Vom Feinsten für Katzen und Hunde. Es gehört zur heristo aktiengesellschaft. Produktionsstandorte wurden nicht belegt.",
+  "geschichte": [
+   {
+    "jahr": "1991",
+    "text": "Start des Unternehmens mit der Vision, hochwertige Heimtiernahrung herzustellen, mit Wurzeln im Metzgerhandwerk.",
+    "quelle": "https://animonda.de/ueber-uns/"
+   },
+   {
+    "jahr": "heute",
+    "text": "animonda petcare gehört neben saturn petcare zur Tiernahrungssparte der heristo aktiengesellschaft.",
+    "quelle": "https://www.heristo.de/de/unternehmen"
+   }
+  ],
+  "vorfaelle": [],
+  "vorfaelle_hinweis": "produktwarnung.eu (Suche „animonda“, „carny“) und allgemeine Websuche zu Rückrufen durchsucht, keine belegten Treffer bis Oktober 2026. Ratgeberseiten ohne Quellenangabe nennen einen Carny-Rückruf wegen Dichtungen; dieser konnte nicht über eine Primärquelle belegt werden und wurde nicht übernommen. Gerichts- oder Wettbewerbsverfahren wurden nicht gefunden. Der Sitz laut Impressum ist Bad Rothenfelde; ein Standort Delmenhorst wurde nicht belegt. lebensmittelwarnung.de ließ sich nicht automatisiert durchsuchen."
+ },
+ "applaws": {
+  "slug": "applaws",
+  "name": "Applaws",
+  "unternehmen": "MPM Products Limited",
+  "sitz": "Manchester, Vereinigtes Königreich",
+  "konzern": "Partners Group (Übernahme von MPM Products von 3i im Juni 2025 vereinbart; Abschluss in den geprüften Quellen nicht bestätigt)",
+  "gegruendet": "2002",
+  "ueberblick": "Applaws ist eine Katzenfuttermarke (daneben auch Hundefutter) der britischen MPM Products, die auch Reveal und Encore vertreibt. MPM verkauft laut Partners Group in über 50 Ländern. Der Rückruf 2021 nennt Fold Hill Foods als Hersteller der betroffenen Trockenfutter.",
+  "geschichte": [
+   {
+    "jahr": "2002",
+    "text": "Die MPM Products Limited wurde am 6. Dezember 2002 registriert; Firmensitz laut Handelsregister Manchester.",
+    "quelle": "https://find-and-update.company-information.service.gov.uk/search/companies?q=MPM+Products"
+   },
+   {
+    "jahr": "2020",
+    "text": "Die Beteiligungsgesellschaft 3i investierte im Dezember 2020 in MPM, den Eigentümer von Applaws, Reveal und Encore.",
+    "quelle": "https://www.petbusinessworld.co.uk/trade-news/manufacturers/applaws-owner-sold-on-to-new-investors.html"
+   },
+   {
+    "jahr": "2024",
+    "text": "MPM wurde als B Corp zertifiziert.",
+    "quelle": "https://www.petbusinessworld.co.uk/trade-news/manufacturers/applaws-owner-sold-on-to-new-investors.html"
+   },
+   {
+    "jahr": "2025",
+    "text": "Im Juni 2025 vereinbarten 3i und Partners Group den Verkauf von MPM Products; der Abschluss stand unter Vorbehalt behördlicher Genehmigung und wurde für das dritte Quartal 2025 erwartet.",
+    "quelle": "https://www.petbusinessworld.co.uk/trade-news/manufacturers/applaws-owner-sold-on-to-new-investors.html"
+   }
+  ],
+  "vorfaelle": [
+   {
+    "datum": "2021-06",
+    "art": "Rückruf",
+    "titel": "Rückruf von hypoallergenem Trockenfutter für Katzen (Großbritannien) wegen Verdachts auf Zusammenhang mit felinem Pancytopenie-Ausbruch",
+    "text": "Im Juni 2021 rief der Hersteller Fold Hill Foods in Großbritannien hypoallergenes Katzentrockenfutter der Marken Applaws, AVA (Pets at Home) und Sainsbury's zurück. Anlass war ein Anstieg von Fällen felinen Pancytopenie, den das Royal Veterinary College gemeldet hatte; laut Leigh Day gab es seit April 2021 130 gemeldete Fälle. Die Food Standards Agency und Defra rieten, die Produkte nicht zu verfüttern. Nach einem Bericht der Tierschutzorganisation GSPCA wurde der Rückruf bei Applaws nachträglich von bestimmten MHD auf alle MHD der gelisteten Produkte ausgeweitet. Eine abschließende Ursache wird in den geprüften Quellen nicht belegt. Der Rückruf betraf den britischen Markt; ein Verkauf der betroffenen Produkte in Deutschland ist nicht belegt.",
+    "quelle_name": "Veterinary Times; Leigh Day; GSPCA",
+    "quelle": "https://www.vettimes.com/news/vets/small-animal-vets/recall-for-cat-food-brands-over-possible-pancytopenia-link-discovery"
+   }
+  ],
+  "vorfaelle_hinweis": "Websuche und produktwarnung.eu (Suche nach Applaws) sowie Abruf von Presse- und Registerseiten, Stand 16.10.2026. Die FSA-Originalmeldung ist archiviert und war nicht abrufbar; der Rückruf 2021 stützt sich auf Fachpresse, Rechtsanwaltskanzlei-Mitteilung und Tierschutzorganisation. Keine Treffer zu Rückrufen in Deutschland oder zu Gerichtsverfahren; lebensmittelwarnung.de wurde nicht direkt durchsucht. Das Verhältnis des Markennamens Applaws zur MPM Products Limited ergibt sich aus Meldungen zur Übernahme, nicht aus einem Impressum (applaws.com war nicht abrufbar). Ein deutscher Importeur wurde nicht gefunden."
+ },
+ "belcando": {
+  "slug": "belcando",
+  "name": "BELCANDO",
+  "unternehmen": "BEWITAL petfood GmbH & Co. KG",
+  "sitz": "Südlohn, Deutschland",
+  "konzern": null,
+  "gegruendet": "1963 (BEWITAL)",
+  "ueberblick": "BELCANDO ist die Hundefuttermarke der BEWITAL petfood GmbH & Co. KG aus Südlohn (Münsterland), einem Familienunternehmen. Das Unternehmen führt außerdem Katzenfuttermarken wie LEONARDO und stellt nach eigenen Angaben ausschließlich in eigenen Werken im Münsterland her.",
+  "geschichte": [
+   {
+    "jahr": "1963",
+    "text": "Bernhard Wigger gründete das Unternehmen BEWITAL als kleines Agrarunternehmen.",
+    "quelle": "https://www.bewital-petfood.de/unternehmen/historie"
+   },
+   {
+    "jahr": "1980",
+    "text": "Anfang der 1980er Jahre entwickelte das Unternehmen mit Ernährungswissenschaftlern die ersten Rezepturen für Hundenahrung.",
+    "quelle": "https://www.bewital-petfood.de/unternehmen/historie"
+   },
+   {
+    "jahr": "1990",
+    "text": "Generationswechsel: Dr. Jürgen Wigger und Ulrike Petershagen übernahmen die Geschäftsführung.",
+    "quelle": "https://www.bewital-petfood.de/unternehmen/historie"
+   },
+   {
+    "jahr": "2015",
+    "text": "Errichtung eines neuen Werks für die Frischfleischvorbereitung; Feuchtnahrungswerk in der Folge erweitert.",
+    "quelle": "https://www.bewital-petfood.de/unternehmen/historie"
+   }
+  ],
+  "vorfaelle": [
+   {
+    "datum": "2022-09",
+    "art": "Rückruf",
+    "titel": "BELCANDO Rind mit Kartoffel & Erbsen, 400-g-Dose, Partikel von Magneten",
+    "text": "BEWITAL rief im September 2022 eine Charge (Chargen-Nr. 22131, MHD 11.05.2026) von BELCANDO Rind mit Kartoffel & Erbsen in der 400-g-Dose zurück, weil Fremdkörper in Form von Partikeln von Magneten enthalten sein konnten. Andere Chargen waren laut Hersteller nicht betroffen; der Kaufpreis wurde erstattet.",
+    "quelle_name": "produktwarnung.eu",
+    "quelle": "https://www.produktwarnung.eu/2022/09/29/rueckruf-partikel-von-magneten-bewital-ruft-eine-charge-des-hundefutters-belcando-rind-mit-kartoffel-erbsen-zurueck/27203"
+   }
+  ],
+  "vorfaelle_hinweis": "produktwarnung.eu (Suche „belcando“, „bewital“) und allgemeine Websuche durchsucht, Stand Oktober 2026; nur der Rückruf von 2022 wurde gefunden. Gerichts- oder Wettbewerbsverfahren gegen die Marke wurden nicht gefunden. lebensmittelwarnung.de ließ sich nicht automatisiert durchsuchen."
+ },
+ "bosch": {
+  "slug": "bosch",
+  "name": "Bosch",
+  "unternehmen": "bosch Tiernahrung GmbH & Co. KG",
+  "sitz": "Blaufelden-Wiesenbach, Deutschland",
+  "konzern": null,
+  "gegruendet": "1960",
+  "ueberblick": "bosch Tiernahrung ist ein Familienunternehmen aus Blaufelden-Wiesenbach (Baden-Württemberg), das Trockenfutter, Nassfutter und Snacks für Hunde und Katzen herstellt. Nach eigenen Angaben wird in Baden-Württemberg produziert und in mehr als 45 Länder vertrieben. Es besteht keine Verbindung zur Bosch-Gruppe (Haushaltsgeräte).",
+  "geschichte": [
+   {
+    "jahr": "1960",
+    "text": "Gründung durch Kurt Bosch; zunächst Herstellung von landwirtschaftlichem Nutztierfutter.",
+    "quelle": "https://www.bosch-tiernahrung.de/bosch_de_de/unsere-geschichte"
+   },
+   {
+    "jahr": "1984",
+    "text": "Beginn des Vertriebs von Trockenfutter für Hunde.",
+    "quelle": "https://www.bosch-tiernahrung.de/bosch_de_de/unsere-geschichte"
+   },
+   {
+    "jahr": "1988",
+    "text": "Installation der ersten Extrusionslinie, Herstellung von Hundetrockennahrung im eigenen Werk, Einführung der High-Premium-Linie.",
+    "quelle": "https://www.bosch-tiernahrung.de/bosch_de_de/unsere-geschichte"
+   },
+   {
+    "jahr": "2000",
+    "text": "Die gesamte Produktionsstätte in Blaufelden-Wiesenbach wurde auf Trockenfutter-Menüs umgestellt.",
+    "quelle": "https://www.bosch-tiernahrung.de/bosch_de_de/unsere-geschichte"
+   },
+   {
+    "jahr": "2001",
+    "text": "Einführung des Sanabelle High-Premium-Sortiments für Katzen.",
+    "quelle": "https://www.bosch-tiernahrung.de/bosch_de_de/unsere-geschichte"
+   }
+  ],
+  "vorfaelle": [
+   {
+    "datum": "2018-01",
+    "art": "Rückruf",
+    "titel": "Bosch Soft Mini Rehwild & Kartoffel, Verdacht auf Bleiverunreinigung",
+    "text": "In einem Händleranschreiben warnte bosch Tiernahrung im Januar 2018 vor zwei Chargen (Partie 263, MHD 20.03.2019; Partie 264, MHD 21.03.2019) von Bosch Soft Mini Rehwild & Kartoffel wegen eines Anfangsverdachts auf Bleiverunreinigung. Laut Update von produktwarnung.eu vom 29.01.2018 stellte der Hersteller in einem Statement klar, dass kein Zusammenhang mit einer parallelen RASFF-Meldung zu schwedischem Hundefutter bestand. Ein Ergebnis der Untersuchung ist in der Quelle nicht dokumentiert.",
+    "quelle_name": "produktwarnung.eu",
+    "quelle": "https://www.produktwarnung.eu/2018/01/26/achtung-hundebesitzer-blei-in-hundefutter-von-bosch/8074"
+   }
+  ],
+  "vorfaelle_hinweis": "produktwarnung.eu (Suche und Schlagwort „Bosch Tiernahrung GmbH“) und allgemeine Websuche durchsucht, Stand Oktober 2026; nur der Fall von 2018 wurde gefunden. Der Firmensitz laut Impressum ist Blaufelden-Wiesenbach; ein Standort Eberbach wurde nicht belegt. lebensmittelwarnung.de ließ sich nicht automatisiert durchsuchen."
+ },
+ "bugbell": {
+  "slug": "bugbell",
+  "name": "Bugbell",
+  "unternehmen": "BugBell GmbH",
+  "sitz": "Verden (Aller), Deutschland",
+  "konzern": null,
+  "gegruendet": "2021",
+  "ueberblick": "Bugbell ist ein Hundefutter-Start-up aus Verden (Aller), das Trocken- und Nassfutter mit Insektenprotein als zentraler Proteinquelle anbietet. Das Unternehmen wurde von Jamina Zaugg und Arne Mües gegründet. Zum Produktionsstandort liegt kein Beleg vor; Handelsplattformen beschreiben die Produkte als in Deutschland hergestellt.",
+  "geschichte": [
+   {
+    "jahr": "2017",
+    "text": "Die Idee, Hundefutter mit Insektenprotein zu entwickeln, entstand laut Regionalpresse während des Studiums von Jamina Zaugg.",
+    "quelle": "https://www.weser-kurier.de/landkreis-verden/stadt-verden/firma-aus-verden-erhaelt-preis-fuer-nachhaltiges-hundefutter-details-doc85m3ba158aulth3wlgr"
+   },
+   {
+    "jahr": "2021",
+    "text": "Jamina Zaugg und Arne Mües gründeten BugBell; das Start-up gehörte zum ersten Batch des Gründerprogramms Seedhouse.",
+    "quelle": "https://www.seedhouse.de/de/growing-startups/bugbell"
+   }
+  ],
+  "vorfaelle": [],
+  "vorfaelle_hinweis": "produktwarnung.eu durchsucht (keine Treffer für Bugbell), Websuche nach Rückruf, Warnung, Abmahnung und Kritik ohne Treffer; lebensmittelwarnung.de war per Abruf nicht erreichbar (HTTP 403), dort daher nicht geprüft. Stand Oktober 2026."
+ },
+ "canina": {
+  "slug": "canina",
+  "name": "Canina",
+  "unternehmen": "Canina pharma GmbH",
+  "sitz": "Hamm, Deutschland",
+  "konzern": null,
+  "gegruendet": "1984",
+  "ueberblick": "Canina ist eine Marke der Canina pharma GmbH aus Hamm für Ergänzungsfuttermittel sowie Pflege- und Hygieneprodukte für Hunde, Katzen und Pferde. Das Unternehmen ist nach Angaben von Branchenportalen familiengeführt und produziert, lagert und verwaltet an einem Standort in Hamm.",
+  "geschichte": [
+   {
+    "jahr": "1984",
+    "text": "Canina pharma wurde als Familienunternehmen gegründet.",
+    "quelle": "https://www.bionity.com/en/companies/12581/canina-pharma-gmbh.html"
+   },
+   {
+    "jahr": "2020",
+    "text": "Das Sortiment umfasste laut Branchenporträt über 170 Produkte; alle Produkte wurden an einem Standort in Hamm hergestellt, der Produktion, Lager und Verwaltung vereint. Der Vertrieb lief über fast 3.000 Zoofachgeschäfte, Tierheilpraxen und Hundesalons in Deutschland sowie Händler in über 40 Ländern.",
+    "quelle": "https://globalpetindustry.com/?p=66024"
+   }
+  ],
+  "vorfaelle": [],
+  "vorfaelle_hinweis": "Websuche nach Rückrufen, Warnungen, Abmahnungen und Urteilen zu Canina pharma sowie Suche auf produktwarnung.eu nach Canina, Stand 16.10.2026: keine Treffer. lebensmittelwarnung.de wurde nicht direkt durchsucht. Die Herstellerseite war über den Proxy nicht abrufbar; die Firmendaten stammen aus Branchenportalen (Bionity, GlobalPETS). Ein Mutterkonzern wurde nicht gefunden."
+ },
+ "dreamies": {
+  "slug": "dreamies",
+  "name": "Dreamies",
+  "unternehmen": "MARS GmbH",
+  "sitz": "Verden (Aller), Deutschland",
+  "konzern": "Mars, Incorporated (Geschäftsbereich Mars Petcare)",
+  "gegruendet": null,
+  "ueberblick": "Dreamies ist eine Marke für Katzensnacks (Katzenleckerlis) von Mars. In Deutschland tritt laut Herstellermitteilung die MARS GmbH auf. Ein belegter Produktionsstandort wurde nicht gefunden.",
+  "geschichte": [],
+  "vorfaelle": [],
+  "vorfaelle_hinweis": "Stand 17.10.2026. Suche auf produktwarnung.eu (Suchbegriff „Dreamies“, keine Treffer) und Websuche nach Rückrufen, Behördenwarnungen, Verfahren und Verbraucherkritik zu Dreamies in Deutschland/EU; keine belegten Vorfälle gefunden. Ein Katzenfutter-Blog äußerte Kritik an der Deklaration; als Einzelmeinung eines Blogs wurde dies nicht aufgenommen. lebensmittelwarnung.de ließ sich nicht direkt abfragen (Zugriff gesperrt)."
+ },
+ "felix": {
+  "slug": "felix",
+  "name": "Felix",
+  "unternehmen": "Nestlé Purina PetCare Deutschland GmbH",
+  "sitz": "Euskirchen, Deutschland",
+  "konzern": "Nestlé S.A. (Vevey, Schweiz) über Nestlé Purina PetCare",
+  "gegruendet": "vor dem Zweiten Weltkrieg (Felix Catfood Ltd., England)",
+  "ueberblick": "Felix ist eine ursprünglich britische Katzenfuttermarke, die heute zu Nestlé Purina PetCare gehört und unter anderem in Deutschland vertrieben wird. Das Sortiment umfasst Nass- und Trockenfutter sowie Snacks. In Deutschland tritt die Nestlé Purina PetCare Deutschland GmbH (Euskirchen) für Purina-Marken auf; Produktionsstandorte der in Deutschland verkauften Felix-Produkte wurden nicht belegt.",
+  "geschichte": [
+   {
+    "jahr": "vor 1939",
+    "text": "Felix Catfood Ltd. stellte vor dem Zweiten Weltkrieg Katzentrockengebäck in einer Fabrik in Biggleswade (Bedfordshire, England) her.",
+    "quelle": "https://en.wikipedia.org/wiki/Felix_(cat_food)"
+   },
+   {
+    "jahr": "1970",
+    "text": "Die Quaker Oats Company übernahm das Geschäft von Felix Catfood.",
+    "quelle": "https://www.gracesguide.co.uk/Felix_Catfood"
+   },
+   {
+    "jahr": "1989",
+    "text": "Die Marke wurde mit neuem Sortiment und dem schwarz-weißen Maskottchen Felix neu eingeführt; 1996 war Felix laut Wikipedia in Großbritannien Marktführer vor Whiskas.",
+    "quelle": "https://en.wikipedia.org/wiki/Felix_(cat_food)"
+   },
+   {
+    "jahr": "1995",
+    "text": "Dalgety kaufte Felix Pet Foods, die europäische Heimtiernahrungssparte von Quaker Oats, und gliederte sie in Spillers ein.",
+    "quelle": "https://www.gracesguide.co.uk/Dalgety_Spillers_Foods"
+   },
+   {
+    "jahr": "1998",
+    "text": "Die Aktionäre von Dalgety stimmten am 17. März 1998 dem Verkauf der Tierfuttersparte Spillers an Nestlé für 715 Millionen Pfund zu (andere Quellen nennen als Jahr des Verkaufs 1997).",
+    "quelle": "https://www.fwi.co.uk/news/dalgety-shareholders-approve-sell-offs"
+   },
+   {
+    "jahr": "2015",
+    "text": "Felix Sensations Crunchy Crumbles der Nestlé Purina PetCare Deutschland GmbH wurde von Lebensmittel Praxis mit Gold in der Kategorie Katze Nassfutter ausgezeichnet.",
+    "quelle": "https://lebensmittelpraxis.de/marken-tiernahrung-tierbedarf/13152-nestlé-purina-pet-care-deutschland-gmbh-ihr-haustier,-unsere-leidenschaft.html"
+   }
+  ],
+  "vorfaelle": [],
+  "vorfaelle_hinweis": "Stand 16.10.2026. Keine dokumentierten Vorfälle gefunden. Durchsucht wurden die französische Rückrufdatenbank RappelConso (Treffer zum Stichwort Felix betrafen nur andere Marken), produktwarnung.eu (Suche nach Felix ohne verwertbare Treffer; die Seitensuche ist unscharf) und Web-Recherchen zu Rückrufen und Warnungen für Felix in Deutschland. Die französischen Rückrufe von 2022 betrafen Pro Plan und Purina ONE (siehe Markenprofil Purina), nicht Felix. lebensmittelwarnung.de und die Seiten von purina.de waren per automatisiertem Abruf nicht erreichbar (HTTP 403) und konnten daher nicht ausgewertet werden. Kundenbewertungen im Handel wurden nicht als Beleg gewertet. Im Konsument-Test 6/2024 (Österreich) wurde Felix So gut wie es aussieht mit Thunfisch in Gelee insgesamt mit „gut“ (72 Punkte) bewertet."
+ },
+ "gimcat": {
+  "slug": "gimcat",
+  "name": "GimCat",
+  "unternehmen": "H. von Gimborn GmbH",
+  "sitz": "Emmerich am Rhein, Deutschland",
+  "konzern": null,
+  "gegruendet": "1855",
+  "ueberblick": "GimCat ist die Katzenmarke der H. von Gimborn GmbH aus Emmerich am Rhein (früher GimPet) mit Snacks, Pasten und Ergänzungsfuttermitteln. Das Unternehmen vertreibt außerdem GimDog und Biokat's Katzenstreu. Produktionsstätten liegen laut Wikipedia in Emmerich am Rhein und Kelheim.",
+  "geschichte": [
+   {
+    "jahr": "1855",
+    "text": "Der Apotheker Heinrich von Gimborn gründete die H. von Gimborn als chemisch-pharmazeutische Fabrik.",
+    "quelle": "https://de.wikipedia.org/wiki/H._von_Gimborn"
+   },
+   {
+    "jahr": "1965",
+    "text": "Mit der Lizenz für die britische Marke Ipevet stieg das Unternehmen in den Heimtiermarkt ein.",
+    "quelle": "https://de.wikipedia.org/wiki/H._von_Gimborn"
+   },
+   {
+    "jahr": "1997",
+    "text": "Die Süd-Chemie AG (München) übernahm das Unternehmen, nachdem es zuvor von Pelikan an Michael Eckes verkauft worden war.",
+    "quelle": "https://de.wikipedia.org/wiki/H._von_Gimborn"
+   },
+   {
+    "jahr": "2006",
+    "text": "Verkauf an die Berliner Gimborn Holding GmbH im Rahmen eines Management-Buy-outs mit dem Finanzinvestor capiton.",
+    "quelle": "https://de.wikipedia.org/wiki/H._von_Gimborn"
+   },
+   {
+    "jahr": "2008",
+    "text": "Die Gimborn-Gruppe gehörte ab September 2008 zu 100 % dem Fonds Penta Investments (Prag).",
+    "quelle": "https://de.wikipedia.org/wiki/H._von_Gimborn"
+   },
+   {
+    "jahr": "2016",
+    "text": "Penta Investments verkaufte die Gimborn-Gruppe im Herbst 2016 an Hillhouse Capital Management.",
+    "quelle": "https://www.boersen-zeitung.de/unternehmen-branchen/penta-findet-kaufer-fur-gimborn-in-china"
+   }
+  ],
+  "vorfaelle": [],
+  "vorfaelle_hinweis": "Websuche nach Rückrufen, Warnungen und Kritik zu GimCat/Gimborn sowie Suche auf produktwarnung.eu nach GimCat, GimPet und Gimborn, Stand 16.10.2026: keine Treffer. lebensmittelwarnung.de wurde nicht direkt durchsucht; Gerichts- und Wettbewerbsverfahren wurden nicht gezielt recherchiert. Der heutige Eigentümer ist nicht belegt (letzter belegter Eigentümerwechsel: Hillhouse 2016); weder Kerbl noch Mars konnten als Eigentümer belegt werden."
+ },
+ "greenies": {
+  "slug": "greenies",
+  "name": "Greenies",
+  "unternehmen": null,
+  "sitz": null,
+  "konzern": "Mars, Incorporated (Mars Petcare)",
+  "gegruendet": "1998 (S&M NuTec, Kansas City)",
+  "ueberblick": "Greenies sind Zahnpflege-Kauartikel für Hunde, die das US-Unternehmen S&M NuTec ab 1998 vertrieb und die seit 2006 zu Mars gehören. Die Marke ist in Deutschland im Handel erhältlich (z. B. bei zooplus als Greenies Dental Treats). Das für Deutschland verantwortliche Unternehmen (Inverkehrbringer) und die Produktionsstandorte der hier verkauften Ware wurden nicht belegt.",
+  "geschichte": [
+   {
+    "jahr": "1998",
+    "text": "Joe und Judy Roetheli gründeten S&M NuTec (North Kansas City, Missouri), den Hersteller der Greenies; 2005 verkaufte das Unternehmen laut Euromonitor 315 Millionen Stück.",
+    "quelle": "https://www.nbcnews.com/id/wbna12305035"
+   },
+   {
+    "jahr": "2006",
+    "text": "Mars Inc. unterzeichnete im April 2006 die Vereinbarung zur Übernahme von S&M NuTec; der Kaufpreis wurde nicht genannt.",
+    "quelle": "https://www.nbcnews.com/id/wbna12305035"
+   },
+   {
+    "jahr": "2006",
+    "text": "Im Oktober 2006 kam eine neu formulierte Version der Greenies auf den Markt, nach Angaben der Hersteller schon vor der negativen Berichterstattung entwickelt.",
+    "quelle": "https://www.mediapost.com/publications/article/49780/controversial-greenies-dog-treats-get-a-makeover.html"
+   },
+   {
+    "jahr": "2019",
+    "text": "Mars Petcare brachte Greenies Dental Treats im Vereinigten Königreich in den Fachhandel.",
+    "quelle": "https://www.petbusinessworld.co.uk/trade-news/manufacturers/mars-brings-greenies-to-pet-trade.html"
+   }
+  ],
+  "vorfaelle": [
+   {
+    "datum": "2006-02",
+    "art": "Kritik",
+    "titel": "Medienberichte über Todesfälle und Darmverschlüsse bei Hunden (USA)",
+    "text": "Im Februar 2006 berichtete ABC News über einen Hund, bei dem sich ein Greenies-Snack im Darm festgesetzt hatte und dessen Halterin rund 12.000 US-Dollar Behandlungskosten aufbrachte. Laut Fachpresse (dvm360, April 2006) lagen Medienberichte über mindestens 13 gestorbene Hunde vor; S&M NuTec erklärte, die Greenies seien bei bestimmungsgemäßer Verwendung sicher, und kündigte eine erweiterte Kennzeichnung an.",
+    "quelle_name": "ABC News, 17.02.2006",
+    "quelle": "https://abcnews.go.com/GMA/story?id=1631267"
+   },
+   {
+    "datum": "2006-03",
+    "art": "Verfahren",
+    "titel": "Untersuchung der US-Behörde FDA",
+    "text": "Laut dvm360 bestätigte das Center for Veterinary Medicine der FDA zum 1. März 2006 35 Beschwerden zu 34 Hunden und einer Katze und leitete eine Untersuchung ein. Die FDA ordnete die von S&M NuTec angekündigte Änderung der Verpackungshinweise (Auswahl der Größe passend zum Hund) nicht an.",
+    "quelle_name": "dvm360, 01.04.2006",
+    "quelle": "https://www.dvm360.com/view/fda-investigates-adverse-events-tied-greenies-maker-changes-label"
+   },
+   {
+    "datum": "2007-09",
+    "art": "Verfahren",
+    "titel": "Vergleich in Klage von zehn Tierhaltern gegen S&M NuTec (USA)",
+    "text": "Am 17. September 2007 wurde die Klage von zehn Tierhaltern aus acht US-Bundesstaaten gegen S&M NuTec beigelegt; der Anwalt der Kläger erklärte, die Einzelheiten seien vertraulich. Gegenstand waren Todesfälle durch Ersticken und Darmverschluss, die den Greenies zugeschrieben worden waren.",
+    "quelle_name": "Baywoof, Canine News November 2007",
+    "quelle": "https://old.baywoof.com/nose-for-news/news-from-near-and-far-november-2007"
+   },
+   {
+    "datum": "2015-07",
+    "art": "Verfahren",
+    "titel": "Klage von Paragon Pet Products Europe gegen Mars wegen Werbeaussage „#1 Vet Recommended“ (USA)",
+    "text": "Im Juli 2015 reichte die niederländische Paragon Pet Products Europe B.V. beim Bundesgericht für den Southern District of New York eine Klage wegen irreführender Werbung gegen Mars Inc. ein. Beanstandet wurde die Aussage „#1 Vet Recommended Dental Chew“ auf Greenies-Verpackungen. Das Gericht verpflichtete Mars zunächst, Belege für die Aussage vorzulegen; ein Anhörungstermin zum Antrag auf einstweilige Verfügung wurde für den 28. Juli 2015 angesetzt. Ein Ausgang des Verfahrens wurde in den ausgewerteten Quellen nicht gefunden.",
+    "quelle_name": "Pet Food Safety News, 23.07.2015",
+    "quelle": "https://www.petfoodsafetynews.com/mars-sued-over-greenies-1-vet-recommended-claim-says-its-baloney/"
+   }
+  ],
+  "vorfaelle_hinweis": "Stand 16.10.2026. Durchsucht wurden produktwarnung.eu (Suche nach Greenies: keine Treffer), die französische Rückrufdatenbank RappelConso (keine einschlägigen Treffer) sowie Web-Recherchen zu Rückrufen, Warnungen und Verfahren; für Deutschland wurden kein Rückruf und keine Behördenwarnung zu Greenies gefunden. lebensmittelwarnung.de war für automatisierten Abruf nicht erreichbar (HTTP 403). Alle aufgeführten Vorfälle betrafen die USA; Aussagen zu Todesfällen beruhen auf Medienberichten und sind nicht behördlich bestätigt. Die Schwere und Zahl der Fälle werden in den Quellen unterschiedlich angegeben. Behauptungen aus Anwaltswerbeseiten zu laufenden Sammelklagen wurden nicht übernommen, da sie nicht durch Gerichts- oder Pressequellen belegt werden konnten."
+ },
+ "happy-dog": {
+  "slug": "happy-dog",
+  "name": "Happy Dog",
+  "unternehmen": "Interquell GmbH",
+  "sitz": "Wehringen, Deutschland",
+  "konzern": null,
+  "gegruendet": "1970 (Marke; Unternehmenswurzeln 1765)",
+  "ueberblick": "Happy Dog ist eine Hundefuttermarke der Interquell GmbH, eines Familienunternehmens in Wehringen (Bayern). Angeboten werden Trocken- und Nassfutter, Snacks und Kauartikel. Das Trockenfutter wird nach Herstellerangaben im Familienbetrieb in Wehringen produziert.",
+  "geschichte": [
+   {
+    "jahr": "1765",
+    "text": "Müllerfamilie Müller erwarb die alte Mühle an der Singold in Wehringen; nach Unternehmensangaben der Grundstein der heutigen Firma Interquell.",
+    "quelle": "https://happydog.de/ueber-uns/unternehmen/unsere-geschichte"
+   },
+   {
+    "jahr": "1965",
+    "text": "Start der Hundefutterproduktion unter dem Namen „Müller´s Hundenahrung“ (Flocken und Nassfutter).",
+    "quelle": "https://happydog.de/ueber-uns/unternehmen/unsere-geschichte"
+   },
+   {
+    "jahr": "1970",
+    "text": "Aus „Müller´s Hundenahrung“ wurde die Marke Happy Dog.",
+    "quelle": "https://happydog.de/ueber-uns/unternehmen/unsere-geschichte"
+   },
+   {
+    "jahr": "1992",
+    "text": "Mit Happy Dog NaturCroq kam das erste Alleinfutter in Krokettenform von Interquell auf den Markt.",
+    "quelle": "https://happydog.de/ueber-uns/unternehmen/unsere-geschichte"
+   },
+   {
+    "jahr": "2001",
+    "text": "Interquell entwickelte mit Happy Cat erstmals Trockenfutter für Katzen.",
+    "quelle": "https://happydog.de/ueber-uns/unternehmen/unsere-geschichte"
+   },
+   {
+    "jahr": "2018",
+    "text": "Einführung der Hundefuttermarke Goood; Annika und Andreas Müller traten in achter Generation in das Familienunternehmen ein.",
+    "quelle": "https://happydog.de/ueber-uns/unternehmen/unsere-geschichte"
+   }
+  ],
+  "vorfaelle": [
+   {
+    "datum": "2024-02",
+    "art": "Rückruf",
+    "titel": "Salmonellen in Happy Dog fit & vital Puppy, Sensible France und Junior (Trockenfutter)",
+    "text": "Die Interquell GmbH rief im Februar 2024 Happy Dog fit & vital Puppy 4 kg (MHD 26.07.2025) und Happy Dog Sensible France 11 kg (MHD 03.08.2025) zurück, nachdem eine Eigenkontrolle in einer Probe derselben Partie Salmonellen in geringer Anzahl ergeben hatte. Weitere Gebindegrößen (Puppy 10 und 18 kg, Sensible France 4 kg) wurden vorsorglich zurückgenommen. Im März 2024 wurde der Rückruf um Happy Dog fit & vital Junior 4 kg (Partie 250828194484, MHD 28.08.2025) erweitert. Der Hersteller erstattete den Kaufpreis.",
+    "quelle_name": "Produktrückruf der Interquell GmbH (LGL Bayern, PDF) und produktwarnung.eu",
+    "quelle": "https://www.lgl.bayern.de/lebensmittel/ueberwachung/lebensmittelwarnungen/doc/happy_dog_heimtierfuttermittel.pdf"
+   },
+   {
+    "datum": "2025-11",
+    "art": "Rückruf",
+    "titel": "Happy Dog Premium Rinderkopfhaut (Snack, 250 g), mikrobiologische Verunreinigung / Salmonellen",
+    "text": "Die Interquell GmbH informierte am 21.11.2025 über den Rückruf von Happy Dog Premium Rinderkopfhaut (250 g, Partie 006425 K, MHD 03/2027), hergestellt von der Dog’s Nature GmbH. Als Grund wurde eine mikrobiologische Verunreinigung genannt. Die Stiftung Warentest wies in dem Produkt Salmonellen nach und informierte den Anbieter (Bericht vom 01.12.2025). Der Kaufpreis wurde auch ohne Kassenbon erstattet. Weitere Meldung: produktwarnung.eu vom 08.01.2026.",
+    "quelle_name": "Stiftung Warentest (test.de)",
+    "quelle": "https://www.test.de/Produktrueckruf-Hundesnacks-koennen-Salmonellen-enthalten-6265997-0/"
+   }
+  ],
+  "vorfaelle_hinweis": "produktwarnung.eu (Suche und Schlagwort), LGL Bayern, test.de und Pressetexte durchsucht, Stand Oktober 2026. Gerichts- oder Behördenverfahren gegen die Marke wurden nicht gefunden. Der Rückruf von Happy Cat (Katzenfutter, März 2024, Salmonellen, Interquell) betrifft eine andere Marke desselben Unternehmens."
+ },
+ "hill-s-science-plan": {
+  "slug": "hill-s-science-plan",
+  "name": "Hill's Science Plan",
+  "unternehmen": "Hill's Pet Nutrition GmbH",
+  "sitz": null,
+  "konzern": "Colgate-Palmolive Company (Hill's Pet Nutrition, Inc., Topeka, Kansas, USA)",
+  "gegruendet": null,
+  "ueberblick": "Science Plan ist der in Großbritannien und Europa verwendete Name der Hill's-Linie, die in den USA als Science Diet vertrieben wird; Hill's Pet Nutrition ist ein Tochterunternehmen von Colgate-Palmolive mit Sitz in Topeka, Kansas. Verkauft werden Trocken- und Nassfutter für Hunde und Katzen, das Unternehmen setzt auf Vertrieb über Tierärzte und den Fachhandel. Für Deutschland nennt der Rückruf von 2019 die Hill's Pet Nutrition GmbH als Ansprechpartner; Produktionsstandorte für den deutschen Markt wurden nicht belegt.",
+  "geschichte": [
+   {
+    "jahr": "1907",
+    "text": "Burton Hill gründete in Topeka (Kansas) das Unternehmen, aus dem die Hill Packing Company hervorging.",
+    "quelle": "https://de.wikipedia.org/wiki/Hill%27s_Pet_Nutrition"
+   },
+   {
+    "jahr": "1935",
+    "text": "Hill's Packing Company begann mit der Herstellung von Hunde- und Katzenfutter in Dosen.",
+    "quelle": "https://www.fundinguniverse.com/company-histories/hill-s-pet-nutrition-inc-history/"
+   },
+   {
+    "jahr": "1943",
+    "text": "Der Tierarzt Mark Morris stellte den Blindenhund Buddy auf eine Spezialdiät gegen ein Nierenleiden um; daraus entwickelte sich laut Unternehmensgeschichte Hill's Pet Nutrition.",
+    "quelle": "https://www.fundinguniverse.com/company-histories/hill-s-pet-nutrition-inc-history/"
+   },
+   {
+    "jahr": "1976",
+    "text": "Colgate-Palmolive kaufte Hill's.",
+    "quelle": "https://www.fundinguniverse.com/company-histories/hill-s-pet-nutrition-inc-history/"
+   },
+   {
+    "jahr": "1970er",
+    "text": "Hill's war seit den 1970er Jahren in Europa präsent; auf Drängen der Konzernmutter Colgate-Palmolive wurde das Europageschäft später ausgebaut und die europäische Zentrale in Hatfield (Hertfordshire, England) eingerichtet.",
+    "quelle": "https://www.fundinguniverse.com/company-histories/hill-s-pet-nutrition-inc-history/"
+   }
+  ],
+  "vorfaelle": [
+   {
+    "datum": "2019-02",
+    "art": "Rückruf",
+    "titel": "Rückruf von Hunde-Dosenfutter wegen erhöhter Vitamin-D-Werte, auch Science-Plan-Produkte in Deutschland",
+    "text": "Hill's Pet Nutrition kündigte am 31. Januar 2019 in den USA einen freiwilligen Rückruf ausgewählten Hunde-Dosenfutters (Science Diet, Prescription Diet) wegen potenziell erhöhter Vitamin-D-Mengen an. Anlass war eine Beschwerde zu einem Hund mit Anzeichen erhöhter Vitamin-D-Werte; interne Untersuchungen bestätigten laut Hill's erhöhte Werte aufgrund eines Lieferantenfehlers bei einer Vitaminmischung. In Deutschland wurde der Rückruf Anfang Februar 2019 bekannt (Stiftung Warentest, 7. Februar 2019: fünf Dosenfutter). Am 21. März 2019 erweiterte Hill's den Rückruf; die deutsche Mitteilung (Update vom 27. März 2019) nennt neben Prescription-Diet-Sorten auch Hill's Science Plan Canine Adult mit Huhn 370 g (Chargennummer 102020T27), Science Plan Canine Mature Adult 7+ mit Huhn 370 g und Science Plan Canine Mature Adult 7+ Active Longevity 370 g. Trockenfutter, Katzenfutter und Snacks waren nicht betroffen. Die FDA führt den Rückruf als abgeschlossen und beendet.",
+    "quelle_name": "produktwarnung.eu (Mitteilung von Hill's Pet Nutrition, Update 27.03.2019)",
+    "quelle": "https://www.produktwarnung.eu/2019/02/05/rueckruf-gesundheitsgefahr-hills-pet-nutrition-ruft-hundefutter-zurueck/12646"
+   },
+   {
+    "datum": "2007-03",
+    "art": "Rückruf",
+    "titel": "Rückruf Prescription Diet m/d Feline wegen melaminbelasteten Weizengluten (nur USA)",
+    "text": "Hill's Pet Nutrition rief Ende März 2007 freiwillig das Trockenfutter Prescription Diet m/d Feline zurück, weil das enthaltene Weizengluten möglicherweise vom selben Lieferanten wie bei den damaligen Menu-Foods-Rückrufen stammte und melaminbelastet sein konnte. Laut ASPCA war es das einzige Hill's-Produkt mit Weizengluten. Der Rückruf wurde in den USA gemeldet; für Deutschland wurde keine Meldung gefunden.",
+    "quelle_name": "ASPCA, Pressemitteilung 31.03.2007",
+    "quelle": "https://www.aspca.org/about-us/press-releases/aspca-urges-caution-dry-food-voluntarily-added-pet-food-recall"
+   }
+  ],
+  "vorfaelle_hinweis": "Stand 16.10.2026. Durchsucht wurden produktwarnung.eu (Suche nach Hill's), die französische Rückrufdatenbank RappelConso (keine Treffer), die Seiten der FDA sowie Web-Recherchen zu Rückrufen, Warnungen und Verfahren in Deutschland und der EU. Der Vitamin-D-Rückruf 2019 betraf in den USA Dosenfutter der Linien Science Diet und Prescription Diet; die deutschen Mitteilungen listen zusätzlich Science-Plan-Produkte (Art.-Nr. und Chargen siehe Quelle), die Rückruffolgen für weitere Märkte wurden nicht einzeln geprüft. In den USA wurde im Februar 2019 außerdem eine Sammelklage von Tierhaltern eingereicht (laut Wikipedia); ein Ausgang wurde nicht belegt und deshalb nicht aufgenommen. lebensmittelwarnung.de war für automatisierten Abruf nicht erreichbar (HTTP 403) und konnte daher nicht ausgewertet werden; die Seiten von hillspet.de ebenfalls nicht."
+ },
+ "josera": {
+  "slug": "josera",
+  "name": "Josera",
+  "unternehmen": "JOSERA PETFOOD GmbH",
+  "sitz": "Kleinheubach, Deutschland",
+  "konzern": "ERBACHER the food family (Familienunternehmen, Dachmarke der Unternehmensgruppe)",
+  "gegruendet": "1941",
+  "ueberblick": "Josera ist eine Marke für Hunde- und Katzenfutter aus Kleinheubach (Unterfranken) und gehört zur Unternehmensgruppe ERBACHER the food family. Das Unternehmen geht auf einen 1941 gegründeten Futterkalkbetrieb zurück. Seit 2025 besteht ein Tiernahrungswerk im polnischen Nowy Tomyśl.",
+  "geschichte": [
+   {
+    "jahr": "1941",
+    "text": "Joseph und Pauline Erbacher gründeten in Weilbach einen Futterkalkbetrieb; der Name Josera leitet sich von „Josef Erbacher Agrar“ ab.",
+    "quelle": "https://food.family/en/about-us/history"
+   },
+   {
+    "jahr": "1980",
+    "text": "Umzug des Unternehmens nach Kleinheubach.",
+    "quelle": "https://food.family/en/about-us/history"
+   },
+   {
+    "jahr": "1988",
+    "text": "Josera stieg in die Heimtiernahrung für Hunde und Katzen ein.",
+    "quelle": "https://food.family/en/about-us/history"
+   },
+   {
+    "jahr": "2017",
+    "text": "ERBACHER the food family wurde als Dach- und Arbeitgebermarke für die zugehörigen Unternehmen etabliert.",
+    "quelle": "https://food.family/en/about-us/history"
+   },
+   {
+    "jahr": "2021",
+    "text": "Gründung der Josera Petfood sp. z o.o. in Polen und Baubeginn eines Werks ausschließlich für Heimtiernahrung.",
+    "quelle": "https://food.family/en/about-us/history"
+   },
+   {
+    "jahr": "2025",
+    "text": "Eröffnung der neuen Tiernahrungsfabrik in Nowy Tomyśl (Westpolen, 40.000 m²).",
+    "quelle": "https://food.family/en/about-us/history"
+   }
+  ],
+  "vorfaelle": [
+   {
+    "datum": "2020-12",
+    "art": "Rückruf",
+    "titel": "Josera Festival 15 kg, Verdacht auf Salmonellen",
+    "text": "Rückruf des Hundefutters Josera Festival, 15 kg, Charge 3000185054, MHD 14.04.2022, wegen des Verdachts auf Salmonellen. Der Kaufpreis wurde erstattet. Wer den Verdacht festgestellt hatte, ist in der Quelle nicht genannt.",
+    "quelle_name": "produktwarnung.eu",
+    "quelle": "https://www.produktwarnung.eu/2020/12/24/rueckruf-salmonellen-in-hundefutter-der-bezeichnung-josera-festival-moeglich/22203"
+   },
+   {
+    "datum": "2025-09",
+    "art": "Rückruf",
+    "titel": "Josera Meat Lovers Pure Lamb, 400-g-Dose (Charge mit aufgeblähten Dosen)",
+    "text": "Rückruf einer Charge Josera Meat Lovers Pure Lamb, 400-g-Dose, MHD 19.05.2028, Charge 521 10000_0320. Nach Angabe von Josera (Update vom 11.09.2025) lag der Grund im Aufblähen einzelner Dosen; die Ursachenuntersuchung lief zu diesem Zeitpunkt noch. Andere Chargen waren nicht betroffen, der Kaufpreis wurde erstattet.",
+    "quelle_name": "produktwarnung.eu",
+    "quelle": "https://www.produktwarnung.eu/2025/09/11/rueckruf-hundefutter-josera-meat-lovers-pure-lamb/35369"
+   }
+  ],
+  "vorfaelle_hinweis": "produktwarnung.eu (Suche) und allgemeine Websuche zu Rückrufen, Verfahren und Kritik durchsucht, Stand Oktober 2026. Zu Gerichts- oder Wettbewerbsverfahren gegen die Marke wurden keine Treffer gefunden. lebensmittelwarnung.de ließ sich nicht automatisiert durchsuchen. Josera wird in der Stiftung-Warentest-Auswertung von Trockenfutter für Hunde (2021) genannt; die Bewertungen sind zum großen Teil kostenpflichtig und wurden nicht übernommen."
+ },
+ "leonardo": {
+  "slug": "leonardo",
+  "name": "Leonardo",
+  "unternehmen": "BEWITAL petfood GmbH & Co. KG",
+  "sitz": "Südlohn, Deutschland",
+  "konzern": "BEWITAL Unternehmensgruppe (Familienunternehmen)",
+  "gegruendet": "1963",
+  "ueberblick": "Leonardo ist eine Katzenfuttermarke der BEWITAL petfood GmbH & Co. KG aus Südlohn im Münsterland. Nach Angaben der Marke werden die Produkte in eigenen Werken im Münsterland hergestellt. Dieselbe Firma vertreibt unter anderem die Hundemarke Belcando.",
+  "geschichte": [
+   {
+    "jahr": "1963",
+    "text": "Bernhard Wigger gründete das Unternehmen BEWITAL als kleines Agrarunternehmen, aus dem später ein Hersteller von Tierspezialnahrung wurde.",
+    "quelle": "https://www.bewital-petfood.de/unternehmen/historie"
+   },
+   {
+    "jahr": "Anfang der 1980er",
+    "text": "BEWITAL entwickelte mit Ernährungswissenschaftlern die ersten Rezepturen für Hundenahrung.",
+    "quelle": "https://www.bewital-petfood.de/unternehmen/historie"
+   },
+   {
+    "jahr": "Anfang der 1990er",
+    "text": "Dr. Jürgen Wigger und Ulrike Petershagen übernahmen die Geschäftsführung (Generationswechsel in der Familie).",
+    "quelle": "https://www.bewital-petfood.de/unternehmen/historie"
+   },
+   {
+    "jahr": "2013",
+    "text": "BEWITAL errichtete ein neues Werk für die Frischfleischvorbereitung, das Frischfleisch für die Trockennahrungsproduktion aufbereitet.",
+    "quelle": "https://www.bewital-petfood.de/unternehmen/historie"
+   },
+   {
+    "jahr": "2017",
+    "text": "Nach Angaben des Unternehmens ersetzt ein neues Herstellungsverfahren Fleischmehl vollständig durch Frischfleisch; es wurde mit Mitteln des Umweltinnovationsprogramms des Bundesumweltministeriums gefördert.",
+    "quelle": "https://www.bewital-petfood.de/unternehmen/historie"
+   }
+  ],
+  "vorfaelle": [],
+  "vorfaelle_hinweis": "Websuche nach Rückrufen und Warnungen zu Leonardo/Bewital sowie Suche auf produktwarnung.eu nach Leonardo und Bewital, Stand 16.10.2026: keine Treffer zu Leonardo-Katzenfutter. Einziger Bewital-Treffer war ein Rückruf einer Charge des Hundefutters Belcando Rind mit Kartoffel & Erbsen (Partikel von Magneten, September 2022), der eine andere Marke betrifft. lebensmittelwarnung.de wurde nicht direkt durchsucht; Gerichts- und Wettbewerbsverfahren wurden nicht gezielt recherchiert. Das Einführungsjahr der Marke Leonardo konnte nicht belegt werden."
+ },
+ "mammaly": {
+  "slug": "mammaly",
+  "name": "mammaly",
+  "unternehmen": "Peturo GmbH",
+  "sitz": "Berlin, Deutschland",
+  "konzern": null,
+  "gegruendet": "2020",
+  "ueberblick": "mammaly ist eine Marke für funktionale Snacks, Tabletten, Pulver, Öle und Sprays für Hunde, die Nahrungsergänzung und Pflege umfassen. Hinter der Marke steht die Peturo GmbH, deren Impressum Berlin als Sitz nennt. Gegründet wurde das Unternehmen 2020 von Stanislav Nazarenus und Alexander Thelen. Zum Produktionsort liegt kein Beleg vor.",
+  "geschichte": [
+   {
+    "jahr": "2020",
+    "text": "Stanislav Nazarenus und Alexander Thelen gründeten mammaly. Die Pressemitteilung des Unternehmens nennt Berlin als Gründungsort, Startbase nennt Köln.",
+    "quelle": "https://www.mammaly.de/blogs/pressemitteilungen/die-mammaly-idee"
+   },
+   {
+    "jahr": "2023",
+    "text": "Series-A-Finanzierung über 14 Mio. Euro unter Führung von Iris Ventures und Five Seasons Ventures, mit Beteiligung von Attila Balogh. Das Kapital sollte in Wachstum, Sortiment und Einzelhandel fließen.",
+    "quelle": "https://globalpetindustry.com/news/eu14-million-mammaly-hopes-lead-european-pet-supplement-sector/"
+   },
+   {
+    "jahr": "2023",
+    "text": "Zum Zeitpunkt der Finanzierung vertrieb mammaly seine Produkte im Einzelhandel über Fressnapf und plante den Ausbau dieses Kanals; mehr als 20 Produkte waren am Markt.",
+    "quelle": "https://www.startbase.de/mediathek/startup-insider/mammaly-sammelt-14-mio-euro-fuer-heimti-4d44f464ef/"
+   },
+   {
+    "jahr": "2024",
+    "text": "mammaly war für den Preis Best Newcomer 2024 von PET worldwide nominiert.",
+    "quelle": "https://www.petworldwide.net/content-1/best-newcomer/2024/mammaly.html"
+   }
+  ],
+  "vorfaelle": [],
+  "vorfaelle_hinweis": "Websuche nach Abmahnung, Verbraucherzentrale, Wettbewerbszentrale, Urteil und Landgericht in Verbindung mit mammaly und Peturo GmbH ohne Treffer; produktwarnung.eu durchsucht (Suchlauf für mammaly schlug technisch fehl, Websuche ohne Rückrufhinweise); lebensmittelwarnung.de per Abruf nicht erreichbar. Kein belegter Vorfall gefunden. Die in den Treffern erwähnte Kritik auf Bewertungsportalen (Abo, E-Mails) ist Einzelmeinung und wurde nicht aufgenommen. Stand Oktober 2026."
+ },
+ "markus-muehle": {
+  "slug": "markus-muehle",
+  "name": "Markus-Mühle",
+  "unternehmen": "Markus-Mühle GmbH & Co. KG",
+  "sitz": "Langenhahn (Westerwald), Deutschland",
+  "konzern": null,
+  "gegruendet": null,
+  "ueberblick": "Markus-Mühle ist ein Hersteller von kaltgepresstem Hunde- und Katzenfutter mit Sitz in Langenhahn im Westerwald. Nach eigenen Angaben legte Müllermeister Josef Olberts vor über 60 Jahren den Grundstein; geführt wird das Unternehmen von Stefanie und Markus Olberts. Produziert wird laut Hersteller im Westerwald.",
+  "geschichte": [
+   {
+    "jahr": "vor über 60 Jahren",
+    "text": "Müllermeister Josef Olberts begann, eigene Rezepte für Tiernahrung zu entwickeln (genaues Jahr nicht angegeben).",
+    "quelle": "https://markus-muehle.de/unternehmen/historie/"
+   },
+   {
+    "jahr": "Heute",
+    "text": "Sein Sohn Markus Olberts entwickelte nach Herstellerangabe mit Anfang 20 das erste vitalstoffschonend hergestellte Trockenfutter für Hunde (Jahr nicht angegeben).",
+    "quelle": "https://markus-muehle.de/"
+   }
+  ],
+  "vorfaelle": [],
+  "vorfaelle_hinweis": "produktwarnung.eu (Suche „markus-muehle“, „markus mühle“) und allgemeine Websuche zu Rückrufen durchsucht, keine Treffer bis Oktober 2026. Gerichts- oder Wettbewerbsverfahren gegen die Marke wurden nicht gefunden. lebensmittelwarnung.de ließ sich nicht automatisiert durchsuchen. Die Stiftung Warentest führt Markus-Mühle NaturNah in ihrem Test von Hundetrockenfutter (08/2025); die Noten sind kostenpflichtig und wurden nicht übernommen. Gründungsjahr und weitere Meilensteine sind auf den Unternehmensseiten nicht genannt."
+ },
+ "medidog": {
+  "slug": "medidog",
+  "name": "Medidog",
+  "unternehmen": "Bionic Nature GmbH",
+  "sitz": "Wehringen, Deutschland",
+  "konzern": null,
+  "gegruendet": null,
+  "ueberblick": "Medidog ist die Hundelinie der Verbrauchermarke Medipet der Bionic Nature GmbH aus Wehringen (Bayern) und umfasst Ergänzungsfuttermittel und Pflegeprodukte für Hunde. Für Katzen führt das Unternehmen die Linie Medicat. Laut Herstellerangabe werden die Produkte in Deutschland entwickelt und hergestellt; Medidog wird zudem über Online-Apotheken vertrieben.",
+  "geschichte": [
+   {
+    "jahr": "Heute",
+    "text": "Die Bionic Nature GmbH (Amtsgericht Augsburg, HRB 34216; Geschäftsführer Denise Ehmer und Georg Müller) entwickelt unter der Verbrauchermarke Medipet Ergänzungsfuttermittel und Pflegeprodukte; Hunde-Produkte laufen unter Medidog, Katzen-Produkte unter Medicat.",
+    "quelle": "https://medipet-shop.de/medidog"
+   },
+   {
+    "jahr": "Heute",
+    "text": "Laut Impressum des Shops ist Medipet eine Marke der Bionic Nature GmbH; das Unternehmen bezeichnet sich als Familienbetrieb mit Herstellung in Deutschland (Selbstangabe).",
+    "quelle": "https://www.medipet-shop.de/impressum"
+   }
+  ],
+  "vorfaelle": [],
+  "vorfaelle_hinweis": "produktwarnung.eu durchsucht (keine Treffer für Medidog); Websuche nach Rückruf, Abmahnung, Urteil und Warnung zu Medidog, Medipet und Bionic Nature GmbH ohne Treffer; lebensmittelwarnung.de per Abruf nicht erreichbar. Gründungsjahr und Firmengeschichte der Bionic Nature GmbH konnten nicht aus abrufbaren Primärquellen belegt werden (Registerportale blockierten den Abruf). Kein belegter Vorfall gefunden. Stand Oktober 2026."
+ },
+ "mjamjam": {
+  "slug": "mjamjam",
+  "name": "MjAMjAM",
+  "unternehmen": "MjAMjAM Petfood GmbH",
+  "sitz": "Neumarkt-Sankt Veit, Deutschland",
+  "konzern": null,
+  "gegruendet": "2016",
+  "ueberblick": "MjAMjAM ist eine Marke der MjAMjAM Petfood GmbH aus Neumarkt-Sankt Veit (Bayern) für Nassfutter und weitere Produkte für Hunde und Katzen. Das Unternehmen wurde nach Angaben der Unternehmeredition 2016 von Jens Kern und seiner Frau gegründet. Produktionsstandorte wurden nicht belegt.",
+  "geschichte": [
+   {
+    "jahr": "2016",
+    "text": "Jens Kern gründete mit seiner Frau nebenberuflich die Mjamjam Petfood mit dem Ziel, natur- und beutenahe Futterprodukte für Hunde und Katzen zu entwickeln.",
+    "quelle": "https://www.unternehmeredition.de/vom-bankdruecker-zum-spielmacher/"
+   }
+  ],
+  "vorfaelle": [],
+  "vorfaelle_hinweis": "Websuche nach Rückrufen, Warnungen, Urteilen und Kritik zu MjAMjAM sowie Suche auf produktwarnung.eu nach Mjamjam, Stand 16.10.2026: keine Treffer zu amtlichen Warnungen, Rückrufen oder Verfahren. Die einzige gefundene Kritik waren einzelne Kundenbewertungen im Handel, die nicht als Beleg gewertet wurden. lebensmittelwarnung.de wurde nicht direkt durchsucht. Ein Mutterkonzern wurde nicht gefunden; die Geschichte ist nur durch eine Quelle belegt."
+ },
+ "pedigree": {
+  "slug": "pedigree",
+  "name": "Pedigree",
+  "unternehmen": "MARS GmbH",
+  "sitz": "Verden (Aller), Deutschland",
+  "konzern": "Mars, Incorporated (Geschäftsbereich Mars Petcare)",
+  "gegruendet": null,
+  "ueberblick": "Pedigree ist eine Hundefuttermarke von Mars Petcare mit Trockenfutter, Nassfutter und Snacks wie Dentastix. In Deutschland ist Mars Petcare mit der MARS GmbH in Verden (Aller) ansässig. Laut einer Mars-Stellenanzeige wird im Werk Verden unter anderem Pedigree hergestellt.",
+  "geschichte": [
+   {
+    "jahr": "1935",
+    "text": "Mars stieg mit der Übernahme der britischen Chappel Brothers Ltd. (Hersteller von CHAPPIE-Hundefutter in Dosen) ins Heimtiernahrungsgeschäft ein.",
+    "quelle": "https://www.mars.com/about/history"
+   },
+   {
+    "jahr": "1960",
+    "text": "Mars Petcare eröffnete in Verden bei Hannover die erste Tiernahrungsfabrik in Deutschland (Angabe in einem Fachartikel von 2010: „vor 50 Jahren“).",
+    "quelle": "https://petworldwide.net/content-1/pet-worldwide/2010/07/7-8-2010/50-years-of-pet-food-from-verden.html"
+   },
+   {
+    "jahr": "1968",
+    "text": "Mars übernahm Kal Kan Foods in Los Angeles.",
+    "quelle": "https://www.mars.com/about/history"
+   },
+   {
+    "jahr": "1988",
+    "text": "Kal Kan benannte sein Hundefutter in den USA in Pedigree um, den Namen, unter dem Mars Hundefutter außerhalb der USA verkaufte.",
+    "quelle": "https://en.wikipedia.org/wiki/Pedigree_Petfoods"
+   }
+  ],
+  "vorfaelle": [
+   {
+    "datum": "2021-01",
+    "art": "Rückruf",
+    "titel": "Rückruf von Pedigree- und Chappi-Trockenfutter wegen überhöhten Vitamin-D-Gehalts (Deutschland)",
+    "text": "Mars Petcare rief am 21.12.2020 eine Charge Pedigree Vital Trockenfutter für kleine Hunde, Adult mit Rind, 1,4 kg (MHD 12.11.2021), zurück. Im Januar 2021 wurde der Rückruf auf weitere Trockenfutter erweitert, darunter Pedigree Adult mit Huhn und Gemüse in 3, 7,5 und 15 kg sowie zwei Chappi-Sorten. Grund war ein überhöhter Vitamin-D-Gehalt, der bei längerem Verzehr zu Unwohlsein führen kann; als Symptome nannte der Hersteller auffallend häufiges Trinken und Urinieren. Der Hersteller empfahl bei Symptomen den Gang zum Tierarzt.",
+    "quelle_name": "produktwarnung.eu, 15.01.2021 (Mitteilung von Mars Petcare)",
+    "quelle": "https://www.produktwarnung.eu/2021/01/15/rueckruf-ueberhoehter-vitamin-d-gehalt-mars-petcare-ruft-pedigree-trockenfutter-fuer-kleine-hunde-zurueck/22141"
+   },
+   {
+    "datum": "2020-02",
+    "art": "Kritik",
+    "titel": "Verbraucherzentrale Hamburg kritisiert reduzierte Füllmengen bei Pedigree-Snacks",
+    "text": "Die Verbraucherzentrale Hamburg kritisierte im Februar 2020, Mars habe bei den Pedigree-Hundesnacks Schmackos, Rodeo und Jumbone Riesenknochen die Füllmengen bei gleichem Preis reduziert. Mars Petcare begründete die Preiserhöhungen laut Verbraucherzentrale mit steigenden Kosten.",
+    "quelle_name": "Verbraucherzentrale Hamburg (Stand 18.02.2020)",
+    "quelle": "https://www.vzhh.de/themen/mogelpackungen/katzen-wuerden-nicht-mehr-whiskas-kaufen"
+   },
+   {
+    "datum": "2026-07",
+    "art": "Rückruf",
+    "titel": "Rückruf von Pedigree-Dosenfutter in den USA (nicht Deutschland)",
+    "text": "Mars Petcare US rief am 02.07.2026 zwei Chargen Pedigree High Protein Chopped Chicken & Duck Flavor Nassfutter (13,2 oz) in den USA zurück. Die Chargen waren zur Vernichtung an einen Drittanbieter gegeben und nach Angaben von Mars betrügerisch abgezweigt und verkauft worden; sie könnten Metall- und Kunststoffteile enthalten. Mars meldete keine Fälle von Erkrankung oder Verletzung. Der Rückruf galt nur für die USA.",
+    "quelle_name": "U.S. Food and Drug Administration (Mitteilung des Unternehmens)",
+    "quelle": "https://www.fda.gov/safety/recalls-market-withdrawals-safety-alerts/voluntary-recall-two-lots-pedigreer-can-high-protein-chopped-chicken-duck-flavor-wet-dog-food-due"
+   }
+  ],
+  "vorfaelle_hinweis": "Stand 17.10.2026. Suche auf produktwarnung.eu (Suchbegriff „Pedigree“, ein Treffer von 2021) und Websuche nach Rückrufen, Behördenwarnungen und Verfahren in Deutschland/EU; ein Rückruf in Deutschland gefunden (2020/2021). lebensmittelwarnung.de ließ sich nicht direkt abfragen (Zugriff gesperrt). Gerichtsverfahren gegen die Marke in Deutschland wurden nicht gefunden. Der Rückruf von 2026 betraf nur die USA."
+ },
+ "purina": {
+  "slug": "purina",
+  "name": "Purina",
+  "unternehmen": "Nestlé Purina PetCare Deutschland GmbH",
+  "sitz": "Euskirchen, Deutschland",
+  "konzern": "Nestlé S.A. (Vevey, Schweiz) über Nestlé Purina PetCare",
+  "gegruendet": "1894 (Robinson-Danforth, Vorläufer von Ralston Purina, USA); deutscher Standort Euskirchen 1905",
+  "ueberblick": "Purina ist die Heimtiernahrungsmarke von Nestlé Purina PetCare. In Deutschland gehören unter anderem die Katzenfuttermarken Gourmet und Felix sowie die Linie Pro Plan zum Sortiment. Gourmet (Nassfutter für Katzen, Linien u. a. Gold, Perle, A la Carte) und Pro Plan (in den USA 1986 mit der Performance-Formel eingeführt) sind Produktlinien unter dem Purina-Dach. Als Gesellschaft für Deutschland ist die Nestlé Purina PetCare Deutschland GmbH mit Sitz in Euskirchen (Amtsgericht Bonn, HRB 11673) im Handelsregister geführt.",
+  "geschichte": [
+   {
+    "jahr": "1894",
+    "text": "Robinson-Danforth, das Vorläuferunternehmen von Ralston Purina, wurde in den USA gegründet; es wurde 1902 in Ralston Purina umbenannt.",
+    "quelle": "https://www.purinaproclub.com/nutrition/story-of-sport/timeline"
+   },
+   {
+    "jahr": "1905",
+    "text": "Albert Latz gründete in Euskirchen eine Hundekuchenfabrik, auf die die deutsche Gesellschaft zurückgeführt wird; der heutige Firmensitz liegt in der Albert-Latz-Straße 6 in Euskirchen.",
+    "quelle": "https://lebensmittelpraxis.de/marken-tiernahrung-tierbedarf/13152-nestlé-purina-pet-care-deutschland-gmbh-ihr-haustier,-unsere-leidenschaft.html"
+   },
+   {
+    "jahr": "1971",
+    "text": "Das Euskirchener Unternehmen wurde von der amerikanischen Ralston Purina Company übernommen.",
+    "quelle": "https://lebensmittelpraxis.de/marken-tiernahrung-tierbedarf/13152-nestlé-purina-pet-care-deutschland-gmbh-ihr-haustier,-unsere-leidenschaft.html"
+   },
+   {
+    "jahr": "1986",
+    "text": "Ralston Purina führte in den USA die Formel Pro Plan Performance ein; Pro Plan gilt laut Purina als erstes kommerzielles Hundefutter mit echtem Fleisch als erster Zutat.",
+    "quelle": "https://www.purinaproclub.com/nutrition/story-of-sport/timeline"
+   },
+   {
+    "jahr": "2001",
+    "text": "Nestlé erwarb Ralston Purina für rund 10 Milliarden US-Dollar in bar (Ankündigung im Januar 2001) und fasste das Geschäft mit der eigenen Sparte Friskies PetCare zusammen; Nestlé Purina PetCare entstand im Dezember 2001.",
+    "quelle": "https://lasvegassun.com/news/2001/jan/16/nestle-buys-ralston-purina-for-10-billion/"
+   },
+   {
+    "jahr": "2001",
+    "text": "Laut Unternehmenschronik entstand in Deutschland nach dem Kauf von Ralston Purina durch Nestlé die Nestlé Purina Deutschland GmbH (heute Nestlé Purina PetCare Deutschland GmbH).",
+    "quelle": "https://lebensmittelpraxis.de/marken-tiernahrung-tierbedarf/13152-nestlé-purina-pet-care-deutschland-gmbh-ihr-haustier,-unsere-leidenschaft.html"
+   }
+  ],
+  "vorfaelle": [
+   {
+    "datum": "2022-07",
+    "art": "Rückruf",
+    "titel": "Rückruf von drei Katzentrockenfuttern in Frankreich (darunter zwei Pro Plan)",
+    "text": "Am 8. Juli 2022 wurden auf dem französischen Portal RappelConso freiwillige Rückrufe von Purina Pro Plan Original Kitten (Huhn), Purina Pro Plan Sterilised Adult 1+ (Lachs) und Purina ONE Junior (Huhn) veröffentlicht. Grund waren mögliche Spuren eines Rückstands (2-CE) aus der Wasseraufbereitung eines Zutatenlieferanten. Verkauf in ganz Frankreich; empfohlen wurde, die Produkte nicht mehr zu verwenden und zu vernichten, Kompensation: Erstattung. Für Deutschland wurde in den durchsuchten Quellen keine entsprechende Meldung gefunden.",
+    "quelle_name": "RappelConso (französische Behörde DGCCRF), Fiche Pro Plan Sterilised Adult",
+    "quelle": "https://rappel.conso.gouv.fr/fiche-rappel/7601/interne"
+   },
+   {
+    "datum": "2021-07",
+    "art": "Rückruf",
+    "titel": "Rückruf Pro Plan Complete Essentials Tuna Entrée (nur USA)",
+    "text": "Nestlé Purina PetCare rief am 14. Juli 2021 freiwillig eine begrenzte Menge Purina Pro Plan Complete Essentials Tuna Entrée In Sauce Wet Cat Food in 3-oz-Dosen zurück, da schwarze flexible Kunststoffteile enthalten sein konnten. Auslöser waren laut Unternehmen einige Beschwerden von Tierhaltern. Das Produkt wurde nur in den USA verkauft.",
+    "quelle_name": "Nestlé Purina News Center",
+    "quelle": "https://newscenter.purina.com/pro-plan-cat-food-recall"
+   },
+   {
+    "datum": "2022-11",
+    "art": "Rückruf",
+    "titel": "Rückruf Pro Plan Veterinary Diets EN Gastroenteric Low Fat wegen Etikettierungsfehler (nur USA)",
+    "text": "Nestlé Purina PetCare kündigte am 30. November 2022 (FDA-Veröffentlichung 2. Dezember 2022) den freiwilligen Rückruf einer begrenzten Menge Purina Pro Plan Veterinary Diets EN Gastroenteric Low Fat (Nassfutter für Hunde, Dosen) an. Wegen eines Etikettierungsfehlers befand sich in einigen Dosen ein anderes Alleinfuttermittel. Der Rückruf betraf den US-Markt.",
+    "quelle_name": "U.S. Food and Drug Administration (Firmenmitteilung)",
+    "quelle": "https://www.fda.gov/safety/recalls-market-withdrawals-safety-alerts/nestle-purina-petcare-company-voluntarily-recalls-limited-amount-purina-pro-plan-veterinary-diets-en"
+   },
+   {
+    "datum": "2024-06",
+    "art": "Kritik",
+    "titel": "Konsument-Test: Gourmet Gold Feine Pastete mit Huhn ernährungsphysiologisch nur „wenig zufriedenstellend“",
+    "text": "Das österreichische Verbrauchermagazin Konsument (Ausgabe 6/2024) testete 20 Katzen-Nassfutter. Der Bericht nennt Purina Gourmet Gold Feine Pastete mit Huhn unter den Futtern, die ernährungsphysiologisch nur „wenig zufriedenstellend“ seien; die Gesamtbewertung lautete „wenig zufriedenstellend“ (30 Punkte). Die beiden anderen getesteten Purina-Produkte (Purina ONE Adult mit Huhn und grünen Bohnen, Felix So gut wie es aussieht mit Thunfisch in Gelee) schnitten im Prüfpunkt Ernährungsphysiologie laut Bericht sehr gut ab. Es handelt sich um einen Test in Österreich.",
+    "quelle_name": "Konsument 6/2024 (Download über Arbeiterkammer Oberösterreich)",
+    "quelle": "https://ooe.arbeiterkammer.at/service/testsundpreisvergleiche/tests/KS_2024_T_KONSUMENT_Katzenfutter.pdf"
+   }
+  ],
+  "vorfaelle_hinweis": "Stand 16.10.2026. Durchsucht wurden die Rückrufdatenbank RappelConso (Frankreich, Marken- und Produktsuche nach Purina, Pro Plan, Gourmet), produktwarnung.eu (Stichwort Purina: keine Treffer) sowie Web-Recherchen zu Rückrufen, Verfahren und Behördenwarnungen in Deutschland und der EU; für Deutschland wurde kein Rückruf und keine Behördenwarnung zu Purina, Gourmet oder Pro Plan gefunden. lebensmittelwarnung.de und die Seiten von purina.de waren per automatisiertem Abruf nicht erreichbar (HTTP 403) und konnten daher nicht ausgewertet werden. Die genannten US-Rückrufe betrafen jeweils einzelne Pro-Plan-Produkte auf dem US-Markt. Zu Gourmet wurde kein dokumentierter Vorfall gefunden. US-Verfahren zu anderen Purina-Marken (z. B. Beneful) sind nicht aufgeführt."
+ },
+ "rinti": {
+  "slug": "rinti",
+  "name": "Rinti",
+  "unternehmen": "Finnern GmbH & Co. KG",
+  "sitz": "Verden (Aller), Deutschland",
+  "konzern": null,
+  "gegruendet": "1983 (Unternehmen)",
+  "ueberblick": "Rinti ist eine Hundefuttermarke der Finnern GmbH & Co. KG aus Verden (Aller), einem nach eigenen Angaben von Großkonzernen unabhängigen Familienunternehmen. Zum Sortiment gehören vor allem Nassfutter und weitere Hundenahrung; neben Rinti führt Finnern die Katzenfuttermarke Miamor.",
+  "geschichte": [
+   {
+    "jahr": "1983",
+    "text": "Gründung der Finnern GmbH & Co. KG durch Roswitha und Joachim Finnern; Rinti und Schmusy waren die ersten Produkte, vertrieben über den Fachhandel.",
+    "quelle": "https://www.landkreis-verden.business/arbeitgeber/finnern-gmbh"
+   },
+   {
+    "jahr": "heute",
+    "text": "Unternehmenssitz ist Verden; Rinti und Miamor bilden nach Unternehmensangaben die Basis des Sortiments. Geschäftsführer ist Joachim Finnern.",
+    "quelle": "https://www.finnern.de/wir-sind-finnern"
+   }
+  ],
+  "vorfaelle": [
+   {
+    "datum": "2014-01",
+    "art": "Rückruf",
+    "titel": "Rinti Sensible Huhn & Kartoffel 800 g, Folienteile",
+    "text": "Finnern rief laut Händleranschreiben vom 15.01.2014 Rinti Sensible Huhn & Kartoffel (800 g, Artikelnr. 92067, MHD 03.10.2016, Batch N) zurück, weil Folienteile aus Verpackungsrückständen einer Rohstofflieferung enthalten waren. Andere Batchnummern waren nicht betroffen.",
+    "quelle_name": "CleanKids",
+    "quelle": "https://www.cleankids.de/2014/01/19/rueckruf-finnern-ruft-hundefuetter-rinti-sensible-huhn-kartoffel-zurueck/44455/"
+   },
+   {
+    "datum": "2017-12",
+    "art": "Rückruf",
+    "titel": "Keramikscherben in Rinti-Dosenfutter (Kundenmeldung)",
+    "text": "Ein Kunde meldete im November und Dezember 2017 Keramikscherben in Dosen Rinti-Hundefutter. Laut Faktencheck von Mimikama (05.11.2023) rief Finnern daraufhin die betroffene Charge zurück und untersuchte den Fall. Eine behördliche Meldung dazu wurde nicht gefunden.",
+    "quelle_name": "Mimikama",
+    "quelle": "https://www.mimikama.org/rinti-hundefutter-faktencheck/"
+   }
+  ],
+  "vorfaelle_hinweis": "produktwarnung.eu (Suche „rinti“, „finnern“) und allgemeine Websuche durchsucht, Stand Oktober 2026; keine Einträge dort. Die beiden Fälle stammen aus Presse- bzw. Faktencheck-Quellen und sind nicht über Behördenportale belegt. Gerichts- oder Wettbewerbsverfahren gegen die Marke wurden nicht gefunden. lebensmittelwarnung.de ließ sich nicht automatisiert durchsuchen."
+ },
+ "royal-canin": {
+  "slug": "royal-canin",
+  "name": "Royal Canin",
+  "unternehmen": "ROYAL CANIN Tiernahrung GmbH & Co. KG",
+  "sitz": "Köln, Deutschland",
+  "konzern": "Mars, Incorporated (seit 2002)",
+  "gegruendet": "1968",
+  "ueberblick": "Royal Canin ist eine Hunde- und Katzenfuttermarke, die 1968 in Frankreich vom Tierarzt Jean Cathary gegründet wurde und seit 2002 zu Mars gehört. Das deutsche Impressum nennt die ROYAL CANIN Tiernahrung GmbH & Co. KG in Köln als Anbieter der Webseiten. Angaben zu den Produktionsstandorten für den deutschen Markt wurden nicht belegt.",
+  "geschichte": [
+   {
+    "jahr": "1968",
+    "text": "Der Tierarzt Jean Cathary entwickelte in Frankreich die „Gelbe Suppe“ für Hunde; das gilt laut Unternehmen als Grundstein von Royal Canin.",
+    "quelle": "https://www.royalcanin.com/de/about-us/our-history"
+   },
+   {
+    "jahr": "1972",
+    "text": "Die Guyomarc'h-Gruppe übernahm das Unternehmen.",
+    "quelle": "https://www.royalcanin.com/de/about-us/our-history"
+   },
+   {
+    "jahr": "1974",
+    "text": "Royal Canin Produkte wurden in acht europäischen Ländern verkauft, darunter Deutschland.",
+    "quelle": "https://www.royalcanin.com/de/about-us/our-history"
+   },
+   {
+    "jahr": "1990",
+    "text": "Paribas Affaires Industrielles erwarb den Guyomarc'h-Konzern und damit Royal Canin.",
+    "quelle": "https://www.royalcanin.com/de/about-us/our-history"
+   },
+   {
+    "jahr": "2002",
+    "text": "Royal Canin wurde Teil von Mars, Incorporated.",
+    "quelle": "https://www.mars.com/about/history"
+   }
+  ],
+  "vorfaelle": [
+   {
+    "datum": "2007-04",
+    "art": "Rückruf",
+    "titel": "Rückrufe wegen melaminbelasteter Rohstoffe (USA, Südafrika/Namibia)",
+    "text": "Royal Canin USA rief im April 2007 einige Trockenfutter für Hunde und Katzen zurück, die mit melaminbelastetem Reisproteinkonzentrat hergestellt worden waren. In derselben Woche rief die südafrikanische Tochtergesellschaft mehrere Trockenfutter zurück, in denen mit Melamin verunreinigtes Maisgluten enthalten war; diese Produkte waren in Südafrika und Namibia verkauft worden. Die Vorgänge betrafen nicht den deutschen Markt.",
+    "quelle_name": "Philadelphia Inquirer, 21.04.2007",
+    "quelle": "https://inquirer.com/philly/health/20070421_Another_recall_of_dog_and_cat_dry_pet_food.html"
+   }
+  ],
+  "vorfaelle_hinweis": "Stand 17.10.2026. Suche auf produktwarnung.eu (Suchbegriff „Royal Canin“, keine Treffer) sowie Websuche nach Rückrufen und Verfahren in Deutschland und der EU; keine Rückrufe, Behördenwarnungen oder Gerichtsverfahren in Deutschland/EU gefunden. lebensmittelwarnung.de ließ sich nicht direkt abfragen (Zugriff gesperrt). Der aufgeführte Rückruf von 2007 betraf die USA, Südafrika und Namibia."
+ },
+ "sheba": {
+  "slug": "sheba",
+  "name": "Sheba",
+  "unternehmen": "MARS GmbH",
+  "sitz": "Verden (Aller), Deutschland",
+  "konzern": "Mars, Incorporated (Geschäftsbereich Mars Petcare)",
+  "gegruendet": "1982",
+  "ueberblick": "Sheba ist eine Katzenfuttermarke von Mars, die laut Wikipedia 1982 in Hamburg eingeführt wurde. Angeboten werden Nassfutter in Schalen und Portionsbeuteln sowie Snacks. Laut einer Mars-Stellenanzeige wird im Werk Verden unter anderem Sheba hergestellt.",
+  "geschichte": [
+   {
+    "jahr": "1960",
+    "text": "Mars Petcare eröffnete in Verden bei Hannover die erste Tiernahrungsfabrik in Deutschland (Angabe in einem Fachartikel von 2010: „vor 50 Jahren“).",
+    "quelle": "https://petworldwide.net/content-1/pet-worldwide/2010/07/7-8-2010/50-years-of-pet-food-from-verden.html"
+   },
+   {
+    "jahr": "1982",
+    "text": "Sheba wurde in Hamburg eingeführt.",
+    "quelle": "https://en.wikipedia.org/wiki/Sheba_(cat_food)"
+   },
+   {
+    "jahr": "2013",
+    "text": "Mars genehmigte 17,4 Mio. Euro für den Ausbau des Werks Verden für Single-Serve-Beutel; die neue Anlage sollte im Januar 2014 in Betrieb gehen.",
+    "quelle": "https://www.petworldwide.net/content-1/news/2013/05/07/mars-petcare-expands-its-plant-in-verden.html"
+   }
+  ],
+  "vorfaelle": [],
+  "vorfaelle_hinweis": "Stand 17.10.2026. Suche auf produktwarnung.eu (Suchbegriff „Sheba“, keine Treffer) und Websuche nach Rückrufen, Behördenwarnungen und Verfahren zu Sheba in Deutschland/EU; keine Treffer. lebensmittelwarnung.de ließ sich nicht direkt abfragen (Zugriff gesperrt)."
+ },
+ "the-better-cat": {
+  "slug": "the-better-cat",
+  "name": "The Better Cat",
+  "unternehmen": "The Healthy Pet Co. GmbH",
+  "sitz": "Berlin, Deutschland",
+  "konzern": null,
+  "gegruendet": null,
+  "ueberblick": "The Better Cat ist eine Berliner Katzenfutter-Marke mit Trocken- und Nassfutter, Snacks und Nahrungsergänzung, die sich als präventive Katzenernährung positioniert. Inverkehrbringer ist die Healthy Pet Co. GmbH, vertreten durch Rachit Shadra und Niklas Köster. Zum Produktionsort liegt kein Beleg vor.",
+  "geschichte": [
+   {
+    "jahr": "Heute",
+    "text": "Gegründet von Rachit Shadra und Niklas Köster (laut Fachpresse Startup-Erfahrung bzw. ehemaliger Investmentbanker mit E-Commerce-Erfahrung); die Marke startete mit Trockenfutter und erweiterte später um Nassfutter, Snacks und Zubehör. Gründungsjahr nicht belegt.",
+    "quelle": "https://petfoodprocessing.net/articles/16549-german-cat-food-company-launches-to-define-cat-nutrition"
+   },
+   {
+    "jahr": "2024",
+    "text": "The Better Cat war für den Preis Best Newcomer 2024 von PET worldwide nominiert.",
+    "quelle": "https://www.petworldwide.net/content-1/best-newcomer/2024/the-better-cat.html"
+   }
+  ],
+  "vorfaelle": [],
+  "vorfaelle_hinweis": "Websuche nach Rückruf, Abmahnung, Verbraucherzentrale, Urteil und Öko-Test ohne Treffer; produktwarnung.eu durchsucht (keine Treffer für The Better Cat); lebensmittelwarnung.de per Abruf nicht erreichbar. Kein belegter Vorfall gefunden. Kundenbewertungen auf Trustpilot wurden nicht als Beleg gewertet. Stand Oktober 2026."
+ },
+ "tierliebhaber": {
+  "slug": "tierliebhaber",
+  "name": "Tierliebhaber",
+  "unternehmen": "Animagus GmbH",
+  "sitz": "Markranstädt, Deutschland",
+  "konzern": null,
+  "gegruendet": "2016",
+  "ueberblick": "Tierliebhaber ist die Marke der Animagus GmbH aus Markranstädt bei Leipzig und bietet Snacks, Ergänzungsfuttermittel und Pflegeprodukte für Hunde an. Zum Produktionsort liegt kein Beleg vor.",
+  "geschichte": [
+   {
+    "jahr": "2016",
+    "text": "Der Gesellschaftsvertrag der Animagus GmbH datiert vom 20.10.2016 (Handelsregister-Dokumentenliste).",
+    "quelle": "https://www.online-handelsregister.de/handelsregisterauszug/sn/Leipzig/HRB/38501/Animagus-GmbH"
+   },
+   {
+    "jahr": "2021",
+    "text": "Eintragung im Handelsregister des Amtsgerichts Leipzig unter HRB 38501 (Datum 22.02.2021 laut Registerauskunftsseite).",
+    "quelle": "https://www.online-handelsregister.de/handelsregisterauszug/sn/Leipzig/HRB/38501/Animagus-GmbH"
+   }
+  ],
+  "vorfaelle": [],
+  "vorfaelle_hinweis": "Websuche nach Rückruf, Abmahnung, Urteil und Warnung zu Animagus und Tierliebhaber ohne einschlägige Treffer; lebensmittelwarnung.de und produktwarnung.eu für diese Marke nicht gezielt geprüft bzw. per Abruf teils gesperrt. Kein belegter Vorfall gefunden. Die Gründerangabe (Josefine Schmidt) und die Markenbeginn-Angabe 2016 stammen aus einer nicht abrufbaren Pressemeldung und wurden nicht übernommen. Stand Oktober 2026."
+ },
+ "tjure": {
+  "slug": "tjure",
+  "name": "TJURE",
+  "unternehmen": "HeimTierLand 24 GmbH & Co. KG",
+  "sitz": "Bad Ems, Deutschland",
+  "konzern": null,
+  "gegruendet": null,
+  "ueberblick": "TJURE ist eine Marke der HeimTierLand 24 GmbH & Co. KG aus Bad Ems für flüssige Fleischnahrung (Fleischsmoothies) und Ergänzungsfuttermittel für Hunde und Katzen. Laut einem Händlerporträt wird TJURE von der Fleischerei Klassen in Temmels bei Trier entwickelt. Ein Sitz in Berlin konnte nicht belegt werden.",
+  "geschichte": [
+   {
+    "jahr": "2019",
+    "text": "Die HeimTierLand 24 GmbH & Co. KG meldete im Juni 2019 den Einstieg von TJURE in den Lebensmitteleinzelhandel: Die Fleischsmoothies wurden in allen Globus-Warenhäusern und ab Juli in 1.200 dm-Drogeriemärkten angeboten. Zuvor vertrieb das Unternehmen TJURE überwiegend online und über ausgewählte Zoofachgeschäfte.",
+    "quelle": "https://www.firmenpresse.de/pressinfo1731093-tjure-fluessignahrung-fuer-hund-und-katze-ab-sofort-auch-im-lebensmittel-einzelhandel.html"
+   }
+  ],
+  "vorfaelle": [],
+  "vorfaelle_hinweis": "Websuche nach Rückrufen, Warnungen, Urteilen und Abmahnungen zu TJURE/HeimTierLand 24 sowie Suche auf produktwarnung.eu nach TJURE, Stand 16.10.2026: keine Treffer. lebensmittelwarnung.de wurde nicht direkt durchsucht. Die Herstellerseite tjure.de war nicht auswertbar; das Impressum und das Gründungsjahr der Marke konnten nicht belegt werden. Die Herstellerzuordnung stützt sich auf eine Pressemitteilung der HeimTierLand 24 GmbH & Co. KG (2019) und Händlerangaben. Die Annahme einer Tjure Holding in Berlin wurde nicht bestätigt."
+ },
+ "whimzees": {
+  "slug": "whimzees",
+  "name": "Whimzees",
+  "unternehmen": "Wellness Pet Company (vormals WellPet LLC)",
+  "sitz": "Tewksbury, Massachusetts, USA",
+  "konzern": "Clearlake Capital Group, L.P. (Eigentümerin der Wellness Pet Company seit 2020)",
+  "gegruendet": null,
+  "ueberblick": "Whimzees sind natürliche Kauartikel zur Zahnpflege für Hunde (laut Hersteller auch für Katzen), die in den Niederlanden hergestellt werden. Die Marke gehört seit 2017 zur US-Gruppe Wellness Pet Company (vormals WellPet), deren Eigentümerin seit 2020 Clearlake Capital ist. In Deutschland wird die Marke über den Handel vertrieben (z. B. medpex, zooplus); der deutsche Inverkehrbringer wurde nicht belegt.",
+  "geschichte": [
+   {
+    "jahr": "2017",
+    "text": "WellPet LLC (Tewksbury, Massachusetts) übernahm die Marke Whimzees, hergestellt von Paragon Pet Products in Veendam (Niederlande); Gründer und CEO Wim Pater sprach von mehr internationalen Ressourcen. Die Produktion sollte in den Niederlanden bleiben.",
+    "quelle": "https://www.powderbulksolids.com/business/wellpet-acquires-dutch-dental-dog-chew-brand-whimzees"
+   },
+   {
+    "jahr": "2020",
+    "text": "Clearlake Capital Group vereinbarte im November 2020 den Kauf von WellPet (Whimzees, Wellness, Old Mother Hubbard, Eagle Pack, Holistic Select, Sojos) von Berwind; WellPet gibt Produktionsstandorte in Indiana, Minnesota und den Niederlanden an.",
+    "quelle": "https://peprofessional.com/2020/11/berwind-sells-wellpet-clearlake/"
+   },
+   {
+    "jahr": "2022",
+    "text": "WellPet wurde in Wellness Pet Company umbenannt; Whimzees wird laut Wikipedia auf dem Produktionsgelände in Veendam (Niederlande) gefertigt.",
+    "quelle": "https://en.wikipedia.org/wiki/Wellness_Pet_Company"
+   }
+  ],
+  "vorfaelle": [],
+  "vorfaelle_hinweis": "Stand 16.10.2026. Keine dokumentierten Vorfälle zu Whimzees gefunden. Durchsucht wurden produktwarnung.eu (Suche nach Whimzees: keine Treffer), die französische Rückrufdatenbank RappelConso (keine Treffer) sowie Web-Recherchen nach Rückrufen, FDA-Meldungen und Verfahren; Hinweise auf Rückrufe von Whimzees stammten nur aus Ratgeber- und Blogseiten und waren dort als Gerücht ohne Beleg beschrieben. Rückrufe anderer Marken der Gruppe (Wellness) wurden nicht aufgenommen. lebensmittelwarnung.de war für automatisierten Abruf nicht erreichbar (HTTP 403). Die Entstehung der Marke vor 2017 ist in den ausgewerteten Quellen nicht belegt."
+ },
+ "whiskas": {
+  "slug": "whiskas",
+  "name": "Whiskas",
+  "unternehmen": "MARS GmbH",
+  "sitz": "Verden (Aller), Deutschland",
+  "konzern": "Mars, Incorporated (Geschäftsbereich Mars Petcare)",
+  "gegruendet": "1958",
+  "ueberblick": "Whiskas ist eine Katzenfuttermarke von Mars mit Nass- und Trockenfutter, Snacks und Katzenmilch. In Deutschland ist Mars Petcare mit der MARS GmbH in Verden (Aller) ansässig. Laut einer Mars-Stellenanzeige wird im Werk Verden unter anderem Whiskas hergestellt.",
+  "geschichte": [
+   {
+    "jahr": "1958",
+    "text": "Die Marke kam unter dem Namen Whiskas in Großbritannien auf den Markt und wurde später in Europa ausgeweitet.",
+    "quelle": "https://en.wikipedia.org/wiki/Whiskas"
+   },
+   {
+    "jahr": "1960",
+    "text": "Mars Petcare eröffnete in Verden bei Hannover die erste Tiernahrungsfabrik in Deutschland (Angabe in einem Fachartikel von 2010: „vor 50 Jahren“).",
+    "quelle": "https://petworldwide.net/content-1/pet-worldwide/2010/07/7-8-2010/50-years-of-pet-food-from-verden.html"
+   },
+   {
+    "jahr": "1968",
+    "text": "Mars übernahm Kal Kan Foods in Los Angeles.",
+    "quelle": "https://www.mars.com/about/history"
+   },
+   {
+    "jahr": "1989",
+    "text": "Kal Kan stellte sein Katzenfutter in den USA auf den Markennamen Whiskas um, um die internationale Marke zu vereinheitlichen.",
+    "quelle": "https://en.wikipedia.org/wiki/Whiskas"
+   }
+  ],
+  "vorfaelle": [
+   {
+    "datum": "2020-02",
+    "art": "Kritik",
+    "titel": "Verbraucherzentrale Hamburg kritisiert reduzierte Füllmengen bei Whiskas-Snacks",
+    "text": "Die Verbraucherzentrale Hamburg kritisierte im Februar 2020, Mars habe bei Whiskas Knuspertaschen und Whiskas Trio Crunchy die Füllmengen bei gleichem Preis reduziert. Bei den Knuspertaschen wies sie zudem auf einen niedrigeren Eiweißanteil hin. Mars Petcare begründete die Preiserhöhungen laut Verbraucherzentrale mit steigenden Kosten.",
+    "quelle_name": "Verbraucherzentrale Hamburg (Stand 18.02.2020)",
+    "quelle": "https://www.vzhh.de/themen/mogelpackungen/katzen-wuerden-nicht-mehr-whiskas-kaufen"
+   },
+   {
+    "datum": "2021-09",
+    "art": "Rückruf",
+    "titel": "Rückruf von Whiskas-Trockenfutter in Kanada (nicht Deutschland)",
+    "text": "Mars Petcare Canada rief am 03.09.2021 mehrere WHISKAS-Trockenfutter für Katzen freiwillig zurück, weil sie mit Rohstoffen hergestellt worden waren, die außerhalb der internen Qualitätsspezifikationen lagen. Der Rückruf galt für in Kanada verkaufte Produkte mit bestimmten Mindesthaltbarkeitsdaten in 2022.",
+    "quelle_name": "Mars Petcare Canada, Pressemitteilung über Newswire",
+    "quelle": "https://www.newswire.ca/news-releases/mars-petcare-canada-announces-voluntary-limited-recall-of-whiskas-r-dry-cat-food-products-860806704.html"
+   }
+  ],
+  "vorfaelle_hinweis": "Stand 17.10.2026. Suche auf produktwarnung.eu (Suchbegriff „Whiskas“, keine Treffer) und Websuche nach Rückrufen, Behördenwarnungen und Verfahren in Deutschland/EU; keine Rückrufe oder Behördenwarnungen in Deutschland/EU gefunden. lebensmittelwarnung.de ließ sich nicht direkt abfragen (Zugriff gesperrt). Gerichtsverfahren wurden nicht gefunden. Der aufgeführte Rückruf von 2021 betraf nur Kanada."
+ },
+ "wolfsblut": {
+  "slug": "wolfsblut",
+  "name": "Wolfsblut",
+  "unternehmen": "Healthfood24 GmbH",
+  "sitz": "Leipzig, Deutschland",
+  "konzern": "AlphaPet Ventures GmbH (München)",
+  "gegruendet": "2006",
+  "ueberblick": "Wolfsblut ist eine Hundefuttermarke der Healthfood24 GmbH aus Leipzig mit Trocken- und Nassfutter, Snacks und Diätfuttermitteln. Die Marke gehört seit Januar 2020 zur AlphaPet-Gruppe. Produktionsstandorte konnten in den geprüften Quellen nicht belegt werden.",
+  "geschichte": [
+   {
+    "jahr": "2006",
+    "text": "Nach Angaben der Marke wurde Wolfsblut 2006 mit dem Ziel gegründet, Hunde getreidefrei und mit hohem Fleischanteil zu ernähren.",
+    "quelle": "https://www.wolfsblut.com/unsere-geschichte"
+   },
+   {
+    "jahr": "2007",
+    "text": "Die ersten drei Trockenfuttersorten Blue Mountain, Green Valley und Wild Pacific wurden eingeführt.",
+    "quelle": "https://www.wolfsblut.com/unsere-geschichte"
+   },
+   {
+    "jahr": "2020",
+    "text": "AlphaPet Ventures GmbH (München) übernahm im Januar 2020 die Healthfood24 GmbH mit der Marke Wolfsblut. Der Finanzinvestor capiton erwarb dafür eine Beteiligung von 36 % an AlphaPet Ventures.",
+    "quelle": "https://www.alpha.pet/en/news-archiv/alphapet-acquires-healthfood24"
+   },
+   {
+    "jahr": "2020",
+    "text": "AlphaPet nennt die Übernahme von Healthfood24 und Wolfsblut in seiner Firmenchronik als Schritt zur digitalen Markenplattform mit über 80 % Umsatz aus eigenen Marken.",
+    "quelle": "https://www.alpha.pet/en/about-alphapet/history"
+   }
+  ],
+  "vorfaelle": [
+   {
+    "datum": "2022-11",
+    "art": "Rückruf",
+    "titel": "Blei in Wolfsblut Atlantic Tuna 500 g (Österreich)",
+    "text": "Das österreichische Bundesamt für Ernährungssicherheit (BAES) informierte am 18.11.2022 über den Rückruf des Alleinfuttermittels Wolfsblut Atlantic Tuna 500 g, Charge 508744, MHD 15.08.2023, durch die Healthfood24 GmbH. In dem Futter waren erhöhte Bleigehalte festgestellt worden. Laut BAES wurde über das europäische Schnellwarnsystem RASFF ein freiwilliger Rückruf eingeleitet. Das Produkt war zwischen 30.12.2020 und 02.10.2022 auch von Kunden in Österreich online bestellt worden. Das BAES wies darauf hin, dass das Futter nicht mehr verfüttert werden dürfe.",
+    "quelle_name": "BAES (Österreichisches Bundesamt für Ernährungssicherheit)",
+    "quelle": "https://baes.gv.at/en/details/produktrueckruf-hundefutter-wolfsblut-atlantic-tuna-500g"
+   },
+   {
+    "datum": "2023-01",
+    "art": "Rückruf",
+    "titel": "Ausweitung auf Wolfsblut Adult Atlantic Tuna 2 kg und 15 kg wegen Blei",
+    "text": "Am 26.01.2023 veröffentlichte das BAES eine Warnung zu weiteren Alleinfuttermitteln der Marke mit erhöhten Bleigehalten, die über das europäische Schnellwarnsystem gemeldet worden waren: Wolfsblut Adult Atlantic Tuna (Thunfisch und Meeressalat) 2 kg mit MHD 14.06.2023, 24.06.2023 und 17.07.2023 sowie 15 kg mit MHD 27.04.2023 und 03.07.2023. Die Healthfood24 GmbH rief diese Futtermittel laut BAES ebenfalls zurück. Die Ware war 2021 auch nach Österreich geliefert worden.",
+    "quelle_name": "BAES",
+    "quelle": "https://www.baes.gv.at/en/details/produktwarnung-hundefutter-wolfsblut-adult-atlantic-tuna-thunfisch-und-meeressalat-2-kg-und-15-kg"
+   },
+   {
+    "datum": "2025-10",
+    "art": "Rückruf",
+    "titel": "Kunststoffteilchen in Wolfsblut Wide Plain Adult Large 12,5 kg",
+    "text": "Die Healthfood24 GmbH rief am 23.10.2025 das Trockenfutter Wolfsblut Wide Plain Adult Large 12,5 kg zurück (MHD 26.06.2028, Charge FA2507291), weil bei internen Qualitätskontrollen festgestellt wurde, dass Hartkunststoffteilchen in die Charge geraten sein könnten. Nach Berichten der Stuttgarter Zeitung hatte ein Sichtfenster aus Hartplastik an einem Trockner einen Bruch aufgewiesen. Das europäische Schnellwarnsystem RASFF führte die Meldung unter der Nummer 2025.8057, erstmals am 20.10.2025 von Deutschland gemeldet. Betroffene Länder neben Deutschland waren laut dieser Quelle Österreich, Polen, Luxemburg, Schweiz, Niederlande und Tschechien. Der Hersteller bot Kaufpreiserstattung auch ohne Kassenbon an.",
+    "quelle_name": "Healthfood24 GmbH (Herstellermitteilung) und Stuttgarter Zeitung",
+    "quelle": "https://www.wolfsblut.com/aktuelles/"
+   }
+  ],
+  "vorfaelle_hinweis": "Recherche per Websuche sowie Abruf der Seiten von BAES, Hersteller (wolfsblut.com), AlphaPet, Stuttgarter Zeitung und Heidelberg24; Stand 16.10.2026. Zu den Blei-Rückrufen 2022/2023 lag nur die BAES-Meldung (Österreich) vor, eine Meldung deutscher Behörden wurde nicht geprüft. Keine Treffer zu Gerichts- oder Wettbewerbsverfahren; lebensmittelwarnung.de wurde nicht direkt durchsucht."
+ }
+}
