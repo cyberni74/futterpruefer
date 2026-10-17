@@ -65,9 +65,15 @@ export function getCategory(slug: string) {
   return prisma.category.findUnique({ where: { slug } });
 }
 
-export function getReviewBySlug(slug: string) {
+/** Nur Vercel-Preview. Produktion und lokale Läufe ohne VERCEL_ENV bleiben bei veröffentlichten Tests. */
+export function previewDraftsEnabled(): boolean {
+  return process.env.VERCEL_ENV === "preview";
+}
+
+export function getReviewBySlug(slug: string, options?: { includeDrafts?: boolean }) {
+  const includeDrafts = options?.includeDrafts === true;
   return prisma.review.findFirst({
-    where: { slug, ...publishedWhere() },
+    where: includeDrafts ? { slug } : { slug, ...publishedWhere() },
     include: {
       category: true,
       studien: { orderBy: [{ wirkstoff: { sortOrder: "asc" } }, { createdAt: "asc" }], include: { wirkstoff: true } },

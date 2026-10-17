@@ -3,7 +3,8 @@ import sharp from "sharp";
 import { productLabel } from "@/lib/seo";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
-import { getReviewBySlug } from "@/lib/queries";
+import { isAmazonHotlink } from "@/lib/image-hosts";
+import { getReviewBySlug, previewDraftsEnabled } from "@/lib/queries";
 import { ratingFor } from "@/lib/scoring";
 import { LOGO_ROUND_DATA_URL } from "@/lib/logo-data";
 
@@ -15,7 +16,7 @@ const COLOR = { gut: "#16a34a", mittel: "#eab308", schlecht: "#dc2626" } as cons
 
 /** Produktbild als PNG-Data-URL (Satori kann kein WebP). Lokale Bilder aus /public, externe per fetch. */
 async function productImage(src: string | null | undefined): Promise<string | null> {
-  if (!src) return null;
+  if (!src || isAmazonHotlink(src)) return null;
   try {
     const buf = src.startsWith("http")
       ? Buffer.from(await (await fetch(src)).arrayBuffer())
@@ -29,7 +30,7 @@ async function productImage(src: string | null | undefined): Promise<string | nu
 
 export default async function OgImage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const r = await getReviewBySlug(slug);
+  const r = await getReviewBySlug(slug, { includeDrafts: previewDraftsEnabled() });
   const score = r?.totalScore ?? 0;
   const color = COLOR[ratingFor(score)];
   const img = await productImage(r?.imageUrl);

@@ -10,7 +10,7 @@ export type Claim = { claim: string; rating: ClaimRating; reason: string; legal:
 export const CLAIM_LABEL: Record<ClaimRating, string> = {
   ZULAESSIG: "Zulässig",
   FRAGWUERDIG: "Fragwürdig",
-  UNZULAESSIG: "Unzulässig/irreführend",
+  UNZULAESSIG: "Halten wir für irreführend",
 };
 
 const str = (v: unknown, max = 1000) => (typeof v === "string" ? v.trim().slice(0, max) : "");
@@ -46,7 +46,7 @@ export function suggestedDeclarationDeduction(claims: Claim[]): number {
 /** Contra-Liste inkl. unzulässiger Werbeaussagen (ohne Dubletten). */
 export function consWithClaims(cons: string[] | null | undefined, claims: Claim[]): string[] {
   const base = (cons ?? []).filter(Boolean);
-  const extra = misleadingClaims(claims).map((c) => `Irreführende Werbeaussage: „${c.claim}“`);
+  const extra = misleadingClaims(claims).map((c) => `Halten wir für irreführend: „${c.claim}“`);
   return [...base, ...extra.filter((e) => !base.includes(e))];
 }
 

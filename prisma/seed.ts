@@ -29,6 +29,7 @@ import { KAUARTIKEL_BILDER } from "./bilder-kauartikel-funktion";
 import { TREND_OKT_TESTS } from "./review-trend-oktober";
 import { TREND_OKT_BILDER } from "./bilder-trend-oktober";
 import { DAILY_OKT16_TESTS } from "./review-daily-2026-10-16";
+import { DAILY_OKT17_TESTS } from "./review-daily-2026-10-17";
 import { DAILY_OKT16_BILDER } from "./bilder-daily-2026-10-16";
 import { REFERENZDOSEN } from "./referenzdosen";
 import { MAMMALY_BLOG_SECTIONS, MAMMALY_BLOGS_MARKER } from "./review-mammaly-blogs";
@@ -172,6 +173,7 @@ async function main() {
   await ensureMammalyTests();
   await ensureMammalyBlogs();
   await normalizeStoredLinks();
+  await ensureDailyOkt17Drafts();
   // Demo-Inhalte (fiktive Tests, Blog, Ticker) nur auf ausdrücklichen Wunsch: SEED_DEMO=1.
   // Verhindert, dass sie nach dem Löschen bei einem Deploy wieder auftauchen.
   if (process.env.SEED_DEMO !== "1" || (await prisma.review.count()) > 0) {
@@ -631,6 +633,63 @@ async function ensureDemoDetails() {
     });
   }
   if (demos.length) console.log(`Demo-Produktdaten ergänzt: ${demos.length}`);
+}
+
+/**
+ * Fünf Tests vom 17.10.2026.
+ * Fehlende Slugs werden als DRAFT angelegt. Bestehende Entwürfe werden inhaltlich aktualisiert,
+ * der Status bleibt DRAFT (publishedAt null), damit Korrekturen in den schon angelegten Datensätzen stehen.
+ * Veröffentlichung nur, wenn freigegeben === true, VERCEL_ENV production ist und der Eintrag DRAFT ist
+ * oder in diesem Lauf gerade als Entwurf geschrieben wurde. Dann sofort, ohne gestaffelte Termine.
+ */
+function dailyOkt17DraftData(t: (typeof DAILY_OKT17_TESTS)[number], categoryId: string) {
+  const sc = t.scores;
+  const total = sc.scoreRaw + sc.scoreHarmful + sc.scoreNutrients + sc.scoreDeclaration + sc.scoreNeeds + sc.scoreValue;
+  return {
+    slug: t.slug, title: t.title, brand: t.brand, productName: t.productName, keyword: t.keyword, categoryId,
+    priceClass: t.priceClass, pricePerKg: t.pricePerKg, packageSize: t.packageSize, price: t.price, pricePerDay: t.pricePerDay,
+    imageUrl: t.imageUrl, imageAlt: t.imageAlt, imageBlur: null,
+    contentImageUrl: t.contentImageUrl, contentImageAlt: t.contentImageAlt, contentImageBlur: null,
+    gallery: [] as string[],
+    composition: t.composition, analysis: t.analysis, claims: t.claims,
+    ...sc, totalScore: total,
+    verdict: t.verdict, teaser: t.teaser, pros: t.pros, cons: t.cons,
+    bodyHtml: autolinkUrls(t.bodyHtml), conclusionHtml: autolinkUrls(t.conclusionHtml),
+    metaTitle: t.metaTitle, metaDescription: t.metaDescription, keywords: t.keywords,
+    priceDate: new Date(t.priceDate), testedAt: new Date(t.testedAt),
+    status: "DRAFT" as const, publishedAt: null,
+  };
+}
+
+async function ensureDailyOkt17Drafts() {
+  const categories = new Map((await prisma.category.findMany({ select: { id: true, slug: true } })).map((c) => [c.slug, c.id]));
+  const releasedAt = new Date();
+  let created = 0;
+  let updated = 0;
+  for (const t of DAILY_OKT17_TESTS) {
+    const categoryId = categories.get(t.categorySlug);
+    if (!categoryId) { console.log(`Test ${t.slug} übersprungen: Kategorie ${t.categorySlug} fehlt.`); continue; }
+    const existing = await prisma.review.findUnique({ where: { slug: t.slug }, select: { id: true, status: true } });
+    const data = dailyOkt17DraftData(t, categoryId);
+    let id: string;
+    if (!existing) {
+      const row = await prisma.review.create({ data });
+      id = row.id;
+      created++;
+    } else if (existing.status === "DRAFT") {
+      await prisma.review.update({ where: { id: existing.id }, data });
+      id = existing.id;
+      updated++;
+    } else {
+      console.log(`Test ${t.slug}: Status ${existing.status}, Inhalt nicht überschrieben.`);
+      continue;
+    }
+    if ((t.freigegeben as boolean) && process.env.VERCEL_ENV === "production") {
+      await prisma.review.update({ where: { id }, data: { status: "PUBLISHED", publishedAt: releasedAt } });
+      console.log(`Test ${t.slug}: nach Freigabe sofort veröffentlicht.`);
+    }
+  }
+  if (created || updated) console.log(`Entwürfe vom 17.10.2026: ${created} angelegt, ${updated} aktualisiert (nicht veröffentlicht, solange nicht freigegeben).`);
 }
 
 main().catch((e) => { console.error(e); process.exit(1); }).finally(() => prisma.$disconnect());
