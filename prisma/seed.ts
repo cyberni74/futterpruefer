@@ -636,57 +636,60 @@ async function ensureDemoDetails() {
 }
 
 /**
- * Fünf Tests vom 17.10.2026. Legt nur fehlende Slugs als DRAFT an (publishedAt null).
- * Bestehende Datensätze bleiben unangetastet. Veröffentlichung nur, wenn im Datensatz
- * freigegeben === true, VERCEL_ENV production ist und der Eintrag noch DRAFT ist.
- * Liegt publishedAtPlan dann noch in der Zukunft, gilt der Freigabezeitpunkt mit abweichender Uhrzeit.
+ * Fünf Tests vom 17.10.2026.
+ * Fehlende Slugs werden als DRAFT angelegt. Bestehende Entwürfe werden inhaltlich aktualisiert,
+ * der Status bleibt DRAFT (publishedAt null), damit Korrekturen in den schon angelegten Datensätzen stehen.
+ * Veröffentlichung nur, wenn freigegeben === true, VERCEL_ENV production ist und der Eintrag DRAFT ist
+ * oder in diesem Lauf gerade als Entwurf geschrieben wurde. Dann sofort, ohne gestaffelte Termine.
  */
-function publishedAtForRelease(planIso: string, index: number): Date {
-  const planned = new Date(planIso);
-  const now = new Date();
-  if (!Number.isNaN(planned.getTime()) && planned.getTime() <= now.getTime()) return planned;
-  return new Date(now.getTime() - (index + 1) * 37 * 60 * 1000);
+function dailyOkt17DraftData(t: (typeof DAILY_OKT17_TESTS)[number], categoryId: string) {
+  const sc = t.scores;
+  const total = sc.scoreRaw + sc.scoreHarmful + sc.scoreNutrients + sc.scoreDeclaration + sc.scoreNeeds + sc.scoreValue;
+  return {
+    slug: t.slug, title: t.title, brand: t.brand, productName: t.productName, keyword: t.keyword, categoryId,
+    priceClass: t.priceClass, pricePerKg: t.pricePerKg, packageSize: t.packageSize, price: t.price, pricePerDay: t.pricePerDay,
+    imageUrl: t.imageUrl, imageAlt: t.imageAlt, imageBlur: null,
+    contentImageUrl: t.contentImageUrl, contentImageAlt: t.contentImageAlt, contentImageBlur: null,
+    gallery: [] as string[],
+    composition: t.composition, analysis: t.analysis, claims: t.claims,
+    ...sc, totalScore: total,
+    verdict: t.verdict, teaser: t.teaser, pros: t.pros, cons: t.cons,
+    bodyHtml: autolinkUrls(t.bodyHtml), conclusionHtml: autolinkUrls(t.conclusionHtml),
+    metaTitle: t.metaTitle, metaDescription: t.metaDescription, keywords: t.keywords,
+    priceDate: new Date(t.priceDate), testedAt: new Date(t.testedAt),
+    status: "DRAFT" as const, publishedAt: null,
+  };
 }
 
 async function ensureDailyOkt17Drafts() {
   const categories = new Map((await prisma.category.findMany({ select: { id: true, slug: true } })).map((c) => [c.slug, c.id]));
+  const releasedAt = new Date();
   let created = 0;
-  for (const [index, t] of DAILY_OKT17_TESTS.entries()) {
+  let updated = 0;
+  for (const t of DAILY_OKT17_TESTS) {
     const categoryId = categories.get(t.categorySlug);
     if (!categoryId) { console.log(`Test ${t.slug} übersprungen: Kategorie ${t.categorySlug} fehlt.`); continue; }
     const existing = await prisma.review.findUnique({ where: { slug: t.slug }, select: { id: true, status: true } });
-    if (existing) {
-      const freigegeben = t.freigegeben as boolean;
-      if (freigegeben && process.env.VERCEL_ENV === "production" && existing.status === "DRAFT") {
-        await prisma.review.update({
-          where: { id: existing.id },
-          data: { status: "PUBLISHED", publishedAt: publishedAtForRelease(t.publishedAtPlan, index) },
-        });
-        console.log(`Test ${t.slug}: Entwurf freigegeben.`);
-      }
+    const data = dailyOkt17DraftData(t, categoryId);
+    let id: string;
+    if (!existing) {
+      const row = await prisma.review.create({ data });
+      id = row.id;
+      created++;
+    } else if (existing.status === "DRAFT") {
+      await prisma.review.update({ where: { id: existing.id }, data });
+      id = existing.id;
+      updated++;
+    } else {
+      console.log(`Test ${t.slug}: Status ${existing.status}, Inhalt nicht überschrieben.`);
       continue;
     }
-    const sc = t.scores;
-    const total = sc.scoreRaw + sc.scoreHarmful + sc.scoreNutrients + sc.scoreDeclaration + sc.scoreNeeds + sc.scoreValue;
-    await prisma.review.create({
-      data: {
-        slug: t.slug, title: t.title, brand: t.brand, productName: t.productName, keyword: t.keyword, categoryId,
-        priceClass: t.priceClass, pricePerKg: t.pricePerKg, packageSize: t.packageSize, price: t.price, pricePerDay: t.pricePerDay,
-        imageUrl: t.imageUrl, imageAlt: t.imageAlt, imageBlur: null,
-        contentImageUrl: t.contentImageUrl, contentImageAlt: t.contentImageAlt, contentImageBlur: null,
-        gallery: [],
-        composition: t.composition, analysis: t.analysis, claims: t.claims,
-        ...sc, totalScore: total,
-        verdict: t.verdict, teaser: t.teaser, pros: t.pros, cons: t.cons,
-        bodyHtml: autolinkUrls(t.bodyHtml), conclusionHtml: autolinkUrls(t.conclusionHtml),
-        metaTitle: t.metaTitle, metaDescription: t.metaDescription, keywords: t.keywords,
-        priceDate: new Date(t.priceDate), testedAt: new Date(t.testedAt),
-        status: "DRAFT", publishedAt: null,
-      },
-    });
-    created++;
+    if ((t.freigegeben as boolean) && process.env.VERCEL_ENV === "production") {
+      await prisma.review.update({ where: { id }, data: { status: "PUBLISHED", publishedAt: releasedAt } });
+      console.log(`Test ${t.slug}: nach Freigabe sofort veröffentlicht.`);
+    }
   }
-  if (created) console.log(`${created} Entwürfe vom 17.10.2026 angelegt (nicht veröffentlicht).`);
+  if (created || updated) console.log(`Entwürfe vom 17.10.2026: ${created} angelegt, ${updated} aktualisiert (nicht veröffentlicht, solange nicht freigegeben).`);
 }
 
 main().catch((e) => { console.error(e); process.exit(1); }).finally(() => prisma.$disconnect());

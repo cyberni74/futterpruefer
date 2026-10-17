@@ -62,17 +62,46 @@ describe("Entwürfe 17.10.2026", () => {
     }
   });
 
-  it("verlinkt Bilder als Amazon-Hotlinks und Produktlinks mit Partner-Tag", () => {
+  it("verlinkt Bilder als Amazon-Hotlinks; Kauflinks mit Partner-Tag, Belegquellen ohne", () => {
+    const blob = DAILY_OKT17_TESTS.map((t) => `${t.bodyHtml}\n${t.conclusionHtml}`).join("\n");
+    expect(blob).not.toContain("Unterlagen haben wir nicht angefordert");
+    expect(blob).not.toContain("Datenbankfeld");
+    expect(blob).toContain("Die Schadstoff-Teilnote beruht auf Zusammensetzung und Deklaration, nicht auf eigenen Laborwerten.");
     for (const t of DAILY_OKT17_TESTS) {
       expect(t.imageUrl, t.slug).toMatch(new RegExp(`^${AMAZON_IMG}`));
       expect(t.contentImageUrl, t.slug).toMatch(new RegExp(`^${AMAZON_IMG}`));
       const imgs = [...t.bodyHtml.matchAll(/<img\s+src="([^"]+)"/g)].map((m) => m[1]);
       expect(imgs.length, t.slug).toBeGreaterThanOrEqual(2);
       for (const src of imgs) expect(src, t.slug).toMatch(new RegExp(`^${AMAZON_IMG}`));
-      const hrefs = [...`${t.bodyHtml}\n${t.conclusionHtml}`.matchAll(/href="(https:\/\/www\.amazon\.de[^"]+)"/g)].map((m) => m[1]);
-      expect(hrefs.length, t.slug).toBeGreaterThan(0);
-      for (const href of hrefs) expect(href, t.slug).toContain(TAG);
+      const html = `${t.bodyHtml}\n${t.conclusionHtml}`;
+      const hrefs = [...html.matchAll(/href="(https:\/\/www\.amazon\.de[^"]+)"/g)].map((m) => m[1]);
+      const affiliate = hrefs.filter((href) => href.includes(TAG));
+      const sources = hrefs.filter((href) => !href.includes(TAG));
+      expect(sources.length, t.slug).toBeGreaterThan(0);
+      for (const href of sources) expect(href, t.slug).toMatch(/^https:\/\/www\.amazon\.de\/dp\/[A-Z0-9]+$/);
+      if (t.slug === "brit-premium-sensitive-lamm-test") {
+        expect(affiliate, t.slug).toEqual([]);
+        expect(html, t.slug).not.toContain("bei Amazon ansehen");
+        expect(html, t.slug).toContain("Bild: Amazon-Produktseite (Stand 17.10.2026)");
+        expect(html, t.slug).not.toContain("Werbung: Bild verlinkt zu Amazon");
+        expect(t.price, t.slug).toBeNull();
+        expect(t.pricePerKg, t.slug).toBeNull();
+        expect(t.pricePerDay, t.slug).toBeNull();
+        expect(t.claims.filter((claim) => claim.rating === "FRAGWUERDIG"), t.slug).toHaveLength(8);
+        expect(t.claims.filter((claim) => claim.rating === "UNZULAESSIG"), t.slug).toHaveLength(1);
+      } else {
+        expect(affiliate.length, t.slug).toBeGreaterThan(0);
+        for (const href of affiliate) expect(href, t.slug).toContain(TAG);
+      }
     }
+    const schesir = DAILY_OKT17_TESTS.find((t) => t.slug === "schesir-cat-adult-maintenance-fisch-test");
+    expect(schesir?.scores.scoreDeclaration).toBe(6);
+    expect(schesir?.teaser).toContain("65 Punkte");
+    expect(schesir?.bodyHtml).toContain("65 von 100 Punkten");
+    expect(schesir?.bodyHtml).not.toContain("64 von 100");
+    const bozita = DAILY_OKT17_TESTS.find((t) => t.slug === "bozita-haeppchen-gelee-makrele-test");
+    expect(bozita?.claims.filter((claim) => claim.rating === "FRAGWUERDIG")).toHaveLength(8);
+    expect(bozita?.claims.some((claim) => claim.claim.startsWith("mit Makrele:"))).toBe(true);
   });
 
   it("lässt Amazon-Galeriebilder im Sanitizer stehen", () => {

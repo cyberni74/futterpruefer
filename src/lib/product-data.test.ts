@@ -40,7 +40,7 @@ describe("Werbeaussagen", () => {
     expect(misleadingClaims(c)).toHaveLength(1);
     expect(suggestedDeclarationDeduction(c)).toBe(4);
     expect(suggestedDeclarationDeduction(parseClaims(Array(9).fill({ claim: "a", rating: "UNZULAESSIG" })))).toBe(15);
-    expect(consWithClaims(["Teuer"], c)).toEqual(["Teuer", "Irreführende Werbeaussage: „stärkt das Immunsystem“"]);
+    expect(consWithClaims(["Teuer"], c)).toEqual(["Teuer", "Halten wir für irreführend: „stärkt das Immunsystem“"]);
     expect(consWithClaims(null, [])).toEqual([]);
   });
 });

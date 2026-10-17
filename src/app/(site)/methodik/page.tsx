@@ -200,7 +200,7 @@ export default function MethodikPage() {
         <ul>
           <li><strong className="text-good">Zulässig:</strong> sachlich richtig oder eine erkennbare Anpreisung ohne irreführenden Gehalt.</li>
           <li><strong className="text-mid">Fragwürdig:</strong> nicht ohne Weiteres nachprüfbar oder unscharf, zum Beispiel ein undefinierter Begriff oder fehlende Mengenangaben.</li>
-          <li><strong className="text-bad">Unzulässig/irreführend:</strong> nach unserer Einschätzung nicht mit dem Kennzeichnungsrecht oder dem Wettbewerbsrecht vereinbar, zum Beispiel krankheitsbezogene Versprechen bei einem Futtermittel.</li>
+          <li><strong className="text-bad">Halten wir für irreführend:</strong> nach unserer Einschätzung nicht mit dem Kennzeichnungsrecht oder dem Wettbewerbsrecht vereinbar, zum Beispiel krankheitsbezogene Versprechen bei einem Futtermittel.</li>
         </ul>
         <p>Als Richtwert für den Abzug im Kriterium „Deklaration &amp; Transparenz“ gelten 3 Punkte je unzulässiger und 1 Punkt je fragwürdiger Aussage, insgesamt höchstens 13 Punkte. Der Abzug kann im Einzelfall abweichen. Jede Einstufung ist mit einer Begründung und, wo möglich, einer Rechtsgrundlage versehen. Sie ist unsere fachliche Meinung und keine Rechtsberatung. Unzulässige Aussagen erscheinen zusätzlich als Contra-Punkt und mit einem Hinweis oben im Test.</p>
 
