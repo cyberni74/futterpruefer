@@ -294,6 +294,52 @@ button, [role="button"], summary { cursor: pointer; }
   .prose-fp .cta-amazon a.cta-amazon-btn { width: auto; min-width: 20rem; }
 }
 
+/* Tabellen am Handy (< 40rem) als Karten: Zelle 1 + 2 fett nebeneinander, weitere Zellen in voller Breite.
+   Kopfzeile bleibt als kleine Legende im gleichen Raster. Sehr breite Tabellen (ab 5 Spalten) scrollen weiter seitlich.
+   Desktop unverändert. */
+@media (max-width: 39.99rem) {
+  .prose-fp table:not(:has(tr > :nth-child(5))) { display: block; overflow: visible; border: 0; font-size: .95rem; }
+  .prose-fp table:not(:has(tr > :nth-child(5))) :is(thead, tbody, tfoot) { display: block; }
+  .prose-fp table:not(:has(tr > :nth-child(5))) tr {
+    display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: .9rem; row-gap: .35rem;
+    margin: 0 0 .65rem; padding: .75rem .9rem;
+    border: 1px solid var(--border); border-radius: .9rem; background: var(--surface);
+  }
+  .prose-fp table:not(:has(tr > :nth-child(5))) :is(th, td) {
+    display: block; min-width: 0; padding: 0; border: 0; background: none;
+    hyphens: manual; -webkit-hyphens: manual; overflow-wrap: break-word; word-break: normal; line-height: 1.5;
+  }
+  .prose-fp table:not(:has(tr > :nth-child(5))) tr > :nth-child(1) { font-weight: 700; }
+  .prose-fp table:not(:has(tr > :nth-child(5))) tr > :nth-child(2) { font-weight: 700; text-align: right; max-width: 45vw; }
+  .prose-fp table:not(:has(tr > :nth-child(5))) tr > :nth-child(n+3) { grid-column: 1 / -1; font-weight: 400; text-align: left; }
+  .prose-fp table:not(:has(tr > :nth-child(5))) tr > :only-child { grid-column: 1 / -1; text-align: left; }
+  /* Kopfzeile (nur th) als dezente Legende */
+  .prose-fp table:not(:has(tr > :nth-child(5))) tr:not(:has(> td)) {
+    padding: .1rem .2rem .2rem; border: 0; background: none; margin-bottom: .35rem;
+  }
+  .prose-fp table:not(:has(tr > :nth-child(5))) tr:not(:has(> td)) > th {
+    font-size: .72rem; font-weight: 700; letter-spacing: .03em; text-transform: uppercase; color: var(--fg-muted);
+  }
+  /* 4 Spalten (z. B. Aussage | Quelle | Einstufung | Begründung): alles untereinander */
+  .prose-fp table:has(tr > :nth-child(4)):not(:has(tr > :nth-child(5))) tr > * { grid-column: 1 / -1; text-align: left; max-width: none; }
+  .prose-fp table:has(tr > :nth-child(4)):not(:has(tr > :nth-child(5))) tr:has(> td) > :nth-child(2) { font-weight: 400; font-size: .85rem; color: var(--fg-muted); }
+  .prose-fp table:has(tr > :nth-child(4)):not(:has(tr > :nth-child(5))) tr:has(> td) > :nth-child(3) { font-weight: 700; }
+  .prose-fp table:has(tr > :nth-child(4)):not(:has(tr > :nth-child(5))) tr:not(:has(> td)) { display: none; }
+  /* breite Tabellen: seitlich scrollen, keine Silbentrennung */
+  .prose-fp table:has(tr > :nth-child(5)) :is(th, td) { hyphens: manual; -webkit-hyphens: manual; }
+}
+
+/* Handy-Feinschliff (< 40rem), Desktop unverändert */
+@media (max-width: 39.99rem) {
+  /* Überschriften nicht mitten im Wort trennen; lange Komposita brechen nur, wenn sie sonst überlaufen */
+  h1, h2, h3, h4 { hyphens: manual; -webkit-hyphens: manual; }
+  /* Mindestschrift ~11px für Badge-Zusätze („/100“, „Produkt des“) */
+  .prose-fp sup, .prose-fp sub { font-size: max(11px, .75em); }
+  /* breite Tabellen (ab 5 Spalten) scrollen seitlich: Textspalten etwas breiter */
+  .prose-fp table:has(tr > :nth-child(5)) :is(th, td) { min-width: 9rem; }
+  .text-\[0\.62rem\], .text-\[0\.6rem\] { font-size: 11px; }
+}
+
 /* ---------------------------------------------------------------------------
    Einheitliches Hover-/Tap-Feedback für alles Klickbare.
    :where() hat Spezifität 0 – eigene hover:-Utilities der Komponenten gewinnen.
