@@ -3,7 +3,7 @@ import nextConfig from "../../next.config";
 import { CANONICAL_ORIGIN, REDIRECT_HOSTS } from "./site";
 
 describe("Host-Weiterleitungen", () => {
-  it("schickt www und vercel.app per 301 auf https://futterpruefer.de, nicht auf die Umlaut-Domain", async () => {
+  it("schickt www und vercel.app per 301 auf die Punycode-Hauptdomain", async () => {
     if (!nextConfig.redirects) throw new Error("redirects fehlen in next.config");
     const rules = await nextConfig.redirects();
     const hostRules = rules.filter((rule) => rule.has?.some((h) => h.type === "host"));
@@ -19,7 +19,7 @@ describe("Host-Weiterleitungen", () => {
     const hosts = hostRules.flatMap((rule) => rule.has?.filter((h) => h.type === "host").map((h) => h.value) ?? []);
     expect(hosts).not.toContain("futterpruefer.de");
     expect(hosts).not.toContain("xn--futterprfer-0hb.de");
-    expect(hostRules.every((rule) => rule.destination.startsWith("https://futterpruefer.de/"))).toBe(true);
-    expect(JSON.stringify(hostRules)).not.toContain("xn--futterprfer-0hb.de/");
+    expect(hostRules.every((rule) => rule.destination.startsWith("https://xn--futterprfer-0hb.de/"))).toBe(true);
+    expect(JSON.stringify(hostRules)).not.toContain("https://futterpruefer.de/");
   });
 });

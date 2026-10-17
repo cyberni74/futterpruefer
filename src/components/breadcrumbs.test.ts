@@ -9,9 +9,9 @@ describe("breadcrumbList", () => {
     ]);
     expect(data["@type"]).toBe("BreadcrumbList");
     expect(data.itemListElement.map((item) => item.item)).toEqual([
-      "https://futterpruefer.de/",
-      "https://futterpruefer.de/tests",
-      "https://futterpruefer.de/ergaenzungsfuttermittel-hund/medidog-ulmenrinden-paste",
+      "https://xn--futterprfer-0hb.de/",
+      "https://xn--futterprfer-0hb.de/tests",
+      "https://xn--futterprfer-0hb.de/ergaenzungsfuttermittel-hund/medidog-ulmenrinden-paste",
     ]);
   });
 });
