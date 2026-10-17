@@ -156,6 +156,7 @@ export default async function ReviewPage({ params }: PageProps<"/[kategorie]/[sl
             brand: r.brand,
             productName: r.productName,
             categoryName: r.category.name,
+            description: trimMetaDescription(r.metaDescription?.trim() || autoDescription(r)),
             totalScore: r.totalScore,
             verdict: r.verdict,
             publishedAt: r.publishedAt,
@@ -164,6 +165,8 @@ export default async function ReviewPage({ params }: PageProps<"/[kategorie]/[sl
             images,
             pros: r.pros,
             cons: consWithClaims(r.cons, claims),
+            price: r.price == null ? null : Number(r.price),
+            url,
           }),
           {
             "@context": "https://schema.org",

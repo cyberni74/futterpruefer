@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { DEFAULT_AUTHOR } from "./authors";
 import { absoluteUrl } from "./site";
-import { productReviewJsonLd, reviewHeadline } from "./review-schema";
+import { productReviewJsonLd, productSnippetIssues, reviewHeadline, skuFromAsin } from "./review-schema";
 
 const updatedAt = new Date("2026-10-09T08:15:00.000Z");
 
@@ -68,5 +68,36 @@ describe("productReviewJsonLd", () => {
     expect(data.review.reviewBody).toBeUndefined();
     expect(data.review.positiveNotes).toBeUndefined();
     expect(data["@type"]).not.toBe("Organization");
+    expect(data).not.toHaveProperty("offers");
+    expect(data).not.toHaveProperty("sku");
+  });
+
+  it("setzt Beschreibung und Packungspreis, aber keine Amazon-Wertung und keine GTIN", () => {
+    const data = sample({
+      description: "Kurz und bequem dosierbar.",
+      price: 12.9,
+      url: "https://futterpruefer.de/ergaenzungsfuttermittel-hund/medidog-ulmenrinden-paste",
+      asin: "B07KCS7YX1",
+    });
+    expect(data.description).toBe("Kurz und bequem dosierbar.");
+    expect(data.sku).toBe("B07KCS7YX1");
+    expect(data).not.toHaveProperty("gtin");
+    expect(data.offers).toEqual({
+      "@type": "Offer",
+      price: 12.9,
+      priceCurrency: "EUR",
+      url: "https://futterpruefer.de/ergaenzungsfuttermittel-hund/medidog-ulmenrinden-paste",
+    });
+    expect(data.offers).not.toHaveProperty("availability");
+    expect(JSON.stringify(data)).not.toMatch(/starRating|ratingCount|amazon/i);
+    expect(productSnippetIssues(data)).toEqual([]);
+  });
+
+  it("lässt eine einzelne Pro-Aussage weg, weil Google zwei Aussagen verlangt", () => {
+    const data = sample({ pros: ["Nur eine"], cons: [] });
+    expect(data.review.positiveNotes).toBeUndefined();
+    expect(data.review.negativeNotes).toBeUndefined();
+    expect(skuFromAsin("keine-asin")).toBeUndefined();
+    expect(skuFromAsin("  b07kcs7yx1 ")).toBe("B07KCS7YX1");
   });
 });
