@@ -25,6 +25,7 @@ describe("sitemapEntries", () => {
     expect(byPath["/alleinfuttermittel-hund/beta"]).toBe("2026-10-09T10:00:00.000Z");
     expect(byPath["/blog/ratgeber"]).toBe("2026-10-04T10:00:00.000Z");
     expect(byPath["/methodik"]).toBeUndefined();
+    expect(byPath["/methodik/ergaenzungsfutter"]).toBe("2026-10-17T00:00:00.000Z");
     expect(byPath["/leer"]).toBeUndefined();
   });
 });

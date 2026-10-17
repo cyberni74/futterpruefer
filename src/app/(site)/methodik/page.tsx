@@ -86,7 +86,7 @@ export default function MethodikPage() {
         <p>Futter ist die wichtigste tägliche Entscheidung für die Gesundheit von Hund und Katze, und die Verpackung zeigt vor allem Werbung. Unsere Bewertung soll Ihnen helfen, hinter diese Werbung zu schauen. Dafür gelten drei Regeln:</p>
         <ul>
           <li><strong>Nachvollziehbar:</strong> Jedes Kriterium, jede Gewichtung und jede Punktzahl ist offengelegt. Auf jeder Testseite sehen Sie, wie die Note zustande kommt.</li>
-          <li><strong>Gleiche Maßstäbe:</strong> Alle Produkte einer Methodik-Version werden nach denselben Kriterien bewertet, getrennt nach Hunden und Katzen sowie nach Alleinfutter und Ergänzungsfutter. Ab dem {METHODOLOGY_STAND} sind das sieben Kriterien.</li>
+          <li><strong>Gleiche Maßstäbe:</strong> Alle Produkte einer Methodik-Version werden nach denselben Kriterien bewertet, getrennt nach Hunden und Katzen sowie nach Alleinfutter und <Link href="/methodik/ergaenzungsfutter">Ergänzungsfutter</Link>. Ab dem {METHODOLOGY_STAND} sind das sieben Kriterien.</li>
           <li><strong>Begründet:</strong> Kritik wird immer erklärt und, wo möglich, mit einer Quelle belegt. Unsere Einstufungen sind begründete fachliche Einschätzungen.</li>
         </ul>
       </div>
