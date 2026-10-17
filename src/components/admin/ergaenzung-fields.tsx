@@ -115,7 +115,13 @@ export function BewertungsartSwitch({
         <Link href="/methodik" className="font-semibold text-brand underline">
           Methodik Alleinfutter
         </Link>
-        {value === "ERGAENZUNGSFUTTER" ? ". Die öffentliche Seite zur Ergänzungsfutter-Methodik folgt nach der Rechtsprüfung." : "."}
+        {value === "ERGAENZUNGSFUTTER" ? (
+          <>
+            {". "}
+            <Link href="/methodik/ergaenzungsfutter" className="font-semibold text-brand underline">Methodik Ergänzungsfutter</Link>
+            .
+          </>
+        ) : "."}
       </p>
       {hinweis && (
         <p className="mt-2 text-sm font-medium text-mid">Hinweis: Diese Kategorie ist Ergänzungsfuttermittel. Die Bewertungsart stellt sich nicht automatisch um.</p>

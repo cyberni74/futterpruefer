@@ -6,6 +6,7 @@ const STATIC_PATHS = [
   "/marken",
   "/blog",
   "/methodik",
+  "/methodik/ergaenzungsfutter",
   "/team",
   "/fuer-hersteller",
   "/kontakt",
@@ -54,6 +55,7 @@ export function sitemapEntries(input: {
     "/lexikon": latest(lexDates),
     "/glossar": latest(glossDates),
     "/produkt-des-monats": latest(reviewDates),
+    "/methodik/ergaenzungsfutter": new Date("2026-10-17T00:00:00.000Z"),
   };
   const entries: SitemapEntry[] = STATIC_PATHS.map((path) => ({
     path,
