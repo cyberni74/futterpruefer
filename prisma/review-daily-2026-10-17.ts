@@ -31,7 +31,7 @@ const figurePlain = (id: string, alt: string) => `<figure><img src="${pic(id)}" 
 const cta = (asin: string, name: string) => `<div class="cta-box fp-box fp-cta space-y-2 rounded-2xl border border-accent bg-surface p-5 shadow-card"><p><a href="${amz(asin)}" rel="sponsored nofollow noopener"><strong>Werbung: ${name} bei Amazon ansehen*</strong></a></p><p class="text-xs text-muted">*Werbung/Affiliate-Link: Kaufen Sie darüber, erhalten wir eine Provision. Der Preis ändert sich für Sie nicht. Als Amazon-Partner verdiene ich an qualifizierten Verkäufen.</p></div>`;
 const quellen = (items: string) => `<div class="fp-box fp-quellen space-y-2 rounded-2xl border border-border bg-bg-soft p-5 text-sm"><h2 id="quellen">Quellen (abgerufen am ${D})</h2><ol>${items}</ol></div>`;
 
-const BASE = { gallery: [] as string[], freigegeben: false as const, priceDate: "2026-10-17T09:00:00.000Z", testedAt: "2026-10-17T08:00:00.000Z" };
+const BASE = { gallery: [] as string[], freigegeben: true as const, priceDate: "2026-10-17T09:00:00.000Z", testedAt: "2026-10-17T08:00:00.000Z" };
 
 export const DAILY_OKT17_TESTS = [
   {

@@ -7,10 +7,10 @@ const AMAZON_IMG = "https://m.media-amazon.com/images/I/";
 const TAG = "tag=cyberni7400-21";
 
 describe("Entwürfe 17.10.2026", () => {
-  it("enthält genau fünf Tests, alle nicht freigegeben", () => {
+  it("enthält genau fünf Tests, alle freigegeben", () => {
     expect(DAILY_OKT17_TESTS).toHaveLength(5);
     expect(new Set(DAILY_OKT17_TESTS.map((t) => t.slug)).size).toBe(5);
-    for (const t of DAILY_OKT17_TESTS) expect(t.freigegeben).toBe(false);
+    for (const t of DAILY_OKT17_TESTS) expect(t.freigegeben).toBe(true);
   });
 
   it("hält Teaser, Pro und Contra in den Längen", () => {
