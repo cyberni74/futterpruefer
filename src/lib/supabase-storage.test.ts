@@ -51,21 +51,26 @@ describe("uploadPublicImage", () => {
 
   it("lädt per apikey und Bearer und baut die öffentliche URL selbst", async () => {
     readyEnv();
-    const fetchMock = vi.fn(async () => new Response("{}", { status: 200 }));
+    const fetchMock = vi.fn(async (_url: string, _init?: RequestInit) => new Response("{}", { status: 200 }));
     vi.stubGlobal("fetch", fetchMock);
     const body = Buffer.from("webp-bytes");
     const result = await uploadPublicImage(NAME, body);
     expect(result).toEqual({ url: `${HOST}/storage/v1/object/public/bilder/${NAME}` });
     expect(fetchMock).toHaveBeenCalledTimes(1);
-    const [url, init] = fetchMock.mock.calls[0] as [string, RequestInit];
+    const [url, init] = fetchMock.mock.calls[0];
     expect(url).toBe(`${HOST}/storage/v1/object/bilder/${NAME}`);
     expect(url).not.toContain(KEY);
-    const headers = init.headers as Record<string, string>;
-    expect(headers.apikey).toBe(KEY);
-    expect(headers.Authorization).toBe(`Bearer ${KEY}`);
-    expect(headers["Content-Type"]).toBe("image/webp");
-    expect(headers["x-upsert"]).toBe("false");
-    expect(init.method).toBe("POST");
+    expect(init).toEqual(
+      expect.objectContaining({
+        method: "POST",
+        headers: expect.objectContaining({
+          apikey: KEY,
+          Authorization: `Bearer ${KEY}`,
+          "Content-Type": "image/webp",
+          "x-upsert": "false",
+        }),
+      }),
+    );
   });
 
   it("loggt bei einem Speicherfehler weder Schlüssel noch Antwort", async () => {
