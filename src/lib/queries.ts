@@ -66,7 +66,13 @@ export function getCategory(slug: string) {
 }
 
 export function getReviewBySlug(slug: string) {
-  return prisma.review.findFirst({ where: { slug, ...publishedWhere() }, include: { category: true } });
+  return prisma.review.findFirst({
+    where: { slug, ...publishedWhere() },
+    include: {
+      category: true,
+      studien: { orderBy: [{ wirkstoff: { sortOrder: "asc" } }, { createdAt: "asc" }], include: { wirkstoff: true } },
+    },
+  });
 }
 
 export function getPostBySlug(slug: string) {

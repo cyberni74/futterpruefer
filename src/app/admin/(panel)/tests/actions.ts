@@ -5,6 +5,8 @@ import { requireAdmin } from "@/auth";
 import { sanitize } from "@/lib/sanitize";
 import { autolinkUrls } from "@/lib/autolink";
 import { totalScore } from "@/lib/scoring";
+import { EF_METHODIK_VERSION } from "@/lib/ergaenzung";
+import { checkEfForm, draftsToInputs, efFormFromFormData, efInputFromForm, preisTagesdosis, previewEf } from "@/lib/admin/ergaenzung-form";
 import { revalidateContent } from "@/lib/revalidate";
 import { isUniqueViolation, reviewFormToRaw, reviewSchema, toFieldErrors, type ActionResult } from "@/lib/admin/schemas";
 import { resolvePublish, statusKey, STATUS_LABEL } from "@/lib/admin/publish";
@@ -23,8 +25,27 @@ export async function saveReview(id: string | null, _prev: ActionResult | null, 
   const existing = id ? await prisma.review.findUnique({ where: { id }, select: { id: true, slug: true, status: true, publishedAt: true } }) : null;
   if (id && !existing) return fail("Dieser Test existiert nicht mehr.");
 
-  const category = await prisma.category.findUnique({ where: { id: v.categoryId }, select: { id: true } });
+  const category = await prisma.category.findUnique({ where: { id: v.categoryId }, select: { id: true, animal: true } });
   if (!category) return fail("Bitte eine gültige Kategorie wählen.", { categoryId: "Kategorie nicht gefunden." });
+
+  const bewertungsart: "ALLEINFUTTER" | "ERGAENZUNGSFUTTER" = formData.get("bewertungsart") === "ERGAENZUNGSFUTTER" ? "ERGAENZUNGSFUTTER" : "ALLEINFUTTER";
+  const efState = efFormFromFormData(formData);
+  const efChecked = checkEfForm(efState, category.animal === "KATZE" ? "KATZE" : "HUND", v.publishMode !== "draft");
+  if (bewertungsart === "ERGAENZUNGSFUTTER" && !efChecked.ok) return fail(efChecked.message, efChecked.fieldErrors);
+  const efScores = efChecked.ok ? efChecked.scores : efInputFromForm(efState);
+  const efResult = previewEf({ ...efState, ...{
+    auswahl: String(efScores.auswahl),
+    dosierung: String(efScores.dosierung),
+    werbung: String(efScores.werbung),
+    traeger: String(efScores.traeger),
+    mengen: String(efScores.mengen),
+    unterlagen: String(efScores.unterlagen),
+    alibi: efState.alibi,
+    keineReferenz: efState.keineReferenz,
+  } }).result;
+  const preis = preisTagesdosis(efState.preisTagesdosis);
+  if (efState.preisTagesdosis.trim() && preis == null) return fail("Bitte den Preis pro Tagesdosis prüfen.", { efPreisTagesdosisEur: "Bitte einen gültigen Betrag angeben." });
+  const { wirkstoffe, studien } = draftsToInputs(efState);
 
   const pub = resolvePublish(v.publishMode, v.scheduledAt, existing);
   if (!pub.ok) return fail(pub.error, { scheduledAt: pub.error });
@@ -53,7 +74,31 @@ export async function saveReview(id: string | null, _prev: ActionResult | null, 
     contentImageAlt: v.contentImageAlt,
     contentImageBlur: v.contentImageBlur || null,
     ...scores,
-    totalScore: totalScore(scores),
+    totalScore: bewertungsart === "ERGAENZUNGSFUTTER" ? efResult.gesamt : totalScore(scores),
+    bewertungsart,
+    ...(bewertungsart === "ERGAENZUNGSFUTTER" || efChecked.ok ? {
+    methodikVersion: bewertungsart === "ERGAENZUNGSFUTTER" ? EF_METHODIK_VERSION : "",
+    efWirkstoffAuswahl: efScores.auswahl,
+    efWirkstoffAuswahlBegruendung: efState.auswahlBegruendung.trim(),
+    efWirkstoffDosierung: bewertungsart === "ERGAENZUNGSFUTTER" ? efResult.dosierung : efScores.dosierung,
+    efWirkstoffDosierungBegruendung: efState.dosierungBegruendung.trim(),
+    efWerbung: efScores.werbung,
+    efWerbungBegruendung: efState.werbungBegruendung.trim(),
+    efTraeger: efScores.traeger,
+    efTraegerBegruendung: efState.traegerBegruendung.trim(),
+    efTransparenzMengen: efScores.mengen,
+    efTransparenzMengenBegruendung: efState.mengenBegruendung.trim(),
+    efTransparenzUnterlagen: efScores.unterlagen,
+    efTransparenzUnterlagenBegruendung: efState.unterlagenBegruendung.trim(),
+    efAlibiDosierung: efState.alibi,
+    efKeineReferenzdosis: efState.keineReferenz,
+    efHeilaussage: efState.heilaussage,
+    efSicherheit: efState.sicherheit,
+    efSicherheitBegruendung: efState.sicherheitBegruendung.trim(),
+    efTierschutzText: efState.tierschutz.trim(),
+    efTraegerAbzuege: efState.traegerAbzuege,
+    efPreisTagesdosisEur: preis == null ? null : Math.round(preis * 100) / 100,
+    } : {}),
     verdict: v.verdict,
     harmfulReason: v.harmfulReason,
     composition: v.composition,
@@ -82,6 +127,47 @@ export async function saveReview(id: string | null, _prev: ActionResult | null, 
   try {
     savedId = await prisma.$transaction(async (tx) => {
       const saved = existing ? await tx.review.update({ where: { id: existing.id }, data }) : await tx.review.create({ data });
+      if (bewertungsart === "ERGAENZUNGSFUTTER" || efChecked.ok) {
+      await tx.ergaenzungStudie.deleteMany({ where: { reviewId: saved.id } });
+      await tx.ergaenzungWirkstoff.deleteMany({ where: { reviewId: saved.id } });
+      const idByKey = new Map<string, string>();
+      for (const [index, wirkstoff] of wirkstoffe.entries()) {
+        const created = await tx.ergaenzungWirkstoff.create({
+          data: {
+            reviewId: saved.id,
+            name: wirkstoff.name,
+            mengeMgProTagesdosis: wirkstoff.mengeMgProTagesdosis,
+            referenzMgProKg: wirkstoff.referenzMgProKg,
+            sortOrder: index,
+          },
+        });
+        idByKey.set(wirkstoff.key, created.id);
+      }
+      for (const studie of studien) {
+        const wirkstoffId = idByKey.get(studie.wirkstoffKey);
+        if (!wirkstoffId) continue;
+        await tx.ergaenzungStudie.create({
+          data: {
+            reviewId: saved.id,
+            wirkstoffId,
+            titel: studie.titel,
+            autoren: studie.autoren,
+            jahr: studie.jahr,
+            zeitschrift: studie.zeitschrift,
+            tierart: studie.tierart,
+            studiendosisJeKg: studie.studiendosisJeKg,
+            einheit: studie.einheit || null,
+            studiendosisOriginal: studie.studiendosisOriginal,
+            ergebnisKurz: studie.ergebnisKurz,
+            link: studie.link,
+            linkFreigabe: studie.linkFreigabe,
+            evidenzstufe: studie.evidenzstufe,
+            richtung: studie.richtung,
+            geprueftAm: new Date(`${studie.geprueftAm}T12:00:00Z`),
+          },
+        });
+      }
+      }
       await applyRedirectPlan(tx.redirect, planSlugRedirect("tests", existing?.slug, v.slug));
       return saved.id;
     });

@@ -14,10 +14,14 @@ export const metadata: Metadata = { title: "Test bearbeiten" };
 export default async function EditReviewPage({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ neu?: string }> }) {
   const { id } = await params;
   const sp = await searchParams;
-  const [review, categories, brands] = await Promise.all([
-    prisma.review.findUnique({ where: { id } }),
-    prisma.category.findMany({ orderBy: { sortOrder: "asc" }, select: { id: true, name: true, slug: true } }),
+  const [review, categories, brands, referenzen] = await Promise.all([
+    prisma.review.findUnique({
+      where: { id },
+      include: { wirkstoffe: { orderBy: { sortOrder: "asc" }, include: { studien: { orderBy: { createdAt: "asc" } } } } },
+    }),
+    prisma.category.findMany({ orderBy: { sortOrder: "asc" }, select: { id: true, name: true, slug: true, animal: true } }),
     getBrands(),
+    prisma.referenzdosis.findMany({ orderBy: [{ wirkstoff: "asc" }, { tierart: "asc" }] }),
   ]);
   if (!review) notFound();
 
@@ -26,6 +30,16 @@ export default async function EditReviewPage({ params, searchParams }: { params:
       key={review.id}
       initial={reviewToEditorData(review)}
       categories={categories}
+      referenzen={referenzen.map((r) => ({
+        id: r.id,
+        wirkstoff: r.wirkstoff,
+        tierart: r.tierart,
+        mgProKgMin: r.mgProKgMin == null ? null : Number(r.mgProKgMin.toString()),
+        einheit: r.einheit,
+        quelle: r.quelle,
+        luecke: r.luecke,
+        hinweis: r.hinweis,
+      }))}
       brands={brands}
       action={saveReview.bind(null, review.id)}
       justCreated={sp.neu === "1"}

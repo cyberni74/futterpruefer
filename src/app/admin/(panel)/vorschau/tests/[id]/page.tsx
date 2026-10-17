@@ -9,14 +9,53 @@ import { STATUS_LABEL, statusKey } from "@/lib/admin/publish";
 import { formatDateTime } from "@/lib/admin/datetime";
 import { resolveAuthor } from "@/lib/authors";
 import { PRICE_CLASS_LABEL } from "@/lib/site";
+import { capNote, efBars, prepareErgaenzungArticle, renderStudienListe, scoreErgaenzung, studieDosisText, type EfInput } from "@/lib/ergaenzung";
 
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = { title: "Vorschau Test" };
 
 export default async function ReviewPreviewPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const r = await prisma.review.findUnique({ where: { id }, include: { category: true } });
+  const r = await prisma.review.findUnique({
+    where: { id },
+    include: { category: true, studien: { orderBy: [{ wirkstoff: { sortOrder: "asc" } }, { createdAt: "asc" }], include: { wirkstoff: true } } },
+  });
   if (!r) notFound();
+  const efInput: EfInput | null = r.bewertungsart === "ERGAENZUNGSFUTTER" ? {
+    auswahl: r.efWirkstoffAuswahl ?? 0,
+    dosierung: r.efWirkstoffDosierung ?? 0,
+    werbung: r.efWerbung ?? 0,
+    traeger: r.efTraeger ?? 0,
+    mengen: r.efTransparenzMengen ?? 0,
+    unterlagen: r.efTransparenzUnterlagen ?? 0,
+    alibi: r.efAlibiDosierung,
+    keineReferenzdosis: r.efKeineReferenzdosis,
+    heilaussage: r.efHeilaussage,
+    sicherheit: r.efSicherheit,
+  } : null;
+  const efResult = efInput ? scoreErgaenzung(efInput) : null;
+  const body = efResult
+    ? prepareErgaenzungArticle(sanitize(r.bodyHtml), {
+        studienHtml: renderStudienListe(r.studien.map((s) => ({
+          wirkstoff: s.wirkstoff.name,
+          autoren: s.autoren,
+          jahr: s.jahr,
+          titel: s.titel,
+          zeitschrift: s.zeitschrift,
+          tierart: s.tierart,
+          evidenzstufe: s.evidenzstufe,
+          dosis: studieDosisText({
+            studiendosisJeKg: s.studiendosisJeKg == null ? null : Number(s.studiendosisJeKg.toString()),
+            einheit: s.einheit ?? "",
+            studiendosisOriginal: s.studiendosisOriginal,
+          }),
+          ergebnis: s.ergebnisKurz,
+          link: s.link,
+        }))),
+        tierschutz: r.efTierschutzText,
+        rot: efResult.ampel === "ROT",
+      })
+    : sanitize(r.bodyHtml);
   const key = statusKey(r.status, r.publishedAt);
 
   return (
@@ -49,9 +88,9 @@ export default async function ReviewPreviewPage({ params }: { params: Promise<{ 
         </figure>
       </div>
       <div className="mt-8">
-        <VerdictPanel data={r} />
+        <VerdictPanel data={r} bars={efInput && efResult ? efBars(efInput, efResult) : undefined} capNote={efResult ? capNote(efResult) || undefined : undefined} safetyWarning={efResult?.warnsignal ? r.efSicherheitBegruendung : undefined} />
       </div>
-      <div className="prose-fp mt-10" dangerouslySetInnerHTML={{ __html: sanitize(r.bodyHtml) }} />
+      <div className="prose-fp mt-10" dangerouslySetInnerHTML={{ __html: body }} />
       {r.conclusionHtml.trim() && (
         <section className="mt-10"><h2 className="text-2xl font-extrabold">Fazit</h2><div className="prose-fp mt-3" dangerouslySetInnerHTML={{ __html: sanitize(r.conclusionHtml) }} /></section>
       )}

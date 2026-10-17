@@ -5,6 +5,9 @@ import { VerdictPanel } from "@/components/verdict-panel";
 import { consWithClaims, type Claim } from "@/lib/product-data";
 import { AnalysisField, ClaimsField, GalleryField } from "./product-data-fields";
 import { CRITERIA, MAX_TOTAL, clampScore, totalScore, type CriterionKey, type Scores } from "@/lib/scoring";
+import { capNote, efBars } from "@/lib/ergaenzung";
+import { EMPTY_EF_FORM, previewEf, type EfFormState } from "@/lib/admin/ergaenzung-form";
+import { BewertungsartSwitch, ErgaenzungFields, type ReferenzOption } from "./ergaenzung-fields";
 import { slugify } from "@/lib/slug";
 import { PRICE_CLASS_LABEL } from "@/lib/site";
 import type { ActionResult } from "@/lib/admin/schemas";
@@ -59,11 +62,14 @@ export type ReviewEditorData = {
   publishMode: PublishMode;
   scheduledAt: string;
   updatedAt: string | null;
+  bewertungsart: "ALLEINFUTTER" | "ERGAENZUNGSFUTTER";
+  ef: EfFormState;
 };
 
 type Props = {
   initial: ReviewEditorData;
-  categories: { id: string; name: string; slug: string }[];
+  categories: { id: string; name: string; slug: string; animal: "HUND" | "KATZE" }[];
+  referenzen?: ReferenzOption[];
   /** bereits angelegte Marken für das Auswahlfeld */
   brands?: string[];
   action: (prev: ActionResult | null, fd: FormData) => Promise<ActionResult>;
@@ -80,7 +86,7 @@ function padList(list: string[], min = 2) {
   return out;
 }
 
-export function ReviewEditor({ initial, categories, brands = [], action, badge, deleteSlot, justCreated }: Props) {
+export function ReviewEditor({ initial, categories, referenzen = [], brands = [], action, badge, deleteSlot, justCreated }: Props) {
   const isNew = !initial.id;
   const [state, formAction, pending] = useActionState(
     action,
@@ -109,11 +115,14 @@ export function ReviewEditor({ initial, categories, brands = [], action, badge, 
   const [cons, setCons] = useState(() => padList(initial.cons));
   const [mode, setMode] = useState<PublishMode>(initial.publishMode);
   const [scheduledAt, setScheduledAt] = useState(initial.scheduledAt);
+  const [bewertungsart, setBewertungsart] = useState(initial.bewertungsart ?? "ALLEINFUTTER");
+  const [ef, setEf] = useState<EfFormState>(initial.ef ?? EMPTY_EF_FORM);
   const [tab, setTab] = useState<"form" | "preview">("form");
   const bodyRef = useRef(initial.bodyHtml);
 
   const numericScores = Object.fromEntries(CRITERIA.map((c) => [c.key, clampScore(c.key, scores[c.key])])) as Scores;
-  const total = totalScore(numericScores);
+  const efPreview = previewEf(ef);
+  const total = bewertungsart === "ERGAENZUNGSFUTTER" ? efPreview.result.gesamt : totalScore(numericScores);
   const productLabel = [brand, productName].filter(Boolean).join(" ");
 
   const scoreError = (key: CriterionKey, max: number): string | undefined => {
@@ -137,6 +146,7 @@ export function ReviewEditor({ initial, categories, brands = [], action, badge, 
     updatedAt: initial.updatedAt,
     harmfulReason,
   };
+  const efTier = categories.find((c) => c.id === categoryId)?.animal === "KATZE" ? "KATZE" : "HUND";
   const catSlug = categories.find((c) => c.id === categoryId)?.slug ?? "kategorie";
   const declarationMax = CRITERIA.find((c) => c.key === "scoreDeclaration")!.max;
 
@@ -187,6 +197,12 @@ export function ReviewEditor({ initial, categories, brands = [], action, badge, 
           noValidate
         >
           <div id="pane-form" className="space-y-6">
+            <BewertungsartSwitch
+              value={bewertungsart}
+              onChange={setBewertungsart}
+              categorySlug={catSlug}
+              published={!isNew && initial.publishMode !== "draft"}
+            />
             <Section title="Produkt & Stammdaten" id="sec-basis">
               <Field id="title" label="Titel *" error={errors.title}>
                 <input
@@ -329,6 +345,7 @@ export function ReviewEditor({ initial, categories, brands = [], action, badge, 
               <GalleryField initial={initial.gallery} nameSource={productLabel || title} error={errors.gallery} />
             </Section>
 
+            <div hidden={bewertungsart !== "ALLEINFUTTER"} className="space-y-6">
             <Section title="Bewertungsmaske" id="sec-bewertung" description={`Punkte je Kriterium – die Gesamtwertung (max. ${MAX_TOTAL}) wird automatisch berechnet.`}>
               <div className="space-y-5">
                 {CRITERIA.map((c) => {
@@ -388,6 +405,10 @@ export function ReviewEditor({ initial, categories, brands = [], action, badge, 
                 <textarea id="harmfulReason" name="harmfulReason" value={harmfulReason} onChange={(e) => setHarmfulReason(e.target.value)} rows={2} maxLength={400} className={textareaCls} placeholder="z. B. Enthält zugesetzten Zucker und das synthetische Antioxidans BHA." {...describe("harmfulReason", errors.harmfulReason, true)} />
               </Field>
             </Section>
+            </div>
+            <div hidden={bewertungsart !== "ERGAENZUNGSFUTTER"}>
+              <ErgaenzungFields value={ef} onChange={setEf} errors={errors} referenzen={referenzen} tierart={efTier} />
+            </div>
 
             <Section title="Produktdaten" id="sec-produktdaten" description="Erscheint als eigener Block auf der Testseite. Leere Felder werden ausgeblendet.">
               <div className="grid gap-4 sm:grid-cols-2">
@@ -471,7 +492,13 @@ export function ReviewEditor({ initial, categories, brands = [], action, badge, 
         <aside id="pane-preview" aria-label="Live-Vorschau des Fazits" className={`min-w-0 ${tab === "preview" ? "" : "hidden lg:block"}`}>
           <div className="lg:sticky lg:top-6">
             <p className="mb-2 text-xs font-bold tracking-wide text-muted uppercase">Live-Vorschau · so erscheint das Fazit</p>
-            <VerdictPanel data={previewData} showWarning />
+            <VerdictPanel
+              data={previewData}
+              showWarning={bewertungsart !== "ERGAENZUNGSFUTTER"}
+              bars={bewertungsart === "ERGAENZUNGSFUTTER" ? efBars(efPreview.input, efPreview.result) : undefined}
+              capNote={bewertungsart === "ERGAENZUNGSFUTTER" ? capNote(efPreview.result) : undefined}
+              safetyWarning={bewertungsart === "ERGAENZUNGSFUTTER" && efPreview.result.warnsignal ? ef.sicherheitBegruendung : undefined}
+            />
             <button type="button" onClick={() => setTab("form")} className="mt-4 min-h-11 w-full rounded-xl border border-border text-sm font-semibold lg:hidden">
               Zurück zum Formular
             </button>

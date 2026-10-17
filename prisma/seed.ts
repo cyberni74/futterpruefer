@@ -30,6 +30,7 @@ import { TREND_OKT_TESTS } from "./review-trend-oktober";
 import { TREND_OKT_BILDER } from "./bilder-trend-oktober";
 import { DAILY_OKT16_TESTS } from "./review-daily-2026-10-16";
 import { DAILY_OKT16_BILDER } from "./bilder-daily-2026-10-16";
+import { REFERENZDOSEN } from "./referenzdosen";
 import { MAMMALY_BLOG_SECTIONS, MAMMALY_BLOGS_MARKER } from "./review-mammaly-blogs";
 
 const esc = (t: string) => t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -160,6 +161,7 @@ async function main() {
   }
 
   await seedLexikonAndGlossary();
+  await ensureReferenzdosen();
   await ensureFaq();
   await ensureNischenPosts();
   await ensureBlogBodyImages();
@@ -552,6 +554,16 @@ async function ensureMedidogTest() {
     },
   });
   console.log("Test Medidog Ulmenrinden Paste angelegt.");
+}
+
+async function ensureReferenzdosen() {
+  const stand = new Date("2026-10-17T12:00:00Z");
+  for (const row of REFERENZDOSEN) {
+    const where = { wirkstoff_tierart: { wirkstoff: row.wirkstoff, tierart: row.tierart } };
+    const existing = await prisma.referenzdosis.findUnique({ where, select: { id: true } });
+    if (existing) continue;
+    await prisma.referenzdosis.create({ data: { ...row, quelle: row.quelle || "keine Quelle hinterlegt", stand } });
+  }
 }
 
 async function ensureFaq() {

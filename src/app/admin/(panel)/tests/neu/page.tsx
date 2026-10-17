@@ -9,9 +9,27 @@ export const dynamic = "force-dynamic";
 export const metadata: Metadata = { title: "Neuer Test" };
 
 export default async function NewReviewPage() {
-  const [categories, brands] = await Promise.all([
-    prisma.category.findMany({ orderBy: { sortOrder: "asc" }, select: { id: true, name: true, slug: true } }),
+  const [categories, brands, referenzen] = await Promise.all([
+    prisma.category.findMany({ orderBy: { sortOrder: "asc" }, select: { id: true, name: true, slug: true, animal: true } }),
     getBrands(),
+    prisma.referenzdosis.findMany({ orderBy: [{ wirkstoff: "asc" }, { tierart: "asc" }] }),
   ]);
-  return <ReviewEditor initial={EMPTY_REVIEW} categories={categories} brands={brands} action={saveReview.bind(null, null)} />;
+  return (
+    <ReviewEditor
+      initial={EMPTY_REVIEW}
+      categories={categories}
+      referenzen={referenzen.map((r) => ({
+        id: r.id,
+        wirkstoff: r.wirkstoff,
+        tierart: r.tierart,
+        mgProKgMin: r.mgProKgMin == null ? null : Number(r.mgProKgMin.toString()),
+        einheit: r.einheit,
+        quelle: r.quelle,
+        luecke: r.luecke,
+        hinweis: r.hinweis,
+      }))}
+      brands={brands}
+      action={saveReview.bind(null, null)}
+    />
+  );
 }
