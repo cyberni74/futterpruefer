@@ -252,6 +252,48 @@ button, [role="button"], summary { cursor: pointer; }
   .cta-box .button { width: auto; min-width: 16rem; }
 }
 
+/* Amazon-Button (einheitlich): <div class="cta-amazon"> mit p.cta-produkt, a.cta-amazon-btn, p.cta-hinweis.
+   Nur Inhalte mit diesen Klassen sind betroffen; Basislayout unverändert. */
+.prose-fp .cta-amazon { text-align: center; }
+.prose-fp .cta-amazon > * + * { margin-top: .6rem; }
+.prose-fp .cta-amazon p { margin: 0; }
+.prose-fp .cta-amazon .cta-produkt {
+  font-size: .95rem; font-weight: 700; line-height: 1.35; color: var(--fg);
+}
+.prose-fp .cta-amazon a.cta-amazon-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: .6rem;
+  width: 100%; min-height: 3.25rem; margin: 0; padding: .85rem 1.5rem;
+  border: 1px solid #e3a21a; border-radius: 9999px;
+  background: linear-gradient(180deg, #ffd56b 0%, #ffa41c 100%);
+  color: #111 !important; font-size: 1.05rem; font-weight: 800; line-height: 1.25;
+  text-align: center; text-decoration: none !important;
+  box-shadow: 0 2px 6px rgba(213, 140, 0, .35);
+  transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+.prose-fp .cta-amazon a.cta-amazon-btn::before {
+  content: ""; flex: none; width: 1.3em; height: 1.3em; background: currentColor;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='9' cy='20' r='1.6'/%3E%3Ccircle cx='18' cy='20' r='1.6'/%3E%3Cpath d='M2.5 3.5h3l2.6 11.2a1.5 1.5 0 0 0 1.5 1.2h8.3a1.5 1.5 0 0 0 1.5-1.1L21.5 8H6.6'/%3E%3C/svg%3E") center / contain no-repeat;
+          mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='9' cy='20' r='1.6'/%3E%3Ccircle cx='18' cy='20' r='1.6'/%3E%3Cpath d='M2.5 3.5h3l2.6 11.2a1.5 1.5 0 0 0 1.5 1.2h8.3a1.5 1.5 0 0 0 1.5-1.1L21.5 8H6.6'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+.prose-fp .cta-amazon a.cta-amazon-btn:hover,
+.prose-fp .cta-amazon a.cta-amazon-btn:focus-visible {
+  background: linear-gradient(180deg, #ffcb47 0%, #f08c00 100%);
+  color: #111 !important; transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(213, 140, 0, .45);
+}
+.prose-fp .cta-amazon a.cta-amazon-btn:focus-visible { outline: 3px solid #146eb4; outline-offset: 2px; }
+.prose-fp .cta-amazon a.cta-amazon-btn:active { transform: translateY(0); box-shadow: 0 1px 3px rgba(213, 140, 0, .35); }
+.prose-fp .cta-amazon .cta-hinweis {
+  font-size: 11px; line-height: 1.45; color: var(--fg-muted); font-weight: 400;
+}
+@media (max-width: 26rem) {
+  .prose-fp .cta-amazon a.cta-amazon-btn { font-size: .95rem; padding-inline: 1rem; gap: .45rem; }
+}
+@media (min-width: 40rem) {
+  .prose-fp .cta-amazon a.cta-amazon-btn { width: auto; min-width: 20rem; }
+}
+
 /* ---------------------------------------------------------------------------
    Einheitliches Hover-/Tap-Feedback für alles Klickbare.
    :where() hat Spezifität 0 – eigene hover:-Utilities der Komponenten gewinnen.
