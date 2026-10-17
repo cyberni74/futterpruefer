@@ -1,11 +1,11 @@
-/** Hauptdomain ohne Umlaut. Canonical, Sitemap, robots, OG, Schema und RSS zeigen hierhin. */
-export const CANONICAL_ORIGIN = "https://futterpruefer.de";
+/** Live-Primärdomain (Punycode). Canonical, Sitemap, robots, OG, Schema und RSS zeigen hierhin – ohne 301, damit WhatsApp & Co. die Vorschau laden. */
+export const CANONICAL_ORIGIN = "https://xn--futterprfer-0hb.de";
 
 /**
  * Hosts, die per 301 auf die Hauptdomain zeigen.
  * Die Hauptdomain selbst steht nicht in der Liste.
- * Die Umlaut-Domain (xn--futterprfer-0hb.de) leitet Vercel an der Kante um;
- * solange dort die Gegenrichtung eingestellt ist, würde eine App-Weiterleitung eine Schleife erzeugen.
+ * futterpruefer.de leitet Vercel an der Kante auf die Umlaut-Domain um;
+ * eine App-Weiterleitung in die Gegenrichtung würde eine Schleife erzeugen.
  * www- und vercel.app-Hosts erreichen die App bzw. werden hier zusätzlich abgefangen.
  */
 export const REDIRECT_HOSTS = [
@@ -25,7 +25,7 @@ const CANONICAL_HOSTS = new Set<string>([
   ...REDIRECT_HOSTS,
 ]);
 
-/** Lokale und Vorschau-URLs bleiben. Umlaut-, www- und Produktions-vercel.app-Hosts werden zur Hauptdomain. */
+/** Lokale und Vorschau-URLs bleiben. ASCII-, www- und Produktions-vercel.app-Hosts werden zur Punycode-Hauptdomain. */
 export function resolveSiteUrl(raw = process.env.NEXT_PUBLIC_SITE_URL): string {
   const value = (raw ?? "").trim().replace(/\/$/, "");
   if (!value) return CANONICAL_ORIGIN;

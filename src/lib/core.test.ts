@@ -139,9 +139,9 @@ describe("Urheberschaft", () => {
 });
 
 describe("resolveSiteUrl", () => {
-  it("setzt Umlaut-, www- und Produktionshosts auf die Hauptdomain", async () => {
+  it("setzt ASCII-, www- und Produktionshosts auf die Punycode-Hauptdomain", async () => {
     const { resolveSiteUrl, CANONICAL_ORIGIN } = await import("./site");
-    expect(CANONICAL_ORIGIN).toBe("https://futterpruefer.de");
+    expect(CANONICAL_ORIGIN).toBe("https://xn--futterprfer-0hb.de");
     expect(resolveSiteUrl(undefined)).toBe(CANONICAL_ORIGIN);
     expect(resolveSiteUrl("")).toBe(CANONICAL_ORIGIN);
     expect(resolveSiteUrl("https://futterpruefer.de/")).toBe(CANONICAL_ORIGIN);

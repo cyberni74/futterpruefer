@@ -56,9 +56,8 @@ const nextConfig: NextConfig = {
     ];
     // www und die festen Produktions-vercel.app-Hosts → Hauptdomain, gleicher Pfad.
     // Vorschau-URLs (*.vercel.app außer den festen Hosts) bleiben erreichbar.
-    // Die Umlaut-Domain selbst wird hier nicht umgeleitet: Vercel leitet futterpruefer.de
-    // derzeit an der Kante dorthin. Die Gegenrichtung in der App ergäbe eine Schleife,
-    // bis futterpruefer.de in den Domain-Einstellungen die Primärdomain ohne Redirect ist.
+    // Die ASCII-Domain selbst wird hier nicht umgeleitet: Vercel leitet futterpruefer.de
+    // an der Kante auf die Punycode-Hauptdomain. Die Gegenrichtung in der App ergäbe eine Schleife.
     for (const host of REDIRECT_HOSTS) {
       rules.push({
         source: "/:path*",
