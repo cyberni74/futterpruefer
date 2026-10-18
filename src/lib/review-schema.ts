@@ -39,18 +39,16 @@ export type ProductReviewInput = {
   images: string[];
   pros: string[];
   cons: string[];
-  /** Packungspreis in Euro, nur wenn das Feld gesetzt ist. */
+  /**
+   * Packungspreis und Testseite. Bewusst nicht als Offer ausgegeben: wir sind
+   * kein Händler, Verfügbarkeit/Versand/Rückgabe kennen wir nicht. Ein Offer
+   * löst sonst Händlereintrags-Warnungen in der Search Console aus.
+   */
   price?: number | null;
-  /** Kanonische Testseite, Ziel des Angebots. */
   url?: string;
   /** Amazon-ASIN, nur wenn sie als eigener Wert vorliegt. Kein GTIN. */
   asin?: string | null;
 };
-
-function money(price: number | null | undefined) {
-  if (price == null || !Number.isFinite(price) || price < 0) return undefined;
-  return Math.round(price * 100) / 100;
-}
 
 /** ASIN ist 10-stellig und kein GTIN. Google prüft bei gtin Länge und Prüfziffer. */
 export function skuFromAsin(asin: string | null | undefined) {
@@ -67,6 +65,7 @@ function statements(items: string[]) {
  * Google: bei einem Review an `Product.review` kein `itemReviewed` setzen;
  * Name, Bild und Marke stehen am Product. Kein AggregateRating: die Punktzahl
  * ist eine einzelne redaktionelle Wertung, kein Mittel aus Nutzerstimmen.
+ * Kein Offer: Testseite, kein Shop (sonst Händlereintrags-Warnungen).
  * Die bewertete Sache ist das Produkt, nicht die Organization der Website.
  */
 export function productReviewJsonLd(r: ProductReviewInput) {
@@ -74,7 +73,6 @@ export function productReviewJsonLd(r: ProductReviewInput) {
   const images = r.images.filter(Boolean).map((u) => (u.startsWith("http") ? u : absoluteUrl(u)));
   const headline = reviewHeadline(name);
   const description = r.description?.trim();
-  const price = money(r.price);
   const sku = skuFromAsin(r.asin);
   const pros = statements(r.pros);
   const cons = statements(r.cons);
@@ -89,16 +87,6 @@ export function productReviewJsonLd(r: ProductReviewInput) {
     category: r.categoryName,
     ...(images.length ? { image: images } : {}),
     ...(sku ? { sku } : {}),
-    ...(price != null
-      ? {
-          offers: {
-            "@type": "Offer" as const,
-            price,
-            priceCurrency: "EUR",
-            ...(r.url ? { url: r.url } : {}),
-          },
-        }
-      : {}),
     review: {
       "@type": "Review" as const,
       ...(headline ? { name: headline } : {}),
@@ -135,9 +123,8 @@ export function productSnippetIssues(data: ReturnType<typeof productReviewJsonLd
   const pros = data.review?.positiveNotes?.itemListElement.length ?? 0;
   const cons = data.review?.negativeNotes?.itemListElement.length ?? 0;
   if ((data.review?.positiveNotes || data.review?.negativeNotes) && pros + cons < 2) issues.push("Pros/Contras unter zwei Aussagen");
-  if (data.offers) {
-    if (data.offers.priceCurrency !== "EUR" || !Number.isFinite(data.offers.price)) issues.push("Angebot ohne Euro-Preis");
-    if ("availability" in data.offers) issues.push("Verfügbarkeit ist nicht bekannt");
-  }
+  // Wir verkaufen nichts: ein Offer ohne Verfügbarkeit, Versand und Rückgabe
+  // meldet die Search Console als Händlereintrag mit fehlenden Feldern.
+  if ("offers" in data) issues.push("Offer gehört nicht in eine Testseite");
   return issues;
 }
