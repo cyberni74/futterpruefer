@@ -72,7 +72,7 @@ describe("productReviewJsonLd", () => {
     expect(data).not.toHaveProperty("sku");
   });
 
-  it("setzt Beschreibung und Packungspreis, aber keine Amazon-Wertung und keine GTIN", () => {
+  it("setzt Beschreibung und SKU, aber kein Offer, keine Amazon-Wertung und keine GTIN", () => {
     const data = sample({
       description: "Kurz und bequem dosierbar.",
       price: 12.9,
@@ -82,14 +82,8 @@ describe("productReviewJsonLd", () => {
     expect(data.description).toBe("Kurz und bequem dosierbar.");
     expect(data.sku).toBe("B07KCS7YX1");
     expect(data).not.toHaveProperty("gtin");
-    expect(data.offers).toEqual({
-      "@type": "Offer",
-      price: 12.9,
-      priceCurrency: "EUR",
-      url: "https://futterpruefer.de/ergaenzungsfuttermittel-hund/medidog-ulmenrinden-paste",
-    });
-    expect(data.offers).not.toHaveProperty("availability");
-    expect(JSON.stringify(data)).not.toMatch(/starRating|ratingCount|amazon/i);
+    expect(data).not.toHaveProperty("offers");
+    expect(JSON.stringify(data)).not.toMatch(/Offer|availability|shippingDetails|starRating|ratingCount|amazon/i);
     expect(productSnippetIssues(data)).toEqual([]);
   });
 
