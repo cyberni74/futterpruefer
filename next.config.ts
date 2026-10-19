@@ -34,6 +34,8 @@ const nextConfig: NextConfig = {
   // Vom Build-Skript ermittelter DB-Host (falls der Host in DATABASE_URL nicht erreichbar war)
   env: { DB_HOST_OVERRIDE: process.env.DB_HOST_OVERRIDE ?? "" },
   images: {
+    // Vercel-Bildoptimierung ist ausgeschöpft (HTTP 402). Bilder direkt ausliefern (Supabase, Blob, lokal).
+    unoptimized: true,
     formats: ["image/avif", "image/webp"],
     qualities: [50, 75],
     deviceSizes: [360, 480, 640, 700, 750, 828, 1080, 1200, 1920],
