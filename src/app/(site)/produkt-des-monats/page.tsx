@@ -26,7 +26,7 @@ export default async function PomArchive() {
               <MonthSeal month={p.month} year={p.year} className="hidden size-24 md:flex" />
               <div className="flex-1">
                 <p className="text-sm font-bold text-brand">{MONTHS[p.month - 1]} {p.year}</p>
-                <h2 className="mt-1 text-xl font-extrabold"><Link href={reviewPath(p.review)} className="after:absolute after:inset-0 hover:underline">{p.review.title}</Link></h2>
+                <h2 className="mt-1 text-xl font-extrabold"><Link href={reviewPath(p.review)} className="after:absolute after:inset-0 after:z-[1] hover:underline">{p.review.title}</Link></h2>
                 <p className="mt-2 text-muted">{p.reason}</p>
               </div>
               <ScoreBadge score={p.review.totalScore} />
