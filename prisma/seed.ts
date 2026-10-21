@@ -24,6 +24,7 @@ import { BUGBELL_TESTS } from "./review-bugbell";
 import { BETTERCAT_TESTS } from "./review-betterkat";
 import { WOLFSBLUT_TESTS } from "./review-wolfsblut";
 import { MEDIDOG_DENTAL_TESTS } from "./review-medidog-dental";
+import { HAPPYDOG_TESTS } from "./review-happydog";
 import { KAUARTIKEL_FUNKTION_TESTS } from "./review-kauartikel-funktion";
 import { KAUARTIKEL_BILDER } from "./bilder-kauartikel-funktion";
 import { TREND_OKT_TESTS } from "./review-trend-oktober";
@@ -171,6 +172,7 @@ async function main() {
   await ensureMedidogTest();
   await removeWithdrawnPosts();
   await ensureMammalyTests();
+  await ensureHappyDogDrafts();
   await ensureMammalyBlogs();
   await normalizeStoredLinks();
   await ensureDailyOkt17Drafts();
@@ -690,6 +692,45 @@ async function ensureDailyOkt17Drafts() {
     }
   }
   if (created || updated) console.log(`Entwürfe vom 17.10.2026: ${created} angelegt, ${updated} aktualisiert (nicht veröffentlicht, solange nicht freigegeben).`);
+}
+
+/** Happy-Dog-Entwürfe (Africa, India): nur Entwurf, bis freigegeben === true und VERCEL_ENV production. */
+async function ensureHappyDogDrafts() {
+  const categories = new Map((await prisma.category.findMany({ select: { id: true, slug: true } })).map((c) => [c.slug, c.id]));
+  for (const t of HAPPYDOG_TESTS) {
+    const categoryId = categories.get(t.categorySlug);
+    if (!categoryId) { console.log(`Test ${t.slug} übersprungen: Kategorie ${t.categorySlug} fehlt.`); continue; }
+    const sc = t.scores;
+    const data = {
+      slug: t.slug, title: t.title, brand: t.brand, productName: t.productName, keyword: t.keyword, categoryId,
+      priceClass: t.priceClass, pricePerKg: t.pricePerKg, packageSize: t.packageSize, price: t.price, pricePerDay: t.pricePerDay,
+      imageUrl: t.imageUrl, imageAlt: t.imageAlt, imageBlur: null,
+      contentImageUrl: t.contentImageUrl, contentImageAlt: t.contentImageAlt, contentImageBlur: null,
+      gallery: [] as string[], composition: t.composition, analysis: t.analysis, claims: t.claims,
+      ...sc, totalScore: Object.values(sc).reduce((a, b) => a + b, 0),
+      verdict: t.verdict, teaser: t.teaser, pros: t.pros, cons: t.cons,
+      bodyHtml: autolinkUrls(t.bodyHtml), conclusionHtml: autolinkUrls(t.conclusionHtml),
+      metaTitle: t.metaTitle, metaDescription: t.metaDescription, keywords: t.keywords,
+      priceDate: new Date(t.priceDate), testedAt: new Date(t.testedAt),
+      status: "DRAFT" as const, publishedAt: null,
+    };
+    const existing = await prisma.review.findUnique({ where: { slug: t.slug }, select: { id: true, status: true } });
+    let id: string;
+    if (!existing) {
+      id = (await prisma.review.create({ data })).id;
+      console.log(`Entwurf ${t.slug} angelegt.`);
+    } else if (existing.status === "DRAFT") {
+      await prisma.review.update({ where: { id: existing.id }, data });
+      id = existing.id;
+    } else {
+      console.log(`Test ${t.slug}: Status ${existing.status}, Inhalt nicht überschrieben.`);
+      continue;
+    }
+    if (t.freigegeben && process.env.VERCEL_ENV === "production") {
+      await prisma.review.update({ where: { id }, data: { status: "PUBLISHED", publishedAt: new Date() } });
+      console.log(`Test ${t.slug}: nach Freigabe veröffentlicht.`);
+    }
+  }
 }
 
 main().catch((e) => { console.error(e); process.exit(1); }).finally(() => prisma.$disconnect());
