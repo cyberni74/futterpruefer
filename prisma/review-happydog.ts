@@ -1,6 +1,6 @@
 /**
  * Zwei Tests der Marke Happy Dog (Okt. 2026): Sensible Africa (Strauß) und Sensible India (vegetarisch).
- * Nur als Entwurf: freigegeben bleibt false, bis die Rechtsprüfung durch ist (wie bei den Tests vom 17.10.).
+ * Freigegeben nach Rechtsprüfung (freigegeben: true); der Seed veröffentlicht auf Production.
  * Quellen: happydog.de (Africa, Abruf 21.10.2026), happydog.at (India, Zusammensetzung und Analyse; deutsche Produktseite nicht gefunden).
  */
 const a = (u: string, l: string) => `<a href="${u}">${l}</a>`;
@@ -60,7 +60,7 @@ function build(d: Def) {
     metaTitle: title,
     metaDescription: `Happy Dog ${d.sorte} im Test: ${d.descCore} Werbeaussagen-Check, Zusammensetzung, Preis. ${total} von 100 Punkten.`,
     keywords: [`Happy Dog ${d.sorte}`, "Happy Dog Test", d.keyword],
-    priceDate: PRICE_DATE, testedAt: TESTED_AT, freigegeben: false as const,
+    priceDate: PRICE_DATE, testedAt: TESTED_AT, freigegeben: true as const,
     imageUrl: `/tests/happy-dog-sensible-illustration.webp`, contentImageUrl: `/tests/happy-dog-sensible-illustration.webp`,
     bodyHtml: `<p>${d.bodyCore.split("|")[0]}</p>
 ${METHODE(d.url, "Produktseite des Herstellers")}
