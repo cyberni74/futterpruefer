@@ -5,7 +5,7 @@ import { PageShell } from "@/components/page-shell";
 import { faqPageJsonLd } from "@/lib/faq-schema";
 import { trimMetaDescription } from "@/lib/seo";
 
-const TITLE = "Methodik Ergänzungsfutter: So testen wir Hund & Katze";
+const TITLE = "Methodik Ergänzungsfutter: So testen wir";
 const DESCRIPTION = trimMetaDescription(
   "Wirkstoff, Dosis je kg, Träger, Werbung, Transparenz: So bewerten wir Pasten, Tabletten, Pulver und Smoothies für Hund und Katze. 100 Punkte, Ampel.",
 );

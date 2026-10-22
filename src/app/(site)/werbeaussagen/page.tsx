@@ -10,12 +10,12 @@ import { PageShell } from "@/components/page-shell";
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
-  title: "Werbeaussagen-Check: Irreführende Werbung bei Tierfutter",
+  title: "Werbeaussagen-Check: Irreführende Werbung",
   description: trimMetaDescription(
     "Welche Werbeaussagen auf Hunde- und Katzenfutter halten dem Etikett nicht stand? Unsere Auswertung aller Tests nach Marke, mit Begründung und Hinweisen, wie Sie fragwürdige Werbung melden.",
   ),
   alternates: { canonical: "/werbeaussagen" },
-  openGraph: { type: "article", url: "/werbeaussagen", title: "Werbeaussagen-Check: Irreführende Werbung bei Tierfutter", images: [{ url: "/opengraph-image.png", width: 1200, height: 630 }] },
+  openGraph: { type: "article", url: "/werbeaussagen", title: "Werbeaussagen-Check: Irreführende Werbung", images: [{ url: "/opengraph-image.png", width: 1200, height: 630 }] },
 };
 
 type Row = { slug: string; title: string; path: string; flagged: number; unz: number; total: number; examples: { claim: string; reason: string }[] };
