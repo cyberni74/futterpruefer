@@ -1,7 +1,7 @@
 import { slugify } from "@/lib/slug";
 
 export const MAX_UPLOAD_BYTES = 8 * 1024 * 1024;
-export const MAX_IMAGE_WIDTH = 1600;
+export const MAX_IMAGE_WIDTH = 1000;
 export const ALLOWED_MIME = ["image/jpeg", "image/png", "image/webp", "image/avif"] as const;
 
 /** Prüft das von sharp erkannte Format (AVIF meldet sharp als "heif" mit AV1-Kompression). */
