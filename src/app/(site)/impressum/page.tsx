@@ -21,8 +21,8 @@ export default function ImpressumPage() {
           {other[0]}<br />
           {other[1]}
         </p>
-        <p>Vertretungsberechtigt: Beytullah Coscun</p>
-        <p>Vertreter für Europa: {OPERATOR.europeRepresentative}, {OPERATOR.europeAddress}</p>
+        <p>Vertretungsberechtigt: {OPERATOR.europeRepresentative}</p>
+        <p>Vertreter für Europa: {OPERATOR.europeRepresentative}{OPERATOR.europeAddress ? `, ${OPERATOR.europeAddress}` : ""}</p>
 
         <h2>Kontakt</h2>
         <p>
@@ -39,7 +39,7 @@ export default function ImpressumPage() {
         <p>Es besteht keine deutsche Umsatzsteuer-Identifikationsnummer. Steuerregistrierungen in Indien (GST): {OPERATOR.gst.join(" und ")}.</p>
 
         <h2>Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV</h2>
-        <p>{OPERATOR.europeRepresentative}, {OPERATOR.europeAddress}</p>
+        <p>{OPERATOR.europeRepresentative}{OPERATOR.europeAddress ? `, ${OPERATOR.europeAddress}` : ""}</p>
 
         <h2>Verbraucherstreitbeilegung</h2>
         <p>Wir sind nicht bereit oder verpflichtet, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.</p>
