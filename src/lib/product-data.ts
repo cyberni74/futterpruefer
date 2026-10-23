@@ -8,7 +8,7 @@ export type ClaimRating = (typeof CLAIM_RATINGS)[number];
 export type Claim = { claim: string; rating: ClaimRating; reason: string; legal: string; imageUrl: string };
 
 export const CLAIM_LABEL: Record<ClaimRating, string> = {
-  ZULAESSIG: "Zulässig",
+  ZULAESSIG: "Ohne Einwand",
   FRAGWUERDIG: "Fragwürdig",
   UNZULAESSIG: "Halten wir für irreführend",
 };
