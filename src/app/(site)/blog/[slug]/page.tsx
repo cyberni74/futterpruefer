@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound, permanentRedirect } from "next/navigation";
 import { seoTitle, trimMetaDescription } from "@/lib/seo";
 import { prisma } from "@/lib/db";
-import { blogCardSelect, findRedirect, getCategoryLeaders, getPostBySlug, publishedWhere } from "@/lib/queries";
+import { blogCardSelect, findRedirect, getCategoryLeaders, getPostBySlug, getPreviousPost, publishedWhere } from "@/lib/queries";
 import { TopicLinks } from "@/components/topic-links";
 import { getReviewsForPost, renderArticle } from "@/lib/content";
 import { absoluteUrl, formatDate, SITE } from "@/lib/site";
@@ -63,8 +63,12 @@ export default async function PostPage({ params }: PageProps<"/blog/[slug]">) {
     renderArticle(p.bodyHtml),
     getCategoryLeaders(),
   ]);
-  const fill = related.length < 3 ? await prisma.blogPost.findMany({ where: { ...publishedWhere(), id: { notIn: [p.id, ...related.map((x) => x.id)] } }, orderBy: { publishedAt: "desc" }, take: 3 - related.length, select: blogCardSelect }) : [];
-  const more = [...related, ...fill];
+  // Ein Platz geht immer an den chronologisch vorherigen Beitrag (ringförmig), damit auch ältere
+  // Beiträge von anderen Artikeln verlinkt werden und nicht nur über die Blog-Übersicht erreichbar sind.
+  const neighbor = await getPreviousPost(p.id);
+  const picked = [...related.filter((x) => x.id !== neighbor?.id).slice(0, neighbor ? 2 : 3), ...(neighbor ? [neighbor] : [])];
+  const fill = picked.length < 3 ? await prisma.blogPost.findMany({ where: { ...publishedWhere(), id: { notIn: [p.id, ...picked.map((x) => x.id)] } }, orderBy: { publishedAt: "desc" }, take: 3 - picked.length, select: blogCardSelect }) : [];
+  const more = [...picked, ...fill];
   const url = absoluteUrl(`/blog/${p.slug}`);
   return (
     <article className="mx-auto max-w-3xl px-4">

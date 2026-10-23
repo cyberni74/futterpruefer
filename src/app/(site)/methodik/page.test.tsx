@@ -20,7 +20,7 @@ describe("Methodik Transparenz", () => {
   });
 
   it("übernimmt die rechtlich vorgegebenen Stufen und den Vergleichshinweis", () => {
-    expect(html).toContain("Vor jedem Test bitten wir den Hersteller per E-Mail mit einheitlichem Text und einer Frist von 14 Tagen um Unterlagen.");
+    expect(html).not.toContain("Vor jedem Test bitten wir den Hersteller per E-Mail");
     expect(html).toContain("Unterlagen ohne Unterschrift oder ohne erkennbares Labor.");
     expect(html).toContain("Endproduktanalysen mit nicht verifizierbarem Labor zählen ebenfalls zur Stufe 4.");
     expect(html).toContain("Analysebericht eines akkreditierten Labors (Akkreditierung überprüfbar), der nur Rohstoffe oder Vorprodukte betrifft.");

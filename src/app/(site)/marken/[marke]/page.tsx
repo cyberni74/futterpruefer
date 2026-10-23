@@ -5,10 +5,19 @@ import { Breadcrumbs } from "@/components/breadcrumbs";
 import { ReviewCard } from "@/components/review-card";
 import { BrandProfile } from "@/components/brand-profile";
 import { getBrandInfo } from "@/lib/brand-info";
-import { getBrandBySlug, getBrandReviews } from "@/lib/brands";
+import { getBrandBySlug, getBrandReviews, getBrands } from "@/lib/brands";
 import { trimMetaDescription } from "@/lib/seo";
 
 export const revalidate = 3600;
+
+/** Markenseiten vorab rendern und per ISR cachen (vorher bei jedem Aufruf neu gerendert, langsam für Googlebot). */
+export async function generateStaticParams() {
+  try {
+    return (await getBrands()).map((b) => ({ marke: b.slug }));
+  } catch {
+    return [];
+  }
+}
 
 export async function generateMetadata({ params }: PageProps<"/marken/[marke]">): Promise<Metadata> {
   const b = await getBrandBySlug((await params).marke);
