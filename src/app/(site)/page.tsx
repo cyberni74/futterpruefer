@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, ShieldCheck } from "lucide-react";
 import type { Metadata } from "next";
-import { getLatestPosts, getLatestReviews, getNewestReviewUpdate, getProductOfMonth, getFeaturedComparison, getTickerEntries, getCategoryLeaders, getPublishedCounts } from "@/lib/queries";
+import { getLatestPosts, getLatestReviews, getNewestReviewUpdate, getProductOfMonth, getFeaturedComparisons, getTickerEntries, getCategoryLeaders, getPublishedCounts } from "@/lib/queries";
 import { HomeHero } from "@/components/home-hero";
 import { ProductOfMonthHero } from "@/components/product-of-month";
 import { FeaturedComparisonHero } from "@/components/featured-comparison";
@@ -56,7 +56,7 @@ export const revalidate = 3600;
 export default async function Home() {
   const [pom, featured, ticker, reviews, posts, leaders, latestUpdate, counts] = await Promise.all([
     getProductOfMonth(),
-    getFeaturedComparison(),
+    getFeaturedComparisons(),
     getTickerEntries(),
     getLatestReviews(21),
     getLatestPosts(21),
@@ -79,7 +79,7 @@ export default async function Home() {
       </div>
 
       <div className="mx-auto max-w-6xl px-4">
-        {featured && <div className="mt-10"><FeaturedComparisonHero comparison={featured} /></div>}
+        {featured.map((c) => <div key={c.slug} className="mt-10"><FeaturedComparisonHero comparison={c} /></div>)}
         {pom && <div className="mt-10"><ProductOfMonthHero pom={pom} /></div>}
 
         <section aria-labelledby="neueste-tests" className="mt-16">

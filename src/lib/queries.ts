@@ -3,7 +3,7 @@ import { cache } from "react";
 import { prisma } from "@/lib/db";
 import type { Prisma } from "@/generated/prisma/client";
 import { buildMonthlyWinners, currentPom } from "@/lib/pom";
-import { FEATURED_COMPARISON, FEATURED_COMPARISONS } from "@/lib/featured-comparison";
+import { FEATURED_COMPARISONS } from "@/lib/featured-comparison";
 
 export const publishedWhere = () => ({ status: "PUBLISHED" as const, publishedAt: { lte: new Date() } });
 
@@ -97,16 +97,6 @@ export async function getProductOfMonthArchive() {
 
 export async function getProductOfMonth() {
   return currentPom(await getProductOfMonthArchive());
-}
-
-/** Startseiten-Kasten „Testsieger“: Konfiguration plus Bild aus dem veröffentlichten Blogbeitrag. */
-export async function getFeaturedComparison() {
-  if (!FEATURED_COMPARISON) return null;
-  const post = await prisma.blogPost.findFirst({
-    where: { slug: FEATURED_COMPARISON.slug, ...publishedWhere() },
-    select: { slug: true, imageUrl: true, imageAlt: true, imageBlur: true },
-  });
-  return post ? { ...FEATURED_COMPARISON, post } : null;
 }
 
 /** Alle Startseiten-Kästen „Testsieger“ in der Reihenfolge von FEATURED_COMPARISONS (neuester zuerst). */
