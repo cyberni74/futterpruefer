@@ -3,7 +3,7 @@ import { isTaggedAffiliateHref } from "./sanitize";
 import { ratingFor } from "./scoring";
 
 /**
- * Früher (bis 23.10.2026): Rot-Regel ohne Kauflink. Seit 23.10.2026 (Entscheidung Manni) bekommen auch
+ * Früher (bis 23.10.2026): Rot-Regel, Rot-Seiten ohne Amazon-Link. Seit 23.10.2026 (Entscheidung Manni) bekommen auch
  * Rot-Tests einen neutralen Amazon-Link; die Testseite ruft stripAffiliateForRot nicht mehr auf.
  * isRotScore bleibt als Hilfsfunktion.
  */

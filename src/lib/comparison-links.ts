@@ -1,6 +1,6 @@
 /**
  * Interne Verlinkung Einzeltest/Fachartikel ↔ Vergleichstest (HANDBUCH: jeder Einzeltest verlinkt
- * seinen Vergleichstest, der Vergleichstest verlinkt zurück). Nur interne Links, keine Kauflinks.
+ * seinen Vergleichstest, der Vergleichstest verlinkt zurück). Nur interne Links; Amazon-Links stehen im Testtext selbst (seit 23.10.2026 auch bei Rot).
  */
 export type Comparison = { slug: string; title: string; href: string; members?: string[] };
 

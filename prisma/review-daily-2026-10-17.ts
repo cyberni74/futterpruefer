@@ -26,7 +26,7 @@ const FOOT = `<p><em>Hinweis:</em> Alle Zitate stammen von den genannten Seiten 
 const STRENG = (f: number, u: number) => `<strong>Strenge Wertung:</strong> Jede fragwürdige Werbeaussage kostet einen Punkt bei der Deklaration, jede von uns als irreführend eingestufte drei; hier sind es ${f} fragwürdige und ${u} als irreführend eingestufte Aussagen.`;
 
 const figure = (id: string, alt: string, asin: string) => `<figure><a href="${amz(asin)}" rel="sponsored nofollow noopener"><img src="${pic(id)}" alt="${alt}"></a><figcaption>Bild: Amazon-Produktseite (Stand ${D}) · Werbung: Bild verlinkt zu Amazon*</figcaption></figure>`;
-/** Ohne Kauflink, solange Amazon kein Angebot zeigt. */
+/** Seed-Stand 17.10.: ohne Amazon-Link (kein Angebot sichtbar). Live seit 23.10.2026 mit Amazon-Link (Entscheidung Manni: alle Tests verlinkt). */
 const figurePlain = (id: string, alt: string) => `<figure><img src="${pic(id)}" alt="${alt}"><figcaption>Bild: Amazon-Produktseite (Stand ${D})</figcaption></figure>`;
 const cta = (asin: string, name: string) => `<div class="cta-box fp-box fp-cta space-y-2 rounded-2xl border border-accent bg-surface p-5 shadow-card"><p><a href="${amz(asin)}" rel="sponsored nofollow noopener"><strong>Werbung: ${name} bei Amazon ansehen*</strong></a></p><p class="text-xs text-muted">*Werbung/Affiliate-Link: Kaufen Sie darüber, erhalten wir eine Provision. Der Preis ändert sich für Sie nicht. Als Amazon-Partner verdiene ich an qualifizierten Verkäufen.</p></div>`;
 const quellen = (items: string) => `<div class="fp-box fp-quellen space-y-2 rounded-2xl border border-border bg-bg-soft p-5 text-sm"><h2 id="quellen">Quellen (abgerufen am ${D})</h2><ol>${items}</ol></div>`;

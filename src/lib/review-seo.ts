@@ -4,7 +4,7 @@ import { misleadingClaims, splitComposition, type Claim } from "./product-data";
 /**
  * SEO-Fazit, Kurz-gesagt-Box und FAQ für Einzeltests (HANDBUCH: SEO-Pflicht für jeden Test).
  * Alles wird nur aus vorhandenen, geprüften Feldern zusammengesetzt (Punkte, Ampel, Urteil,
- * Pro/Contra, Werbeaussagen, Preis, Zusammensetzung). Keine neuen Aussagen, keine Kauflinks.
+ * Pro/Contra, Werbeaussagen, Preis, Zusammensetzung). Keine neuen Aussagen und keine Amazon-Links; die stehen in der CTA-Box des Testtexts (seit 23.10.2026 auch bei Rot).
  */
 
 export const AMPEL_WORD = { gut: "Grün", mittel: "Gelb", schlecht: "Rot" } as const;
