@@ -5,6 +5,7 @@ import { ArrowRight, Award, CalendarCheck, Clock, PawPrint, RefreshCw, Scale, Us
 import { prisma } from "@/lib/db";
 import { getRelatedReviews, getReviewBySlug, previewDraftsEnabled, publishedWhere, resolveReviewPath } from "@/lib/queries";
 import { getLexikonEntries, getPostsForReview, renderArticle } from "@/lib/content";
+import { isRotScore } from "@/lib/rot-guard";
 import { enhanceArticle } from "@/lib/article-html";
 import { consWithClaims, misleadingClaims, parseAnalysis, parseClaims, readingMinutes } from "@/lib/product-data";
 import { CRITERIA, type Scores } from "@/lib/scoring";
@@ -118,8 +119,8 @@ export default async function ReviewPage({ params }: PageProps<"/[kategorie]/[sl
   const [related, posts, linked, conclusion, lexikon, pom] = await Promise.all([
     getRelatedReviews(r.categoryId, r.id, 3),
     getPostsForReview(r, 2),
-    renderArticle(r.bodyHtml),
-    renderArticle(r.conclusionHtml),
+    renderArticle(r.bodyHtml, [], { rot: isRotScore(r.totalScore) }),
+    renderArticle(r.conclusionHtml, [], { rot: isRotScore(r.totalScore) }),
     getLexikonEntries(),
     prisma.productOfMonth.findFirst({ where: { reviewId: r.id }, orderBy: [{ year: "desc" }, { month: "desc" }] }),
   ]);
