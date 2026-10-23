@@ -1,0 +1,102 @@
+{
+  "/brand/drei-hunde-auf-blumenwiese-hundefutter-test.webp": {
+    "w": 640,
+    "v": [
+      {
+        "w": 400,
+        "src": "/brand/drei-hunde-auf-blumenwiese-hundefutter-test-400.webp"
+      }
+    ]
+  },
+  "/blog/hund-stadtwohnung-ohne-garten-alltag.webp": {
+    "w": 1000,
+    "v": [
+      {
+        "w": 400,
+        "src": "/blog/hund-stadtwohnung-ohne-garten-alltag-400.webp"
+      },
+      {
+        "w": 800,
+        "src": "/blog/hund-stadtwohnung-ohne-garten-alltag-800.webp"
+      }
+    ]
+  },
+  "/tests/bugbell-bellyvital-hund-kroketten-insektenprotein.webp": {
+    "w": 1000,
+    "v": [
+      {
+        "w": 400,
+        "src": "/tests/bugbell-bellyvital-hund-kroketten-insektenprotein-400.webp"
+      },
+      {
+        "w": 800,
+        "src": "/tests/bugbell-bellyvital-hund-kroketten-insektenprotein-800.webp"
+      }
+    ]
+  },
+  "/tests/bugbell-bellyvital-trockenfutter-hund-napf.webp": {
+    "w": 1000,
+    "v": [
+      {
+        "w": 400,
+        "src": "/tests/bugbell-bellyvital-trockenfutter-hund-napf-400.webp"
+      },
+      {
+        "w": 800,
+        "src": "/tests/bugbell-bellyvital-trockenfutter-hund-napf-800.webp"
+      }
+    ]
+  },
+  "/tests/medidog-ulmenrinden-paste-hund-dose.webp": {
+    "w": 900,
+    "v": [
+      {
+        "w": 400,
+        "src": "/tests/medidog-ulmenrinden-paste-hund-dose-400.webp"
+      },
+      {
+        "w": 800,
+        "src": "/tests/medidog-ulmenrinden-paste-hund-dose-800.webp"
+      }
+    ]
+  },
+  "/tests/medidog-ulmenrinden-paste-hund-etikett-pflichtangaben.webp": {
+    "w": 1000,
+    "v": [
+      {
+        "w": 400,
+        "src": "/tests/medidog-ulmenrinden-paste-hund-etikett-pflichtangaben-400.webp"
+      },
+      {
+        "w": 800,
+        "src": "/tests/medidog-ulmenrinden-paste-hund-etikett-pflichtangaben-800.webp"
+      }
+    ]
+  },
+  "/tests/medidog-ulmenrinden-paste-hund-fuetterungsempfehlung.webp": {
+    "w": 1000,
+    "v": [
+      {
+        "w": 400,
+        "src": "/tests/medidog-ulmenrinden-paste-hund-fuetterungsempfehlung-400.webp"
+      },
+      {
+        "w": 800,
+        "src": "/tests/medidog-ulmenrinden-paste-hund-fuetterungsempfehlung-800.webp"
+      }
+    ]
+  },
+  "/tests/medidog-ulmenrinden-paste-hund-paste-in-schale.webp": {
+    "w": 1000,
+    "v": [
+      {
+        "w": 400,
+        "src": "/tests/medidog-ulmenrinden-paste-hund-paste-in-schale-400.webp"
+      },
+      {
+        "w": 800,
+        "src": "/tests/medidog-ulmenrinden-paste-hund-paste-in-schale-800.webp"
+      }
+    ]
+  }
+}

@@ -2,6 +2,7 @@ import sharp from "sharp";
 import { auth } from "@/auth";
 import { MAX_IMAGE_WIDTH, MAX_UPLOAD_BYTES, altSuggestion, buildImageFileName, isAllowedSharpFormat, parseVariant } from "@/lib/admin/upload";
 import { uploadPublicImage } from "@/lib/supabase-storage";
+import { VARIANT_WIDTHS, variantName } from "@/lib/image-variants";
 
 export const dynamic = "force-dynamic";
 
@@ -49,6 +50,19 @@ export async function POST(request: Request) {
   }
   const blur = `data:image/webp;base64,${blurBuf.toString("base64")}`;
   const fileName = buildImageFileName(variant ? `${name} ${variant}` : name);
+
+  // Varianten zuerst: ein Bild ohne -400/-800 darf nie im Bucket stehen (das srcset setzt sie voraus).
+  for (const width of VARIANT_WIDTHS) {
+    let variant: Buffer;
+    try {
+      variant = await sharp(output).resize({ width, withoutEnlargement: true }).webp({ quality: 60 }).toBuffer();
+    } catch (e) {
+      console.error("upload: sharp Variante", e);
+      return error("Das Bild konnte nicht verarbeitet werden.", 422);
+    }
+    const storedVariant = await uploadPublicImage(variantName(fileName, width), variant);
+    if ("error" in storedVariant) return error(storedVariant.error, storedVariant.status);
+  }
 
   const stored = await uploadPublicImage(fileName, output);
   if ("error" in stored) return error(stored.error, stored.status);

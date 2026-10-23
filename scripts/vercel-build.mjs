@@ -53,6 +53,7 @@ const env = {
 for (const [label, cmd, args] of [
   ["Migrationen", "npx", ["prisma", "migrate", "deploy"]],
   ["Seed", "npx", ["tsx", "prisma/seed.ts"]],
+  ["Bildvarianten", "node", ["scripts/image-variants.mjs"]],
   ["Next-Build", "npx", ["next", "build"]],
 ]) {
   log(`${label} …`);
