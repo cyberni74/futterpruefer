@@ -243,8 +243,8 @@ describe("reviewSchema", () => {
   it("lässt den Autor leer für den Standard und lehnt unbekannte Namen ab", () => {
     const empty = reviewSchema.safeParse(reviewFormToRaw(reviewFd()));
     expect(empty.success && empty.data.authorSlug).toBe(null);
-    const known = reviewSchema.safeParse(reviewFormToRaw(reviewFd({ authorSlug: "wilhelm-schaefer" })));
-    expect(known.success && known.data.authorSlug).toBe("wilhelm-schaefer");
+    const known = reviewSchema.safeParse(reviewFormToRaw(reviewFd({ authorSlug: "dr-kraft" })));
+    expect(known.success && known.data.authorSlug).toBe("dr-kraft");
     const bad = reviewSchema.safeParse(reviewFormToRaw(reviewFd({ authorSlug: "Dr. L." })));
     expect(bad.success).toBe(false);
   });
@@ -257,9 +257,9 @@ describe("weitere Schemas", () => {
     fd.set("slug", "getreide-im-hundefutter");
     fd.set("publishMode", "draft");
     expect(blogSchema.safeParse(blogFormToRaw(fd)).success).toBe(true);
-    fd.set("authorSlug", "wilhelm-schaefer");
+    fd.set("authorSlug", "dr-kraft");
     const known = blogSchema.safeParse(blogFormToRaw(fd));
-    expect(known.success && known.data.authorSlug).toBe("wilhelm-schaefer");
+    expect(known.success && known.data.authorSlug).toBe("dr-kraft");
     fd.set("authorSlug", "erfundene Person");
     expect(blogSchema.safeParse(blogFormToRaw(fd)).success).toBe(false);
     fd.set("authorSlug", "");

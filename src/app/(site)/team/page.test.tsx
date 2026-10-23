@@ -9,8 +9,8 @@ describe("Team-Seite", () => {
     expect(html).toContain("Unsere Tests stützen sich auf die Kennzeichnung, die Angaben der Hersteller und öffentlich zugängliche Quellen.");
     expect(html).toContain("Eigene Laboranalysen führen wir nur durch, wenn wir das im Test ausdrücklich angeben.");
     expect(html).toContain("Verantwortlich für die Inhalte ist");
-    expect(html).toContain("Wilhelm Schäfer");
-    expect(html).toContain('id="wilhelm-schaefer"');
+    expect(html).toContain("Dr. Kraft");
+    expect(html).toContain('id="dr-kraft"');
     expect(html).toContain('href="/impressum"');
     expect(html).toContain(">Impressum<");
     expect(html).toContain('"@type":"Organization"');
