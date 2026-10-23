@@ -6,12 +6,12 @@ type Props = {
   comparison: FeaturedComparison & { post: { imageUrl: string | null; imageAlt: string; imageBlur: string | null } };
 };
 
-/** Testsieger des aktuellen großen Vergleichstests, im selben Kasten wie das Produkt des Monats. */
+/** Testsieger eines großen Vergleichstests, im selben Kasten wie das Produkt des Monats. */
 export function FeaturedComparisonHero({ comparison: c }: Props) {
   const sub = `${MONTHS[c.month - 1]} ${c.year}`;
   return (
     <FeatureHero
-      headingId="testsieger-heading"
+      headingId={`testsieger-heading-${c.slug}`}
       kicker={`Testsieger · ${c.testName}`}
       srPrefix={`Testsieger im Vergleichstest ${c.testName}: `}
       title={c.winner}

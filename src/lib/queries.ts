@@ -3,7 +3,7 @@ import { cache } from "react";
 import { prisma } from "@/lib/db";
 import type { Prisma } from "@/generated/prisma/client";
 import { buildMonthlyWinners, currentPom } from "@/lib/pom";
-import { FEATURED_COMPARISON } from "@/lib/featured-comparison";
+import { FEATURED_COMPARISON, FEATURED_COMPARISONS } from "@/lib/featured-comparison";
 
 export const publishedWhere = () => ({ status: "PUBLISHED" as const, publishedAt: { lte: new Date() } });
 
@@ -107,6 +107,20 @@ export async function getFeaturedComparison() {
     select: { slug: true, imageUrl: true, imageAlt: true, imageBlur: true },
   });
   return post ? { ...FEATURED_COMPARISON, post } : null;
+}
+
+/** Alle Startseiten-Kästen „Testsieger“ in der Reihenfolge von FEATURED_COMPARISONS (neuester zuerst). */
+export async function getFeaturedComparisons() {
+  if (FEATURED_COMPARISONS.length === 0) return [];
+  const posts = await prisma.blogPost.findMany({
+    where: { slug: { in: FEATURED_COMPARISONS.map((c) => c.slug) }, ...publishedWhere() },
+    select: { slug: true, imageUrl: true, imageAlt: true, imageBlur: true },
+  });
+  const bySlug = new Map(posts.map((p) => [p.slug, p]));
+  return FEATURED_COMPARISONS.flatMap((c) => {
+    const post = bySlug.get(c.slug);
+    return post ? [{ ...c, post }] : [];
+  });
 }
 
 export type TickerEntry = { id: string; text: string; href: string | null; isWarning: boolean };
