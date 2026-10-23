@@ -59,12 +59,15 @@ export async function generateMetadata({ params }: PageProps<"/blog/[slug]">): P
   if (!p) return {};
   const title = p.metaTitle || p.title;
   const description = trimMetaDescription(p.metaDescription || p.excerpt);
+  const imageAlt = p.imageAlt.trim() || `Titelbild: ${p.title}`;
+  const images = p.imageUrl ? [{ url: p.imageUrl, alt: imageAlt }] : [{ url: "/opengraph-image.png", width: 1200, height: 630, alt: SITE.name }];
   return {
     title: { absolute: seoTitle(title) },
     description,
     keywords: p.keywords,
     alternates: { canonical: `/blog/${p.slug}` },
-    openGraph: { type: "article", title, description, url: `/blog/${p.slug}`, publishedTime: p.publishedAt?.toISOString(), modifiedTime: p.updatedAt.toISOString(), authors: [resolveAuthor(p.authorSlug).name], images: p.imageUrl ? [{ url: p.imageUrl }] : [{ url: "/opengraph-image.png", width: 1200, height: 630 }] },
+    openGraph: { type: "article", title, description, url: `/blog/${p.slug}`, publishedTime: p.publishedAt?.toISOString(), modifiedTime: p.updatedAt.toISOString(), authors: [resolveAuthor(p.authorSlug).name], images },
+    twitter: { card: "summary_large_image", title, description, images },
   };
 }
 
