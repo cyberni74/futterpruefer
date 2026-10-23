@@ -100,8 +100,7 @@ export function reviewFaq(r: ReviewSeoInput, comparison?: { title: string } | nu
   const rating = ratingFor(r.totalScore);
   const d = dayDate(r.testedAt);
   const out: FaqItem[] = [];
-  // Punkte und Ampel stehen schon im ersten Satz; Urteilssätze mit denselben Angaben fallen weg.
-  const verdict = clean(r.verdict).split(/(?<=[.!?])\s+/).filter((sentence) => !/\d+\s*(von|\/)\s*100|100 Punkten|Ampel (Grün|Gelb|Rot)/.test(sentence)).join(" ");
+  const verdict = withoutLeadingScore(clean(r.verdict), r.totalScore);
   out.push({
     question: `Wie schneidet ${r.name} im Test ab?`,
     answer: `${r.name} erreicht in unserem Test${d ? ` vom ${d}` : ""} ${r.totalScore} von 100 Punkten, Ampel ${AMPEL_WORD[rating]} (${RATING_LABEL[rating]}).${verdict ? ` ${sentence(verdict)}` : ""}`,
@@ -141,7 +140,43 @@ export function reviewFaq(r: ReviewSeoInput, comparison?: { title: string } | nu
   return out;
 }
 
-/** Jede H2, die mit „Fazit“ beginnt, heißt im Body „Detailbewertung“. So bleibt nur die SEO-Fazit-H2 mit Keyword übrig. */
+/** Überschrift für Body-H2, die mit „Fazit“ beginnen (das einzige Fazit-H2 ist das SEO-Fazit der Vorlage). */
+export const BODY_FAZIT_HEADING = "Unser Urteil im Detail";
+
+/**
+ * Benennt jede H2 im Body um, deren Text mit „Fazit“ beginnt („Fazit“,
+ * „Fazit im Detail“, „Fazit: … im Test (Oktober 2026)“ …), damit die Seite
+ * genau ein Fazit-H2 hat: das SEO-Fazit mit Keyword.
+ */
 export function renameBodyFazit(html: string): string {
-  return html.replace(/<h2([^>]*)>\s*Fazit\b([^<]*)<\/h2>/gi, "<h2$1>Detailbewertung$2</h2>");
+  return html.replace(/<h2([^>]*)>([\s\S]*?)<\/h2>/gi, (m, attrs: string, inner: string) => {
+    const text = inner.replace(/<[^>]*>/g, "").replace(/&nbsp;/g, " ").trim();
+    return /^fazit\b/i.test(text) ? `<h2${attrs}>${BODY_FAZIT_HEADING}</h2>` : m;
+  });
+}
+
+/**
+ * Entfernt eine Punktzahl am Anfang des Fazit-Texts („22 von 100 Punkten, Rot
+ * (nicht empfehlenswert). …“, „62/100, Gelb. …“), weil die FAQ-Antwort Punkte
+ * und Ampel schon nennt. Ein angehängter Zusatz („…, mit Warnsignal Sicherheit.“)
+ * bleibt als eigener Satz erhalten.
+ */
+export function withoutLeadingScore(verdict: string, score: number): string {
+  const re = new RegExp(`^${score}\\s*(?:von\\s*100\\s*Punkten|\\/\\s*100(?:\\s*Punkte(?:n)?)?)\\s*,\\s*(?:Ampel\\s+)?(?:Rot|Gelb|Grün)(?:\\s*\\([^)]*\\))?\\s*([.,;])\\s*`, "i");
+  const m = verdict.match(re);
+  let rest = verdict;
+  if (m) {
+    rest = verdict.slice(m[0].length).trim();
+    if (rest && m[1] !== ".") rest = rest.charAt(0).toLocaleUpperCase("de") + rest.slice(1);
+  }
+  return withoutTrailingScore(rest, score);
+}
+
+/** Entfernt einen Schlusssatz, der nur die Punktzahl wiederholt („… 61 von 100 Punkten, Gelb: …“, „Gesamt: 76/100, mit Abstrichen.“). */
+function withoutTrailingScore(verdict: string, score: number): string {
+  const re = new RegExp(`(?:^|(?<=[.!?“”")]\\s))\\s*(?:Mit\\s+|Gesamt:\\s*)?${score}\\s*(?:von\\s*100\\b|\\/\\s*100\\b)[^]*$`);
+  const m = verdict.match(re);
+  if (!m || m.index === undefined || m.index === 0) return verdict;
+  if (/[.!?]\s+[A-ZÄÖÜ]/.test(m[0].trim().replace(/[.!?]$/, ""))) return verdict;
+  return verdict.slice(0, m.index).trim();
 }

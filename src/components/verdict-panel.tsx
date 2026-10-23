@@ -16,7 +16,7 @@ export type VerdictData = Scores & {
   harmfulReason?: string | null;
 };
 
-/** Fazit-Box: Punkte-Ring, Kriterien-Balken, Klartext-Fazit, Pro/Contra. */
+/** Testergebnis-Box (früher „Fazit“; das einzige Fazit-H2 ist das SEO-Fazit): Punkte-Ring, Kriterien-Balken, Klartext-Fazit, Pro/Contra. */
 export function VerdictPanel({ data, showWarning = false, bars, capNote, safetyWarning }: { data: VerdictData; showWarning?: boolean; bars?: CriteriaBarItem[]; capNote?: string; safetyWarning?: string }) {
   const scores = Object.fromEntries(CRITERIA.map((c) => [c.key, Number(data?.[c.key] ?? 0) || 0])) as Scores;
   const pros = (data?.pros ?? []).map((p) => p?.trim()).filter(Boolean);
@@ -28,7 +28,7 @@ export function VerdictPanel({ data, showWarning = false, bars, capNote, safetyW
       {safetyWarning ? <WarningBanner scoreHarmful={0} title="Warnhinweis: Sicherheit" reason={safetyWarning} flush /> : null}
       <div className="p-5 md:p-8">
         <div className="flex flex-wrap items-center justify-between gap-3">
-          <h2 id="fazit-heading" className="text-2xl font-extrabold">Fazit</h2>
+          <h2 id="fazit-heading" className="text-2xl font-extrabold">Testergebnis</h2>
           {updated && !Number.isNaN(updated.getTime()) && (
             <p className="flex items-center gap-1.5 text-xs text-muted">
               <CalendarClock className="size-4" aria-hidden />

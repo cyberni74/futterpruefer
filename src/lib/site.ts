@@ -107,20 +107,15 @@ export const ANIMAL_LABEL = { HUND: "Hund", KATZE: "Katze" } as const;
 
 /** Anbieter der Website (Impressum, Datenschutzerklärung). */
 export const OPERATOR = {
-  name: "Teraa International",
-  nameSuffix: "c/o Blue Vale Lifetech LLP",
-  address: [
-    ["No 36, Opp. 09, Arekempanhally, Wilson Garden", "Bengaluru – 560027, Indien"],
-    ["A1, Gouranganagar, North 24 Parganas", "West Bengal – 700162, Indien"],
-  ],
-  /** Ansprechpartner/Vertreter für Europa */
-  europeRepresentative: "Wilhelm Schäfer",
-  /** Leer, solange keine ladungsfähige Anschrift hinterlegt ist. */
-  europeAddress: "" as string,
-  email: "contactus@teraa-intl.com",
-  phone: "+91 95350 96718",
-  phoneInternational: "+91 94773 74505",
-  hours: "Mo–Sa 10:00–18:00 Uhr (indische Zeit, IST)",
-  registrationNo: "AAL-6212",
-  gst: ["29ABIFM0599D1Z0", "19ABIFM0599D1Z1"],
+  name: "Karpas Web Solutions Ltd.",
+  address: ["Mavi Çam Sokak 12", "Gazimağusa 99450", "Türkische Republik Nordzypern"],
+  /** Geschäftsführer und Vertretungsberechtigter */
+  managingDirector: "Manuel Stark",
+  /** Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV */
+  responsibleContent: "Sebastian Kraft",
+  /** Vertreter für Europa nach Art. 27 DSGVO. */
+  europeRepresentative: "Sebastian Kraft",
+  europeAddress: "P.O. Box 20520, CY1678 Nicosia, Cyprus",
+  email: "manuel.stark@karpasweb.com",
+  phone: "+90 533 821 44 09",
 } as const;
