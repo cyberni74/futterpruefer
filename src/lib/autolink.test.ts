@@ -6,7 +6,7 @@ describe("autolinkUrls", () => {
     const out = autolinkUrls("<p>18. Öko-Test: https://www.oekotest.de/freizeit-technik/Hundefutter-im-Test-Mit-welchem-Trockenfutter_14968_1.html.</p>");
     expect(out).toContain('href="https://www.oekotest.de/freizeit-technik/Hundefutter-im-Test-Mit-welchem-Trockenfutter_14968_1.html"');
     expect(out).toContain(">oekotest.d…</a>.</p>");
-    expect(out).toContain('rel="noopener nofollow"');
+    expect(out).toContain('rel="nofollow noopener noreferrer"');
   });
   it("lässt Code und normale Linktexte unverändert", () => {
     const html = '<p><a href="https://a.de/x">Öko-Test</a> <code>https://b.de/y/sehr/lang</code></p>';
@@ -33,5 +33,10 @@ describe("autolinkUrls", () => {
     const out = autolinkUrls("<p>https://www.amazon.de/dp/B07KCS7YX1?tag=cyberni7400-21</p>");
     expect(out).toContain('rel="noopener noreferrer nofollow sponsored"');
     expect(out).toContain("tag=cyberni7400-21");
+  });
+  it("Amazon-Quellen-URL ohne Partner-Tag bekommt kein sponsored", () => {
+    const out = autolinkUrls("<p>Q1: Amazon.de, https://www.amazon.de/dp/B000QAEQXQ (Listing)</p>");
+    expect(out).toContain('rel="nofollow noopener noreferrer"');
+    expect(out).not.toContain("sponsored");
   });
 });
