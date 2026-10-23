@@ -22,6 +22,7 @@ export function CompareProvider({ children }: { children: React.ReactNode }) {
           <button type="button" onClick={() => setItems([])} className="inline-flex size-11 items-center justify-center rounded-full hover:bg-bg-soft" aria-label="Auswahl leeren"><X className="size-5" aria-hidden /></button>
           <Link
             href={`/vergleich?ids=${items.map((i) => i.id).join(",")}`}
+            rel="nofollow"
             aria-disabled={items.length < 2}
             className={`inline-flex min-h-11 items-center rounded-full px-4 text-sm font-bold ${items.length < 2 ? "pointer-events-none bg-border text-muted" : "bg-accent text-white hover:bg-accent-strong dark:text-black"}`}
           >

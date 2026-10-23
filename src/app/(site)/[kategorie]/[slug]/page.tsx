@@ -368,7 +368,7 @@ export default async function ReviewPage({ params }: PageProps<"/[kategorie]/[sl
             <section aria-labelledby="aehnliche" className="mt-16">
               <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
                 <h2 id="aehnliche" className="text-2xl font-extrabold">Ähnliche Produkte im Vergleich</h2>
-                <Link href={`/vergleich?ids=${[r.id, ...related.slice(0, 2).map((x) => x.id)].join(",")}`} className="inline-flex min-h-11 items-center gap-2 rounded-full bg-accent px-5 text-sm font-bold text-white hover:bg-accent-strong dark:text-black">
+                <Link href={`/vergleich?ids=${[r.id, ...related.slice(0, 2).map((x) => x.id)].join(",")}`} rel="nofollow" className="inline-flex min-h-11 items-center gap-2 rounded-full bg-accent px-5 text-sm font-bold text-white hover:bg-accent-strong dark:text-black">
                   <Scale className="size-4" aria-hidden /> Direkt vergleichen
                 </Link>
               </div>

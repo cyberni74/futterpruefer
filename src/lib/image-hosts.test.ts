@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { isAllowedImageUrl, isAmazonHotlink } from "./image-hosts";
+import { amazonSizedUrl, isAllowedImageUrl, isAmazonHotlink } from "./image-hosts";
 
 const BLOB = "https://xwpsp3svpsdhnsdw.public.blob.vercel-storage.com/bilder/rinti-abc123.webp";
 const SUPABASE = "https://cotopvhmsqztjtdsdnoc.supabase.co/storage/v1/object/public/bilder/rinti-abc123.webp";
@@ -31,5 +31,15 @@ describe("isAllowedImageUrl", () => {
     expect(isAmazonHotlink(src)).toBe(true);
     expect(isAllowedImageUrl(src)).toBe(true);
     expect(isAmazonHotlink("https://m.media-amazon.com/images/G/other.jpg")).toBe(false);
+  });
+});
+
+describe("amazonSizedUrl", () => {
+  it("ersetzt die Größe im Dateinamen", () => {
+    expect(amazonSizedUrl("https://m.media-amazon.com/images/I/abc._AC_SL1500_.jpg", 500)).toBe("https://m.media-amazon.com/images/I/abc._AC_SL500_.jpg");
+  });
+  it("ergänzt die Größe ohne Größenteil und lässt andere Hosts unverändert", () => {
+    expect(amazonSizedUrl("https://m.media-amazon.com/images/I/abc.jpg", 1000)).toBe("https://m.media-amazon.com/images/I/abc._AC_SL1000_.jpg");
+    expect(amazonSizedUrl("https://example.com/a._AC_SL1500_.jpg", 500)).toBe("https://example.com/a._AC_SL1500_.jpg");
   });
 });

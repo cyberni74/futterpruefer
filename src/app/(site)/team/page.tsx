@@ -7,7 +7,7 @@ import { DEFAULT_AUTHOR } from "@/lib/authors";
 import { SITE } from "@/lib/site";
 
 const DESCRIPTION =
-  "Futterprüfer.de ist ein transparentes Testportal für Hunde- und Katzenfutter. Tests stützen sich auf Kennzeichnung, Herstellerangaben und öffentlich zugängliche Quellen.";
+  "Futterprüfer.de ist ein transparentes Testportal für Hunde- und Katzenfutter. Wir stützen uns auf Kennzeichnung, Herstellerangaben und öffentliche Quellen.";
 
 export const metadata: Metadata = {
   title: "Team",

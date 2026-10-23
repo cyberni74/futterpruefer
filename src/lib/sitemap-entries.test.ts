@@ -21,8 +21,9 @@ describe("sitemapEntries", () => {
     expect(byPath["/lexikon"]).toBe("2026-09-01T10:00:00.000Z");
     expect(byPath["/glossar"]).toBe("2026-08-01T10:00:00.000Z");
     expect(byPath["/"]).toBe("2026-10-09T10:00:00.000Z");
-    expect(byPath["/alleinfuttermittel-hund"]).toBe("2026-10-09T10:00:00.000Z");
-    expect(byPath["/alleinfuttermittel-hund/beta"]).toBe("2026-10-09T10:00:00.000Z");
+    // Einzeltests: lastmod ist der neuere Wert aus Inhalt und Vorlagenänderung.
+    expect(byPath["/alleinfuttermittel-hund"]).toBe("2026-10-23T12:00:00.000Z");
+    expect(byPath["/alleinfuttermittel-hund/beta"]).toBe("2026-10-23T12:00:00.000Z");
     expect(byPath["/blog/ratgeber"]).toBe("2026-10-04T10:00:00.000Z");
     expect(byPath["/methodik"]).toBeUndefined();
     expect(byPath["/methodik/ergaenzungsfutter"]).toBe("2026-10-17T00:00:00.000Z");

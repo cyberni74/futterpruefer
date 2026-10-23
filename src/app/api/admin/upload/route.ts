@@ -41,7 +41,7 @@ export async function POST(request: Request) {
   let output: Buffer;
   let blurBuf: Buffer;
   try {
-    output = await sharp(input).rotate().resize({ width: MAX_IMAGE_WIDTH, withoutEnlargement: true }).webp({ quality: 80 }).toBuffer();
+    output = await sharp(input).rotate().resize({ width: MAX_IMAGE_WIDTH, withoutEnlargement: true }).webp({ quality: 72 }).toBuffer();
     blurBuf = await sharp(input).rotate().resize(16, 16, { fit: "inside" }).webp({ quality: 40 }).toBuffer();
   } catch (e) {
     console.error("upload: sharp", e);

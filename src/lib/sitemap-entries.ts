@@ -26,6 +26,14 @@ export type SitemapEntry = {
   priority: number;
 };
 
+/** Letzte Änderung der Einzeltest-Vorlage (Fazit, Kurz gesagt, FAQ). Pro Vorlagenänderung hier neu setzen. */
+export const TEMPLATE_CHANGED_AT = new Date("2026-10-23T12:00:00.000Z");
+
+/** lastmod = neuerer Wert aus Inhalt und Vorlage, damit Google geänderte Vorlagen erkennt. */
+function withTemplate(updatedAt: Date): Date {
+  return updatedAt > TEMPLATE_CHANGED_AT ? updatedAt : TEMPLATE_CHANGED_AT;
+}
+
 function latest(dates: Date[]): Date | undefined {
   if (!dates.length) return undefined;
   return new Date(Math.max(...dates.map((date) => date.getTime())));
@@ -64,7 +72,7 @@ export function sitemapEntries(input: {
     priority: path === "/" ? 1 : 0.6,
   }));
   for (const category of input.categories) {
-    const lastModified = latest(input.reviews.filter((row) => row.categorySlug === category.slug).map((row) => row.updatedAt));
+    const lastModified = latest(input.reviews.filter((row) => row.categorySlug === category.slug).map((row) => withTemplate(row.updatedAt)));
     entries.push({
       path: `/${category.slug}`,
       ...(lastModified ? { lastModified } : {}),
@@ -73,7 +81,7 @@ export function sitemapEntries(input: {
     });
   }
   for (const review of input.reviews) {
-    entries.push({ path: `/${review.categorySlug}/${review.slug}`, lastModified: review.updatedAt, priority: 0.9 });
+    entries.push({ path: `/${review.categorySlug}/${review.slug}`, lastModified: withTemplate(review.updatedAt), priority: 0.9 });
   }
   for (const post of input.posts) {
     entries.push({ path: `/blog/${post.slug}`, lastModified: post.updatedAt, priority: 0.7 });
