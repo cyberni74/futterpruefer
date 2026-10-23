@@ -100,7 +100,7 @@ export function reviewFaq(r: ReviewSeoInput, comparison?: { title: string } | nu
   const rating = ratingFor(r.totalScore);
   const d = dayDate(r.testedAt);
   const out: FaqItem[] = [];
-  const verdict = clean(r.verdict);
+  const verdict = withoutLeadingScore(clean(r.verdict), r.totalScore);
   out.push({
     question: `Wie schneidet ${r.name} im Test ab?`,
     answer: `${r.name} erreicht in unserem Test${d ? ` vom ${d}` : ""} ${r.totalScore} von 100 Punkten, Ampel ${AMPEL_WORD[rating]} (${RATING_LABEL[rating]}).${verdict ? ` ${sentence(verdict)}` : ""}`,
@@ -140,7 +140,32 @@ export function reviewFaq(r: ReviewSeoInput, comparison?: { title: string } | nu
   return out;
 }
 
-/** Umbenennen einer schlichten „Fazit“-H2 im Body, damit es nur ein Fazit mit Keyword gibt. */
+/** Überschrift für Body-H2, die mit „Fazit“ beginnen (das einzige Fazit-H2 ist das SEO-Fazit der Vorlage). */
+export const BODY_FAZIT_HEADING = "Unser Urteil im Detail";
+
+/**
+ * Benennt jede H2 im Body um, deren Text mit „Fazit“ beginnt („Fazit“,
+ * „Fazit im Detail“, „Fazit: … im Test (Oktober 2026)“ …), damit die Seite
+ * genau ein Fazit-H2 hat: das SEO-Fazit mit Keyword.
+ */
 export function renameBodyFazit(html: string): string {
-  return html.replace(/<h2([^>]*)>\s*Fazit\s*<\/h2>/gi, "<h2$1>Fazit im Detail</h2>");
+  return html.replace(/<h2([^>]*)>([\s\S]*?)<\/h2>/gi, (m, attrs: string, inner: string) => {
+    const text = inner.replace(/<[^>]*>/g, "").replace(/&nbsp;/g, " ").trim();
+    return /^fazit\b/i.test(text) ? `<h2${attrs}>${BODY_FAZIT_HEADING}</h2>` : m;
+  });
+}
+
+/**
+ * Entfernt eine Punktzahl am Anfang des Fazit-Texts („22 von 100 Punkten, Rot
+ * (nicht empfehlenswert). …“, „62/100, Gelb. …“), weil die FAQ-Antwort Punkte
+ * und Ampel schon nennt. Ein angehängter Zusatz („…, mit Warnsignal Sicherheit.“)
+ * bleibt als eigener Satz erhalten.
+ */
+export function withoutLeadingScore(verdict: string, score: number): string {
+  const re = new RegExp(`^${score}\\s*(?:von\\s*100\\s*Punkten|\\/\\s*100(?:\\s*Punkte(?:n)?)?)\\s*,\\s*(?:Ampel\\s+)?(?:Rot|Gelb|Grün)(?:\\s*\\([^)]*\\))?\\s*([.,;])\\s*`, "i");
+  const m = verdict.match(re);
+  if (!m) return verdict;
+  const rest = verdict.slice(m[0].length).trim();
+  if (!rest) return "";
+  return m[1] === "." ? rest : rest.charAt(0).toLocaleUpperCase("de") + rest.slice(1);
 }

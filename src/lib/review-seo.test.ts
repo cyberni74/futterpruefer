@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { directAnswer, keywordName, kurzGesagt, renameBodyFazit, reviewFaq, seoFazitHeading } from "./review-seo";
+import { directAnswer, keywordName, kurzGesagt, renameBodyFazit, reviewFaq, seoFazitHeading, withoutLeadingScore } from "./review-seo";
 import { comparisonForPost, comparisonForReview, isInComparison } from "./comparison-links";
 import { faqPageJsonLd } from "./faq-schema";
 
@@ -51,8 +51,22 @@ describe("review-seo", () => {
     expect(isInComparison(nf, "tierliebhaber-nassfutter-huhn-mit-gemuese")).toBe(false);
     expect(comparisonForReview({ title: "Gelenk-Pulver", categorySlug: "ergaenzungsfuttermittel-hund" })?.title).toBe("Gelenktabletten und Gelenkpulver für Hunde im Test 2026: 5 Gelenkmittel im Vergleich");
   });
-  it("benennt schlichte Body-Fazit-H2 um", () => {
-    expect(renameBodyFazit('<h2 id="a">Fazit</h2>')).toBe('<h2 id="a">Fazit im Detail</h2>');
+  it("benennt jede Body-H2 um, die mit Fazit beginnt (SEO-004)", () => {
+    expect(renameBodyFazit('<h2 id="a">Fazit</h2>')).toBe('<h2 id="a">Unser Urteil im Detail</h2>');
+    expect(renameBodyFazit("<h2>Fazit im Detail</h2>")).toBe("<h2>Unser Urteil im Detail</h2>");
+    expect(renameBodyFazit("<h2><strong>Fazit:</strong> Zesty Paws im Test (Oktober 2026)</h2>")).toBe("<h2>Unser Urteil im Detail</h2>");
+    expect(renameBodyFazit("<h2>Zusammensetzung</h2><h3>Fazit</h3><h2>Unser Fazit</h2>")).toBe("<h2>Zusammensetzung</h2><h3>Fazit</h3><h2>Unser Fazit</h2>");
+  });
+  it("nennt die Punktzahl in der FAQ-Antwort nur einmal (SEO-004)", () => {
+    expect(withoutLeadingScore("22 von 100 Punkten, Rot (nicht empfehlenswert). Pluspunkt: Prozente.", 22)).toBe("Pluspunkt: Prozente.");
+    expect(withoutLeadingScore("62/100, Gelb. Frischer Lachs vorn.", 62)).toBe("Frischer Lachs vorn.");
+    expect(withoutLeadingScore("59 von 100 Punkten, Rot (nicht empfehlenswert), mit Warnsignal Sicherheit. Pluspunkt: x.", 59)).toBe("Mit Warnsignal Sicherheit. Pluspunkt: x.");
+    expect(withoutLeadingScore("59 von 100 Punkten, Rot, einen Punkt unter Gelb. Bio-Huhn.", 59)).toBe("Einen Punkt unter Gelb. Bio-Huhn.");
+    expect(withoutLeadingScore("30 % Muschelfleisch, 22 von 100 Punkten.", 22)).toBe("30 % Muschelfleisch, 22 von 100 Punkten.");
+    expect(withoutLeadingScore("21 von 100 Punkten, Rot. x", 22)).toBe("21 von 100 Punkten, Rot. x");
+    const faq = reviewFaq({ ...base, totalScore: 22, verdict: "22 von 100 Punkten, Rot (nicht empfehlenswert). Pluspunkt: Prozente." });
+    expect(faq[0].answer.match(/22 von 100 Punkten/g)).toHaveLength(1);
+    expect(faq[0].answer).toContain("Pluspunkt: Prozente.");
   });
   it("ordnet Vergleichstests zu", () => {
     expect(comparisonForReview({ title: "Premium Lachsöl", categorySlug: "ergaenzungsfuttermittel-hund" })?.slug).toBe("lachsoel-test-hund-oktober-2026");
