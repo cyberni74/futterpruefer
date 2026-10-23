@@ -27,6 +27,11 @@ describe("Methodik Transparenz", () => {
     expect(html).toContain("Tests nach der bisherigen und nach der neuen Methodik sind nicht unmittelbar vergleichbar. Ranglisten und Vergleichstabellen berücksichtigen nur Tests derselben Methodik-Version.");
   });
 
+  it("verwendet keine Einstufung „zulässig“/„unzulässig“ (Rechtsprüfung 23.10.)", () => {
+    expect(html).not.toMatch(/zuläss/i);
+    expect(html).toContain("Aussagen, die wir für irreführend halten, führen zu Abzügen");
+  });
+
   it("nennt den optionalen Satz für Hersteller", () => {
     const manufacturer = renderToStaticMarkup(<ManufacturerPage />);
     expect(manufacturer).toContain("Sie können zusätzlich prüfbare Unterlagen einreichen (z. B. unterschriebene Herstellererklärungen oder Laboranalysen des Endprodukts). Diese bewerten wir im Kriterium „Transparenz / Herstellerunterlagen“ nach festen Stufen. Eine Einreichung kauft auch hier keine Note.");

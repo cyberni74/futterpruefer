@@ -42,9 +42,9 @@ const DETAIL: Record<CriterionKey, { fragen: string; punkte: string; abzug: stri
     abzug: ["Auffällig hohe oder niedrige Gehalte im Verhältnis zur Tierart", "Fehlende Angaben, etwa zur Feuchtigkeit, die eine Einordnung erschweren", "Ungünstige Verhältnisse wichtiger Mineralstoffe, soweit angegeben"],
   },
   scoreDeclaration: {
-    fragen: "Wie ehrlich und nachvollziehbar informiert der Hersteller? Hier fließt der Werbeaussagen-Check ein: Halten die Versprechen auf Packung und im Shop, was sie ankündigen, und sind sie rechtlich zulässig?",
-    punkte: "Volle Punktzahl gibt es für klare, vollständige Angaben und Werbeaussagen, die sachlich belegt und zulässig sind.",
-    abzug: ["Irreführende oder unzulässige Werbeaussagen, etwa krankheitsbezogene Versprechen bei Alleinfutter", "Anpreisungen ohne nachprüfbaren Kern (z. B. „das Beste für Ihren Liebling“)", "Unvollständige oder widersprüchliche Angaben auf Verpackung und Herstellerseite"],
+    fragen: "Wie ehrlich und nachvollziehbar informiert der Hersteller? Hier fließt der Werbeaussagen-Check ein: Halten die Versprechen auf Packung und im Shop, was sie ankündigen, und sind sie aus unserer Sicht rechtlich ohne Einwand?",
+    punkte: "Volle Punktzahl gibt es für klare, vollständige Angaben und Werbeaussagen, die sachlich belegt und ohne Einwand sind.",
+    abzug: ["Werbeaussagen, die wir für irreführend halten, etwa krankheitsbezogene Versprechen bei Alleinfutter", "Anpreisungen ohne nachprüfbaren Kern (z. B. „das Beste für Ihren Liebling“)", "Unvollständige oder widersprüchliche Angaben auf Verpackung und Herstellerseite"],
   },
   scoreNeeds: {
     fragen: "Passt das Futter zu dem, was das Tier braucht? Wir prüfen, ob es als Alleinfuttermittel den Bedarf deckt oder als Ergänzung korrekt gekennzeichnet ist, und für welche Lebensphase es gedacht ist.",
@@ -153,7 +153,7 @@ export default function MethodikPage() {
           <ul className="mt-2 list-disc space-y-1 pl-5 text-muted">
             <li><strong className="text-fg">Gleich für alle:</strong> Das Kriterium gilt für alle Hersteller in gleicher Weise, unabhängig davon, ob sie ein Produkt eingereicht haben, ob ein Werbe- oder Partnerverhältnis besteht oder ob sie mit uns in Kontakt stehen. Jeder Hersteller kann uns Unterlagen schicken.</li>
             <li><strong className="text-fg">Kein Ausgleich inhaltlicher Schwächen:</strong> Unterlagen belegen Angaben, sie verbessern das Produkt nicht. Die Bewertung von Rohstoffen, Zusatzstoffen, Nährstoffprofil und Tierschutzaspekten bleibt davon unberührt. Ein Warnsignal bei „Schadstoffe & Bedenkliches“ bleibt auch bei voller Punktzahl in diesem Kriterium bestehen.</li>
-            <li><strong className="text-fg">Keine Belohnung für Heilaussagen:</strong> Unterlagen, die gesundheitsbezogene oder krankheitsbezogene Werbeaussagen stützen sollen, bringen keine Punkte. Unzulässige Aussagen werden weiterhin bei „Deklaration & Transparenz“ abgezogen.</li>
+            <li><strong className="text-fg">Keine Belohnung für Heilaussagen:</strong> Unterlagen, die gesundheitsbezogene oder krankheitsbezogene Werbeaussagen stützen sollen, bringen keine Punkte. Aussagen, die wir für irreführend halten, werden weiterhin bei „Deklaration & Transparenz“ abgezogen.</li>
             <li><strong className="text-fg">Gesprächsbereitschaft allein zählt nicht:</strong> Interviews, Stellungnahmen oder Anfragen ohne prüfbare Unterlagen bringen keine Punkte.</li>
             <li><strong className="text-fg">Offenlegung im Test:</strong> Jede Testseite nennt die berücksichtigten Unterlagen, die vergebene Stufe und eventuelle Einschränkungen, z. B. „Analyse betrifft nur den Rohstoff“.</li>
             <li><strong className="text-fg">Widerlegte Angaben:</strong> Stellt sich eine Unterlage als falsch oder nicht mehr gültig heraus, entfallen die Punkte und der Test wird aktualisiert.</li>
@@ -180,7 +180,7 @@ export default function MethodikPage() {
           <li><strong>Erfassen:</strong> Wir übernehmen die vollständige Deklaration, die analytischen Bestandteile, Zusatzstoffe, Gebindegröße und Preise.</li>
           <li><strong>Rohstoffe prüfen:</strong> Qualität, Reihenfolge und Sinnhaftigkeit der Zutaten für die Tierart. Jeder Inhaltsstoff wird mit dem Futter-Lexikon abgeglichen.</li>
           <li><strong>Nährstoffprofil einordnen:</strong> Abgleich mit dem Bedarf von Hund oder Katze, umgerechnet auf die Trockensubstanz.</li>
-          <li><strong>Werbeaussagen prüfen:</strong> Jede Aussage auf Packung und im Shop wird auf Zulässigkeit und Richtigkeit geprüft (u. a. VO (EG) 767/2009 Art. 11 und 13, UWG). Unzulässige Aussagen führen zu Abzügen bei „Deklaration &amp; Transparenz“ und werden im Test als Faktencheck dokumentiert.</li>
+          <li><strong>Werbeaussagen prüfen:</strong> Jede Aussage auf Packung und im Shop wird rechtlich und sachlich geprüft (u. a. VO (EG) 767/2009 Art. 11 und 13, UWG). Aussagen, die wir für irreführend halten, führen zu Abzügen bei „Deklaration &amp; Transparenz“ und werden im Test als Faktencheck dokumentiert.</li>
           <li><strong>Preis einordnen:</strong> Kilopreis und Preis pro Tagesration im Verhältnis zur Qualität.</li>
           <li><strong>Veröffentlichen:</strong> Der Test erscheint mit Datum, Punkten je Kriterium, Fazit und Quellen.</li>
         </ol>
@@ -202,7 +202,7 @@ export default function MethodikPage() {
           <li><strong className="text-mid">Fragwürdig:</strong> nicht ohne Weiteres nachprüfbar oder unscharf, zum Beispiel ein undefinierter Begriff oder fehlende Mengenangaben.</li>
           <li><strong className="text-bad">Halten wir für irreführend:</strong> nach unserer Einschätzung nicht mit dem Kennzeichnungsrecht oder dem Wettbewerbsrecht vereinbar, zum Beispiel krankheitsbezogene Versprechen bei einem Futtermittel.</li>
         </ul>
-        <p>Als Richtwert für den Abzug im Kriterium „Deklaration & Transparenz“ gelten 3 Punkte je unzulässiger und 1 Punkt je fragwürdiger Aussage, insgesamt höchstens 13 Punkte. Der Abzug kann im Einzelfall abweichen. Jede Einstufung ist mit einer Begründung und, wo möglich, einer Rechtsgrundlage versehen. Sie ist unsere fachliche Meinung und keine Rechtsberatung. Unzulässige Aussagen erscheinen zusätzlich als Contra-Punkt und mit einem Hinweis oben im Test.</p>
+        <p>Als Richtwert für den Abzug im Kriterium „Deklaration & Transparenz“ gelten 3 Punkte je Aussage, die wir für irreführend halten, und 1 Punkt je fragwürdiger Aussage, insgesamt höchstens 13 Punkte. Der Abzug kann im Einzelfall abweichen. Jede Einstufung ist mit einer Begründung und, wo möglich, einer Rechtsgrundlage versehen. Sie ist unsere fachliche Meinung und keine Rechtsberatung. Aussagen, die wir für irreführend halten, erscheinen zusätzlich als Contra-Punkt und mit einem Hinweis oben im Test.</p>
 
         <h2 id="grenzen">Was ein Test nicht leisten kann</h2>
         <ul>

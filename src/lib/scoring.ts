@@ -26,7 +26,7 @@ export const PUBLISHED_CRITERIA = [
   { key: "scoreRaw", label: "Rohstoffqualität", description: "Sinnhaftigkeit und Qualität der Rohstoffe", max: 27, previousMax: 30 },
   { key: "scoreHarmful", label: "Schadstoffe & Bedenkliches", description: "Ungeeignete oder problematische Inhaltsstoffe", max: 18, previousMax: 20 },
   { key: "scoreNutrients", label: "Nährstoffprofil", description: "Protein, Fett, Vitamine, Mineralstoffe", max: 18, previousMax: 20 },
-  { key: "scoreDeclaration", label: "Deklaration & Transparenz", description: "Nachvollziehbare Angaben auf Etikett und Website, ehrliche statt unzulässiger Werbeaussagen", max: 13, previousMax: 15 },
+  { key: "scoreDeclaration", label: "Deklaration & Transparenz", description: "Nachvollziehbare Angaben auf Etikett und Website, ehrliche Werbeaussagen statt solcher, die wir für irreführend halten", max: 13, previousMax: 15 },
   { key: "scoreNeeds", label: "Bedarfsdeckung", description: "Passt das Produkt zum Bedarf des Tiers?", max: 9, previousMax: 10 },
   { key: "scoreValue", label: "Preis-Leistung", description: "Preis-Leistungs-Verhältnis", max: 5, previousMax: 5 },
   { key: "scoreTransparency", label: "Transparenz / Herstellerunterlagen", description: "Belegt der Hersteller seine Angaben mit prüfbaren Unterlagen?", max: 10, previousMax: null },

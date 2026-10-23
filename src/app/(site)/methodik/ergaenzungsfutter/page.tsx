@@ -345,7 +345,7 @@ export default function ErgaenzungsfutterMethodikPage() {
           <li><strong>Schwer:</strong> Der Stoff ist für die Tierart ungeeignet (z. B. Xylit, Knoblauch/Zwiebel in relevanter Menge, ätherische Öle bei Katzen), oder bei Fütterung nach Herstellerangabe kann der sichere Bereich oder ein gesetzlicher Höchstgehalt nach den Zusatzstoff-Zulassungen (VO (EG) Nr. 1831/2003), umgerechnet auf die Tagesration, überschritten werden (z. B. Vitamin D, Vitamin A, Selen, Kupfer, Zink). <strong>Folge: rotes Warnsignal, höchstens 39 Punkte.</strong></li>
           <li><strong>Mittel:</strong> Ein Hinweis auf bekannte Wechselwirkungen fehlt (sofern in der Fachliteratur belegt), ebenso nötige Warnhinweise (Trächtigkeit, Jungtiere, Nieren- oder Leberkranke) oder die Angabe der Fütterungsdauer, wo sie nötig ist. <strong>Folge: rotes Warnsignal, höchstens 59 Punkte.</strong></li>
         </ul>
-        <p><strong>Tierschutz:</strong> Jede Testseite hat einen Abschnitt „Tierschutz“. Darin steht, ob Tierversuche gemacht wurden (Herstellerauskunft) und woher die tierischen Rohstoffe stammen, z. B. Grünlippmuschel aus Aquakultur oder Haifischknorpel. Kritische Befunde nennen wir im Fazit und unter Contra.</p>
+        <p><strong>Tierschutz:</strong> Jede Testseite hat einen Abschnitt „Tierschutz“. Darin steht, ob der Hersteller öffentlich zugängliche Angaben zu Tierversuchen macht, und woher die tierischen Rohstoffe stammen, z. B. Grünlippmuschel aus Aquakultur oder Haifischknorpel. Kritische Befunde nennen wir im Fazit und unter Contra.</p>
 
         <h2 id="gesamtnote">Wie entstehen Gesamtnote und Ampel?</h2>
         <p>Punkte addieren, dann Deckel anwenden (der niedrigste gilt):</p>
