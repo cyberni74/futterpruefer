@@ -113,9 +113,9 @@ export const OPERATOR = {
   managingDirector: "Manuel Stark",
   /** Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV */
   responsibleContent: "Sebastian Kraft",
-  /** Vertreter für Europa nach Art. 27 DSGVO. europeAddress bleibt leer, bis eine EU-Anschrift vorliegt. */
+  /** Vertreter für Europa nach Art. 27 DSGVO. */
   europeRepresentative: "Sebastian Kraft",
-  europeAddress: "" as string,
+  europeAddress: "P.O. Box 20520, CY1678 Nicosia, Cyprus",
   email: "manuel.stark@karpasweb.com",
   phone: "+90 533 821 44 09",
 } as const;
