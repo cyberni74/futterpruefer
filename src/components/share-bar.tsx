@@ -29,7 +29,7 @@ export function ShareBar({ url, title }: { url: string; title: string }) {
     >
       <a href={`https://wa.me/?text=${t}%20${u}`} target="_blank" rel="noopener noreferrer" tabIndex={visible ? 0 : -1} className="inline-flex h-11 items-center gap-1.5 rounded-full bg-[#146c38] pl-3 pr-3.5 font-bold text-white hover:bg-[#0f5a2e] sm:gap-2 sm:pr-4" aria-label="Per WhatsApp teilen">
         <svg viewBox="0 0 24 24" className="size-5 shrink-0" aria-hidden><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm4.5 12.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.3-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2c0 1.3.9 2.5 1 2.7.1.2 1.9 2.9 4.6 4 1.7.7 2.4.8 3.2.7.5-.1 1.5-.6 1.8-1.2.2-.6.2-1.1.1-1.2l-.5-.3Z"/></svg>
-        <span className="max-w-[5.5rem] text-left text-xs leading-tight sm:max-w-none sm:whitespace-nowrap sm:text-sm">Per WhatsApp teilen</span>
+        <span className="max-w-[6.5rem] text-left text-xs leading-tight sm:max-w-none sm:whitespace-nowrap sm:text-sm">Per WhatsApp teilen</span>
       </a>
       <a href={`https://www.facebook.com/sharer/sharer.php?u=${u}`} target="_blank" rel="noopener noreferrer" tabIndex={visible ? 0 : -1} className={`${btn} text-sm font-bold`} aria-label="Bei Facebook teilen">f</a>
       <a href={`mailto:?subject=${t}&body=${u}`} tabIndex={visible ? 0 : -1} className={btn} aria-label="Per E-Mail teilen"><Mail className="size-5" aria-hidden /></a>
