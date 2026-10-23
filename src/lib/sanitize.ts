@@ -1,4 +1,5 @@
 import sanitizeHtml from "sanitize-html";
+import { labelTableCells } from "./table-labels";
 
 const REL_ORDER = ["noopener", "noreferrer", "nofollow", "sponsored", "ugc"] as const;
 
@@ -65,7 +66,7 @@ const OPTIONS: sanitizeHtml.IOptions = {
     a: ["href", "title", "target", "rel", "class"],
     img: ["src", "alt", "width", "height", "loading"],
     th: ["colspan", "rowspan", "scope"],
-    td: ["colspan", "rowspan"],
+    td: ["colspan", "rowspan", "data-label"],
     "*": ["class", "id"],
   },
   allowedSchemes: ["http", "https", "mailto", "tel"],
@@ -95,7 +96,8 @@ export function stripInvisible(text: string): string {
 
 export function sanitize(html: string | null | undefined): string {
   if (!html) return "";
-  return sanitizeHtml(stripInvisible(html), OPTIONS);
+  // data-label (mobile Tabellen-Beschriftung) aus dem thead ergänzen, wo es fehlt.
+  return labelTableCells(sanitizeHtml(stripInvisible(html), OPTIONS));
 }
 
 export function stripHtml(html: string | null | undefined): string {

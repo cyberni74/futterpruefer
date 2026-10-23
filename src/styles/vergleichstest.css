@@ -129,9 +129,9 @@
   .prose-fp table.vt-table tr.vt-row > .vt-c-score { grid-area: sc; }
   .prose-fp table.vt-table tr.vt-row > .vt-c-ampel { grid-area: am; margin-top: .25rem; }
   .prose-fp table.vt-table tr.vt-row > .vt-c-ekg { grid-area: ek; font-size: .85rem; }
-  .prose-fp table.vt-table tr.vt-row > .vt-c-ekg::before { content: "Kilopreis: "; color: var(--fg-muted); }
+  /* Label aus der Spaltenüberschrift (data-label, vom Sanitizer aus dem thead ergänzt) */
+  .prose-fp table.vt-table tr.vt-row > :is(.vt-c-ekg, .vt-c-rind)[data-label]::before { content: attr(data-label) ": "; color: var(--fg-muted); }
   .prose-fp table.vt-table tr.vt-row > .vt-c-rind { grid-area: ri; font-size: .85rem; }
-  .prose-fp table.vt-table tr.vt-row > .vt-c-rind::before { content: "Rind: "; color: var(--fg-muted); }
   .prose-fp table.vt-table tr.vt-top { background: color-mix(in srgb, var(--brand-soft) 45%, transparent) !important; border-radius: .75rem; }
 }
 
