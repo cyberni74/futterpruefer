@@ -19,6 +19,8 @@ import { AllLink } from "@/components/all-link";
 import { ReviewCard } from "@/components/review-card";
 import { NewsletterBox } from "@/components/newsletter-box";
 import { WishBox } from "@/components/wish-box";
+import { BodyGauges } from "@/components/body-gauges";
+import "@/styles/vergleichstest.css";
 
 export const revalidate = 3600;
 
@@ -132,9 +134,10 @@ export default async function PostPage({ params }: PageProps<"/blog/[slug]">) {
         <ShareButtons url={url} title={p.title} />
       </div>
       <div id="artikel" className="prose-fp mt-8">
-        {p.excerpt && <p className="text-xl font-medium">{p.excerpt}</p>}
+        {p.excerpt && <p className="text-lg font-medium md:text-xl">{p.excerpt}</p>}
         <div dangerouslySetInnerHTML={{ __html: body }} />
       </div>
+      <BodyGauges />
       {reviews.length > 0 && (
         <section aria-labelledby="passende-tests" className="mt-16">
           <h2 id="passende-tests" className="mb-6 text-2xl font-extrabold">Passende Tests</h2>
