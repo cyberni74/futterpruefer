@@ -22,6 +22,28 @@ import { WishBox } from "@/components/wish-box";
 
 export const revalidate = 3600;
 
+/**
+ * Vergleichstests liegen als BlogPost vor. Ihr ItemList-JSON-LD (Reviews der Plätze) steht im bodyHtml,
+ * das der Sanitizer samt <script> entfernt. Nur für diese Slugs wird es hier als geparstes JSON
+ * ausgegeben; Article-Knoten entfallen, weil die Seite ihr eigenes Article-JSON-LD rendert.
+ */
+const BODY_JSON_LD_SLUGS = new Set(["nassfutter-test-rind-hund-oktober-2026"]);
+
+function bodyJsonLd(slug: string, html: string | null | undefined): Record<string, unknown> | null {
+  if (!html || !BODY_JSON_LD_SLUGS.has(slug)) return null;
+  const nodes: Record<string, unknown>[] = [];
+  for (const m of html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)) {
+    try {
+      const data = JSON.parse(m[1]) as Record<string, unknown>;
+      const graph = Array.isArray(data["@graph"]) ? (data["@graph"] as Record<string, unknown>[]) : [data];
+      nodes.push(...graph.filter((n) => n && typeof n === "object" && n["@type"] !== "Article"));
+    } catch {
+      // ungültiges JSON: nichts ausgeben
+    }
+  }
+  return nodes.length ? { "@context": "https://schema.org", "@graph": nodes.map((n) => { const { "@context": _ctx, ...rest } = n; void _ctx; return rest; }) } : null;
+}
+
 export async function generateStaticParams() {
   try {
     const rows = await prisma.blogPost.findMany({ where: publishedWhere(), select: { slug: true }, take: 500 });
@@ -70,6 +92,7 @@ export default async function PostPage({ params }: PageProps<"/blog/[slug]">) {
   const fill = picked.length < 3 ? await prisma.blogPost.findMany({ where: { ...publishedWhere(), id: { notIn: [p.id, ...picked.map((x) => x.id)] } }, orderBy: { publishedAt: "desc" }, take: 3 - picked.length, select: blogCardSelect }) : [];
   const more = [...picked, ...fill];
   const url = absoluteUrl(`/blog/${p.slug}`);
+  const extraLd = bodyJsonLd(p.slug, p.bodyHtml);
   return (
     <article className="mx-auto max-w-3xl px-4">
       <JsonLd
@@ -87,6 +110,7 @@ export default async function PostPage({ params }: PageProps<"/blog/[slug]">) {
           publisher: { "@type": "Organization", name: SITE.name, url: SITE.url },
         }}
       />
+      {extraLd && <JsonLd data={extraLd} />}
       <Breadcrumbs items={[{ label: "Fachblog", href: "/blog" }, { label: p.title, href: `/blog/${p.slug}` }]} />
       <header className="mt-4">
         <h1 className="text-3xl font-extrabold leading-tight md:text-5xl">{p.title}</h1>
