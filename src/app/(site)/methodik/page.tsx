@@ -140,7 +140,7 @@ export default function MethodikPage() {
               <caption className="sr-only">Stufen für Transparenz und Herstellerunterlagen</caption>
               <thead className="bg-bg-soft"><tr><th scope="col" className="p-3 text-right">Punkte</th><th scope="col" className="p-3">Voraussetzung</th></tr></thead>
               <tbody>
-                <tr className="border-t border-border"><th scope="row" className="p-3 text-right tabular-nums">0</th><td className="p-3">Keine Unterlagen vorgelegt oder keine Antwort auf unsere Anfrage. Hersteller fragen wir im Einzelfall an; die Bewertung stützt sich auf Amazon-Produktseite, Deklaration und Herstellerangaben.</td></tr>
+                <tr className="border-t border-border"><th scope="row" className="p-3 text-right tabular-nums">0</th><td className="p-3">Keine Unterlagen vorgelegt. Unsere Bewertung stützt sich auf die Amazon-Produktseite, die Deklaration und öffentlich zugängliche Herstellerangaben.</td></tr>
                 <tr className="border-t border-border"><th scope="row" className="p-3 text-right tabular-nums">2</th><td className="p-3">Unterlagen ohne Unterschrift oder ohne erkennbares Labor. Dazu gehören auch Unterlagen ohne nachprüfbare Herkunft, zum Beispiel formlose Produktbeschreibungen oder Auszüge aus Korrespondenz.</td></tr>
                 <tr className="border-t border-border"><th scope="row" className="p-3 text-right tabular-nums">4</th><td className="p-3">Unterschriebene Herstellererklärungen mit Datum und verantwortlicher Person (z. B. HACCP-Nachweis, Konformitätserklärung, Rohstoffspezifikation, Registrierung als Futtermittelunternehmer). Endproduktanalysen mit nicht verifizierbarem Labor zählen ebenfalls zur Stufe 4.</td></tr>
                 <tr className="border-t border-border"><th scope="row" className="p-3 text-right tabular-nums">7</th><td className="p-3">Analysebericht eines akkreditierten Labors (Akkreditierung überprüfbar), der nur Rohstoffe oder Vorprodukte betrifft.</td></tr>
@@ -148,7 +148,7 @@ export default function MethodikPage() {
               </tbody>
             </table>
           </div>
-          <p className="mt-3">Es zählt die höchste erreichte Stufe, die Punkte werden nicht addiert. Wir bewerten nur Unterlagen, die uns schriftlich vorliegen. Mündliche oder telefonische Angaben zählen nicht.</p>
+          <p className="mt-3">Es zählt die höchste erreichte Stufe, die Punkte werden nicht addiert. Wir bewerten nur Unterlagen, die uns schriftlich vorliegen und die der Hersteller von sich aus eingereicht hat oder die öffentlich zugänglich sind. Unterlagen, die wir beim Hersteller anfordern, berücksichtigen wir nicht. Mündliche oder telefonische Angaben zählen nicht.</p>
           <h4 className="mt-4 font-extrabold">Grundsätze</h4>
           <ul className="mt-2 list-disc space-y-1 pl-5 text-muted">
             <li><strong className="text-fg">Gleich für alle:</strong> Das Kriterium gilt für alle Hersteller in gleicher Weise, unabhängig davon, ob sie ein Produkt eingereicht haben, ob ein Werbe- oder Partnerverhältnis besteht oder ob sie mit uns in Kontakt stehen. Jeder Hersteller kann uns Unterlagen schicken.</li>
