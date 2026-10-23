@@ -29,7 +29,7 @@ export const FEATURED_COMPARISON: FeaturedComparison | null = {
   winner: "Josera Meat Lovers Pure Beef",
   score: 81,
   summary:
-    "Sieben Rind-Nassfutter für Hunde im Vergleich. Testsieger mit 81 von 100 Punkten (Grün): 68 % Rind, alle Teile benannt und die vollständigsten Analysewerte im Feld. Platz 2 und 3: animonda GranCarno Rind + Lamm (79) und MjAMjAM Rind pur (77).",
+    "Sieben Rind-Nassfutter für Hunde im Vergleich. Josera siegt mit 81 von 100 Punkten (Grün), vor GranCarno Rind + Lamm (79) und MjAMjAM Rind pur (77).",
   imageAltFallback: "Pokale für Platz 1 bis 3 im großen Nassfutter-Test Oktober 2026",
 };
 
