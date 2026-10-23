@@ -125,9 +125,9 @@ describe("Urheberschaft", () => {
       url,
       jobTitle: DEFAULT_AUTHOR.jobTitle,
     });
-    expect(author.name).toBe("Dr. Kraft");
+    expect(author.name).toBe("Sebastian Kraft");
     expect(author.name).not.toMatch(/von |Futterprüfer/i);
-    expect(author.url).toMatch(/^https:\/\/.+\/team#dr-kraft$/);
+    expect(author.url).toMatch(/^https:\/\/.+\/team#sebastian-kraft$/);
     expect(author).not.toHaveProperty("sameAs");
     expect(author.jobTitle).not.toBe(author.name);
     const unknown = contentAuthor("gespeicherter Name");

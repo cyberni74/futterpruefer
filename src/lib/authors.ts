@@ -14,10 +14,10 @@ export type PublicAuthor = {
 
 export const AUTHORS = [
   {
-    slug: "dr-kraft",
-    name: "Dr. Kraft",
+    slug: "sebastian-kraft",
+    name: "Sebastian Kraft",
     jobTitle: "Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV",
-    hash: "dr-kraft",
+    hash: "sebastian-kraft",
   },
 ] as const satisfies readonly PublicAuthor[];
 

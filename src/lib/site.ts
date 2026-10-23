@@ -112,9 +112,9 @@ export const OPERATOR = {
   /** Geschäftsführer und Vertretungsberechtigter */
   managingDirector: "Manuel Stark",
   /** Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV */
-  responsibleContent: "Dr. Kraft",
+  responsibleContent: "Sebastian Kraft",
   /** Vertreter für Europa nach Art. 27 DSGVO. europeAddress bleibt leer, bis eine EU-Anschrift vorliegt. */
-  europeRepresentative: "Dr. Kraft",
+  europeRepresentative: "Sebastian Kraft",
   europeAddress: "" as string,
   email: "manuel.stark@karpasweb.com",
   phone: "+90 533 821 44 09",
