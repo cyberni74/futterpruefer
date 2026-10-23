@@ -19,7 +19,7 @@ export function FeaturedComparisonHero({ comparison: c }: Props) {
       text={c.summary}
       image={{ src: c.post.imageUrl, alt: c.post.imageAlt || c.imageAltFallback, blur: c.post.imageBlur }}
       seal={<HeroSeal top="Test" main="Sieger" sub={sub} label={`Testsieger ${c.testName}`} className={SEAL_POSITION} />}
-      primary={{ href: comparisonPath(c), label: "Zum Testbericht" }}
+      primary={{ href: comparisonPath(c), label: "Zum Test" }}
       secondary={{ href: "/tests", label: "Alle Tests" }}
     />
   );
