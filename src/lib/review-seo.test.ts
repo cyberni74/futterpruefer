@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { directAnswer, kurzGesagt, renameBodyFazit, reviewFaq, seoFazitHeading } from "./review-seo";
+import { directAnswer, keywordName, kurzGesagt, renameBodyFazit, reviewFaq, seoFazitHeading } from "./review-seo";
 import { comparisonForPost, comparisonForReview } from "./comparison-links";
 import { faqPageJsonLd } from "./faq-schema";
 
@@ -8,6 +8,11 @@ const base = { name: "Testfutter Rind", totalScore: 45, testedAt: new Date("2026
 describe("review-seo", () => {
   it("Fazit-H2 enthält Keyword und Monat", () => {
     expect(seoFazitHeading("Testfutter Rind", base.testedAt)).toBe("Fazit: Testfutter Rind im Test Oktober 2026");
+  });
+  it("Fazit-H2 nutzt das kurze Keyword", () => {
+    expect(keywordName("Rinti Kennerfleisch Rind Test", "Rinti", "Rinti Kennerfleisch Rind, Nassfutter für Hunde, 400 g Dose")).toBe("Rinti Kennerfleisch Rind");
+    expect(keywordName("Malzpaste Test", "GimCat", "GimCat Malt-Soft Paste Extra, 100 g")).toBe("GimCat Malt-Soft Paste Extra");
+    expect(keywordName("", null, "Produkt X")).toBe("Produkt X");
   });
   it("erster Satz beantwortet die Frage mit Punkten und Ampel", () => {
     expect(directAnswer(base)).toContain("45 von 100 Punkten, Ampel Rot");

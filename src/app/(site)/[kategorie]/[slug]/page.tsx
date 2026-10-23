@@ -37,7 +37,7 @@ import { NewsletterBox } from "@/components/newsletter-box";
 import { WishBox } from "@/components/wish-box";
 import { Disclosure } from "@/components/disclosure";
 import { JsonLd } from "@/components/json-ld";
-import { directAnswer, kurzGesagt, renameBodyFazit, reviewFaq, seoFazitHeading, type ReviewSeoInput } from "@/lib/review-seo";
+import { directAnswer, keywordName, kurzGesagt, renameBodyFazit, reviewFaq, seoFazitHeading, type ReviewSeoInput } from "@/lib/review-seo";
 import { comparisonForReview } from "@/lib/comparison-links";
 import { faqPageJsonLd } from "@/lib/faq-schema";
 import "@/styles/vergleichstest.css";
@@ -161,7 +161,7 @@ export default async function ReviewPage({ params }: PageProps<"/[kategorie]/[sl
   const name = productLabel(r.brand, r.productName);
   const gallery = (r.gallery ?? []).filter(Boolean);
   const seoInput: ReviewSeoInput = {
-    name, totalScore: r.totalScore, testedAt, verdict: r.verdict, pros: r.pros, cons: consWithClaims(r.cons, claims), claims,
+    name: keywordName(r.keyword, r.brand, name), totalScore: r.totalScore, testedAt, verdict: r.verdict, pros: r.pros, cons: consWithClaims(r.cons, claims), claims,
     price: r.price, packageSize: r.packageSize, pricePerKg: r.pricePerKg, pricePerDay: r.pricePerDay, priceDate: r.priceDate,
     composition: r.composition, ergaenzung: Boolean(efResult),
   };
@@ -298,7 +298,7 @@ export default async function ReviewPage({ params }: PageProps<"/[kategorie]/[sl
           </div>
 
           <section id="fazit-test" aria-labelledby="fazit-h" className="mt-10 scroll-mt-28 rounded-3xl border border-border bg-bg-soft p-5 md:p-8">
-            <h2 id="fazit-h" className="text-2xl font-extrabold">{seoFazitHeading(name, testedAt)}</h2>
+            <h2 id="fazit-h" className="text-2xl font-extrabold">{seoFazitHeading(seoInput.name, testedAt)}</h2>
             <div className="prose-fp mt-3">
               <p><strong>{directAnswer(seoInput)}</strong></p>
               <div className="fp-box fp-kurz space-y-3 rounded-3xl border-2 border-brand bg-brand-soft p-5">
@@ -319,7 +319,7 @@ export default async function ReviewPage({ params }: PageProps<"/[kategorie]/[sl
           <section id="faq-test" aria-labelledby="faq-h" className="mt-10 scroll-mt-28">
             <div className="prose-fp">
               <div className="fp-box vt-faq">
-                <h2 id="faq-h">Häufige Fragen zu {name}</h2>
+                <h2 id="faq-h">Häufige Fragen zu {seoInput.name}</h2>
                 {faq.map((f) => (
                   <details key={f.question} className="vt-acc vt-faq-item"><summary>{f.question}</summary><p>{f.answer}</p></details>
                 ))}

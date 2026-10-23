@@ -26,6 +26,17 @@ const num = (v: unknown) => (v == null || v === "" ? null : Number.isFinite(Numb
 const clean = (s: string | null | undefined) => (s ?? "").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
 const sentence = (s: string) => (/[.!?…“"]$/.test(s) ? s : `${s}.`);
 
+/**
+ * Kurzer Produktname für die Fazit-H2: das gepflegte Haupt-Keyword ohne „Test“,
+ * sonst der Produktname ohne Packungsangaben nach dem ersten Komma.
+ */
+export function keywordName(keyword: string | null | undefined, brand: string | null | undefined, fallback: string): string {
+  const kw = (keyword ?? "").replace(/\s+(im\s+)?Test(\s+\d{4})?$/i, "").trim();
+  const b = (brand ?? "").trim().split(/\s+/)[0]?.toLowerCase() ?? "";
+  if (kw && (!b || kw.toLowerCase().includes(b))) return kw;
+  return fallback.split(",")[0].trim() || fallback;
+}
+
 /** H2 mit Haupt-Keyword „<Produkt> im Test“ plus Monat und Jahr. */
 export function seoFazitHeading(name: string, testedAt: Date | null | undefined): string {
   const my = monthYear(testedAt);
