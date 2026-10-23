@@ -133,7 +133,7 @@ export default function MethodikPage() {
             <h3 className="text-lg font-extrabold"><span className="mr-2 text-sm tabular-nums text-muted">7.</span>Transparenz / Herstellerunterlagen</h3>
             <span className="shrink-0 rounded-full bg-brand-soft px-3 py-1 text-sm font-bold text-brand-strong tabular-nums">10 Punkte</span>
           </div>
-          <p className="mt-3">Mit diesem Kriterium bewerten wir, ob ein Hersteller seine Angaben mit Unterlagen belegt, die wir prüfen können. Es ergänzt das Kriterium „Deklaration &amp; Transparenz“. Dort bewerten wir, was auf Etikett und Website steht. Hier bewerten wir die Belege, die der Hersteller zusätzlich vorlegt.</p>
+          <p className="mt-3">Mit diesem Kriterium bewerten wir, ob ein Hersteller seine Angaben mit Unterlagen belegt, die wir prüfen können. Es ergänzt das Kriterium „Deklaration & Transparenz“. Dort bewerten wir, was auf Etikett und Website steht. Hier bewerten wir die Belege, die der Hersteller zusätzlich vorlegt.</p>
           <h4 className="mt-4 font-extrabold">Stufen nach Beweiswert</h4>
           <div className="mt-3 overflow-x-auto rounded-2xl border border-border">
             <table className="w-full text-left text-sm">
@@ -152,8 +152,8 @@ export default function MethodikPage() {
           <h4 className="mt-4 font-extrabold">Grundsätze</h4>
           <ul className="mt-2 list-disc space-y-1 pl-5 text-muted">
             <li><strong className="text-fg">Gleich für alle:</strong> Das Kriterium gilt für alle Hersteller in gleicher Weise, unabhängig davon, ob sie ein Produkt eingereicht haben, ob ein Werbe- oder Partnerverhältnis besteht oder ob sie mit uns in Kontakt stehen. Jeder Hersteller kann uns Unterlagen schicken.</li>
-            <li><strong className="text-fg">Kein Ausgleich inhaltlicher Schwächen:</strong> Unterlagen belegen Angaben, sie verbessern das Produkt nicht. Die Bewertung von Rohstoffen, Zusatzstoffen, Nährstoffprofil und Tierschutzaspekten bleibt davon unberührt. Ein Warnsignal bei „Schadstoffe &amp; Bedenkliches“ bleibt auch bei voller Punktzahl in diesem Kriterium bestehen.</li>
-            <li><strong className="text-fg">Keine Belohnung für Heilaussagen:</strong> Unterlagen, die gesundheitsbezogene oder krankheitsbezogene Werbeaussagen stützen sollen, bringen keine Punkte. Unzulässige Aussagen werden weiterhin bei „Deklaration &amp; Transparenz“ abgezogen.</li>
+            <li><strong className="text-fg">Kein Ausgleich inhaltlicher Schwächen:</strong> Unterlagen belegen Angaben, sie verbessern das Produkt nicht. Die Bewertung von Rohstoffen, Zusatzstoffen, Nährstoffprofil und Tierschutzaspekten bleibt davon unberührt. Ein Warnsignal bei „Schadstoffe & Bedenkliches“ bleibt auch bei voller Punktzahl in diesem Kriterium bestehen.</li>
+            <li><strong className="text-fg">Keine Belohnung für Heilaussagen:</strong> Unterlagen, die gesundheitsbezogene oder krankheitsbezogene Werbeaussagen stützen sollen, bringen keine Punkte. Unzulässige Aussagen werden weiterhin bei „Deklaration & Transparenz“ abgezogen.</li>
             <li><strong className="text-fg">Gesprächsbereitschaft allein zählt nicht:</strong> Interviews, Stellungnahmen oder Anfragen ohne prüfbare Unterlagen bringen keine Punkte.</li>
             <li><strong className="text-fg">Offenlegung im Test:</strong> Jede Testseite nennt die berücksichtigten Unterlagen, die vergebene Stufe und eventuelle Einschränkungen, z. B. „Analyse betrifft nur den Rohstoff“.</li>
             <li><strong className="text-fg">Widerlegte Angaben:</strong> Stellt sich eine Unterlage als falsch oder nicht mehr gültig heraus, entfallen die Punkte und der Test wird aktualisiert.</li>
@@ -172,7 +172,7 @@ export default function MethodikPage() {
           <li><strong className="text-mid">Gelb ({RATING_THRESHOLDS.mittel}–{RATING_THRESHOLDS.gut - 1} Punkte):</strong> mit Abstrichen</li>
           <li><strong className="text-bad">Rot (unter {RATING_THRESHOLDS.mittel} Punkten):</strong> nicht empfehlenswert</li>
         </ul>
-        <p>Erreicht ein Produkt im Kriterium „Schadstoffe &amp; Bedenkliches“ weniger als {HARMFUL_FAIL_RATIO * 100} % der Punkte, erscheint unabhängig von der Gesamtnote ein rotes Warnsignal mit Begründung. Nach der Gewichtung vom {METHODOLOGY_STAND} sind das unter 9 von 18 Punkten. Ein Futter kann also insgesamt gut abschneiden und trotzdem eine deutliche Warnung tragen, wenn einzelne Zusätze problematisch sind.</p>
+        <p>Erreicht ein Produkt im Kriterium „Schadstoffe & Bedenkliches“ weniger als {HARMFUL_FAIL_RATIO * 100} % der Punkte, erscheint unabhängig von der Gesamtnote ein rotes Warnsignal mit Begründung. Nach der Gewichtung vom {METHODOLOGY_STAND} sind das unter 9 von 18 Punkten. Ein Futter kann also insgesamt gut abschneiden und trotzdem eine deutliche Warnung tragen, wenn einzelne Zusätze problematisch sind.</p>
         <p>Zu jeder Note gehören ein kurzes Fazit sowie eine Liste von Pro- und Contra-Punkten. Die Punktzahl ist ein Anhaltspunkt für den Vergleich, kein Urteil über das einzelne Tier.</p>
 
         <h2 id="ablauf">Ablauf einer Bewertung</h2>
@@ -180,7 +180,7 @@ export default function MethodikPage() {
           <li><strong>Erfassen:</strong> Wir übernehmen die vollständige Deklaration, die analytischen Bestandteile, Zusatzstoffe, Gebindegröße und Preise.</li>
           <li><strong>Rohstoffe prüfen:</strong> Qualität, Reihenfolge und Sinnhaftigkeit der Zutaten für die Tierart. Jeder Inhaltsstoff wird mit dem Futter-Lexikon abgeglichen.</li>
           <li><strong>Nährstoffprofil einordnen:</strong> Abgleich mit dem Bedarf von Hund oder Katze, umgerechnet auf die Trockensubstanz.</li>
-          <li><strong>Werbeaussagen prüfen:</strong> Jede Aussage auf Packung und im Shop wird auf Zulässigkeit und Richtigkeit geprüft (u. a. VO (EG) 767/2009 Art. 11 und 13, UWG). Unzulässige Aussagen führen zu Abzügen bei „Deklaration &amp; Transparenz“ und werden im Test als Faktencheck dokumentiert.</li>
+          <li><strong>Werbeaussagen prüfen:</strong> Jede Aussage auf Packung und im Shop wird auf Zulässigkeit und Richtigkeit geprüft (u. a. VO (EG) 767/2009 Art. 11 und 13, UWG). Unzulässige Aussagen führen zu Abzügen bei „Deklaration & Transparenz“ und werden im Test als Faktencheck dokumentiert.</li>
           <li><strong>Preis einordnen:</strong> Kilopreis und Preis pro Tagesration im Verhältnis zur Qualität.</li>
           <li><strong>Veröffentlichen:</strong> Der Test erscheint mit Datum, Punkten je Kriterium, Fazit und Quellen.</li>
         </ol>
@@ -188,7 +188,7 @@ export default function MethodikPage() {
         <h2 id="quellen">Woher die Informationen stammen</h2>
         <p>Wir bewerten auf Grundlage dessen, was Hersteller und Behörden öffentlich zugänglich machen. Eigene Laboranalysen führen wir in der Regel nicht durch. Wo ein Test auf Laborwerten beruht, steht das ausdrücklich im Testbericht. Genutzt werden:</p>
         <ul>{SOURCES.map((s) => <li key={s}>{s}</li>)}</ul>
-        <p>Wo Angaben fehlen oder sich widersprechen, schreiben wir das im Test dazu und bewerten vorsichtig. Wir erfinden keine Werte, und fehlende Angaben können sich im Kriterium „Deklaration &amp; Transparenz“ auswirken.</p>
+        <p>Wo Angaben fehlen oder sich widersprechen, schreiben wir das im Test dazu und bewerten vorsichtig. Wir erfinden keine Werte, und fehlende Angaben können sich im Kriterium „Deklaration & Transparenz“ auswirken.</p>
 
         <h2 id="trockensubstanz">Vergleichbar durch Trockensubstanz</h2>
         <p>Nassfutter besteht oft zu rund 80 % aus Wasser, Trockenfutter zu etwa 10 %. Ein Rohprotein-Wert von 10 % klingt in der Dose deshalb niedrig, ist aber nicht schlechter als 28 % im Trockenfutter. Damit beide fair vergleichbar sind, rechnen wir auf die Trockensubstanz um:</p>
@@ -198,11 +198,11 @@ export default function MethodikPage() {
         <h2 id="werbeaussagen">Der Werbeaussagen-Check</h2>
         <p>Aussagen wie „stärkt das Immunsystem“, „natürlich“ oder „für gesunde Gelenke“ klingen nach Information, sind aber oft Marketing. Im Werbeaussagen-Check stellen wir jede Aussage des Herstellers der Bewertung gegenüber. Wir unterscheiden drei Stufen:</p>
         <ul>
-          <li><strong className="text-good">Zulässig:</strong> sachlich richtig oder eine erkennbare Anpreisung ohne irreführenden Gehalt.</li>
+          <li><strong className="text-good">Ohne Einwand:</strong> sachlich richtig oder eine erkennbare Anpreisung ohne irreführenden Gehalt.</li>
           <li><strong className="text-mid">Fragwürdig:</strong> nicht ohne Weiteres nachprüfbar oder unscharf, zum Beispiel ein undefinierter Begriff oder fehlende Mengenangaben.</li>
           <li><strong className="text-bad">Halten wir für irreführend:</strong> nach unserer Einschätzung nicht mit dem Kennzeichnungsrecht oder dem Wettbewerbsrecht vereinbar, zum Beispiel krankheitsbezogene Versprechen bei einem Futtermittel.</li>
         </ul>
-        <p>Als Richtwert für den Abzug im Kriterium „Deklaration &amp; Transparenz“ gelten 3 Punkte je unzulässiger und 1 Punkt je fragwürdiger Aussage, insgesamt höchstens 13 Punkte. Der Abzug kann im Einzelfall abweichen. Jede Einstufung ist mit einer Begründung und, wo möglich, einer Rechtsgrundlage versehen. Sie ist unsere fachliche Meinung und keine Rechtsberatung. Unzulässige Aussagen erscheinen zusätzlich als Contra-Punkt und mit einem Hinweis oben im Test.</p>
+        <p>Als Richtwert für den Abzug im Kriterium „Deklaration & Transparenz“ gelten 3 Punkte je unzulässiger und 1 Punkt je fragwürdiger Aussage, insgesamt höchstens 13 Punkte. Der Abzug kann im Einzelfall abweichen. Jede Einstufung ist mit einer Begründung und, wo möglich, einer Rechtsgrundlage versehen. Sie ist unsere fachliche Meinung und keine Rechtsberatung. Unzulässige Aussagen erscheinen zusätzlich als Contra-Punkt und mit einem Hinweis oben im Test.</p>
 
         <h2 id="grenzen">Was ein Test nicht leisten kann</h2>
         <ul>
