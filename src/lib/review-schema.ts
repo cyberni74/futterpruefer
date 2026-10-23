@@ -128,3 +128,19 @@ export function productSnippetIssues(data: ReturnType<typeof productReviewJsonLd
   if ("offers" in data) issues.push("Offer gehört nicht in eine Testseite");
   return issues;
 }
+
+/**
+ * Bereits gespeicherte JSON-LD-Knoten (Vergleichstests im bodyHtml) auf die Seitenregeln bringen:
+ * kein Offer (wir verkaufen nichts) und ein Autor wie auf allen anderen Tests (Person), nie Organization.
+ */
+export function normalizeStoredJsonLd(value: unknown): unknown {
+  if (Array.isArray(value)) return value.map(normalizeStoredJsonLd);
+  if (!value || typeof value !== "object") return value;
+  const out: Record<string, unknown> = {};
+  for (const [key, item] of Object.entries(value)) {
+    if (key === "offers" || key === "offer") continue;
+    const isOrganizationAuthor = key === "author" && typeof item === "object" && item !== null && (item as { "@type"?: unknown })["@type"] === "Organization";
+    out[key] = isOrganizationAuthor ? contentAuthor(null) : normalizeStoredJsonLd(item);
+  }
+  return out;
+}

@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { DEFAULT_AUTHOR } from "./authors";
 import { absoluteUrl } from "./site";
-import { productReviewJsonLd, productSnippetIssues, reviewHeadline, skuFromAsin } from "./review-schema";
+import { normalizeStoredJsonLd, productReviewJsonLd, productSnippetIssues, reviewHeadline, skuFromAsin } from "./review-schema";
 
 const updatedAt = new Date("2026-10-09T08:15:00.000Z");
 
@@ -93,5 +93,17 @@ describe("productReviewJsonLd", () => {
     expect(data.review.negativeNotes).toBeUndefined();
     expect(skuFromAsin("keine-asin")).toBeUndefined();
     expect(skuFromAsin("  b07kcs7yx1 ")).toBe("B07KCS7YX1");
+  });
+});
+
+describe("normalizeStoredJsonLd", () => {
+  it("entfernt Offer-Knoten und setzt Organization-Autoren auf die Standardperson", () => {
+    const data = normalizeStoredJsonLd({
+      "@type": "Product",
+      offers: { "@type": "Offer", price: "16.71" },
+      review: { "@type": "Review", author: { "@type": "Organization", name: "Futterprüfer" } },
+    }) as { offers?: unknown; review: { author: Record<string, unknown> } };
+    expect(data).not.toHaveProperty("offers");
+    expect(data.review.author).toMatchObject({ "@type": "Person", name: DEFAULT_AUTHOR.name });
   });
 });

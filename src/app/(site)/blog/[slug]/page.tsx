@@ -22,6 +22,7 @@ import { WishBox } from "@/components/wish-box";
 import { BodyGauges } from "@/components/body-gauges";
 import "@/styles/vergleichstest.css";
 import { comparisonForPost } from "@/lib/comparison-links";
+import { normalizeStoredJsonLd } from "@/lib/review-schema";
 
 export const revalidate = 3600;
 
@@ -39,7 +40,7 @@ function bodyJsonLd(slug: string, html: string | null | undefined): Record<strin
     try {
       const data = JSON.parse(m[1]) as Record<string, unknown>;
       const graph = Array.isArray(data["@graph"]) ? (data["@graph"] as Record<string, unknown>[]) : [data];
-      nodes.push(...graph.filter((n) => n && typeof n === "object" && n["@type"] !== "Article"));
+      nodes.push(...(graph.filter((n) => n && typeof n === "object" && n["@type"] !== "Article").map(normalizeStoredJsonLd) as Record<string, unknown>[]));
     } catch {
       // ungültiges JSON: nichts ausgeben
     }

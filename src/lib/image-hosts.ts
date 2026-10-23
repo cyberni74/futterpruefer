@@ -35,3 +35,17 @@ export function isAllowedImageUrl(value: string): boolean {
   if (host === AMAZON_IMAGE_HOST && url.pathname.startsWith("/images/I/")) return true;
   return host === SUPABASE_IMAGE_HOST && url.pathname.startsWith(`/storage/v1/object/public/${BILDER_BUCKET}/`);
 }
+
+/**
+ * Amazon-Galeriebild in einer festen Breite: ersetzt den Größenteil (z. B. `._AC_SL1500_.`) durch `._AC_SL<px>_.`.
+ * Ohne Größenteil wird er vor der Dateiendung ergänzt. Andere Hosts bleiben unverändert.
+ */
+export function amazonSizedUrl(value: string, px: number): string {
+  if (!isAmazonHotlink(value)) return value;
+  const url = new URL(value.trim());
+  const sized = `._AC_SL${px}_`;
+  url.pathname = /\._[^/]*?SL\d+_(?=\.)/.test(url.pathname)
+    ? url.pathname.replace(/\._[^/]*?SL\d+_(?=\.)/, sized)
+    : url.pathname.replace(/\.(jpe?g|png|webp)$/i, `${sized}.$1`);
+  return url.toString();
+}

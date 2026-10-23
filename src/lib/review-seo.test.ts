@@ -52,7 +52,7 @@ describe("review-seo", () => {
     expect(comparisonForReview({ title: "Gelenk-Pulver", categorySlug: "ergaenzungsfuttermittel-hund" })?.title).toBe("Gelenktabletten und Gelenkpulver für Hunde im Test 2026: 5 Gelenkmittel im Vergleich");
   });
   it("benennt schlichte Body-Fazit-H2 um", () => {
-    expect(renameBodyFazit('<h2 id="a">Fazit</h2>')).toBe('<h2 id="a">Fazit im Detail</h2>');
+    expect(renameBodyFazit('<h2 id="a">Fazit</h2>')).toBe('<h2 id="a">Detailbewertung</h2>');
   });
   it("ordnet Vergleichstests zu", () => {
     expect(comparisonForReview({ title: "Premium Lachsöl", categorySlug: "ergaenzungsfuttermittel-hund" })?.slug).toBe("lachsoel-test-hund-oktober-2026");

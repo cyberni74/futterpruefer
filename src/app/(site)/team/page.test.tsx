@@ -21,7 +21,7 @@ describe("Team-Seite", () => {
     expect(html).not.toContain("sameAs");
     expect(metadata.title).toBe("Team");
     expect(metadata.description).toBe(
-      "Futterprüfer.de ist ein transparentes Testportal für Hunde- und Katzenfutter. Tests stützen sich auf Kennzeichnung, Herstellerangaben und öffentlich zugängliche Quellen.",
+      "Futterprüfer.de ist ein transparentes Testportal für Hunde- und Katzenfutter. Wir stützen uns auf Kennzeichnung, Herstellerangaben und öffentliche Quellen.",
     );
   });
 });

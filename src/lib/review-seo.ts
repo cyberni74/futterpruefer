@@ -100,7 +100,8 @@ export function reviewFaq(r: ReviewSeoInput, comparison?: { title: string } | nu
   const rating = ratingFor(r.totalScore);
   const d = dayDate(r.testedAt);
   const out: FaqItem[] = [];
-  const verdict = clean(r.verdict);
+  // Punkte und Ampel stehen schon im ersten Satz; Urteilssätze mit denselben Angaben fallen weg.
+  const verdict = clean(r.verdict).split(/(?<=[.!?])\s+/).filter((sentence) => !/\d+\s*(von|\/)\s*100|100 Punkten|Ampel (Grün|Gelb|Rot)/.test(sentence)).join(" ");
   out.push({
     question: `Wie schneidet ${r.name} im Test ab?`,
     answer: `${r.name} erreicht in unserem Test${d ? ` vom ${d}` : ""} ${r.totalScore} von 100 Punkten, Ampel ${AMPEL_WORD[rating]} (${RATING_LABEL[rating]}).${verdict ? ` ${sentence(verdict)}` : ""}`,
@@ -140,7 +141,7 @@ export function reviewFaq(r: ReviewSeoInput, comparison?: { title: string } | nu
   return out;
 }
 
-/** Umbenennen einer schlichten „Fazit“-H2 im Body, damit es nur ein Fazit mit Keyword gibt. */
+/** Jede H2, die mit „Fazit“ beginnt, heißt im Body „Detailbewertung“. So bleibt nur die SEO-Fazit-H2 mit Keyword übrig. */
 export function renameBodyFazit(html: string): string {
-  return html.replace(/<h2([^>]*)>\s*Fazit\s*<\/h2>/gi, "<h2$1>Fazit im Detail</h2>");
+  return html.replace(/<h2([^>]*)>\s*Fazit\b([^<]*)<\/h2>/gi, "<h2$1>Detailbewertung$2</h2>");
 }
