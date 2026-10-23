@@ -164,8 +164,19 @@ export function renameBodyFazit(html: string): string {
 export function withoutLeadingScore(verdict: string, score: number): string {
   const re = new RegExp(`^${score}\\s*(?:von\\s*100\\s*Punkten|\\/\\s*100(?:\\s*Punkte(?:n)?)?)\\s*,\\s*(?:Ampel\\s+)?(?:Rot|Gelb|Grün)(?:\\s*\\([^)]*\\))?\\s*([.,;])\\s*`, "i");
   const m = verdict.match(re);
-  if (!m) return verdict;
-  const rest = verdict.slice(m[0].length).trim();
-  if (!rest) return "";
-  return m[1] === "." ? rest : rest.charAt(0).toLocaleUpperCase("de") + rest.slice(1);
+  let rest = verdict;
+  if (m) {
+    rest = verdict.slice(m[0].length).trim();
+    if (rest && m[1] !== ".") rest = rest.charAt(0).toLocaleUpperCase("de") + rest.slice(1);
+  }
+  return withoutTrailingScore(rest, score);
+}
+
+/** Entfernt einen Schlusssatz, der nur die Punktzahl wiederholt („… 61 von 100 Punkten, Gelb: …“, „Gesamt: 76/100, mit Abstrichen.“). */
+function withoutTrailingScore(verdict: string, score: number): string {
+  const re = new RegExp(`(?:^|(?<=[.!?“”")]\\s))\\s*(?:Mit\\s+|Gesamt:\\s*)?${score}\\s*(?:von\\s*100\\b|\\/\\s*100\\b)[^]*$`);
+  const m = verdict.match(re);
+  if (!m || m.index === undefined || m.index === 0) return verdict;
+  if (/[.!?]\s+[A-ZÄÖÜ]/.test(m[0].trim().replace(/[.!?]$/, ""))) return verdict;
+  return verdict.slice(0, m.index).trim();
 }

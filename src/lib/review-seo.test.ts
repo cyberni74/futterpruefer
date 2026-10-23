@@ -64,6 +64,11 @@ describe("review-seo", () => {
     expect(withoutLeadingScore("59 von 100 Punkten, Rot, einen Punkt unter Gelb. Bio-Huhn.", 59)).toBe("Einen Punkt unter Gelb. Bio-Huhn.");
     expect(withoutLeadingScore("30 % Muschelfleisch, 22 von 100 Punkten.", 22)).toBe("30 % Muschelfleisch, 22 von 100 Punkten.");
     expect(withoutLeadingScore("21 von 100 Punkten, Rot. x", 22)).toBe("21 von 100 Punkten, Rot. x");
+    expect(withoutLeadingScore("Gute Rezeptur. 61 von 100 Punkten, Gelb: nach unserem Bewertungsschema mit Abstrichen.", 61)).toBe("Gute Rezeptur.");
+    expect(withoutLeadingScore("Viel Getreide. Gesamt: 76/100, mit Abstrichen.", 76)).toBe("Viel Getreide.");
+    expect(withoutLeadingScore("Unscharf deklariert. Mit 45 von 100 Punkten ist es nach unserem Schema nicht empfehlenswert.", 45)).toBe("Unscharf deklariert.");
+    expect(withoutLeadingScore("Offen deklariert. 52/100 Punkte. Dazu kommt der Preis.", 52)).toBe("Offen deklariert. 52/100 Punkte. Dazu kommt der Preis.");
+    expect(withoutLeadingScore("Kauartikel mit 60/100 Fleisch.", 60)).toBe("Kauartikel mit 60/100 Fleisch.");
     const faq = reviewFaq({ ...base, totalScore: 22, verdict: "22 von 100 Punkten, Rot (nicht empfehlenswert). Pluspunkt: Prozente." });
     expect(faq[0].answer.match(/22 von 100 Punkten/g)).toHaveLength(1);
     expect(faq[0].answer).toContain("Pluspunkt: Prozente.");
