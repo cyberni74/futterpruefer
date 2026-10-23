@@ -8,14 +8,14 @@ import type { getCategoryLeaders } from "@/lib/queries";
 type Leaders = Awaited<ReturnType<typeof getCategoryLeaders>>;
 
 const TRUST = [
-  { Icon: BadgeCheck, text: "Unabhängig bewertet" },
+  { Icon: BadgeCheck, text: "Methodik offengelegt" },
   { Icon: FlaskConical, text: "Offene 100-Punkte-Methodik" },
   { Icon: Scale, text: "Faktencheck der Werbeaussagen" },
 ] as const;
 
 const HERO_IMAGE = "/brand/drei-hunde-auf-blumenwiese-hundefutter-test.webp";
 const HERO_BLUR = "data:image/webp;base64,UklGRm4AAABXRUJQVlA4IGIAAAAQAgCdASoQAA8AA4BaJbACdAEDlcHWJyaAAP3b5BSpCK47dp0ys5as/s+tMydGvfARPOvIPbZiZGATVYYwwp5La/P/qLTIZTSCFshRT0M2s4duEL+Le1cvjzxkTzGda3AAAA==";
-const HERO_ALT = "Drei Hunde sitzen auf einer Blumenwiese – unabhängige Futtertests für Hunde und Katzen";
+const HERO_ALT = "Drei Hunde sitzen auf einer Blumenwiese – Futtertests mit offengelegter Methodik für Hunde und Katzen";
 
 const GROUPS = [
   { animal: "HUND", emoji: "🐕", title: "Für Hunde" },
@@ -40,7 +40,7 @@ export function HomeHero({ leaders }: { leaders: Leaders }) {
               <li key={text} className="flex items-center gap-1.5"><Icon className="size-4" aria-hidden />{text}</li>
             ))}
           </ul>
-          <h1 id="home-h1" className="mt-4 text-4xl font-extrabold leading-[1.1] text-balance md:text-4xl lg:text-[2.6rem]">Hunde- und Katzenfutter im unabhängigen Fachtest</h1>
+          <h1 id="home-h1" className="mt-4 text-4xl font-extrabold leading-[1.1] text-balance md:text-4xl lg:text-[2.6rem]">Hunde- und Katzenfutter im Fachtest – mit offengelegter Methodik</h1>
           <p className="mt-4 text-lg text-muted">
             {total > 0 ? `${total} Futtersorten` : "Futtersorten"} geprüft nach einer offenen{" "}
             <Link href="/methodik" className="font-semibold text-brand underline">100-Punkte-Methodik</Link>: Rohstoffe, Schadstoffe, Nährstoffprofil, Deklaration und Preis-Leistung.

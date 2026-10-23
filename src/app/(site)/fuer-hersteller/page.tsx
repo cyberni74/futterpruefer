@@ -3,7 +3,7 @@ import Link from "next/link";
 import { ShieldAlert } from "lucide-react";
 import { PageShell } from "@/components/page-shell";
 
-export const metadata: Metadata = { title: "Für Hersteller", description: "Produkte zur unabhängigen Prüfung einreichen. Eine Einreichung kauft keine Note.", alternates: { canonical: "/fuer-hersteller" } };
+export const metadata: Metadata = { title: "Für Hersteller", description: "Hersteller können Deklarationen, Analysen und Belege einreichen. Wir berücksichtigen sie nach unserer offengelegten Methodik.", alternates: { canonical: "/fuer-hersteller" } };
 
 export default function ManufacturerPage() {
   return (

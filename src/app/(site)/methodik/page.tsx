@@ -22,7 +22,7 @@ const SECTIONS = [
   ["werbeaussagen", "Der Werbeaussagen-Check"],
   ["grenzen", "Was ein Test nicht leisten kann"],
   ["aktualisierung", "Aktualisierung und Korrekturen"],
-  ["unabhaengigkeit", "Unabhängigkeit und Hersteller"],
+  ["unabhaengigkeit", "Finanzierung und Hersteller"],
 ] as const;
 
 const DETAIL: Record<CriterionKey, { fragen: string; punkte: string; abzug: string[] }> = {
@@ -180,7 +180,7 @@ export default function MethodikPage() {
           <li><strong>Erfassen:</strong> Wir übernehmen die vollständige Deklaration, die analytischen Bestandteile, Zusatzstoffe, Gebindegröße und Preise.</li>
           <li><strong>Rohstoffe prüfen:</strong> Qualität, Reihenfolge und Sinnhaftigkeit der Zutaten für die Tierart. Jeder Inhaltsstoff wird mit dem Futter-Lexikon abgeglichen.</li>
           <li><strong>Nährstoffprofil einordnen:</strong> Abgleich mit dem Bedarf von Hund oder Katze, umgerechnet auf die Trockensubstanz.</li>
-          <li><strong>Werbeaussagen prüfen:</strong> Jede Aussage auf Packung und im Shop wird auf Zulässigkeit und Richtigkeit geprüft (u. a. VO (EG) 767/2009 Art. 11 und 13, UWG). Unzulässige Aussagen führen zu Abzügen bei „Deklaration & Transparenz“ und werden im Test als Faktencheck dokumentiert.</li>
+          <li><strong>Werbeaussagen prüfen:</strong> Jede Aussage auf Packung und im Shop wird auf Zulässigkeit und Richtigkeit geprüft (u. a. VO (EG) 767/2009 Art. 11 und 13, UWG). Unzulässige Aussagen führen zu Abzügen bei „Deklaration &amp; Transparenz“ und werden im Test als Faktencheck dokumentiert.</li>
           <li><strong>Preis einordnen:</strong> Kilopreis und Preis pro Tagesration im Verhältnis zur Qualität.</li>
           <li><strong>Veröffentlichen:</strong> Der Test erscheint mit Datum, Punkten je Kriterium, Fazit und Quellen.</li>
         </ol>
@@ -215,8 +215,8 @@ export default function MethodikPage() {
         <h2 id="aktualisierung">Aktualisierung und Korrekturen</h2>
         <p>Bei Rezepturänderungen, neuen Erkenntnissen oder Rückrufen wird ein Test überarbeitet. Der Hinweis „Zuletzt aktualisiert“ nennt das Datum. Haben wir einen Fehler gemacht, korrigieren wir ihn sichtbar. Hinweise auf sachliche Fehler senden Sie bitte über das <Link href="/kontakt">Kontaktformular</Link>. Wir prüfen jeden Hinweis anhand der Quellen. Die Bewertung selbst ist nicht verhandelbar.</p>
 
-        <h2 id="unabhaengigkeit">Unabhängigkeit und Hersteller</h2>
-        <p>Hersteller können Produkte zur Prüfung einreichen. Eine Einreichung hat keinen Einfluss auf die Bewertung, und Zahlungen oder Kooperationen kaufen keine Note. Mehr dazu auf der Seite <Link href="/fuer-hersteller">Für Hersteller</Link>.</p>
+        <h2 id="unabhaengigkeit">Finanzierung und Hersteller</h2>
+        <p>Hersteller beauftragen oder bezahlen keine Tests und haben keinen Einfluss auf die Punkte. Futterprüfer finanziert sich über Provisionen aus dem Amazon-Partnerprogramm. Die Provision hängt nicht von der Punktzahl ab. Produkte mit Rot-Bewertung erhalten keinen Kauflink. Wir fragen Hersteller nicht an. Belege, die Hersteller von sich aus einsenden, berücksichtigen wir nach den auf dieser Seite beschriebenen Kriterien.</p>
         <p>Begriffe aus den Tests erklären wir im <Link href="/lexikon">Futter-Lexikon</Link> und im <Link href="/glossar">Glossar</Link>. Antworten auf häufige Fragen finden Sie in der <Link href="/faq">FAQ</Link>. Hier geht es direkt zu den <Link href="/tests">Tests</Link>.</p>
       </div>
     </PageShell>
