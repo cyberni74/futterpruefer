@@ -337,7 +337,7 @@ export default function ErgaenzungsfutterMethodikPage() {
           <li><strong>1–2:</strong> nur E-Mail-Antworten ohne Belege</li>
           <li><strong>0:</strong> keine Unterlagen</li>
         </ul>
-        <p>Wir fragen jeden Hersteller vor der Veröffentlichung gleich an. Unterlagen bringen nur Punkte in diesem Teilkriterium (höchstens 10 von 100) und verändern die übrigen Kriterien nur, wenn sie dort einen Sachverhalt belegen (z. B. eine gemessene Wirkstoffmenge). Für Bewertungen nehmen wir kein Geld. Wir bewerten anhand öffentlicher Angaben und eigener Recherche. Bei manchen Produkten verdienen wir über als Werbung gekennzeichnete Amazon-Links eine Provision, das hat keinen Einfluss auf die Note; rot bewertete Produkte erhalten keinen Kauflink.</p>
+        <p>Hersteller fragen wir im Einzelfall an; die Bewertung stützt sich auf Amazon-Produktseite, Deklaration und Herstellerangaben. Unterlagen bringen nur Punkte in diesem Teilkriterium (höchstens 10 von 100) und verändern die übrigen Kriterien nur, wenn sie dort einen Sachverhalt belegen (z. B. eine gemessene Wirkstoffmenge). Für Bewertungen nehmen wir kein Geld. Wir bewerten anhand öffentlicher Angaben und eigener Recherche. Bei manchen Produkten verdienen wir über als Werbung gekennzeichnete Amazon-Links eine Provision, das hat keinen Einfluss auf die Note; rot bewertete Produkte erhalten keinen Kauflink.</p>
 
         <h2 id="sicherheit">Wie gehen Sicherheit und Tierschutz ein?</h2>
         <p>Sicherheit bringt keine Punkte, weil Sicherheit selbstverständlich sein muss. Ein Problem zieht die Note nach unten:</p>
