@@ -141,6 +141,11 @@ export default async function Home() {
         </section>
 
         <section aria-labelledby="neueste-artikel" className="mt-16">
+          <form role="search" action="/suche" className="mb-8 flex max-w-xl gap-2">
+            <label htmlFor="thema-suche" className="sr-only">Thema suchen</label>
+            <input id="thema-suche" name="q" type="search" placeholder="Thema suchen, z. B. Taurin oder Getreidefrei" enterKeyHint="search" className="min-h-12 flex-1 rounded-full border border-border bg-surface px-5 text-base shadow-card" />
+            <button type="submit" className="inline-flex min-h-12 items-center rounded-full bg-accent px-5 font-bold text-white hover:bg-accent-strong dark:text-black">Suchen</button>
+          </form>
           <SectionHeading id="neueste-artikel" kicker="Fachblog" title="Ratgeber: Neues aus dem Fachblog" href="/blog" linkLabel="Zum Fachblog" />
           <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {HOME_GUIDES.map((guide) => (
