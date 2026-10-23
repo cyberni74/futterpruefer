@@ -2,7 +2,7 @@ export const CRITERIA = [
   { key: "scoreRaw", label: "Rohstoffqualität", short: "Rohstoffe", max: 30, description: "Sinnhaftigkeit und Qualität der Rohstoffe" },
   { key: "scoreHarmful", label: "Schadstoffe & Bedenkliches", short: "Schadstoffe", max: 20, description: "Ungeeignete oder problematische Inhaltsstoffe" },
   { key: "scoreNutrients", label: "Nährstoffprofil", short: "Nährstoffe", max: 20, description: "Protein, Fett, Vitamine, Mineralstoffe" },
-  { key: "scoreDeclaration", label: "Deklaration & Transparenz", short: "Deklaration", max: 15, description: "Nachvollziehbare Angaben, ehrliche statt unzulässiger Werbeaussagen" },
+  { key: "scoreDeclaration", label: "Deklaration & Transparenz", short: "Deklaration", max: 15, description: "Nachvollziehbare Angaben, ehrliche Werbeaussagen statt solcher, die wir für irreführend halten" },
   { key: "scoreNeeds", label: "Bedarfsdeckung", short: "Bedarf", max: 10, description: "Passt das Produkt zum Bedarf des Tiers?" },
   { key: "scoreValue", label: "Preis-Leistung", short: "Preis-Leistung", max: 5, description: "Preis-Leistungs-Verhältnis" },
 ] as const;

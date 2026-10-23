@@ -162,7 +162,7 @@ export const HOME_FAQ: readonly HomeFaq[] = [
   },
   {
     q: "Werden Werbeaussagen auf der Verpackung geprüft?",
-    a: "Ja. Wir prüfen Werbeaussagen auf der Verpackung und im Onlineshop nach dem Futtermittelrecht, vor allem nach Artikel 11 und 13 der Verordnung (EG) Nr. 767/2009. Danach darf Werbung nicht irreführen, und ein Futtermittel darf nicht damit beworben werden, dass es Krankheiten verhindert, behandelt oder heilt. Aussagen, die nach unserer Einschätzung nicht zulässig oder nicht ausreichend belegt sind, führen zu Abzügen bei „Deklaration & Transparenz“ und werden im Test einzeln erläutert.",
+    a: "Ja. Wir prüfen Werbeaussagen auf der Verpackung und im Onlineshop nach dem Futtermittelrecht, vor allem nach Artikel 11 und 13 der Verordnung (EG) Nr. 767/2009. Danach darf Werbung nicht irreführen, und ein Futtermittel darf nicht damit beworben werden, dass es Krankheiten verhindert, behandelt oder heilt. Aussagen, die wir für irreführend halten oder die nicht ausreichend belegt sind, führen zu Abzügen bei „Deklaration & Transparenz“ und werden im Test einzeln erläutert.",
     links: [["So prüfen wir Werbeaussagen", "/methodik"]],
   },
 ];

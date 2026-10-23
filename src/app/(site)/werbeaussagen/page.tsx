@@ -48,7 +48,7 @@ export default async function WerbeaussagenPage() {
       crumb="Werbeaussagen-Check"
       path="/werbeaussagen"
       title="Werbeaussagen-Check: Was die Werbung verspricht"
-      intro="In jedem unserer Tests prüfen wir Werbeaussagen der Hersteller auf Zulässigkeit und Richtigkeit. Hier steht die Auswertung über alle Tests."
+      intro="In jedem unserer Tests prüfen wir Werbeaussagen der Hersteller rechtlich und sachlich. Hier steht die Auswertung über alle Tests."
     >
       <p className="rounded-2xl border border-border bg-bg-soft p-4 text-sm text-muted">
         Alle Einstufungen sind unsere begründete fachliche Einschätzung auf Grundlage veröffentlichter Herstellerangaben (VO (EG) 767/2009, UWG). Sie sind keine rechtsverbindliche Feststellung. Jede Aussage ist im jeweiligen Test mit Quelle und Begründung nachzulesen.
@@ -57,8 +57,8 @@ export default async function WerbeaussagenPage() {
       <ul className="mt-6 grid grid-cols-3 gap-3 text-center">
         {[
           [totalClaims, "geprüfte Aussagen"],
-          [totalFlagged, "als fragwürdig oder unzulässig eingestuft"],
-          [totalUnz, "davon als unzulässig eingestuft"],
+          [totalFlagged, "als fragwürdig oder irreführend eingestuft"],
+          [totalUnz, "davon als irreführend eingestuft"],
         ].map(([n, label]) => (
           <li key={String(label)} className="rounded-2xl border border-border bg-surface p-4">
             <p className="text-3xl font-extrabold text-brand">{n}</p>
@@ -68,21 +68,21 @@ export default async function WerbeaussagenPage() {
       </ul>
 
       <h2 className="mt-10 text-2xl font-extrabold">Nach Marke</h2>
-      <p className="mt-2 text-muted">Sortiert nach Zahl der als fragwürdig oder unzulässig eingestuften Aussagen. Das sagt nichts über die Qualität des Futters, sondern über die Werbung. Ein Futter kann gut sein und trotzdem schlecht beworben werden.</p>
+      <p className="mt-2 text-muted">Sortiert nach Zahl der als fragwürdig oder irreführend eingestuften Aussagen. Das sagt nichts über die Qualität des Futters, sondern über die Werbung. Ein Futter kann gut sein und trotzdem schlecht beworben werden.</p>
       <div className="mt-4 space-y-3">
         {brands.map((b) => (
           <details key={b.brand} className="group rounded-2xl border border-border bg-surface shadow-card">
             <summary className="flex min-h-14 list-none flex-wrap items-center justify-between gap-2 rounded-2xl p-4 font-bold transition-colors hover:text-brand">
               <span className="text-lg">{b.brand}</span>
               <span className="text-sm font-semibold text-muted">
-                {b.rows.length} {b.rows.length === 1 ? "Test" : "Tests"} · {b.flagged} von {b.total} Aussagen beanstandet · {b.unz} unzulässig
+                {b.rows.length} {b.rows.length === 1 ? "Test" : "Tests"} · {b.flagged} von {b.total} Aussagen beanstandet · {b.unz} irreführend
               </span>
             </summary>
             <ul className="space-y-4 px-4 pb-4">
               {b.rows.map((r) => (
                 <li key={r.slug} className="border-t border-border pt-3">
                   <Link href={r.path} className="font-semibold text-brand underline underline-offset-4 hover:text-brand-strong">{r.title}</Link>
-                  <p className="mt-1 text-sm text-muted">{r.flagged} von {r.total} Aussagen beanstandet, davon {r.unz} als unzulässig eingestuft.</p>
+                  <p className="mt-1 text-sm text-muted">{r.flagged} von {r.total} Aussagen beanstandet, davon {r.unz} als irreführend eingestuft.</p>
                   {r.examples.length > 0 && (
                     <ul className="mt-2 space-y-2 text-sm">
                       {r.examples.map((e) => (

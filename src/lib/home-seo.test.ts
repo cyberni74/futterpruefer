@@ -39,7 +39,8 @@ describe("Startseiten-Text", () => {
     expect(HOME_FAQ[3].q).toBe("Werden Trockenfutter und Nassfutter getestet?");
     expect(HOME_FAQ[3].a).toContain("innerhalb einer Kategorie");
     expect(HOME_FAQ[4].a).toContain("im Onlineshop");
-    expect(HOME_FAQ[4].a).toContain("nicht zulässig oder nicht ausreichend belegt");
+    expect(HOME_FAQ[4].a).toContain("die wir für irreführend halten oder die nicht ausreichend belegt sind");
+    expect(HOME_FAQ.map((f) => f.q + f.a).join(" ")).not.toMatch(/zuläss/i);
   });
 
   it("nennt in Meta, H1 und Footer weder Schadstoffe noch Fachtest noch unabhängig", () => {
