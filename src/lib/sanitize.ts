@@ -57,6 +57,8 @@ const OPTIONS: sanitizeHtml.IOptions = {
     "h2", "h3", "h4", "p", "br", "hr", "strong", "b", "em", "i", "u", "s", "mark", "sup", "sub",
     "ul", "ol", "li", "blockquote", "a", "img", "figure", "figcaption",
     "table", "thead", "tbody", "tr", "th", "td", "code", "pre", "span", "div",
+    // Aufklappbare Quellenlisten (Vergleichstests), ohne Event-Attribute.
+    "details", "summary",
   ],
   allowedAttributes: {
     // class liegt zusätzlich auf "*": .cta-box und Button-Klassen bleiben, style nicht.

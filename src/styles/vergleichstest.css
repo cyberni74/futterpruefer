@@ -1,0 +1,212 @@
+/* Vergleichstest-Layout (Blog): Bausteine mit Präfix .vt-* im Artikeltext (.prose-fp).
+   Body-HTML nutzt nur class/id (Sanitizer), keine Inline-Styles. Vorlage:
+   /workspace/futterpruefer/vorlagen/vergleichstest-layout.html */
+
+.prose-fp :is(.fp-box[class*="vt-"], .vt-facts, .vt-pro, .vt-con) > * + * { margin-top: .7em; }
+.prose-fp :is(.fp-box[class*="vt-"], .vt-facts, .vt-pro, .vt-con) > :first-child { margin-top: 0; }
+
+.prose-fp .vt-label {
+  font-size: .8rem; font-weight: 800; letter-spacing: .04em; text-transform: uppercase;
+  color: var(--brand-strong); line-height: 1.3;
+}
+
+/* Urteil */
+.prose-fp .vt-verdict {
+  border: 2px solid var(--brand); border-radius: 1.5rem; padding: 1.25rem;
+  background: linear-gradient(160deg, var(--brand-soft) 0%, var(--surface) 70%);
+  box-shadow: var(--shadow);
+}
+.prose-fp .vt-verdict > p:nth-of-type(2) { font-size: 1.1rem; font-weight: 700; line-height: 1.5; }
+.prose-fp .vt-label-pod { margin-top: 1.25rem !important; }
+.prose-fp .vt-podium {
+  display: grid; gap: .75rem; align-items: end;
+  grid-template-columns: 1fr 1fr; grid-template-areas: "g g" "s b";
+}
+.prose-fp .vt-pod { margin: 0; }
+.prose-fp .vt-pod figure { margin: 0; }
+.prose-fp .vt-pod img { display: block; width: 100%; border-radius: 1rem; box-shadow: var(--shadow); }
+.prose-fp .vt-pod figcaption { font-size: .7rem; color: var(--fg-muted); text-align: center; margin-top: .3rem; }
+.prose-fp .vt-pod-1 { grid-area: g; max-width: 18rem; margin-inline: auto; width: 100%; }
+.prose-fp .vt-pod-2 { grid-area: s; }
+.prose-fp .vt-pod-3 { grid-area: b; }
+@media (min-width: 40rem) {
+  .prose-fp .vt-verdict { padding: 1.75rem; }
+  .prose-fp .vt-podium { grid-template-columns: 1fr 1.25fr 1fr; grid-template-areas: "s g b"; gap: 1rem; }
+  .prose-fp .vt-pod-1 { max-width: none; }
+  .prose-fp .vt-pod-2, .prose-fp .vt-pod-3 { padding-bottom: 1.5rem; }
+}
+.prose-fp .vt-note { font-size: .95rem; font-weight: 600; }
+.prose-fp .vt-stand { font-size: .8rem; color: var(--fg-muted); }
+
+/* Ampel-Chips und Punkte-Siegel */
+.prose-fp .vt-ampel {
+  display: inline-flex; align-items: center; gap: .35em; padding: .15em .65em; border-radius: 9999px;
+  font-size: .75rem; font-weight: 800; line-height: 1.4; white-space: nowrap;
+}
+.prose-fp .vt-ampel::before { content: ""; width: .6em; height: .6em; border-radius: 9999px; background: currentColor; }
+.prose-fp .vt-ampel-gut { background: var(--good-soft); color: var(--good); }
+.prose-fp .vt-ampel-mittel { background: var(--mid-soft); color: var(--mid); }
+.prose-fp .vt-ampel-schlecht { background: var(--bad-soft); color: var(--bad); }
+.prose-fp .vt-score {
+  display: inline-flex; align-items: center; justify-content: center; flex: none;
+  width: 2.5rem; height: 2.5rem; border-radius: 9999px; border: 4px solid var(--good);
+  background: #fff; color: #1b2b29; font-family: var(--font-display); font-weight: 800; font-size: .95rem;
+  font-variant-numeric: tabular-nums; line-height: 1;
+}
+.prose-fp .vt-score-mittel { border-color: #eab308; }
+.prose-fp .vt-score-schlecht { border-color: #dc2626; }
+.prose-fp .vt-score-gut { border-color: #16a34a; }
+.prose-fp .vt-score-lg { width: 4.25rem; height: 4.25rem; border-width: 6px; font-size: 1.5rem; flex-direction: column; box-shadow: var(--shadow-lift); }
+.prose-fp .vt-score-max { font-size: .6rem; font-weight: 700; color: #4b5f5d; margin-top: .1rem; }
+
+/* Tacho-Raster: 1 Spalte Handy (quer), 2 Tablet, 3 Desktop */
+.prose-fp .vt-gauges { display: grid; gap: .85rem; grid-template-columns: 1fr; }
+@media (min-width: 40rem) { .prose-fp .vt-gauges { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 64rem) { .prose-fp .vt-gauges { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.prose-fp a.vt-gauge-card {
+  display: grid; grid-template-columns: auto 1fr; grid-template-areas: "g p" "g n" "g a" "g m";
+  align-items: center; column-gap: 1rem; row-gap: .2rem;
+  padding: .9rem 1rem; border: 1px solid var(--border); border-top: 4px solid var(--good); border-radius: 1.25rem;
+  background: var(--surface); box-shadow: var(--shadow); color: var(--fg); text-decoration: none;
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+.prose-fp a.vt-gauge-card.vt-mittel { border-top-color: var(--mid-fill); }
+.prose-fp a.vt-gauge-card.vt-schlecht { border-top-color: var(--bad); }
+.prose-fp a.vt-gauge-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lift); color: var(--fg); }
+.prose-fp .vt-gauge-card .fp-gauge { grid-area: g; }
+.prose-fp .vt-gauge-card .vt-gauge-place { grid-area: p; }
+.prose-fp .vt-gauge-card .vt-gauge-name { grid-area: n; font-weight: 800; font-size: 1rem; line-height: 1.3; }
+.prose-fp .vt-gauge-card .vt-ampel { grid-area: a; justify-self: start; }
+.prose-fp .vt-gauge-card .vt-gauge-more { grid-area: m; font-size: .8rem; font-weight: 700; color: var(--brand); }
+@media (min-width: 40rem) {
+  .prose-fp a.vt-gauge-card { grid-template-columns: 1fr; grid-template-areas: "p" "g" "n" "a" "m"; justify-items: center; text-align: center; row-gap: .45rem; padding: 1.1rem 1rem 1rem; }
+  .prose-fp .vt-gauge-card .vt-ampel { justify-self: center; }
+  .prose-fp .vt-gauge-card .vt-gauge-name { min-height: 2.6em; display: flex; align-items: center; }
+}
+.prose-fp .vt-gauge-place { font-size: .78rem; font-weight: 800; letter-spacing: .03em; text-transform: uppercase; color: var(--fg-muted); }
+/* Tacho: Platzhalter ohne JS, wird von <BodyGauges> durch den animierten ScoreRing ersetzt */
+.prose-fp .fp-gauge { display: inline-flex; align-items: center; justify-content: center; min-width: 8rem; min-height: 8rem; }
+.prose-fp .fp-gauge-fallback {
+  display: inline-flex; flex-direction: column; align-items: center; justify-content: center;
+  width: 8rem; height: 8rem; border-radius: 9999px; border: 10px solid var(--border);
+  font-family: var(--font-display); line-height: 1;
+}
+.prose-fp .vt-gut .fp-gauge-fallback { border-color: var(--good); }
+.prose-fp .vt-mittel .fp-gauge-fallback { border-color: var(--mid-fill); }
+.prose-fp .vt-schlecht .fp-gauge-fallback { border-color: var(--bad); }
+.prose-fp .fp-gauge-score { font-size: 2rem; font-weight: 800; }
+.prose-fp .fp-gauge-max { font-size: .7rem; font-weight: 600; color: var(--fg-muted); }
+.prose-fp .fp-gauge.fp-gauge-live .fp-gauge-fallback { display: none; }
+@media (min-width: 40rem) {
+  .prose-fp .fp-gauge, .prose-fp .fp-gauge-fallback { min-width: 8.75rem; min-height: 8.75rem; }
+  .prose-fp .fp-gauge-fallback { width: 8.75rem; height: 8.75rem; }
+}
+
+/* Vergleichstabelle */
+.prose-fp .vt-table-box { border: 1px solid var(--border); border-radius: 1.25rem; padding: .5rem; background: var(--surface); box-shadow: var(--shadow); }
+.prose-fp .vt-table-box > p { padding: 0 .5rem .4rem; font-size: .75rem; color: var(--fg-muted); }
+.prose-fp table.vt-table { display: table; width: 100%; font-size: .92rem; overflow: visible; }
+.prose-fp table.vt-table th { font-size: .72rem; text-transform: uppercase; letter-spacing: .03em; color: var(--fg-muted); white-space: nowrap; }
+.prose-fp table.vt-table :is(th, td) { min-width: 0; padding: .65rem .55rem; vertical-align: middle; hyphens: manual; }
+.prose-fp table.vt-table tr.vt-top td { background: color-mix(in srgb, var(--brand-soft) 45%, transparent); }
+.prose-fp table.vt-table .vt-c-place { font-weight: 800; white-space: nowrap; }
+.prose-fp table.vt-table .vt-c-name a { font-weight: 700; color: var(--fg); text-decoration: none; }
+.prose-fp table.vt-table .vt-c-name a:hover { color: var(--brand); text-decoration: underline; }
+.prose-fp .vt-pack { display: block; font-size: .75rem; color: var(--fg-muted); font-weight: 500; }
+.prose-fp table.vt-table .vt-c-ekg { white-space: nowrap; font-variant-numeric: tabular-nums; }
+.prose-fp table.vt-table .vt-c-rind { font-size: .85rem; }
+@media (max-width: 39.99rem) {
+  .prose-fp table.vt-table, .prose-fp table.vt-table tbody { display: block; }
+  .prose-fp table.vt-table thead { display: none; }
+  .prose-fp table.vt-table tr.vt-row {
+    display: grid !important; grid-template-columns: 2rem 1fr auto; grid-template-areas: "pl nm sc" "pl am am" "pl ek ek" "pl ri ri";
+    column-gap: .6rem; row-gap: .15rem; padding: .7rem .5rem; border-bottom: 1px solid var(--border); background: none;
+  }
+  .prose-fp table.vt-table tr.vt-row:last-child { border-bottom: 0; }
+  .prose-fp table.vt-table tr.vt-row > td { display: block; margin: 0 !important; padding: 0 !important; border: 0 !important; background: none !important; text-align: left !important; max-width: none !important; grid-column: auto !important; font-weight: inherit; }
+  .prose-fp table.vt-table tr.vt-row > .vt-c-place { grid-area: pl; }
+  .prose-fp table.vt-table tr.vt-row > .vt-c-name { grid-area: nm; }
+  .prose-fp table.vt-table tr.vt-row > .vt-c-score { grid-area: sc; }
+  .prose-fp table.vt-table tr.vt-row > .vt-c-ampel { grid-area: am; margin-top: .25rem; }
+  .prose-fp table.vt-table tr.vt-row > .vt-c-ekg { grid-area: ek; font-size: .85rem; }
+  .prose-fp table.vt-table tr.vt-row > .vt-c-ekg::before { content: "Kilopreis: "; color: var(--fg-muted); }
+  .prose-fp table.vt-table tr.vt-row > .vt-c-rind { grid-area: ri; font-size: .85rem; }
+  .prose-fp table.vt-table tr.vt-row > .vt-c-rind::before { content: "Rind: "; color: var(--fg-muted); }
+  .prose-fp table.vt-table tr.vt-top { background: color-mix(in srgb, var(--brand-soft) 45%, transparent) !important; border-radius: .75rem; }
+}
+
+/* Methodik, Regeln, Rechnen, Tierschutz, Warnung, Fazit */
+.prose-fp .vt-method { border: 1px solid var(--border); border-left: 4px solid var(--brand); border-radius: 1.25rem; padding: 1.25rem; background: var(--bg-soft); }
+.prose-fp .vt-method h2 { margin-top: 0; font-size: 1.35rem; }
+.prose-fp .vt-rules, .prose-fp .vt-merk { border-left: 4px solid var(--mid-fill); border-radius: 1.25rem; padding: 1.25rem; background: var(--mid-soft); }
+.prose-fp :is(.vt-rules, .vt-merk) > p:first-child { font-weight: 800; }
+.prose-fp .vt-calc { border: 1px solid var(--border); border-radius: 1.25rem; padding: 1.25rem; background: var(--surface); box-shadow: var(--shadow); }
+.prose-fp .vt-tierschutz { border-left: 4px solid var(--good); border-radius: 1.25rem; padding: 1.25rem; background: var(--good-soft); }
+.prose-fp .vt-warn { border-left: 4px solid var(--bad); border-radius: 1.25rem; padding: 1.25rem; background: var(--bad-soft); }
+.prose-fp .vt-fazit { border: 2px solid var(--brand); border-radius: 1.5rem; padding: 1.25rem 1.25rem 1.4rem; background: var(--surface); box-shadow: var(--shadow-lift); }
+.prose-fp .vt-fazit h2 { margin-top: 0; }
+.prose-fp .vt-detail, .prose-fp .vt-claims { border: 1px solid var(--border); border-radius: 1.25rem; padding: 1rem; background: var(--surface); }
+.prose-fp .vt-detail > p, .prose-fp .vt-claims > p:last-child { font-size: .8rem; color: var(--fg-muted); line-height: 1.55; }
+.prose-fp .vt-claims > p:first-child { font-weight: 800; }
+.prose-fp .vt-claims table { font-size: .88rem; }
+
+/* Produktkarte */
+.prose-fp .vt-card {
+  position: relative; border: 1px solid var(--border); border-radius: 1.5rem; padding: 1.25rem;
+  background: var(--surface); box-shadow: var(--shadow); margin-top: 2.25rem;
+}
+.prose-fp .vt-card.vt-card-top { border: 2px solid var(--brand); }
+.prose-fp .vt-card-head { display: flex; align-items: center; gap: .9rem; }
+.prose-fp .vt-card-meta { display: flex; flex-wrap: wrap; align-items: center; gap: .35rem .5rem; }
+.prose-fp .vt-card-meta .vt-pack { display: inline; }
+.prose-fp .vt-card h2 { margin-top: .9rem; font-size: 1.3rem; line-height: 1.3; }
+.prose-fp .vt-scoreline { font-size: 1rem; }
+.prose-fp ul.vt-crit { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: .4rem; }
+.prose-fp ul.vt-crit li { margin: 0; padding: .2rem .65rem; border-radius: 9999px; background: var(--bg-soft); border: 1px solid var(--border); font-size: .8rem; font-weight: 600; font-variant-numeric: tabular-nums; }
+.prose-fp figure.vt-prodimg { margin: 1rem auto; max-width: 15rem; }
+.prose-fp figure.vt-prodimg img { max-height: 15rem; width: 100%; object-fit: contain; background: #fff; padding: .75rem; border: 1px solid var(--border); }
+.prose-fp figure.vt-prodimg figcaption { font-size: .7rem; color: var(--fg-muted); text-align: center; margin-top: .3rem; }
+.prose-fp .vt-facts { border-radius: 1rem; padding: 1rem; background: var(--bg-soft); border: 1px solid var(--border); font-size: .93rem; line-height: 1.6; }
+.prose-fp .vt-facts > p + p { margin-top: .55em; }
+.prose-fp .vt-procon { display: grid; gap: .75rem; }
+@media (min-width: 40rem) { .prose-fp .vt-procon { grid-template-columns: 1fr 1fr; } }
+.prose-fp .vt-pro, .prose-fp .vt-con { border-radius: 1rem; padding: .9rem 1rem; font-size: .95rem; line-height: 1.55; }
+.prose-fp .vt-pro { background: var(--good-soft); }
+.prose-fp .vt-con { background: var(--bad-soft); }
+.prose-fp .vt-pro .vt-label { color: var(--good); }
+.prose-fp .vt-con .vt-label { color: var(--bad); }
+.prose-fp .vt-pro ul, .prose-fp .vt-con ul { list-style: none; padding: 0; margin-top: .45rem; }
+.prose-fp .vt-pro li, .prose-fp .vt-con li { position: relative; padding-left: 1.5rem; }
+.prose-fp .vt-pro li::before, .prose-fp .vt-con li::before { position: absolute; left: 0; top: 0; font-weight: 900; }
+.prose-fp .vt-pro li::before { content: "✓"; color: var(--good); }
+.prose-fp .vt-con li::before { content: "✗"; color: var(--bad); }
+.prose-fp .vt-cta { border-radius: 1rem; padding: 1rem; background: var(--bg-soft); border: 1px dashed var(--border); }
+.prose-fp .vt-card + .vt-merk { margin-top: .9rem; }
+@media (min-width: 40rem) { .prose-fp .vt-card { padding: 1.75rem; } .prose-fp .vt-card h2 { font-size: 1.45rem; } }
+
+/* Quellen-Akkordeon */
+.prose-fp .vt-sources { border: 1px solid var(--border); border-radius: 1.25rem; padding: 1.25rem; background: var(--bg-soft); font-size: .9rem; }
+.prose-fp .vt-sources h2 { margin-top: 0; font-size: 1.25rem; }
+.prose-fp details.vt-acc { border: 1px solid var(--border); border-radius: .9rem; background: var(--surface); }
+.prose-fp details.vt-acc > summary {
+  list-style: none; display: flex; align-items: center; justify-content: space-between; gap: .75rem;
+  padding: .8rem 1rem; font-weight: 800; color: var(--brand-strong); min-height: 2.75rem;
+}
+.prose-fp details.vt-acc > summary::-webkit-details-marker { display: none; }
+.prose-fp details.vt-acc > summary::after { content: "▾"; transition: transform .2s ease; }
+.prose-fp details.vt-acc[open] > summary::after { transform: rotate(180deg); }
+.prose-fp details.vt-acc > :not(summary) { margin: 0 1rem 1rem; }
+.prose-fp details.vt-acc li { overflow-wrap: anywhere; }
+
+/* FAQ-Akkordeon */
+.prose-fp .vt-faq { border: 1px solid var(--border); border-left: 4px solid var(--brand); border-radius: 1.25rem; padding: 1.25rem; background: var(--bg-soft); }
+.prose-fp .vt-faq h2 { margin-top: 0; font-size: 1.3rem; }
+.prose-fp .vt-faq > details.vt-acc + details.vt-acc { margin-top: .6rem; }
+.prose-fp .vt-faq details.vt-acc > summary { color: var(--fg); font-size: 1rem; line-height: 1.4; cursor: pointer; }
+.prose-fp .vt-faq details.vt-acc > summary::after { color: var(--brand); flex: none; }
+.prose-fp .vt-faq details.vt-acc > p { font-size: .97rem; line-height: 1.65; }
+.prose-fp details.vt-acc > summary:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; border-radius: .9rem; }
+
+/* Abstände der Kästen auf oberster Ebene */
+.prose-fp > div > :is(.fp-box[class*="vt-"], .vt-gauges) { margin-block: 1.75rem; }
+.prose-fp > div > .vt-card { margin-top: 2.25rem; }
