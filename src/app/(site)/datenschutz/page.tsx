@@ -10,8 +10,8 @@ export default function DatenschutzPage() {
       <div className="prose-fp">
         <h2>1. Verantwortlicher</h2>
         <p>
-          {OPERATOR.name} ({OPERATOR.nameSuffix})<br />
-          {OPERATOR.address[0][0]}, {OPERATOR.address[0][1]}<br />
+          {OPERATOR.name}<br />
+          {OPERATOR.address.join(", ")}<br />
           E-Mail: <a href={`mailto:${OPERATOR.email}`}>{OPERATOR.email}</a><br />
           Telefon: {OPERATOR.phone}
         </p>
