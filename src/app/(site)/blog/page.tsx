@@ -17,7 +17,7 @@ export default async function BlogPage() {
     <div className="mx-auto max-w-6xl px-4">
       <Breadcrumbs items={[{ label: "Fachblog", href: "/blog" }]} />
       <h1 className="mt-4 text-3xl font-extrabold md:text-5xl">Fachblog</h1>
-      <p className="mb-10 mt-3 max-w-2xl text-lg text-muted">Hintergrundwissen zur Tierernährung – unabhängig von den Produkttests.</p>
+      <p className="mb-10 mt-3 max-w-2xl text-lg text-muted">Hintergrundwissen zur Tierernährung – als Ergänzung zu unseren Produkttests.</p>
       {posts.length === 0 ? (
         <p className="text-muted">Noch keine Artikel veröffentlicht.</p>
       ) : (
