@@ -11,7 +11,7 @@ const AMAZON_HOST = /(^|\.)amazon\.(de|com|co\.uk|fr|it|es|nl|pl|se|com\.be|ca|c
 /** Affiliate: gesetztes rel=sponsored, der Partner-Tag oder ein Amazon-Retail-Link. */
 export function isSponsoredHref(href: string | undefined): boolean {
   if (!href) return false;
-  const raw = href.replace(/&amp;/gi, "&").trim();
+  const raw = href.replace(/&/gi, "&").trim();
   try {
     const url = new URL(raw);
     if ((url.searchParams.get("tag") ?? "").toLowerCase() === AMAZON_AFFILIATE_TAG) return true;
@@ -20,6 +20,19 @@ export function isSponsoredHref(href: string | undefined): boolean {
     return AMAZON_HOST.test(host);
   } catch {
     return new RegExp(`(?:^|[?&])tag=${AMAZON_AFFILIATE_TAG}(?:&|$)`, "i").test(raw);
+  }
+}
+
+/** Partner-Link im engeren Sinn: unser Partner-Tag oder ein amzn-Kurzlink (nicht jede Amazon-URL). */
+export function isTaggedAffiliateHref(href: string | undefined): boolean {
+  if (!href) return false;
+  const raw = href.replace(/&/gi, "&").trim();
+  if (/[?&]tag=/i.test(raw)) return isSponsoredHref(raw);
+  try {
+    const host = new URL(raw).hostname.toLowerCase().replace(/\.$/, "");
+    return host === "amzn.to" || host === "amzn.eu" || host.endsWith(".amzn.to") || host.endsWith(".amzn.eu");
+  } catch {
+    return false;
   }
 }
 
@@ -61,7 +74,10 @@ const OPTIONS: sanitizeHtml.IOptions = {
     a: (tagName, attribs) => {
       const external = /^https?:\/\//.test(attribs.href ?? "");
       if (!external) return { tagName, attribs };
-      return { tagName, attribs: { ...attribs, target: "_blank", rel: externalRel(attribs.rel, attribs.href) } };
+      // Quellenbeleg (.src-link) ohne Partner-Tag ist keine Werbung: kein sponsored, auch bei Amazon-URLs.
+      const isSource = /(^|\s)src-link(\s|$)/.test(attribs.class ?? "");
+      const rel = isSource && !isTaggedAffiliateHref(attribs.href) ? "nofollow noopener noreferrer" : externalRel(attribs.rel, attribs.href);
+      return { tagName, attribs: { ...attribs, target: "_blank", rel } };
     },
     img: (tagName, attribs) => ({ tagName, attribs: { ...attribs, loading: "lazy" } }),
   },
