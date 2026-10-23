@@ -254,13 +254,17 @@ button, [role="button"], summary { cursor: pointer; }
 
 /* Amazon-Button (einheitlich): <div class="cta-amazon"> mit p.cta-produkt, a.cta-amazon-btn, p.cta-hinweis.
    Nur Inhalte mit diesen Klassen sind betroffen; Basislayout unverändert. */
+/* Gleicher Button für ältere CTA-Boxen (.fp-cta / .cta-box) mit Amazon-Link ohne .cta-amazon-btn, z. B. Tailwind-Klassen
+   aus dem Editor (bg-brand text-white): Die Utilities verlieren gegen .prose-fp a (Linkfarbe = Hintergrund) und der Link
+   bleibt inline (bricht in zwei Pillen um). Bild-Links (Galerie) bleiben ausgenommen. */
+.prose-fp .fp-cta:has(a[href*="amazon.de"]) { text-align: center; }
 .prose-fp .cta-amazon { text-align: center; }
 .prose-fp .cta-amazon > * + * { margin-top: .6rem; }
 .prose-fp .cta-amazon p { margin: 0; }
 .prose-fp .cta-amazon .cta-produkt {
   font-size: .95rem; font-weight: 700; line-height: 1.35; color: var(--fg);
 }
-.prose-fp .cta-amazon a.cta-amazon-btn {
+.prose-fp :is(.cta-amazon a.cta-amazon-btn, .fp-cta a[href*="amazon.de"]:not(:has(img)), .cta-box a[href*="amazon.de"]:not(:has(img))) {
   display: inline-flex; align-items: center; justify-content: center; gap: .6rem;
   width: 100%; min-height: 3.25rem; margin: 0; padding: .85rem 1.5rem;
   border: 1px solid #e3a21a; border-radius: 9999px;
@@ -271,27 +275,26 @@ button, [role="button"], summary { cursor: pointer; }
   transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
   -webkit-tap-highlight-color: transparent;
 }
-.prose-fp .cta-amazon a.cta-amazon-btn::before {
+.prose-fp :is(.cta-amazon a.cta-amazon-btn, .fp-cta a[href*="amazon.de"]:not(:has(img)), .cta-box a[href*="amazon.de"]:not(:has(img)))::before {
   content: ""; flex: none; width: 1.3em; height: 1.3em; background: currentColor;
   -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='9' cy='20' r='1.6'/%3E%3Ccircle cx='18' cy='20' r='1.6'/%3E%3Cpath d='M2.5 3.5h3l2.6 11.2a1.5 1.5 0 0 0 1.5 1.2h8.3a1.5 1.5 0 0 0 1.5-1.1L21.5 8H6.6'/%3E%3C/svg%3E") center / contain no-repeat;
           mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='9' cy='20' r='1.6'/%3E%3Ccircle cx='18' cy='20' r='1.6'/%3E%3Cpath d='M2.5 3.5h3l2.6 11.2a1.5 1.5 0 0 0 1.5 1.2h8.3a1.5 1.5 0 0 0 1.5-1.1L21.5 8H6.6'/%3E%3C/svg%3E") center / contain no-repeat;
 }
-.prose-fp .cta-amazon a.cta-amazon-btn:hover,
-.prose-fp .cta-amazon a.cta-amazon-btn:focus-visible {
+.prose-fp :is(.cta-amazon a.cta-amazon-btn, .fp-cta a[href*="amazon.de"]:not(:has(img)), .cta-box a[href*="amazon.de"]:not(:has(img))):is(:hover, :focus-visible) {
   background: linear-gradient(180deg, #ffcb47 0%, #f08c00 100%);
   color: #111 !important; transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(213, 140, 0, .45);
 }
-.prose-fp .cta-amazon a.cta-amazon-btn:focus-visible { outline: 3px solid #146eb4; outline-offset: 2px; }
-.prose-fp .cta-amazon a.cta-amazon-btn:active { transform: translateY(0); box-shadow: 0 1px 3px rgba(213, 140, 0, .35); }
+.prose-fp :is(.cta-amazon a.cta-amazon-btn, .fp-cta a[href*="amazon.de"]:not(:has(img)), .cta-box a[href*="amazon.de"]:not(:has(img))):focus-visible { outline: 3px solid #146eb4; outline-offset: 2px; }
+.prose-fp :is(.cta-amazon a.cta-amazon-btn, .fp-cta a[href*="amazon.de"]:not(:has(img)), .cta-box a[href*="amazon.de"]:not(:has(img))):active { transform: translateY(0); box-shadow: 0 1px 3px rgba(213, 140, 0, .35); }
 .prose-fp .cta-amazon .cta-hinweis {
   font-size: 11px; line-height: 1.45; color: var(--fg-muted); font-weight: 400;
 }
 @media (max-width: 26rem) {
-  .prose-fp .cta-amazon a.cta-amazon-btn { font-size: .95rem; padding-inline: 1rem; gap: .45rem; }
+  .prose-fp :is(.cta-amazon a.cta-amazon-btn, .fp-cta a[href*="amazon.de"]:not(:has(img)), .cta-box a[href*="amazon.de"]:not(:has(img))) { font-size: .95rem; padding-inline: 1rem; gap: .45rem; }
 }
 @media (min-width: 40rem) {
-  .prose-fp .cta-amazon a.cta-amazon-btn { width: auto; min-width: 20rem; }
+  .prose-fp :is(.cta-amazon a.cta-amazon-btn, .fp-cta a[href*="amazon.de"]:not(:has(img)), .cta-box a[href*="amazon.de"]:not(:has(img))) { width: auto; min-width: 20rem; max-width: 100%; }
 }
 
 /* Tabellen am Handy (< 40rem) als Karten: Zelle 1 + 2 fett nebeneinander, weitere Zellen in voller Breite.
