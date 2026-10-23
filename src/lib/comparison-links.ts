@@ -2,11 +2,11 @@
  * Interne Verlinkung Einzeltest/Fachartikel ↔ Vergleichstest (HANDBUCH: jeder Einzeltest verlinkt
  * seinen Vergleichstest, der Vergleichstest verlinkt zurück). Nur interne Links, keine Kauflinks.
  */
-export type Comparison = { slug: string; title: string; href: string };
+export type Comparison = { slug: string; title: string; href: string; members?: string[] };
 
 const C = {
-  nassfutter: { slug: "nassfutter-test-rind-hund-oktober-2026", title: "Nassfutter für Hunde im Test 2026: 7 Rind-Dosen im Vergleich", href: "/blog/nassfutter-test-rind-hund-oktober-2026" },
-  gelenk: { slug: "gelenk-test-hund-oktober-2026", title: "Gelenktabletten für Hunde im Test 2026: 5 Gelenkmittel im Vergleich", href: "/blog/gelenk-test-hund-oktober-2026" },
+  nassfutter: { slug: "nassfutter-test-rind-hund-oktober-2026", title: "Nassfutter für Hunde im Test 2026: 7 Rind-Dosen im Vergleich", href: "/blog/nassfutter-test-rind-hund-oktober-2026", members: ["rinti-kennerfleisch-rind-400g-test"] },
+  gelenk: { slug: "gelenk-test-hund-oktober-2026", title: "Gelenktabletten und Gelenkpulver für Hunde im Test 2026: 5 Gelenkmittel im Vergleich", href: "/blog/gelenk-test-hund-oktober-2026" },
   lachsoel: { slug: "lachsoel-test-hund-oktober-2026", title: "Lachsöl für Hunde im Test 2026: 5 Lachsöle im Vergleich", href: "/blog/lachsoel-test-hund-oktober-2026" },
 } satisfies Record<string, Comparison>;
 
@@ -37,4 +37,9 @@ export function comparisonForReview(r: { title?: string | null; productName?: st
   if (/gelenk|gr(ü|ue)nlippmuschel|glucosamin|chondroitin|h(ü|ue)fte/i.test(text)) return C.gelenk;
   if (r.categorySlug === "alleinfuttermittel-hund" && (WET.test(text) || (r.moisture != null && r.moisture >= 60))) return C.nassfutter;
   return null;
+}
+
+/** Steht genau dieses Produkt (Einzeltest-Slug) im Vergleichstest? Nur dann darf die FAQ „Vergleichstest zu <Produkt>“ sagen. */
+export function isInComparison(comparison: Comparison | null | undefined, reviewSlug: string): boolean {
+  return Boolean(comparison?.members?.includes(reviewSlug));
 }

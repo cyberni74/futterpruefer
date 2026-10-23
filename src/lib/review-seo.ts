@@ -60,11 +60,13 @@ export type ReviewSeoInput = {
   ergaenzung: boolean;
 };
 
+const lowerFirst = (s: string) => s.charAt(0).toLocaleLowerCase("de") + s.slice(1);
+
 /** Erster Satz: beantwortet „Lohnt sich …?“ direkt mit Punkten und Ampel. */
 export function directAnswer(r: ReviewSeoInput): string {
   const rating = ratingFor(r.totalScore);
   const d = dayDate(r.testedAt);
-  return `Lohnt sich ${r.name}? Nach unserem Bewertungsschema: ${RATING_LABEL[rating].toLocaleLowerCase("de")}. ${r.name} erreicht im Test${d ? ` vom ${d}` : ""} ${r.totalScore} von 100 Punkten, Ampel ${AMPEL_WORD[rating]}.`;
+  return `Lohnt sich ${r.name}? Nach unserem Bewertungsschema: ${lowerFirst(RATING_LABEL[rating])}. ${r.name} erreicht im Test${d ? ` vom ${d}` : ""} ${r.totalScore} von 100 Punkten, Ampel ${AMPEL_WORD[rating]}.`;
 }
 
 function priceText(r: ReviewSeoInput): string {
@@ -94,7 +96,7 @@ export function kurzGesagt(r: ReviewSeoInput): string[] {
 
 export type FaqItem = { question: string; answer: string };
 
-export function reviewFaq(r: ReviewSeoInput, comparison?: { title: string } | null): FaqItem[] {
+export function reviewFaq(r: ReviewSeoInput, comparison?: { title: string } | null, productInComparison = false): FaqItem[] {
   const rating = ratingFor(r.totalScore);
   const d = dayDate(r.testedAt);
   const out: FaqItem[] = [];
@@ -110,7 +112,7 @@ export function reviewFaq(r: ReviewSeoInput, comparison?: { title: string } | nu
   const mis = misleadingClaims(r.claims);
   if (mis.length) {
     out.push({
-      question: `Welche Werbeaussagen zu ${r.name} halten wir für irreführend?`,
+      question: mis.length === 1 ? `Welche Werbeaussage zu ${r.name} halten wir für irreführend?` : `Welche Werbeaussagen zu ${r.name} halten wir für irreführend?`,
       answer: mis.map((c) => `„${clean(c.claim)}“${clean(c.reason) ? `: ${sentence(clean(c.reason))}` : "."}`).join(" "),
     });
   }
@@ -128,7 +130,13 @@ export function reviewFaq(r: ReviewSeoInput, comparison?: { title: string } | nu
     question: `Wie hat Futterprüfer ${r.name} getestet?`,
     answer: `Wir haben ${r.name} nicht im Labor untersucht. Unsere Bewertung beruht auf veröffentlichten Angaben: Produktseite, Deklaration und öffentlich zugängliche Herstellerangaben${d ? ` (Stand ${d})` : ""}. Bewertet wird nach unserem ${r.ergaenzung ? "Bewertungsschema für Ergänzungsfutter" : "rezepturbasierten Bewertungsschema"} mit 100 Punkten: ab 80 Grün, ab 60 Gelb, darunter Rot.`,
   });
-  if (comparison) out.push({ question: `Gibt es einen Vergleichstest zu ${r.name}?`, answer: `Ja, passend dazu: ${comparison.title}. Der Link steht direkt über diesen Fragen.` });
+  if (comparison) {
+    out.push(
+      productInComparison
+        ? { question: `Gibt es einen Vergleichstest zu ${r.name}?`, answer: `Ja, passend dazu: ${comparison.title}. Der Link steht direkt über diesen Fragen.` }
+        : { question: "Gibt es einen Vergleichstest zu ähnlichen Produkten?", answer: `Ja: ${comparison.title}. ${r.name} selbst ist darin nicht enthalten. Der Link steht direkt über diesen Fragen.` },
+    );
+  }
   return out;
 }
 

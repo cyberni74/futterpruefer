@@ -38,7 +38,7 @@ import { WishBox } from "@/components/wish-box";
 import { Disclosure } from "@/components/disclosure";
 import { JsonLd } from "@/components/json-ld";
 import { directAnswer, keywordName, kurzGesagt, renameBodyFazit, reviewFaq, seoFazitHeading, type ReviewSeoInput } from "@/lib/review-seo";
-import { comparisonForReview } from "@/lib/comparison-links";
+import { comparisonForReview, isInComparison } from "@/lib/comparison-links";
 import { faqPageJsonLd } from "@/lib/faq-schema";
 import "@/styles/vergleichstest.css";
 
@@ -167,7 +167,7 @@ export default async function ReviewPage({ params }: PageProps<"/[kategorie]/[sl
   };
   const moisture = analysis.find((a) => /feucht|wasser/i.test(a.name))?.value ?? null;
   const comparison = comparisonForReview({ title: r.title, productName: r.productName, keyword: r.keyword, categorySlug: r.category.slug, moisture });
-  const faq = reviewFaq(seoInput, comparison);
+  const faq = reviewFaq(seoInput, comparison, isInComparison(comparison, r.slug));
   const faqLd = faqPageJsonLd(faq);
   const abs = (u: string) => (u.startsWith("http") ? u : absoluteUrl(u));
   const author = contentAuthor(r.authorSlug);
