@@ -337,7 +337,7 @@ export default function ErgaenzungsfutterMethodikPage() {
           <li><strong>1–2:</strong> nur formlose schriftliche Angaben ohne Belege</li>
           <li><strong>0:</strong> keine Unterlagen</li>
         </ul>
-        <p>Unsere Bewertung stützt sich auf die Amazon-Produktseite, die Deklaration und öffentlich zugängliche Herstellerangaben. Unterlagen bringen nur Punkte in diesem Teilkriterium (höchstens 10 von 100) und verändern die übrigen Kriterien nur, wenn sie dort einen Sachverhalt belegen (z. B. eine gemessene Wirkstoffmenge). Für Bewertungen nehmen wir kein Geld. Wir bewerten anhand öffentlicher Angaben und eigener Recherche. Bei manchen Produkten verdienen wir über als Werbung gekennzeichnete Amazon-Links eine Provision, das hat keinen Einfluss auf die Note; rot bewertete Produkte erhalten keinen Kauflink.</p>
+        <p>Unsere Bewertung stützt sich auf die Amazon-Produktseite, die Deklaration und öffentlich zugängliche Herstellerangaben. Unterlagen bringen nur Punkte in diesem Teilkriterium (höchstens 10 von 100) und verändern die übrigen Kriterien nur, wenn sie dort einen Sachverhalt belegen (z. B. eine gemessene Wirkstoffmenge). Für Bewertungen nehmen wir kein Geld. Wir bewerten anhand öffentlicher Angaben und eigener Recherche. Bei manchen Produkten verdienen wir über als Werbung gekennzeichnete Amazon-Links eine Provision, das hat keinen Einfluss auf die Note. Auch rot bewertete Produkte verlinken wir zu Amazon; ein solcher Link ist keine Kaufempfehlung.</p>
 
         <h2 id="sicherheit">Wie gehen Sicherheit und Tierschutz ein?</h2>
         <p>Sicherheit bringt keine Punkte, weil Sicherheit selbstverständlich sein muss. Ein Problem zieht die Note nach unten:</p>
@@ -355,7 +355,7 @@ export default function ErgaenzungsfutterMethodikPage() {
           <li>Sicherheit mittel: max. 59 + Warnsignal</li>
           <li>Sicherheit schwer: max. 39 + Warnsignal</li>
         </ul>
-        <p><strong className="text-good">Grün</strong> ab 80 (empfehlenswert) · <strong className="text-mid">Gelb</strong> 60–79 (mit Abstrichen) · <strong className="text-bad">Rot</strong> unter 60 (nicht empfehlenswert). Produkte mit roter Ampel bekommen keinen Kauf-Button.</p>
+        <p><strong className="text-good">Grün</strong> ab 80 (empfehlenswert) · <strong className="text-mid">Gelb</strong> 60–79 (mit Abstrichen) · <strong className="text-bad">Rot</strong> unter 60 (nicht empfehlenswert). Auch bei roter Ampel verlinken wir die Amazon-Produktseite; das ist keine Kaufempfehlung.</p>
 
         <h2 id="faq">Häufige Fragen</h2>
         {ERGAENZUNG_FAQ.map((item) => (

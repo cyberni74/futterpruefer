@@ -216,7 +216,7 @@ export default function MethodikPage() {
         <p>Bei Rezepturänderungen, neuen Erkenntnissen oder Rückrufen wird ein Test überarbeitet. Der Hinweis „Zuletzt aktualisiert“ nennt das Datum. Haben wir einen Fehler gemacht, korrigieren wir ihn sichtbar. Hinweise auf sachliche Fehler senden Sie bitte über das <Link href="/kontakt">Kontaktformular</Link>. Wir prüfen jeden Hinweis anhand der Quellen. Die Bewertung selbst ist nicht verhandelbar.</p>
 
         <h2 id="unabhaengigkeit">Finanzierung und Hersteller</h2>
-        <p>Hersteller beauftragen oder bezahlen keine Tests und haben keinen Einfluss auf die Punkte. Futterprüfer finanziert sich über Provisionen aus dem Amazon-Partnerprogramm. Die Provision hängt nicht von der Punktzahl ab. Produkte mit Rot-Bewertung erhalten keinen Kauflink. Wir fragen Hersteller nicht an. Belege, die Hersteller von sich aus einsenden, berücksichtigen wir nach den auf dieser Seite beschriebenen Kriterien.</p>
+        <p>Hersteller beauftragen oder bezahlen keine Tests und haben keinen Einfluss auf die Punkte. Futterprüfer finanziert sich über Provisionen aus dem Amazon-Partnerprogramm. Die Provision hängt nicht von der Punktzahl ab. Auch bei Produkten mit Rot-Bewertung verlinken wir die Amazon-Produktseite; ein solcher Link ist keine Kaufempfehlung. Wir fragen Hersteller nicht an. Belege, die Hersteller von sich aus einsenden, berücksichtigen wir nach den auf dieser Seite beschriebenen Kriterien.</p>
         <p>Begriffe aus den Tests erklären wir im <Link href="/lexikon">Futter-Lexikon</Link> und im <Link href="/glossar">Glossar</Link>. Antworten auf häufige Fragen finden Sie in der <Link href="/faq">FAQ</Link>. Hier geht es direkt zu den <Link href="/tests">Tests</Link>.</p>
       </div>
     </PageShell>

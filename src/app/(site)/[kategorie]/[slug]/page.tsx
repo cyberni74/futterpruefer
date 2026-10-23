@@ -5,7 +5,6 @@ import { ArrowRight, Award, CalendarCheck, Clock, PawPrint, RefreshCw, Scale, Us
 import { prisma } from "@/lib/db";
 import { getRelatedReviews, getReviewBySlug, previewDraftsEnabled, publishedWhere, resolveReviewPath } from "@/lib/queries";
 import { getLexikonEntries, getPostsForReview, renderArticle } from "@/lib/content";
-import { isRotScore } from "@/lib/rot-guard";
 import { enhanceArticle } from "@/lib/article-html";
 import { consWithClaims, misleadingClaims, parseAnalysis, parseClaims, readingMinutes } from "@/lib/product-data";
 import { CRITERIA, type Scores } from "@/lib/scoring";
@@ -123,8 +122,8 @@ export default async function ReviewPage({ params }: PageProps<"/[kategorie]/[sl
   const [related, posts, linked, conclusion, lexikon, pom] = await Promise.all([
     getRelatedReviews(r.categoryId, r.id, 3),
     getPostsForReview(r, 2),
-    renderArticle(r.bodyHtml, [], { rot: isRotScore(r.totalScore) }),
-    renderArticle(r.conclusionHtml, [], { rot: isRotScore(r.totalScore) }),
+    renderArticle(r.bodyHtml),
+    renderArticle(r.conclusionHtml),
     getLexikonEntries(),
     prisma.productOfMonth.findFirst({ where: { reviewId: r.id }, orderBy: [{ year: "desc" }, { month: "desc" }] }),
   ]);
@@ -147,7 +146,8 @@ export default async function ReviewPage({ params }: PageProps<"/[kategorie]/[sl
           link: s.link,
         }))),
         tierschutz: r.efTierschutzText,
-        rot: efResult.ampel === "ROT",
+        // Seit 23.10.2026 (Entscheidung Manni): Amazon-Links auch bei Rot, daher keine Kauf-Box-Entfernung mehr.
+        rot: false,
       })
     : linked;
   const { html: body, toc } = enhanceArticle(renameBodyFazit(articleSource), efResult ? undefined : scores);

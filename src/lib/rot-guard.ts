@@ -2,7 +2,11 @@ import sanitizeHtml from "sanitize-html";
 import { isTaggedAffiliateHref } from "./sanitize";
 import { ratingFor } from "./scoring";
 
-/** Rot-Regel: Testseiten unter 60 Punkten zeigen keinen Kauflink und keinen Amazon-CTA. */
+/**
+ * Früher (bis 23.10.2026): Rot-Regel ohne Kauflink. Seit 23.10.2026 (Entscheidung Manni) bekommen auch
+ * Rot-Tests einen neutralen Amazon-Link; die Testseite ruft stripAffiliateForRot nicht mehr auf.
+ * isRotScore bleibt als Hilfsfunktion.
+ */
 export function isRotScore(total: number | null | undefined): boolean {
   return ratingFor(total) === "schlecht";
 }
