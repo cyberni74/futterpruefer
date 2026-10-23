@@ -114,8 +114,9 @@ export const OPERATOR = {
     ["A1, Gouranganagar, North 24 Parganas", "West Bengal – 700162, Indien"],
   ],
   /** Ansprechpartner/Vertreter für Europa */
-  europeRepresentative: "Beytullah Coscun",
-  europeAddress: "Via della Moscova, 20121 Mailand, Italien",
+  europeRepresentative: "Wilhelm Schäfer",
+  /** Leer, solange keine ladungsfähige Anschrift hinterlegt ist. */
+  europeAddress: "" as string,
   email: "contactus@teraa-intl.com",
   phone: "+91 95350 96718",
   phoneInternational: "+91 94773 74505",

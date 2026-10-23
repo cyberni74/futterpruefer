@@ -15,7 +15,7 @@ export default function DatenschutzPage() {
           E-Mail: <a href={`mailto:${OPERATOR.email}`}>{OPERATOR.email}</a><br />
           Telefon: {OPERATOR.phone}
         </p>
-        <p>Vertreter in der Europäischen Union nach Art. 27 DSGVO: {OPERATOR.europeRepresentative}, {OPERATOR.europeAddress}, E-Mail: {OPERATOR.email}</p>
+        <p>Vertreter in der Europäischen Union nach Art. 27 DSGVO: {OPERATOR.europeRepresentative}{OPERATOR.europeAddress ? `, ${OPERATOR.europeAddress}` : ""}, E-Mail: {OPERATOR.email}</p>
         <h2>2. Hosting und Datenbank</h2>
         <p>Diese Website wird bei Vercel Inc. (USA) gehostet, die Server-Funktionen laufen in der Region Frankfurt. Beim Aufruf werden technisch notwendige Daten (IP-Adresse, Zeitpunkt, aufgerufene Seite, Browser) verarbeitet (Art. 6 Abs. 1 lit. f DSGVO). Die Übermittlung in die USA erfolgt auf Grundlage des EU-US Data Privacy Framework bzw. von EU-Standardvertragsklauseln. Mit Vercel besteht eine Vereinbarung zur Auftragsverarbeitung (Art. 28 DSGVO) (Data Processing Addendum, Bestandteil der Vercel-Nutzungsbedingungen).</p>
         <p>Die Inhalte der Website und Kontaktanfragen werden in einer Datenbank von Supabase (Rechenzentrum in Frankfurt am Main, Deutschland) gespeichert. Mit Supabase besteht eine Vereinbarung zur Auftragsverarbeitung (Art. 28 DSGVO) (Data Processing Addendum, Bestandteil der Supabase-Nutzungsbedingungen).</p>

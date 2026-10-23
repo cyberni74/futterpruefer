@@ -118,13 +118,36 @@ export async function getTickerEntries(): Promise<TickerEntry[]> {
   ];
 }
 
-export function getRelatedReviews(categoryId: string, excludeId: string, take = 3) {
-  return prisma.review.findMany({
-    where: { ...publishedWhere(), categoryId, id: { not: excludeId } },
-    orderBy: { totalScore: "desc" },
-    take,
-    select: reviewCardSelect,
+/**
+ * Verwandte Tests: Nachbarn in der Punkte-Rangliste der Kategorie (ringförmig), nicht immer die Top 3.
+ * So verweist jeder Test auf Produkte mit ähnlicher Punktzahl, und jeder Test bekommt Links von
+ * anderen Testseiten (keine Seite hängt nur an der Kategorieübersicht).
+ */
+export async function getRelatedReviews(categoryId: string, excludeId: string, take = 3) {
+  const ranking = await prisma.review.findMany({
+    where: { ...publishedWhere(), categoryId },
+    orderBy: [{ totalScore: "desc" }, { id: "asc" }],
+    select: { id: true },
   });
+  const ids = relatedNeighborIds(ranking.map((r) => r.id), excludeId, take);
+  if (!ids.length) return [];
+  const rows = await prisma.review.findMany({ where: { id: { in: ids } }, select: reviewCardSelect });
+  const byId = new Map(rows.map((r) => [r.id, r]));
+  return ids.flatMap((id) => byId.get(id) ?? []);
+}
+
+/** Ring-Nachbarn: einer davor, dann die folgenden. Ergebnis nach Punkten absteigend wie die Rangliste. */
+export function relatedNeighborIds(ranked: string[], selfId: string, take = 3): string[] {
+  const others = ranked.filter((id) => id !== selfId);
+  if (others.length <= take) return others;
+  const i = ranked.indexOf(selfId);
+  if (i < 0) return others.slice(0, take);
+  const n = ranked.length;
+  const picked: number[] = [];
+  for (const offset of [-1, ...Array.from({ length: take - 1 }, (_, k) => k + 1)]) {
+    picked.push((((i + offset) % n) + n) % n);
+  }
+  return picked.sort((a, b) => a - b).map((idx) => ranked[idx]);
 }
 
 export async function findRedirect(path: string) {
@@ -170,4 +193,18 @@ export function getHomeFaq(take = 4) {
 export async function getPublishedCounts() {
   const [tests, posts] = await Promise.all([prisma.review.count({ where: publishedWhere() }), prisma.blogPost.count({ where: publishedWhere() })]);
   return { tests, posts };
+}
+
+/** Chronologisch vorheriger veröffentlichter Beitrag; beim ältesten der neueste (Ring). */
+export async function getPreviousPost(postId: string) {
+  const ids = await prisma.blogPost.findMany({
+    where: publishedWhere(),
+    orderBy: [{ publishedAt: "desc" }, { id: "asc" }],
+    select: { id: true },
+  });
+  if (ids.length < 2) return null;
+  const i = ids.findIndex((r) => r.id === postId);
+  if (i < 0) return null;
+  const prevId = ids[(i + 1) % ids.length].id;
+  return prisma.blogPost.findUnique({ where: { id: prevId }, select: blogCardSelect });
 }

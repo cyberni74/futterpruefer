@@ -18,6 +18,11 @@ export function shortUrl(url: string, max = LINK_TEXT_MAX): string {
   return plain.length > max ? `${plain.slice(0, max)}…` : plain;
 }
 
+/** Partner-Tag oder amzn-Kurzlink: nur dann ist eine Quellen-URL ein Werbelink. */
+function isTaggedAffiliate(url: string): boolean {
+  return /[?&](?:amp;)?tag=/i.test(url) || /^https?:\/\/([^/]*\.)?amzn\.(to|eu)\b/i.test(url) ? isSponsoredHref(url) : false;
+}
+
 const esc = (s: string) => s.replace(/&(?!amp;|lt;|gt;|quot;|#\d+;)/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
 export function autolinkUrls(html: string | null | undefined): string {
@@ -44,7 +49,9 @@ export function autolinkUrls(html: string | null | undefined): string {
         const tail = raw.match(TRAILING)?.[0] ?? "";
         const url = tail ? raw.slice(0, -tail.length) : raw;
         if (url.length < 12) return raw;
-        const rel = isSponsoredHref(url) ? externalRel(undefined, url) : "noopener nofollow";
+        // Quellen-URLs: nur Links mit Partner-Tag (oder amzn-Kurzlink) sind Werbung → sponsored;
+        // alle übrigen, auch nackte Amazon-Produktseiten ohne Tag, nur nofollow noopener noreferrer.
+        const rel = isTaggedAffiliate(url) ? externalRel(undefined, url) : "nofollow noopener noreferrer";
         return `<a href="${esc(url)}" class="src-link" target="_blank" rel="${rel}" title="${esc(url)}">${esc(shortUrl(url))}</a>${tail}`;
       })
       .replace(/(\S)[ \t]*\r?\n\s*(?=\S)/g, "$1<br>");

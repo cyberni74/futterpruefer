@@ -329,15 +329,15 @@ export default function ErgaenzungsfutterMethodikPage() {
 
         <h2 id="transparenz">Wann gibt es Punkte für Transparenz? (15 Punkte)</h2>
         <p><strong>Deklarierte Wirkstoffmengen (0–5):</strong> 5 = alle Wirkstoffe mit Menge pro Tagesdosis oder pro kg; 2–3 = nur Prozentangaben oder nur teilweise; 0 = keine Menge.</p>
-        <p><strong>Herstellerunterlagen (0–10)</strong>, wie bei Alleinfutter:</p>
+        <p><strong>Herstellerunterlagen (0–10)</strong>, wie bei Alleinfutter, nur für Unterlagen, die der Hersteller von sich aus einreicht oder die öffentlich zugänglich sind (nicht für Unterlagen auf unsere Anfrage hin):</p>
         <ul>
           <li><strong>10:</strong> nur mit echter Laboranalyse des fertigen Produkts (akkreditiertes Labor, Charge, Datum) mit Wirkstoffgehalt</li>
           <li><strong>6–8:</strong> unterschriebene Unterlagen, Wirkstoffspezifikation, Rohstoffzertifikate</li>
           <li><strong>3–5:</strong> unsignierte Dokumente oder Datenblätter</li>
-          <li><strong>1–2:</strong> nur E-Mail-Antworten ohne Belege</li>
+          <li><strong>1–2:</strong> nur formlose schriftliche Angaben ohne Belege</li>
           <li><strong>0:</strong> keine Unterlagen</li>
         </ul>
-        <p>Wir fragen jeden Hersteller vor der Veröffentlichung gleich an. Unterlagen bringen nur Punkte in diesem Teilkriterium (höchstens 10 von 100) und verändern die übrigen Kriterien nur, wenn sie dort einen Sachverhalt belegen (z. B. eine gemessene Wirkstoffmenge). Für Bewertungen nehmen wir kein Geld. Wir bewerten anhand öffentlicher Angaben und eigener Recherche. Bei manchen Produkten verdienen wir über als Werbung gekennzeichnete Amazon-Links eine Provision, das hat keinen Einfluss auf die Note; rot bewertete Produkte erhalten keinen Kauflink.</p>
+        <p>Unsere Bewertung stützt sich auf die Amazon-Produktseite, die Deklaration und öffentlich zugängliche Herstellerangaben. Unterlagen bringen nur Punkte in diesem Teilkriterium (höchstens 10 von 100) und verändern die übrigen Kriterien nur, wenn sie dort einen Sachverhalt belegen (z. B. eine gemessene Wirkstoffmenge). Für Bewertungen nehmen wir kein Geld. Wir bewerten anhand öffentlicher Angaben und eigener Recherche. Bei manchen Produkten verdienen wir über als Werbung gekennzeichnete Amazon-Links eine Provision, das hat keinen Einfluss auf die Note; rot bewertete Produkte erhalten keinen Kauflink.</p>
 
         <h2 id="sicherheit">Wie gehen Sicherheit und Tierschutz ein?</h2>
         <p>Sicherheit bringt keine Punkte, weil Sicherheit selbstverständlich sein muss. Ein Problem zieht die Note nach unten:</p>
