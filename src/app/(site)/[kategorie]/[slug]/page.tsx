@@ -37,6 +37,10 @@ import { NewsletterBox } from "@/components/newsletter-box";
 import { WishBox } from "@/components/wish-box";
 import { Disclosure } from "@/components/disclosure";
 import { JsonLd } from "@/components/json-ld";
+import { directAnswer, kurzGesagt, renameBodyFazit, reviewFaq, seoFazitHeading, type ReviewSeoInput } from "@/lib/review-seo";
+import { comparisonForReview } from "@/lib/comparison-links";
+import { faqPageJsonLd } from "@/lib/faq-schema";
+import "@/styles/vergleichstest.css";
 
 export const revalidate = 3600;
 /** Draft-Slugs stehen nicht in generateStaticParams und rendern auf der Preview on-demand. */
@@ -146,16 +150,25 @@ export default async function ReviewPage({ params }: PageProps<"/[kategorie]/[sl
         rot: efResult.ampel === "ROT",
       })
     : linked;
-  const { html: body, toc } = enhanceArticle(articleSource, efResult ? undefined : scores);
+  const { html: body, toc } = enhanceArticle(renameBodyFazit(articleSource), efResult ? undefined : scores);
   const hasProductData = Boolean(r.composition?.trim() || analysis.length || r.price != null || r.pricePerKg != null || r.pricePerDay != null);
   const hasConclusion = Boolean(conclusion.trim());
-  const tocItems = [...toc, ...(hasConclusion ? [{ id: "fazit", text: "Fazit" }] : []), ...(hasProductData ? [{ id: "produktdaten", text: "Produktdaten" }] : []), ...(claims.length ? [{ id: "werbeaussagen-h", text: "Werbeversprechen im Faktencheck" }] : [])];
+  const tocItems = [...toc, { id: "fazit-test", text: "Fazit" }, { id: "faq-test", text: "Häufige Fragen" }, ...(hasProductData ? [{ id: "produktdaten", text: "Produktdaten" }] : []), ...(claims.length ? [{ id: "werbeaussagen-h", text: "Werbeversprechen im Faktencheck" }] : [])];
   const url = absoluteUrl(reviewPath(r));
   const testedAt = r.testedAt ?? r.publishedAt;
   const minutes = readingMinutes(r.bodyHtml, r.verdict);
   const images = [r.imageUrl, r.contentImageUrl, ...(r.gallery ?? [])].filter((x): x is string => Boolean(x));
   const name = productLabel(r.brand, r.productName);
   const gallery = (r.gallery ?? []).filter(Boolean);
+  const seoInput: ReviewSeoInput = {
+    name, totalScore: r.totalScore, testedAt, verdict: r.verdict, pros: r.pros, cons: consWithClaims(r.cons, claims), claims,
+    price: r.price, packageSize: r.packageSize, pricePerKg: r.pricePerKg, pricePerDay: r.pricePerDay, priceDate: r.priceDate,
+    composition: r.composition, ergaenzung: Boolean(efResult),
+  };
+  const moisture = analysis.find((a) => /feucht|wasser/i.test(a.name))?.value ?? null;
+  const comparison = comparisonForReview({ title: r.title, productName: r.productName, keyword: r.keyword, categorySlug: r.category.slug, moisture });
+  const faq = reviewFaq(seoInput, comparison);
+  const faqLd = faqPageJsonLd(faq);
   const abs = (u: string) => (u.startsWith("http") ? u : absoluteUrl(u));
   const author = contentAuthor(r.authorSlug);
   const draftPreview = allowDrafts && !isPublicReview(r);
@@ -284,12 +297,36 @@ export default async function ReviewPage({ params }: PageProps<"/[kategorie]/[sl
             <p className="mt-6 rounded-2xl bg-bg-soft p-4 text-sm text-muted">Unterstrichene Begriffe sind im <Link href="/lexikon" className="font-semibold text-brand underline">Futter-Lexikon</Link> bzw. im <Link href="/glossar" className="font-semibold text-brand underline">Glossar</Link> erklärt. Der farbige Punkt zeigt die Bedenklichkeits-Ampel.</p>
           </div>
 
-          {hasConclusion && (
-            <section id="fazit" aria-labelledby="fazit-h" className="mt-10 scroll-mt-28 rounded-3xl border border-border bg-bg-soft p-5 md:p-8">
-              <h2 id="fazit-h" className="text-2xl font-extrabold">Fazit</h2>
-              <div className="prose-fp mt-3" dangerouslySetInnerHTML={{ __html: conclusion }} />
-            </section>
+          <section id="fazit-test" aria-labelledby="fazit-h" className="mt-10 scroll-mt-28 rounded-3xl border border-border bg-bg-soft p-5 md:p-8">
+            <h2 id="fazit-h" className="text-2xl font-extrabold">{seoFazitHeading(name, testedAt)}</h2>
+            <div className="prose-fp mt-3">
+              <p><strong>{directAnswer(seoInput)}</strong></p>
+              <div className="fp-box fp-kurz space-y-3 rounded-3xl border-2 border-brand bg-brand-soft p-5">
+                <p className="font-extrabold">📌 Kurz gesagt</p>
+                <ul>{kurzGesagt(seoInput).map((t) => <li key={t}>{t}</li>)}</ul>
+              </div>
+              {hasConclusion ? <div dangerouslySetInnerHTML={{ __html: conclusion }} /> : r.verdict?.trim() ? <p>{r.verdict.trim()}</p> : null}
+            </div>
+          </section>
+
+          {comparison && (
+            <p className="mt-6 rounded-2xl border border-border bg-surface p-4 text-sm">
+              <strong>Zum Vergleichstest:</strong>{" "}
+              <Link href={comparison.href} className="font-semibold text-brand underline">{comparison.title}</Link>
+            </p>
           )}
+
+          <section id="faq-test" aria-labelledby="faq-h" className="mt-10 scroll-mt-28">
+            <div className="prose-fp">
+              <div className="fp-box vt-faq">
+                <h2 id="faq-h">Häufige Fragen zu {name}</h2>
+                {faq.map((f) => (
+                  <details key={f.question} className="vt-acc vt-faq-item"><summary>{f.question}</summary><p>{f.answer}</p></details>
+                ))}
+              </div>
+            </div>
+            {faqLd && <JsonLd data={faqLd} />}
+          </section>
 
           {/* 7. Produktdaten */}
           {hasProductData && (

@@ -21,6 +21,7 @@ import { NewsletterBox } from "@/components/newsletter-box";
 import { WishBox } from "@/components/wish-box";
 import { BodyGauges } from "@/components/body-gauges";
 import "@/styles/vergleichstest.css";
+import { comparisonForPost } from "@/lib/comparison-links";
 
 export const revalidate = 3600;
 
@@ -138,6 +139,12 @@ export default async function PostPage({ params }: PageProps<"/blog/[slug]">) {
         <div dangerouslySetInnerHTML={{ __html: body }} />
       </div>
       <BodyGauges />
+      {comparisonForPost(p.slug) && (
+        <p className="mt-8 rounded-2xl border border-border bg-surface p-4 text-sm">
+          <strong>Zum Vergleichstest:</strong>{" "}
+          <a href={comparisonForPost(p.slug)!.href} className="font-semibold text-brand underline">{comparisonForPost(p.slug)!.title}</a>
+        </p>
+      )}
       {reviews.length > 0 && (
         <section aria-labelledby="passende-tests" className="mt-16">
           <h2 id="passende-tests" className="mb-6 text-2xl font-extrabold">Passende Tests</h2>
