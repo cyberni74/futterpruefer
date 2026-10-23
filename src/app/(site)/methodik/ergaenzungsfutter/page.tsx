@@ -289,12 +289,12 @@ export default function ErgaenzungsfutterMethodikPage() {
 
       <div className="prose-fp mt-6">
         <h2 id="werbeaussagen">Wie prüfen wir die Werbeaussagen? (20 Punkte)</h2>
-        <p>Grundlage ist die VO (EG) Nr. 767/2009, vor allem Art. 11 (keine Irreführung) und Art. 13 (Angaben). Nach Art. 13 Abs. 3 darf nicht behauptet werden, dass ein Futtermittel eine Krankheit verhindert, behandelt oder heilt; ausgenommen sind nur Kokzidiostatika/Histomonostatika und Angaben zu ernährungsbedingten Mängeln ohne krankhaften Zusammenhang. Angaben zur Optimierung der Ernährung müssen wissenschaftlich belegt sein (Art. 13 Abs. 1). Ein Diätzweck ist nur zulässig, wenn er in VO (EU) 2020/354 gelistet ist und alle dort genannten Merkmale und Kennzeichnungen erfüllt sind (Art. 9, 10 und 18 VO (EG) Nr. 767/2009).</p>
+        <p>Grundlage ist die VO (EG) Nr. 767/2009, vor allem Art. 11 (keine Irreführung) und Art. 13 (Angaben). Nach Art. 13 Abs. 3 darf nicht behauptet werden, dass ein Futtermittel eine Krankheit verhindert, behandelt oder heilt; ausgenommen sind nur Kokzidiostatika/Histomonostatika und Angaben zu ernährungsbedingten Mängeln ohne krankhaften Zusammenhang. Angaben zur Optimierung der Ernährung müssen wissenschaftlich belegt sein (Art. 13 Abs. 1). Ein Diätzweck ist nur erlaubt, wenn er in VO (EU) 2020/354 gelistet ist und alle dort genannten Merkmale und Kennzeichnungen erfüllt sind (Art. 9, 10 und 18 VO (EG) Nr. 767/2009).</p>
         <ul>
-          <li><strong>18–20:</strong> alle Aussagen zulässig, belegt und mit allen Pflichtangaben (z. B. „Ergänzungsfuttermittel für Hunde“)</li>
-          <li><strong>12–17:</strong> übertreibend, aber zulässig</li>
+          <li><strong>18–20:</strong> alle Aussagen ohne Einwand, belegt und mit allen Pflichtangaben (z. B. „Ergänzungsfuttermittel für Hunde“)</li>
+          <li><strong>12–17:</strong> übertreibend, aber ohne Einwand</li>
           <li><strong>6–11:</strong> unbelegte Wirkversprechen, fehlende Pflichtangaben oder widersprüchliche Angaben (z. B. „Ergänzung“ und „vollwertige Mahlzeit“)</li>
-          <li><strong>0–5:</strong> unzulässige Krankheitsbezüge („bei Arthrose“, „heilt Durchfall“) oder Angaben, die wir nach Prüfung als irreführend einstufen; jede Einstufung begründen wir im Faktencheck</li>
+          <li><strong>0–5:</strong> Krankheitsbezüge („bei Arthrose“, „heilt Durchfall“) oder andere Angaben, die wir nach Prüfung für irreführend halten; jede Einstufung begründen wir im Faktencheck</li>
         </ul>
         <p><strong>Heilaussagen-Deckel:</strong> höchstens 79 Punkte (nie Grün). Jede beanstandete Aussage steht wörtlich und mit Quelle im Faktencheck.</p>
 
