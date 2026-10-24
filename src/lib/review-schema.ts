@@ -129,9 +129,33 @@ export function productSnippetIssues(data: ReturnType<typeof productReviewJsonLd
   return issues;
 }
 
+function asRecord(value: unknown): Record<string, unknown> {
+  return value && typeof value === "object" && !Array.isArray(value) ? (value as Record<string, unknown>) : {};
+}
+
+/**
+ * Platzierung eines Vergleichstests als einfacher ListItem (Position, Name, ggf. URL).
+ * Review und Product gehören nur auf Einzeltests: Google zeigt für Listen keine Review-Snippets,
+ * und ein Product ohne review, offers oder aggregateRating ist in der Search Console ungültig.
+ */
+function simplifyListItem(entry: unknown, index: number) {
+  const e = asRecord(entry);
+  const item = asRecord(e.item);
+  const reviewed = Object.keys(asRecord(item.itemReviewed)).length ? asRecord(item.itemReviewed) : item;
+  const name = [reviewed.name, item.name, e.name].find((v): v is string => typeof v === "string" && v.trim() !== "");
+  const url = [e.url, item.url, reviewed.url].find((v): v is string => typeof v === "string" && v !== "");
+  return {
+    "@type": "ListItem" as const,
+    position: typeof e.position === "number" ? e.position : index + 1,
+    ...(name ? { name } : {}),
+    ...(url ? { url } : {}),
+  };
+}
+
 /**
  * Bereits gespeicherte JSON-LD-Knoten (Vergleichstests im bodyHtml) auf die Seitenregeln bringen:
- * kein Offer (wir verkaufen nichts) und ein Autor wie auf allen anderen Tests (Person), nie Organization.
+ * kein Offer (wir verkaufen nichts), ein Autor wie auf allen anderen Tests (Person, nie Organization)
+ * und ItemList nur mit einfachen ListItem-Einträgen.
  */
 export function normalizeStoredJsonLd(value: unknown): unknown {
   if (Array.isArray(value)) return value.map(normalizeStoredJsonLd);
@@ -142,5 +166,6 @@ export function normalizeStoredJsonLd(value: unknown): unknown {
     const isOrganizationAuthor = key === "author" && typeof item === "object" && item !== null && (item as { "@type"?: unknown })["@type"] === "Organization";
     out[key] = isOrganizationAuthor ? contentAuthor(null) : normalizeStoredJsonLd(item);
   }
+  if (out["@type"] === "ItemList" && Array.isArray(out.itemListElement)) out.itemListElement = out.itemListElement.map(simplifyListItem);
   return out;
 }
