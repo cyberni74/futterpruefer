@@ -106,4 +106,33 @@ describe("normalizeStoredJsonLd", () => {
     expect(data).not.toHaveProperty("offers");
     expect(data.review.author).toMatchObject({ "@type": "Person", name: DEFAULT_AUTHOR.name });
   });
+
+  it("macht aus einer ItemList mit Review und Product einfache ListItem-Einträge", () => {
+    const data = normalizeStoredJsonLd({
+      "@type": "ItemList",
+      name: "Nassfutter-Test",
+      itemListOrder: "https://schema.org/ItemListOrderDescending",
+      numberOfItems: 2,
+      itemListElement: [
+        {
+          "@type": "ListItem",
+          position: 1,
+          item: {
+            "@type": "Review",
+            name: "Josera im Test",
+            reviewRating: { "@type": "Rating", ratingValue: 81 },
+            itemReviewed: { "@type": "Product", name: "Josera Meat Lovers", brand: { "@type": "Brand", name: "Josera" }, sku: "B0GNSMRNB2" },
+          },
+        },
+        { "@type": "ListItem", item: { "@type": "Product", name: "Rinti Kennerfleisch", url: "https://futterprüfer.de/x" } },
+      ],
+    }) as { name: string; numberOfItems: number; itemListElement: Record<string, unknown>[] };
+    expect(data.name).toBe("Nassfutter-Test");
+    expect(data.numberOfItems).toBe(2);
+    expect(data.itemListElement).toEqual([
+      { "@type": "ListItem", position: 1, name: "Josera Meat Lovers" },
+      { "@type": "ListItem", position: 2, name: "Rinti Kennerfleisch", url: "https://futterprüfer.de/x" },
+    ]);
+    expect(JSON.stringify(data)).not.toMatch(/Review|Product|itemReviewed|reviewRating|sku/);
+  });
 });
