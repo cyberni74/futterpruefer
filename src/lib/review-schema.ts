@@ -169,3 +169,29 @@ export function normalizeStoredJsonLd(value: unknown): unknown {
   if (out["@type"] === "ItemList" && Array.isArray(out.itemListElement)) out.itemListElement = out.itemListElement.map(simplifyListItem);
   return out;
 }
+
+/** Google verlangt an einem Product mindestens review, aggregateRating oder offers (sonst „ungültig“ in den Produkt-Snippets). */
+function isIncompleteProduct(node: unknown): boolean {
+  const n = asRecord(node);
+  const types = Array.isArray(n["@type"]) ? n["@type"] : [n["@type"]];
+  return types.includes("Product") && !n.review && !n.aggregateRating && !n.offers;
+}
+
+/**
+ * Letzte Absicherung vor der Ausgabe: Product-Knoten ohne review, aggregateRating und offers
+ * werden verworfen (auch in @graph). In Listen stehen sie als einfache ListItem (siehe normalizeStoredJsonLd).
+ * Gibt null zurück, wenn nichts übrig bleibt.
+ */
+export function withoutIncompleteProducts<T>(data: T): T | null {
+  if (Array.isArray(data)) {
+    const kept = data.filter((n) => !isIncompleteProduct(n)).map((n) => withoutIncompleteProducts(n)).filter((n) => n !== null);
+    return (kept.length ? kept : null) as T | null;
+  }
+  if (isIncompleteProduct(data)) return null;
+  const node = asRecord(data);
+  if (Array.isArray(node["@graph"])) {
+    const graph = (node["@graph"] as unknown[]).filter((n) => !isIncompleteProduct(n));
+    return graph.length ? ({ ...node, "@graph": graph } as T) : null;
+  }
+  return data;
+}

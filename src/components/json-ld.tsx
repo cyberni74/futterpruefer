@@ -1,3 +1,7 @@
+import { withoutIncompleteProducts } from "@/lib/review-schema";
+
 export function JsonLd({ data }: { data: Record<string, unknown> | Record<string, unknown>[] }) {
-  return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(data).replace(/</g, "\\u003c") }} />;
+  const safe = withoutIncompleteProducts(data);
+  if (!safe) return null;
+  return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(safe).replace(/</g, "\\u003c") }} />;
 }

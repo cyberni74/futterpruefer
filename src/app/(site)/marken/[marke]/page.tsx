@@ -26,8 +26,6 @@ export async function generateMetadata({ params }: PageProps<"/marken/[marke]">)
     title: `${b.brand} im Test: ${b.count} ${b.count === 1 ? "Produkt" : "Produkte"} bewertet`,
     description: trimMetaDescription(`${b.brand}: ${b.count} ${b.count === 1 ? "Test" : "Tests"} nach unserer 100-Punkte-Methodik, durchschnittlich ${b.avg} von 100 Punkten. Zusammensetzung, Werbeaussagen und Preis im Überblick.`),
     alternates: { canonical: `/marken/${b.slug}` },
-    // Eine Marke mit nur einem Test hat zu wenig eigenen Text: noindex, Links bleiben folgbar.
-    ...(b.count < 2 ? { robots: { index: false, follow: true } } : {}),
   };
 }
 
