@@ -110,8 +110,12 @@ export default function ErgaenzungsfutterMethodikPage() {
 
       <div className="prose-fp mt-10">
         <p><strong>Kurz gesagt:</strong> Ergänzungsfutter deckt allein nicht den Tagesbedarf, sondern soll vor allem bestimmte Stoffe liefern (vgl. Art. 3 Abs. 2 Buchst. j VO (EG) Nr. 767/2009). Darum gibt es die Hälfte der Punkte nur für den Wirkstoff: Ist es der richtige, und steckt genug davon drin? Die andere Hälfte verteilt sich auf ehrliche Werbung, einen sauberen Träger und offene Angaben. Sicherheitsprobleme bringen keine Punkte, sondern ein Warnsignal und eine schlechtere Ampel. Die Ampel ist dieselbe wie bei Alleinfutter.</p>
-        <p><em>Stand: 17.10.2026 · Verantwortlich: Redaktion Futterprüfer · Methodik-Version: ergaenzung-v1</em></p>
-        <p><strong>Änderungsprotokoll:</strong> 17.10.2026 – Erstveröffentlichung</p>
+        <p><em>Stand: 25.10.2026 · Verantwortlich: Redaktion Futterprüfer · Methodik-Version: ergaenzung-v1.1</em></p>
+        <p><strong>Änderungsprotokoll:</strong></p>
+        <ul>
+          <li><strong>25.10.2026 – ergaenzung-v1.1:</strong> Drei Regeln für Omega-3-Produkte ergänzt: Abzug für Omega-3-Quellen ohne Wirksamkeitsstudie beim Hund (Abschnitt 3), Abzug je weiterem Öl ohne belegten Nutzen (Abschnitt 3), Stufung der Dosierung bei Haut und Fell (Abschnitt 4). Auf unseren Lachsöl-Test vom 23.10.2026 angewendet, ändern die Regeln keine Punktzahl. Erstmals angewendet im Algenöl-Test Oktober 2026.</li>
+          <li>17.10.2026 – Erstveröffentlichung</li>
+        </ul>
 
         <h2 id="warum">Warum eine eigene Bewertung für Ergänzungsfutter?</h2>
         <p>Ein Alleinfutter muss den ganzen Tagesbedarf decken, deshalb zählen dort Rohstoffe und Nährstoffprofil (<Link href="/methodik">Methodik Alleinfutter</Link>). Ergänzungsfutter wird in kleinen Mengen gegeben und soll einen bestimmten Stoff liefern, etwa Glucosamin, Omega-3-Fettsäuren oder Flohsamen. Alles andere ist Träger, der den Wirkstoff schmackhaft und haltbar macht. Eine Bewertung von Protein und Fett wäre hier sinnlos.</p>
@@ -155,6 +159,8 @@ export default function ErgaenzungsfutterMethodikPage() {
           <li><strong>0–4:</strong> keine Studien, nur Tradition oder Herstellerbehauptung, oder der Wirkstoff passt nicht zum beworbenen Zweck</li>
           <li>Bei Mischungen zählt der Hauptwirkstoff. Für jeden beigemischten Stoff ohne Beleg ziehen wir 1–2 Punkte ab („viel draufgeschrieben, wenig drin“).</li>
         </ul>
+        <p><strong>Omega-3-Quelle ohne Wirksamkeitsstudie beim Hund: −2 Punkte.</strong> Die kontrollierten Hundestudien zu Gelenken und Haut wurden mit Fischöl gemacht, das mehr EPA als DHA enthält (Roush 2010; Logas &amp; Kunkle 1994; Mueller 2004). Stammen EPA und DHA aus einer anderen Quelle, etwa aus Algenöl, gibt es beim Hund bisher Studien zu Sicherheit und Aufnahme ins Blut (Dahms 2019; Souza 2019), aber keine zur Wirkung auf Gelenke oder Haut. Wir ziehen deshalb 2 Punkte vom Wert für Fischöl ab: bei Gelenkwerbung 15 statt 17, bei Haut, Fell oder allgemeinem Wohlbefinden 11 statt 13. Liegt eine solche Studie vor, entfällt der Abzug.</p>
+        <p><strong>Weitere Öle ohne belegten Nutzen: −1 Punkt je Öl.</strong> Enthält ein Omega-3-Produkt neben der EPA- und DHA-Quelle weitere Öle, die zum beworbenen Zweck nichts Belegtes beitragen, ziehen wir je Öl 1 Punkt ab. Das konkretisiert die Regel „1–2 Punkte je beigemischtem Stoff ohne Beleg“ für Öle. Beispiel: Hanf- und Leinöl liefern vor allem Alpha-Linolensäure, die der Hund nur in geringem Umfang in EPA und kaum in DHA umbaut (Bauer 2011).</p>
 
         <h2 id="dosierung">Wie bewerten wir die Dosierung? (30 Punkte)</h2>
         <p>Wir rechnen die Tagesmenge laut Hersteller in mg je kg Körpergewicht um, für einen Hund mit 10 kg und 30 kg bzw. eine Katze mit 4 kg, und vergleichen sie mit der Referenzdosis in der Tabelle unten.</p>
@@ -165,7 +171,27 @@ export default function ErgaenzungsfutterMethodikPage() {
           <li><strong>0: Alibi-Dosierung.</strong> Das sind weniger als 25 % der Referenzdosis, oder die Menge ist nicht deklariert.</li>
           <li><strong>Keine belegte Referenzdosis</strong> (in der Tabelle als Lücke markiert): höchstens 10 Punkte, weil sich eine Wirkung nicht beurteilen lässt.</li>
         </ul>
+        <p>Gewertet wird das ungünstigere der beiden Gewichte (10 oder 30 kg). Nennt der Hersteller eine Spanne, werten wir den oberen Wert und nennen beide.</p>
+        <p><strong>Omega-3 für Haut, Fell oder allgemeines Wohlbefinden (ohne Gelenkwerbung): 10, 5 oder 0 Punkte.</strong> Dafür gibt es keine belegte Referenzdosis, deshalb höchstens 10 Punkte. In den beiden kontrollierten Hautstudien bekamen die Hunde rund 66 und 85 mg EPA und DHA je kg Körpergewicht (Logas &amp; Kunkle 1994; Mueller 2004). Leitlinien nennen Fettsäuren bei juckender Haut nur als mögliche Ergänzung (Olivry 2015).</p>
+        <ul>
+          <li><strong>10 Punkte:</strong> EPA und DHA sind getrennt angegeben, und die Tagesmenge erreicht beim ungünstigeren Gewicht (10 oder 30 kg) mindestens 16,5 mg je kg, ein Viertel der kleineren Studienmenge.</li>
+          <li><strong>5 Punkte:</strong> nur eine Summen- oder „bis zu“-Angabe, oder getrennt angegeben, aber unter 16,5 mg je kg.</li>
+          <li><strong>0 Punkte:</strong> keine Mengenangabe zu EPA und DHA.</li>
+        </ul>
+        <p>Tropfen ohne Größenangabe rechnen wir mit 0,025 bis 0,05 ml.</p>
         <p><strong>Alibi-Regel:</strong> Wird ein Wirkstoff beworben, aber als Alibi dosiert, ist die Gesamtnote <strong>höchstens 59 Punkte (Rot)</strong>.</p>
+        <p><strong>Quellen zu den Omega-3-Regeln (ergaenzung-v1.1):</strong></p>
+        <ul>
+          <li>Bauer J. E., Therapeutic use of fish oils in companion animals, J Am Vet Med Assoc 2011;239:1441–1451, <Quelle href="https://pubmed.ncbi.nlm.nih.gov/22087720/">PMID 22087720</Quelle></li>
+          <li>Roush J. K. et al., J Am Vet Med Assoc 2010;236:59–66, <Quelle href="https://pubmed.ncbi.nlm.nih.gov/20043800/">PMID 20043800</Quelle></li>
+          <li>Logas D., Kunkle G. A., Vet Dermatol 1994;5:99–104, <Quelle href="https://pubmed.ncbi.nlm.nih.gov/34645070/">PMID 34645070</Quelle></li>
+          <li>Mueller R. S. et al., J Small Anim Pract 2004;45:293–297, <Quelle href="https://pubmed.ncbi.nlm.nih.gov/15206474/">PMID 15206474</Quelle></li>
+          <li>Olivry T. et al., BMC Vet Res 2015;11:210, <Quelle href="https://pubmed.ncbi.nlm.nih.gov/26276051/">PMID 26276051</Quelle></li>
+          <li>Dahms I. et al., Safety of a novel feed ingredient, Algal Oil containing EPA and DHA, in a gestation-lactation-growth feeding study in Beagle dogs, PLoS One 2019;14:e0217794, <Quelle href="https://pubmed.ncbi.nlm.nih.gov/31158258/">PMID 31158258</Quelle></li>
+          <li>Souza C. M. M. et al., Anim Sci J 2019;90:1567–1574, <Quelle href="https://pubmed.ncbi.nlm.nih.gov/31680401/">PMID 31680401</Quelle></li>
+          <li>Eigene PubMed-Suche am 25.10.2026 (algal oil / Schizochytrium / microalgae bei Hunden): keine Wirksamkeitsstudie zu Gelenken oder Haut.</li>
+        </ul>
+        <p>Die mit v1.1 ergänzten Quellen wurden am 25.10.2026 aufgerufen.</p>
 
         <h2 id="referenzdosen">Welche Dosis ist wirksam? Referenzdosen je kg Körpergewicht</h2>
         <p>Alle Quellen wurden am 17.10.2026 aufgerufen (PubMed, Verlagsseite oder EUR-Lex); wo wir eine Zahl nicht selbst im Volltext prüfen konnten, steht das in der Zeile.</p>

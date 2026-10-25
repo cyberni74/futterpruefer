@@ -31,7 +31,7 @@ export const revalidate = 3600;
  * das der Sanitizer samt <script> entfernt. Nur für diese Slugs wird es hier als geparstes JSON
  * ausgegeben; Article-Knoten entfallen, weil die Seite ihr eigenes Article-JSON-LD rendert.
  */
-const BODY_JSON_LD_SLUGS = new Set(["nassfutter-test-rind-hund-oktober-2026", "gelenk-test-hund-oktober-2026", "lachsoel-test-hund-oktober-2026"]);
+const BODY_JSON_LD_SLUGS = new Set(["nassfutter-test-rind-hund-oktober-2026", "gelenk-test-hund-oktober-2026", "lachsoel-test-hund-oktober-2026", "algenoel-test-hund-oktober-2026"]);
 
 function bodyJsonLd(slug: string, html: string | null | undefined): Record<string, unknown> | null {
   if (!html || !BODY_JSON_LD_SLUGS.has(slug)) return null;

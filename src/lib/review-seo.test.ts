@@ -75,6 +75,7 @@ describe("review-seo", () => {
   });
   it("ordnet Vergleichstests zu", () => {
     expect(comparisonForReview({ title: "Premium Lachsöl", categorySlug: "ergaenzungsfuttermittel-hund" })?.slug).toBe("lachsoel-test-hund-oktober-2026");
+    expect(comparisonForReview({ title: "AniForte Algenöl", categorySlug: "ergaenzungsfuttermittel-hund" })?.slug).toBe("algenoel-test-hund-oktober-2026");
     expect(comparisonForReview({ title: "Gelenk-Pulver", categorySlug: "ergaenzungsfuttermittel-hund" })?.slug).toBe("gelenk-test-hund-oktober-2026");
     expect(comparisonForReview({ title: "Rinti Kennerfleisch Rind", categorySlug: "alleinfuttermittel-hund" })?.slug).toBe("nassfutter-test-rind-hund-oktober-2026");
     expect(comparisonForReview({ title: "Lachsöl", categorySlug: "ergaenzungsfuttermittel-katze" })).toBeNull();

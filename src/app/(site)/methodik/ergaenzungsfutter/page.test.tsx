@@ -7,7 +7,10 @@ describe("Methodik Ergänzungsfutter", () => {
   const html = renderToStaticMarkup(<ErgaenzungsfutterMethodikPage />);
 
   it("übernimmt Stand, Erstveröffentlichung und die freigegebenen Kernsätze", () => {
-    expect(html).toContain("Stand: 17.10.2026 · Verantwortlich: Redaktion Futterprüfer · Methodik-Version: ergaenzung-v1");
+    expect(html).toContain("Stand: 25.10.2026 · Verantwortlich: Redaktion Futterprüfer · Methodik-Version: ergaenzung-v1.1");
+    expect(html).toContain("25.10.2026 – ergaenzung-v1.1:");
+    expect(html).toContain("Omega-3-Quelle ohne Wirksamkeitsstudie beim Hund: −2 Punkte.");
+    expect(html).toContain("Die mit v1.1 ergänzten Quellen wurden am 25.10.2026 aufgerufen.");
     expect(html).toContain("Änderungsprotokoll:");
     expect(html).toContain("17.10.2026 – Erstveröffentlichung");
     expect(html).toContain("höchstens 59 Punkte (Rot)");
