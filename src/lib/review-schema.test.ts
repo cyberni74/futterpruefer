@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { DEFAULT_AUTHOR } from "./authors";
 import { absoluteUrl } from "./site";
-import { normalizeStoredJsonLd, productReviewJsonLd, productSnippetIssues, reviewHeadline, skuFromAsin } from "./review-schema";
+import { normalizeStoredJsonLd, withoutIncompleteProducts, productReviewJsonLd, productSnippetIssues, reviewHeadline, skuFromAsin } from "./review-schema";
 
 const updatedAt = new Date("2026-10-09T08:15:00.000Z");
 
@@ -134,5 +134,24 @@ describe("normalizeStoredJsonLd", () => {
       { "@type": "ListItem", position: 2, name: "Rinti Kennerfleisch", url: "https://futterprüfer.de/x" },
     ]);
     expect(JSON.stringify(data)).not.toMatch(/Review|Product|itemReviewed|reviewRating|sku/);
+  });
+});
+
+describe("withoutIncompleteProducts", () => {
+  const ohne = { "@type": "Product", name: "Ohne Felder", brand: { "@type": "Brand", name: "X" } };
+  const mit = { "@type": "Product", name: "Mit Review", review: { "@type": "Review" } };
+
+  it("verwirft ein Product ohne review, aggregateRating und offers", () => {
+    expect(withoutIncompleteProducts(ohne)).toBeNull();
+    expect(withoutIncompleteProducts(mit)).toBe(mit);
+    expect(withoutIncompleteProducts({ ...ohne, offers: { "@type": "Offer" } })).toMatchObject({ name: "Ohne Felder" });
+    expect(withoutIncompleteProducts({ ...ohne, aggregateRating: { "@type": "AggregateRating" } })).toMatchObject({ name: "Ohne Felder" });
+  });
+
+  it("filtert auch Listen und @graph und lässt andere Typen unberührt", () => {
+    const article = { "@type": "Article", headline: "A" };
+    expect(withoutIncompleteProducts([article, ohne, mit])).toEqual([article, mit]);
+    expect(withoutIncompleteProducts({ "@context": "https://schema.org", "@graph": [article, ohne] })).toEqual({ "@context": "https://schema.org", "@graph": [article] });
+    expect(withoutIncompleteProducts([ohne])).toBeNull();
   });
 });
