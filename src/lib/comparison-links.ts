@@ -8,6 +8,7 @@ const C = {
   nassfutter: { slug: "nassfutter-test-rind-hund-oktober-2026", title: "Nassfutter für Hunde im Test 2026: 7 Rind-Dosen im Vergleich", href: "/blog/nassfutter-test-rind-hund-oktober-2026", members: ["rinti-kennerfleisch-rind-400g-test"] },
   gelenk: { slug: "gelenk-test-hund-oktober-2026", title: "Gelenktabletten und Gelenkpulver für Hunde im Test 2026: 5 Gelenkmittel im Vergleich", href: "/blog/gelenk-test-hund-oktober-2026" },
   lachsoel: { slug: "lachsoel-test-hund-oktober-2026", title: "Lachsöl für Hunde im Test 2026: 5 Lachsöle im Vergleich", href: "/blog/lachsoel-test-hund-oktober-2026" },
+  algenoel: { slug: "algenoel-test-hund-oktober-2026", title: "Algenöl für Hunde im Test 2026: 5 Algenöle im Vergleich", href: "/blog/algenoel-test-hund-oktober-2026" },
 } satisfies Record<string, Comparison>;
 
 export const COMPARISONS: Comparison[] = Object.values(C);
@@ -33,6 +34,7 @@ const WET = /nassfutter|\bdose\b|pastete|kennerfleisch|grancarno|mjamjam|rinti|l
 export function comparisonForReview(r: { title?: string | null; productName?: string | null; keyword?: string | null; categorySlug: string; moisture?: number | null }): Comparison | null {
   if (!r.categorySlug.endsWith("-hund")) return null;
   const text = `${r.title ?? ""} ${r.productName ?? ""} ${r.keyword ?? ""}`;
+  if (/alge(n)?(ö|oe)l|algal|schizochytrium|mikroalge/i.test(text)) return C.algenoel;
   if (/lachs(ö|oe)l|fisch(ö|oe)l|omega-?3/i.test(text)) return C.lachsoel;
   if (/gelenk|gr(ü|ue)nlippmuschel|glucosamin|chondroitin|h(ü|ue)fte/i.test(text)) return C.gelenk;
   if (r.categorySlug === "alleinfuttermittel-hund" && (WET.test(text) || (r.moisture != null && r.moisture >= 60))) return C.nassfutter;
