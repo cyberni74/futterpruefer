@@ -70,6 +70,7 @@ export function isIndexable(url = SITE.url, flag = process.env.SITE_NOINDEX): bo
 }
 
 export function absoluteUrl(path = "/"): string {
+  if (path === "/" || path === "") return SITE.url; // Startseite ohne Schrägstrich, wie Canonical und og:url
   return `${SITE.url}${path.startsWith("/") ? path : `/${path}`}`;
 }
 

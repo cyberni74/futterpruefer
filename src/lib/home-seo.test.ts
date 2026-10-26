@@ -162,3 +162,15 @@ describe("bezahlte Einreichung", () => {
     expect(src).not.toMatch(/kostenpflicht|Checkout|Stripe|PayPal|Kaufpreis/i);
   });
 });
+
+describe("JSON-LD Startseiten-URL", () => {
+  it("nennt die Startseite ohne Schrägstrich, die @id-Bezeichner bleiben unverändert", () => {
+    const graph = homeJsonLd("Titel", []) ["@graph"] as Record<string, unknown>[];
+    const byType = Object.fromEntries(graph.map((node) => [node["@type"], node]));
+    expect(byType.Organization.url).toBe(SITE.url);
+    expect(byType.WebSite.url).toBe(SITE.url);
+    expect(byType.WebPage.url).toBe(SITE.url);
+    expect(byType.WebPage["@id"]).toBe(`${SITE.url}/#webpage`);
+    expect(byType.WebSite["@id"]).toBe(`${SITE.url}/#website`);
+  });
+});
