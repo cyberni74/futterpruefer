@@ -250,7 +250,7 @@ async function main() {
 
   await prisma.faqItem.createMany({
     data: [
-      { sortOrder: 1, question: "Wie entstehen die Bewertungen?", answer: "Jedes Produkt wird anhand von sieben Kriterien mit insgesamt maximal 100 Punkten bewertet. Die Gewichtung ist auf der Methodik-Seite offengelegt." },
+      { sortOrder: 1, question: "Wie entstehen die Bewertungen?", answer: "Jedes Alleinfutter wird anhand von sechs Kriterien mit insgesamt maximal 100 Punkten bewertet. Die Gewichtung ist auf der Methodik-Seite offengelegt." },
       { sortOrder: 2, question: "Können Hersteller eine bessere Note kaufen?", answer: "Nein. Hersteller können Produkte zur Prüfung einreichen, haben aber keinerlei Einfluss auf das Ergebnis." },
       { sortOrder: 3, question: "Wie oft werden Tests aktualisiert?", answer: "Bei Rezepturänderungen oder neuen Erkenntnissen wird ein Test überarbeitet. Das Datum der letzten Aktualisierung steht auf jeder Testseite." },
       { sortOrder: 4, question: "Ersetzt ein Test die tierärztliche Beratung?", answer: "Nein. Bei Erkrankungen oder speziellen Bedürfnissen sollte die Fütterung immer mit einer Tierärztin oder einem Tierarzt abgestimmt werden." },
@@ -577,9 +577,10 @@ async function ensureFaq() {
     await prisma.faqItem.create({ data: f });
     n++;
   }
+  // Seit 26.10.2026 sechs Kriterien für Alleinfutter: eine Antwort mit „sieben Kriterien“ wird einmalig angehoben, „sechs“ bleibt unangetastet.
   const updated = await prisma.faqItem.updateMany({
-    where: { question: "Wie entstehen die Bewertungen?", answer: { contains: "sechs Kriterien" } },
-    data: { answer: "Jedes Produkt wird anhand von sieben Kriterien mit insgesamt maximal 100 Punkten bewertet. Die Gewichtung ist auf der Methodik-Seite offengelegt." },
+    where: { question: "Wie entstehen die Bewertungen?", answer: { contains: "sieben Kriterien" } },
+    data: { answer: "Jedes Alleinfutter wird anhand von sechs Kriterien mit insgesamt maximal 100 Punkten bewertet. Die Gewichtung ist auf der Methodik-Seite offengelegt." },
   });
   if (n || updated.count) console.log(`FAQ ergänzt: ${n}, angepasst: ${updated.count}`);
 }
