@@ -41,6 +41,7 @@ const BODY_FAQ_SLUGS = new Set([
   "pfotenbalsam-selber-machen-hund",
   "nasenbalsam-hund-selber-machen",
   "hund-po-wund-pflegebalsam-selber-machen",
+  "bestes-hundefutter-zusammensetzung",
 ]);
 
 function bodyJsonLd(slug: string, html: string | null | undefined): Record<string, unknown> | null {
