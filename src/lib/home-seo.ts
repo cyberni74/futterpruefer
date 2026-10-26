@@ -9,6 +9,10 @@ import { reviewPath } from "@/lib/urls";
 export const HOME_DESCRIPTION =
   "Hundefutter und Katzenfutter im Test: Rohstoffe, bedenkliche Zusatzstoffe, Nährstoffe und Deklaration nach 100-Punkte-Schema bewertet – transparent erklärt.";
 
+/** Meta-Description der Startseite. HOME_DESCRIPTION bleibt unverändert, weil sie auch die Organization im JSON-LD beschreibt. */
+export const HOME_META_DESCRIPTION =
+  "Hunde- und Katzenfutter im Test: über 110 Produkte nach 100-Punkte-Schema, von MjAMjAM und Leonardo (Grün) bis Whiskas (Rot). Wir lesen das Kleingedruckte.";
+
 export const OG_TITLE = `Hundefutter & Katzenfutter im Test – ${SITE.name}`;
 export const OG_DESCRIPTION =
   "Trocken- und Nassfutter für Hund und Katze, bewertet nach sechs offengelegten Kriterien und 100 Punkten. Mit Werbeaussagen-Check und Futter-Lexikon.";

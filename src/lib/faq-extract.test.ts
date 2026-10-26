@@ -31,4 +31,16 @@ describe("extractFaq", () => {
     expect(ld?.mainEntity).toHaveLength(2);
     expect(ld?.mainEntity[1].acceptedAnswer.text).toBe("Nein. Beifang ganz ausschließen kann er nicht.");
   });
+
+  it("entfernt Links aus der Antwort und dekodiert &amp; (DIY-Beiträge)", () => {
+    const body = `<h2 id="faq">Häufige Fragen</h2>
+<h3>Kann ich Pfoten- und Nasenbalsam aus einem Tiegel nehmen?</h3>
+<p>Von den Zutaten her ja. Texas-A&amp;M nennt Vaseline. Das Rezept steht in unserem Beitrag <a href="/blog/pfotenbalsam-selber-machen-hund">Pfotenbalsam selber machen</a>.</p>
+
+<p><strong>Fazit:</strong> Nicht Teil der FAQ.</p>
+<div class="fp-quellen"><h2 id="quellen">Quellen</h2></div>`;
+    expect(extractFaq(body)).toEqual([
+      { question: "Kann ich Pfoten- und Nasenbalsam aus einem Tiegel nehmen?", answer: "Von den Zutaten her ja. Texas-A&M nennt Vaseline. Das Rezept steht in unserem Beitrag Pfotenbalsam selber machen." },
+    ]);
+  });
 });
