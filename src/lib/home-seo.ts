@@ -170,16 +170,17 @@ export const HOME_FAQ: readonly HomeFaq[] = [
 type ListedReview = { title: string; slug: string; category: { slug: string } };
 
 export function homeJsonLd(title: string, reviews: ListedReview[]): Record<string, unknown> {
-  const base = absoluteUrl("/");
-  const organizationId = `${base}#organization`;
-  const websiteId = `${base}#website`;
+  const home = absoluteUrl("/"); // https://…de, ohne Schrägstrich
+  const idBase = `${SITE.url}/`; // @id-Bezeichner bleiben exakt wie bisher
+  const organizationId = `${idBase}#organization`;
+  const websiteId = `${idBase}#website`;
   const graph: Record<string, unknown>[] = [
     {
       "@type": "Organization",
       "@id": organizationId,
       name: SITE.name,
       alternateName: "Futterprüfer.de",
-      url: base,
+      url: home,
       logo: { "@type": "ImageObject", url: absoluteUrl("/brand/logo-round-512.png"), width: 512, height: 512 },
       description: HOME_DESCRIPTION,
     },
@@ -188,7 +189,7 @@ export function homeJsonLd(title: string, reviews: ListedReview[]): Record<strin
       "@id": websiteId,
       name: SITE.name,
       alternateName: "Futterprüfer.de",
-      url: base,
+      url: home,
       inLanguage: "de-DE",
       publisher: { "@id": organizationId },
       potentialAction: {
@@ -199,8 +200,8 @@ export function homeJsonLd(title: string, reviews: ListedReview[]): Record<strin
     },
     {
       "@type": "WebPage",
-      "@id": `${base}#webpage`,
-      url: base,
+      "@id": `${idBase}#webpage`,
+      url: home,
       name: title,
       inLanguage: "de-DE",
       isPartOf: { "@id": websiteId },
@@ -211,7 +212,7 @@ export function homeJsonLd(title: string, reviews: ListedReview[]): Record<strin
   if (reviews.length > 0) {
     graph.push({
       "@type": "ItemList",
-      "@id": `${base}#neueste-tests`,
+      "@id": `${idBase}#neueste-tests`,
       name: "Neueste Futtertests für Hund und Katze",
       itemListOrder: "https://schema.org/ItemListOrderDescending",
       numberOfItems: reviews.length,
@@ -227,7 +228,7 @@ export function homeJsonLd(title: string, reviews: ListedReview[]): Record<strin
   if (faq.length > 0) {
     graph.push({
       "@type": "FAQPage",
-      "@id": `${base}#faq`,
+      "@id": `${idBase}#faq`,
       mainEntity: faq.map((item) => ({
         "@type": "Question",
         name: item.q,
