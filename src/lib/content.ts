@@ -77,9 +77,18 @@ export async function getPostsForReview(r: { brand: string; keyword: string; key
 }
 
 /** Tests zum Fachartikel über Tags, eingeschränkt auf die genannte Tierart. */
-export async function getReviewsForPost(p: { title: string; keywords: string[]; excerpt?: string; bodyHtml: string }, take = 3) {
+/**
+ * Tests, die im Kasten „Passende Tests“ eines bestimmten Beitrags nicht erscheinen (Blog-Slug → Test-Slugs).
+ * Betrifft nur diese Auswahl; die Testseiten selbst bleiben unverändert.
+ */
+export const RELATED_REVIEW_EXCLUDE: Record<string, string[]> = {
+  "hunde-nahrungsergaenzung": ["medidog-ulmenrinden-paste"],
+};
+
+export async function getReviewsForPost(p: { slug?: string; title: string; keywords: string[]; excerpt?: string; bodyHtml: string }, take = 3) {
   const animal = subjectAnimal(p.title, p.excerpt, p.keywords);
-  const animalWhere = animal ? { category: { animal } } : {};
+  const excluded = (p.slug && RELATED_REVIEW_EXCLUDE[p.slug]) || [];
+  const animalWhere = { ...(animal ? { category: { animal } } : {}), ...(excluded.length ? { slug: { notIn: excluded } } : {}) };
   const tags = tagsOf(p.keywords);
   if (tags.length) {
     const tagged = await prisma.review.findMany({
