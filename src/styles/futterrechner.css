@@ -1,0 +1,47 @@
+/* Futterrechner: Regler, Raster. Nur Tokens der Seite, keine neuen Farben. */
+.fp-range {
+  -webkit-appearance: none; appearance: none; display: block; width: 100%; height: 2.75rem; margin: 0;
+  background: transparent; cursor: pointer; touch-action: pan-y;
+  --pct: 0%; --fill: var(--brand); --fill-end: var(--lime);
+}
+.fp-range[data-tone="mid"] { --fill: var(--mid-fill); --fill-end: var(--mid-fill); }
+.fp-range[data-tone="bad"] { --fill: var(--bad); --fill-end: var(--bad); }
+.fp-range[data-unset="true"] { --fill: var(--border); --fill-end: var(--border); }
+.fp-range:focus { outline: none; }
+.fp-range::-webkit-slider-runnable-track {
+  height: 8px; border-radius: 9999px;
+  background: linear-gradient(90deg, var(--fill) 0, var(--fill-end) var(--pct), var(--border) var(--pct));
+}
+.fp-range::-moz-range-track {
+  height: 8px; border-radius: 9999px;
+  background: linear-gradient(90deg, var(--fill) 0, var(--fill-end) var(--pct), var(--border) var(--pct));
+}
+.fp-range::-webkit-slider-thumb {
+  -webkit-appearance: none; appearance: none; width: 28px; height: 28px; margin-top: -10px; border-radius: 9999px;
+  background: #fff; border: 3px solid var(--fill); box-shadow: var(--shadow-lift);
+}
+.fp-range::-moz-range-thumb { width: 22px; height: 22px; border-radius: 9999px; background: #fff; border: 3px solid var(--fill); box-shadow: var(--shadow-lift); }
+.fp-range[data-unset="true"]::-webkit-slider-thumb { border-color: var(--fg-muted); }
+.fp-range[data-unset="true"]::-moz-range-thumb { border-color: var(--fg-muted); }
+.fp-range:focus-visible::-webkit-slider-thumb { outline: 2px solid var(--ring); outline-offset: 3px; }
+.fp-range:focus-visible::-moz-range-thumb { outline: 2px solid var(--ring); outline-offset: 3px; }
+.dark .fp-range::-webkit-slider-thumb { background: var(--surface); }
+.dark .fp-range::-moz-range-thumb { background: var(--surface); }
+
+.fp-raster {
+  background-image: linear-gradient(color-mix(in srgb, var(--brand) 4%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--brand) 4%, transparent) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .fp-pulse { animation: none !important; }
+}
+@keyframes fp-pulse { 0% { transform: scale(1); } 40% { transform: scale(1.06); } 100% { transform: scale(1); } }
+.fp-pulse { animation: fp-pulse .35s ease-out; }
+
+/* Infografiken liegen im .prose-fp: Listen ohne Aufzählungspunkte, Links als Button lesbar */
+.prose-fp [data-infografik] :is(ul, ol) { list-style: none; padding-left: 0; }
+.prose-fp [data-infografik] li { padding-left: 0; }
+.prose-fp [data-infografik] li::marker { content: none; }
+.prose-fp [data-infografik] a.fp-btn { color: #fff; text-decoration: none; font-weight: 700; }
+.dark .prose-fp [data-infografik] a.fp-btn { color: #000; }

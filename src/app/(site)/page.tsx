@@ -3,6 +3,7 @@ import { ArrowRight, ShieldCheck } from "lucide-react";
 import type { Metadata } from "next";
 import { getLatestPosts, getLatestReviews, getNewestReviewUpdate, getProductOfMonth, getFeaturedComparisons, getTickerEntries, getCategoryLeaders, getPublishedCounts } from "@/lib/queries";
 import { HomeHero } from "@/components/home-hero";
+import { StartseitenTeaser } from "@/components/futterrechner/startseiten-teaser";
 import { ProductOfMonthHero } from "@/components/product-of-month";
 import { FeaturedComparisonHero } from "@/components/featured-comparison";
 import { Ticker } from "@/components/ticker";
@@ -73,6 +74,8 @@ export default async function Home() {
       <div className="mx-auto max-w-6xl px-4">
         <HomeHero leaders={leaders} />
       </div>
+
+      <StartseitenTeaser />
 
       <div className="mt-8">
         <Ticker items={ticker} />
