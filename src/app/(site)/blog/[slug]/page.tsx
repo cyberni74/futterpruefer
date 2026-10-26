@@ -23,6 +23,8 @@ import { BodyGauges } from "@/components/body-gauges";
 import "@/styles/vergleichstest.css";
 import { comparisonForPost } from "@/lib/comparison-links";
 import { normalizeStoredJsonLd } from "@/lib/review-schema";
+import { extractFaq } from "@/lib/faq-extract";
+import { faqPageJsonLd } from "@/lib/faq-schema";
 
 export const revalidate = 3600;
 
@@ -32,6 +34,9 @@ export const revalidate = 3600;
  * ausgegeben; Article-Knoten entfallen, weil die Seite ihr eigenes Article-JSON-LD rendert.
  */
 const BODY_JSON_LD_SLUGS = new Set(["nassfutter-test-rind-hund-oktober-2026", "gelenk-test-hund-oktober-2026", "lachsoel-test-hund-oktober-2026", "algenoel-test-hund-oktober-2026"]);
+
+/** Beiträge, bei denen der sichtbare Abschnitt „Häufige Fragen“ als FAQPage-JSON-LD ausgegeben wird (Text kommt aus dem Beitrag selbst). */
+const BODY_FAQ_SLUGS = new Set(["fischmehl-ueberfischung-tierfutter"]);
 
 function bodyJsonLd(slug: string, html: string | null | undefined): Record<string, unknown> | null {
   if (!html || !BODY_JSON_LD_SLUGS.has(slug)) return null;
@@ -100,6 +105,7 @@ export default async function PostPage({ params }: PageProps<"/blog/[slug]">) {
   const more = [...picked, ...fill];
   const url = absoluteUrl(`/blog/${p.slug}`);
   const extraLd = bodyJsonLd(p.slug, p.bodyHtml);
+  const faqLd = BODY_FAQ_SLUGS.has(p.slug) ? faqPageJsonLd(extractFaq(p.bodyHtml)) : null;
   return (
     <article className="mx-auto max-w-3xl px-4">
       <JsonLd
@@ -118,6 +124,7 @@ export default async function PostPage({ params }: PageProps<"/blog/[slug]">) {
         }}
       />
       {extraLd && <JsonLd data={extraLd} />}
+      {faqLd && <JsonLd data={faqLd} />}
       <Breadcrumbs items={[{ label: "Fachblog", href: "/blog" }, { label: p.title, href: `/blog/${p.slug}` }]} />
       <header className="mt-4">
         <h1 className="text-3xl font-extrabold leading-tight md:text-5xl">{p.title}</h1>
