@@ -38,6 +38,7 @@ import { Disclosure } from "@/components/disclosure";
 import { JsonLd } from "@/components/json-ld";
 import { directAnswer, keywordName, kurzGesagt, renameBodyFazit, reviewFaq, seoFazitHeading, type ReviewSeoInput } from "@/lib/review-seo";
 import { comparisonForReview, isInComparison } from "@/lib/comparison-links";
+import { reviewH1 } from "@/lib/review-extra-faq";
 import { faqPageJsonLd } from "@/lib/faq-schema";
 import "@/styles/vergleichstest.css";
 
@@ -161,7 +162,7 @@ export default async function ReviewPage({ params }: PageProps<"/[kategorie]/[sl
   const name = productLabel(r.brand, r.productName);
   const gallery = (r.gallery ?? []).filter(Boolean);
   const seoInput: ReviewSeoInput = {
-    name: keywordName(r.keyword, r.brand, name), totalScore: r.totalScore, testedAt, verdict: r.verdict, pros: r.pros, cons: consWithClaims(r.cons, claims), claims,
+    slug: r.slug, name: keywordName(r.keyword, r.brand, name), totalScore: r.totalScore, testedAt, verdict: r.verdict, pros: r.pros, cons: consWithClaims(r.cons, claims), claims,
     price: r.price, packageSize: r.packageSize, pricePerKg: r.pricePerKg, pricePerDay: r.pricePerDay, priceDate: r.priceDate,
     composition: r.composition, ergaenzung: Boolean(efResult),
   };
@@ -228,7 +229,7 @@ export default async function ReviewPage({ params }: PageProps<"/[kategorie]/[sl
                 <Link href="/produkt-des-monats" className="inline-flex items-center gap-1.5 rounded-full bg-accent px-3 py-1 text-xs font-bold text-white dark:text-black hover:bg-accent-strong"><Award className="size-3.5" aria-hidden />Produkt des Monats {MONTHS[pom.month - 1]} {pom.year}</Link>
               )}
             </div>
-            <h1 className="mt-3 text-3xl font-extrabold leading-tight md:text-5xl">{name} im Test</h1>
+            <h1 className="mt-3 text-3xl font-extrabold leading-tight md:text-5xl">{reviewH1(r.slug, name)}</h1>
             <ul className="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-sm text-muted">
               <li className="flex items-center gap-1.5"><UserRound className="size-4" aria-hidden />Von <AuthorCredit slug={r.authorSlug} /></li>
               {testedAt && <li className="flex items-center gap-1.5"><CalendarCheck className="size-4" aria-hidden />Getestet am <time dateTime={testedAt.toISOString()}>{formatDate(testedAt)}</time></li>}

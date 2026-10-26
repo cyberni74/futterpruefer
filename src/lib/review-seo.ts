@@ -1,5 +1,6 @@
 import { ratingFor, RATING_LABEL } from "./scoring";
 import { misleadingClaims, splitComposition, type Claim } from "./product-data";
+import { REVIEW_EXTRA_FAQ } from "./review-extra-faq";
 
 /**
  * SEO-Fazit, Kurz-gesagt-Box und FAQ für Einzeltests (HANDBUCH: SEO-Pflicht für jeden Test).
@@ -44,6 +45,8 @@ export function seoFazitHeading(name: string, testedAt: Date | null | undefined)
 }
 
 export type ReviewSeoInput = {
+  /** Slug des Tests, nur für Zusatzfragen pro Test (REVIEW_EXTRA_FAQ). */
+  slug?: string;
   name: string;
   totalScore: number;
   testedAt: Date | null | undefined;
@@ -105,6 +108,7 @@ export function reviewFaq(r: ReviewSeoInput, comparison?: { title: string } | nu
     question: `Wie schneidet ${r.name} im Test ab?`,
     answer: `${r.name} erreicht in unserem Test${d ? ` vom ${d}` : ""} ${r.totalScore} von 100 Punkten, Ampel ${AMPEL_WORD[rating]} (${RATING_LABEL[rating]}).${verdict ? ` ${sentence(verdict)}` : ""}`,
   });
+  if (r.slug) out.push(...(REVIEW_EXTRA_FAQ[r.slug] ?? []));
   const pros = (r.pros ?? []).map(clean).filter(Boolean);
   if (pros.length) out.push({ question: `Was spricht für ${r.name}?`, answer: pros.map(sentence).join(" ") });
   const cons = (r.cons ?? []).map(clean).filter(Boolean);
