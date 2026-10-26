@@ -115,26 +115,51 @@ button, [role="button"], summary { cursor: pointer; }
 }
 .skip-link:focus { top: 1rem; }
 
-/* Fließtext aus dem Editor */
-.prose-fp { font-size: 1.0625rem; line-height: 1.75; overflow-wrap: anywhere; }
+/* Fließtext aus dem Editor (Blog, Tests, Ratgeber): Magazin-Lesbarkeit.
+   Handy ≥ 17 px, Zeilenhöhe ~1,72, linksbündig; Lesespalte im Blog ~ 65–75 Zeichen (siehe #artikel). */
+.prose-fp { font-size: 1.0625rem; line-height: 1.72; overflow-wrap: anywhere; text-align: left; color: var(--fg); }
+@media (min-width: 48rem) { .prose-fp { font-size: 1.125rem; } }
+#artikel.prose-fp { max-width: 42rem; }
 .prose-fp a.src-link { word-break: break-all; }
-.prose-fp > * + * { margin-top: 1.1em; }
-.prose-fp h2 { font-size: 1.5rem; font-weight: 800; margin-top: 2em; line-height: 1.25; }
-.prose-fp h3 { font-size: 1.2rem; font-weight: 700; margin-top: 1.6em; }
-.prose-fp a { color: var(--brand); text-decoration: underline; text-underline-offset: 3px; }
-.prose-fp ul { list-style: disc; padding-left: 1.4em; }
-.prose-fp ol { list-style: decimal; padding-left: 1.4em; }
-.prose-fp li + li { margin-top: .35em; }
-.prose-fp blockquote { border-left: 4px solid var(--brand); padding-left: 1em; color: var(--fg-muted); font-style: italic; }
+.prose-fp > * + * { margin-top: 1.25em; }
+.prose-fp h2 { font-size: 1.55rem; font-weight: 800; margin-top: 2.5em; line-height: 1.25; letter-spacing: -.01em; text-wrap: balance; }
+.prose-fp h3 { font-size: 1.25rem; font-weight: 700; margin-top: 1.9em; line-height: 1.3; text-wrap: balance; }
+.prose-fp h4 { font-size: 1.05rem; font-weight: 700; margin-top: 1.6em; }
+.prose-fp :is(h2, h3, h4) + * { margin-top: .7em; }
+.prose-fp p { text-wrap: pretty; }
+.prose-fp strong { font-weight: 700; color: var(--fg); }
+.prose-fp a { color: var(--brand); text-decoration: underline; text-decoration-thickness: 1.5px; text-underline-offset: .2em; font-weight: 500; }
+.prose-fp ul { list-style: disc; padding-left: 1.5em; }
+.prose-fp ol { list-style: decimal; padding-left: 1.6em; }
+.prose-fp li { padding-left: .2em; }
+.prose-fp li::marker { color: var(--brand); font-weight: 700; }
+.prose-fp li + li { margin-top: .5em; }
+.prose-fp li > :is(ul, ol) { margin-top: .5em; }
+.prose-fp blockquote {
+  margin-left: 0; padding: .15em 0 .15em 1.1em; border-left: 4px solid var(--brand);
+  color: var(--fg); font-size: 1.05em; font-style: normal; line-height: 1.65;
+}
+.prose-fp blockquote > * + * { margin-top: .7em; }
+.prose-fp blockquote em, .prose-fp blockquote cite { color: var(--fg-muted); }
+/* „Das Wichtigste in Kürze“ als Zitat mit Liste: wie eine Info-Box */
+.prose-fp blockquote:has(> ul, > ol) {
+  padding: 1.1rem 1.15rem; border: 2px solid var(--brand); border-radius: 1.1rem; background: var(--brand-soft);
+}
+.prose-fp blockquote:has(> ul, > ol) > p:first-child { font-weight: 800; }
+.prose-fp hr { border: 0; border-top: 1px solid var(--border); margin: 2.5em 0; }
 .prose-fp img { border-radius: 1rem; max-width: 100%; height: auto; }
-.prose-fp figure { margin: 1.25em 0; }
+.prose-fp figure { margin: 2em 0; }
 .prose-fp figure img { width: 100%; }
-.prose-fp table { width: 100%; border-collapse: collapse; font-size: .95rem; display: block; overflow-x: auto; }
-.prose-fp th, .prose-fp td { border-bottom: 1px solid var(--border); padding: .6em .75em; text-align: left; }
+.prose-fp figcaption { margin-top: .6em; padding-inline: .25rem; font-size: .85rem; line-height: 1.5; color: var(--fg-muted); text-align: left; }
+.prose-fp table { width: 100%; border-collapse: collapse; font-size: .95rem; line-height: 1.5; display: block; overflow-x: auto; }
+.prose-fp th, .prose-fp td { border-bottom: 1px solid var(--border); padding: .6em .75em; text-align: left; vertical-align: top; }
 /* Tabellen am Handy: Wörter nicht mitten im Wort brechen, breite Tabellen seitlich scrollen */
 .prose-fp th, .prose-fp td { min-width: 7rem; overflow-wrap: normal; word-break: normal; hyphens: auto; }
 .prose-fp th { background: var(--bg-soft); font-weight: 700; }
 .prose-fp code { background: var(--bg-soft); padding: .1em .35em; border-radius: .3em; font-size: .9em; }
+.prose-fp details { border: 1px solid var(--border); border-radius: .9rem; background: var(--surface); padding: .85rem 1rem; }
+.prose-fp summary { font-weight: 700; line-height: 1.4; }
+.prose-fp details[open] > summary { margin-bottom: .6em; }
 
 @keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 .ticker-track { animation: ticker 64s linear infinite; }
@@ -197,7 +222,7 @@ button, [role="button"], summary { cursor: pointer; }
   line-height: 1.3;
   text-transform: uppercase;
 }
-.cta-box a[href^="http"],
+.cta-box a[href^="http"]:not(table a),
 .cta-box a.button,
 .cta-box a.cta-button,
 .cta-box a.btn,
@@ -220,19 +245,19 @@ button, [role="button"], summary { cursor: pointer; }
   box-shadow: var(--shadow);
   overflow-wrap: anywhere;
 }
-.dark .cta-box a[href^="http"],
+.dark .cta-box a[href^="http"]:not(table a),
 .dark .cta-box a.button,
 .dark .cta-box a.cta-button,
 .dark .cta-box a.btn,
 .dark .cta-box .button { color: #1c1008; }
-.cta-box a[href^="http"] strong,
+.cta-box a[href^="http"]:not(table a) strong,
 .cta-box a.button strong { font-weight: 800; color: inherit; }
 .cta-box p:last-child {
   color: var(--fg-muted);
   font-size: .85rem;
   line-height: 1.5;
 }
-.cta-box a[href^="http"]:hover,
+.cta-box a[href^="http"]:not(table a):hover,
 .cta-box a.button:hover,
 .cta-box a.cta-button:hover,
 .cta-box a.btn:hover {
@@ -240,12 +265,12 @@ button, [role="button"], summary { cursor: pointer; }
   background: var(--accent-strong);
   text-decoration: none;
 }
-.dark .cta-box a[href^="http"]:hover,
+.dark .cta-box a[href^="http"]:not(table a):hover,
 .dark .cta-box a.button:hover,
 .dark .cta-box a.cta-button:hover,
 .dark .cta-box a.btn:hover { color: #1c1008; }
 @media (min-width: 40rem) {
-  .cta-box a[href^="http"],
+  .cta-box a[href^="http"]:not(table a),
   .cta-box a.button,
   .cta-box a.cta-button,
   .cta-box a.btn,
@@ -257,14 +282,14 @@ button, [role="button"], summary { cursor: pointer; }
 /* Gleicher Button für ältere CTA-Boxen (.fp-cta / .cta-box) mit Amazon-Link ohne .cta-amazon-btn, z. B. Tailwind-Klassen
    aus dem Editor (bg-brand text-white): Die Utilities verlieren gegen .prose-fp a (Linkfarbe = Hintergrund) und der Link
    bleibt inline (bricht in zwei Pillen um). Bild-Links (Galerie) bleiben ausgenommen. */
-.prose-fp .fp-cta:has(a[href*="amazon.de"]) { text-align: center; }
-.prose-fp .cta-amazon { text-align: center; }
+.prose-fp .fp-cta:has(a[href*="amazon.de"]):not(:has(table)) { text-align: center; }
+.prose-fp .cta-amazon:not(:has(table)) { text-align: center; }
 .prose-fp .cta-amazon > * + * { margin-top: .6rem; }
 .prose-fp .cta-amazon p { margin: 0; }
 .prose-fp .cta-amazon .cta-produkt {
   font-size: .95rem; font-weight: 700; line-height: 1.35; color: var(--fg);
 }
-.prose-fp :is(.cta-amazon a.cta-amazon-btn, .fp-cta a[href*="amazon.de"]:not(:has(img)), .cta-box a[href*="amazon.de"]:not(:has(img))) {
+.prose-fp :is(.cta-amazon a.cta-amazon-btn, .fp-cta a[href*="amazon.de"]:not(:has(img)):not(table a), .cta-box a[href*="amazon.de"]:not(:has(img)):not(table a)) {
   display: inline-flex; align-items: center; justify-content: center; gap: .6rem;
   width: 100%; min-height: 3.25rem; margin: 0; padding: .85rem 1.5rem;
   border: 1px solid #e3a21a; border-radius: 9999px;
@@ -275,26 +300,26 @@ button, [role="button"], summary { cursor: pointer; }
   transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
   -webkit-tap-highlight-color: transparent;
 }
-.prose-fp :is(.cta-amazon a.cta-amazon-btn, .fp-cta a[href*="amazon.de"]:not(:has(img)), .cta-box a[href*="amazon.de"]:not(:has(img)))::before {
+.prose-fp :is(.cta-amazon a.cta-amazon-btn, .fp-cta a[href*="amazon.de"]:not(:has(img)):not(table a), .cta-box a[href*="amazon.de"]:not(:has(img)):not(table a))::before {
   content: ""; flex: none; width: 1.3em; height: 1.3em; background: currentColor;
   -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='9' cy='20' r='1.6'/%3E%3Ccircle cx='18' cy='20' r='1.6'/%3E%3Cpath d='M2.5 3.5h3l2.6 11.2a1.5 1.5 0 0 0 1.5 1.2h8.3a1.5 1.5 0 0 0 1.5-1.1L21.5 8H6.6'/%3E%3C/svg%3E") center / contain no-repeat;
           mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='9' cy='20' r='1.6'/%3E%3Ccircle cx='18' cy='20' r='1.6'/%3E%3Cpath d='M2.5 3.5h3l2.6 11.2a1.5 1.5 0 0 0 1.5 1.2h8.3a1.5 1.5 0 0 0 1.5-1.1L21.5 8H6.6'/%3E%3C/svg%3E") center / contain no-repeat;
 }
-.prose-fp :is(.cta-amazon a.cta-amazon-btn, .fp-cta a[href*="amazon.de"]:not(:has(img)), .cta-box a[href*="amazon.de"]:not(:has(img))):is(:hover, :focus-visible) {
+.prose-fp :is(.cta-amazon a.cta-amazon-btn, .fp-cta a[href*="amazon.de"]:not(:has(img)):not(table a), .cta-box a[href*="amazon.de"]:not(:has(img)):not(table a)):is(:hover, :focus-visible) {
   background: linear-gradient(180deg, #ffcb47 0%, #f08c00 100%);
   color: #111 !important; transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(213, 140, 0, .45);
 }
-.prose-fp :is(.cta-amazon a.cta-amazon-btn, .fp-cta a[href*="amazon.de"]:not(:has(img)), .cta-box a[href*="amazon.de"]:not(:has(img))):focus-visible { outline: 3px solid #146eb4; outline-offset: 2px; }
-.prose-fp :is(.cta-amazon a.cta-amazon-btn, .fp-cta a[href*="amazon.de"]:not(:has(img)), .cta-box a[href*="amazon.de"]:not(:has(img))):active { transform: translateY(0); box-shadow: 0 1px 3px rgba(213, 140, 0, .35); }
+.prose-fp :is(.cta-amazon a.cta-amazon-btn, .fp-cta a[href*="amazon.de"]:not(:has(img)):not(table a), .cta-box a[href*="amazon.de"]:not(:has(img)):not(table a)):focus-visible { outline: 3px solid #146eb4; outline-offset: 2px; }
+.prose-fp :is(.cta-amazon a.cta-amazon-btn, .fp-cta a[href*="amazon.de"]:not(:has(img)):not(table a), .cta-box a[href*="amazon.de"]:not(:has(img)):not(table a)):active { transform: translateY(0); box-shadow: 0 1px 3px rgba(213, 140, 0, .35); }
 .prose-fp .cta-amazon .cta-hinweis {
   font-size: 11px; line-height: 1.45; color: var(--fg-muted); font-weight: 400;
 }
 @media (max-width: 26rem) {
-  .prose-fp :is(.cta-amazon a.cta-amazon-btn, .fp-cta a[href*="amazon.de"]:not(:has(img)), .cta-box a[href*="amazon.de"]:not(:has(img))) { font-size: .95rem; padding-inline: 1rem; gap: .45rem; }
+  .prose-fp :is(.cta-amazon a.cta-amazon-btn, .fp-cta a[href*="amazon.de"]:not(:has(img)):not(table a), .cta-box a[href*="amazon.de"]:not(:has(img)):not(table a)) { font-size: .95rem; padding-inline: 1rem; gap: .45rem; }
 }
 @media (min-width: 40rem) {
-  .prose-fp :is(.cta-amazon a.cta-amazon-btn, .fp-cta a[href*="amazon.de"]:not(:has(img)), .cta-box a[href*="amazon.de"]:not(:has(img))) { width: auto; min-width: 20rem; max-width: 100%; }
+  .prose-fp :is(.cta-amazon a.cta-amazon-btn, .fp-cta a[href*="amazon.de"]:not(:has(img)):not(table a), .cta-box a[href*="amazon.de"]:not(:has(img)):not(table a)) { width: auto; min-width: 20rem; max-width: 100%; }
 }
 
 /* Tabellen am Handy (< 40rem) als Karten: Zelle 1 + 2 fett nebeneinander, weitere Zellen in voller Breite.
@@ -387,3 +412,86 @@ button, [role="button"], summary { cursor: pointer; }
 /* Sicherheitsnetz: nichts darf die Seite seitlich verschiebbar machen (clip statt hidden – sticky bleibt intakt) */
 html, body { overflow-x: clip; }
 .prose-fp h2[id] { scroll-margin-top: 7rem; }
+
+/* ---------------------------------------------------------------------------
+   Boxen im Fließtext (.fp-box + Variante): einheitlich, linksbündig, nichts ragt heraus.
+   Vergleichstest-Bausteine (vt-*) sind ausgenommen und behalten ihr Design.
+--------------------------------------------------------------------------- */
+.prose-fp .fp-box:not([class*="vt-"]) {
+  margin-block: 1.9em; padding: 1.1rem 1.15rem; max-width: 100%; box-sizing: border-box;
+  border: 1px solid var(--border); border-radius: 1.1rem; background: var(--bg-soft);
+  text-align: left; font-size: 1rem; line-height: 1.65;
+}
+.prose-fp .fp-box:not([class*="vt-"]) > * + * { margin-top: .75em; }
+.prose-fp .fp-box:not([class*="vt-"]) > :first-child { margin-top: 0; }
+.prose-fp .fp-box:not([class*="vt-"]) :is(h2, h3, h4) { margin-top: 0; font-size: 1.2rem; line-height: 1.3; }
+.prose-fp .fp-box:not([class*="vt-"]) :is(ul, ol) { padding-left: 1.4em; }
+.prose-fp .fp-box:not([class*="vt-"]) > p[class*="font-extrabold"] {
+  font-size: .8rem; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; color: var(--brand-strong); line-height: 1.4;
+}
+.prose-fp .fp-box.fp-kurz { border: 2px solid var(--brand); background: var(--brand-soft); }
+.prose-fp .fp-box.fp-fazit { border: 2px solid var(--brand); background: var(--surface); box-shadow: var(--shadow); }
+.prose-fp .fp-box.fp-cta { border: 1px solid var(--accent); background: var(--surface); box-shadow: var(--shadow); }
+.prose-fp .fp-box.fp-check { border-left: 5px solid var(--good); background: var(--good-soft); }
+.prose-fp .fp-box.fp-merk { border-left: 5px solid var(--mid); background: var(--mid-soft); }
+.prose-fp .fp-box.fp-warn { border-left: 5px solid var(--bad); background: var(--bad-soft); }
+.prose-fp .fp-box.fp-tierschutz { border-left: 5px solid var(--brand); background: var(--brand-soft); }
+.prose-fp .fp-box.fp-quellen { font-size: .9rem; line-height: 1.55; color: var(--fg-muted); }
+.prose-fp .fp-box.fp-quellen :is(h2, h3) { font-size: 1.1rem; color: var(--fg); }
+/* Tabelle in einer CTA-Box: Box-in-Box vermeiden, Amazon-Links als kompakte Buttons statt Vollbreite */
+.prose-fp .fp-box:not([class*="vt-"]) .vt-table-box { padding: 0; border: 0; box-shadow: none; background: none; }
+.prose-fp table a[href*="amazon.de"] {
+  display: inline-block; padding: .45rem .9rem; border-radius: 9999px; border: 1px solid #e3a21a;
+  background: linear-gradient(180deg, #ffd56b 0%, #ffa41c 100%); color: #111 !important;
+  font-size: .85rem; font-weight: 800; line-height: 1.3; text-decoration: none !important; text-align: center;
+}
+@media (max-width: 39.99rem) {
+  .prose-fp .fp-box:not([class*="vt-"]) { padding: 1rem; border-radius: 1rem; }
+  .prose-fp h2 { font-size: 1.45rem; }
+}
+
+/* ---------------------------------------------------------------------------
+   Tabellen mit data-label (z. B. Testauswahl in CTA-Boxen) am Handy: eine Karte pro Zeile,
+   Spaltenname als kleine Beschriftung über dem Wert. Vergleichstest-Tabellen (tr.vt-row) bleiben unberührt.
+--------------------------------------------------------------------------- */
+@media (max-width: 39.99rem) {
+  .prose-fp table:has(td[data-label]):not(:has(tr.vt-row)) { display: block; overflow: visible; border: 0; }
+  .prose-fp table:has(td[data-label]):not(:has(tr.vt-row)) :is(thead) { display: none; }
+  .prose-fp table:has(td[data-label]):not(:has(tr.vt-row)) tbody { display: block; }
+  .prose-fp table:has(td[data-label]):not(:has(tr.vt-row)) tr {
+    display: block; margin: 0 0 .75rem; padding: .85rem 1rem;
+    border: 1px solid var(--border); border-radius: 1rem; background: var(--surface);
+  }
+  .prose-fp table:has(td[data-label]):not(:has(tr.vt-row)) td {
+    display: block; min-width: 0; max-width: none; margin: 0; padding: .4rem 0 0; border: 0; background: none;
+    text-align: left; font-weight: 400; hyphens: manual; -webkit-hyphens: manual; overflow-wrap: break-word; line-height: 1.5;
+  }
+  .prose-fp table:has(td[data-label]):not(:has(tr.vt-row)) td::before {
+    content: attr(data-label); display: block; font-size: .7rem; font-weight: 700; letter-spacing: .05em;
+    text-transform: uppercase; color: var(--fg-muted); margin-bottom: .1rem;
+  }
+  .prose-fp table:has(td[data-label]):not(:has(tr.vt-row)) td:first-child { padding-top: 0; font-size: 1.05rem; font-weight: 800; line-height: 1.35; }
+  .prose-fp table:has(td[data-label]):not(:has(tr.vt-row)) td:first-child::before { display: none; }
+  .prose-fp table:has(td[data-label]):not(:has(tr.vt-row)) td:last-child:has(a[href*="amazon.de"]) { padding-top: .65rem; }
+  .prose-fp table:has(td[data-label]):not(:has(tr.vt-row)) td:last-child:has(a[href*="amazon.de"])::before { display: none; }
+}
+
+/* Breite Tabellen ohne data-label (≥ 5 Spalten) scrollen seitlich; Schattenkanten zeigen, dass es weitergeht */
+.prose-fp table:has(tr > :nth-child(5)):not(:has(td[data-label])):not(.vt-table) {
+  background:
+    linear-gradient(to right, var(--surface) 30%, transparent) left center / 2.5rem 100% no-repeat local,
+    linear-gradient(to left, var(--surface) 30%, transparent) right center / 2.5rem 100% no-repeat local,
+    radial-gradient(farthest-side at 0 50%, rgba(0, 0, 0, .18), transparent) left center / .8rem 100% no-repeat scroll,
+    radial-gradient(farthest-side at 100% 50%, rgba(0, 0, 0, .18), transparent) right center / .8rem 100% no-repeat scroll;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Magazin-Feinschliff: Weißraum, klare Akzente, Einstiegsabsatz */
+.prose-fp h2::before { content: ""; display: block; width: 2.5rem; height: 4px; margin-bottom: .65rem; border-radius: 9999px; background: var(--accent); }
+.prose-fp :is(.fp-box, blockquote, details) h2::before { display: none; }
+#artikel.prose-fp > p:first-child { font-size: 1.12em; line-height: 1.6; }
+.prose-fp > * + * { margin-top: 1.35em; }
+.prose-fp figure img { box-shadow: var(--shadow); }
+.prose-fp .fp-box:not([class*="vt-"]) { border-radius: 1.25rem; }
+.prose-fp .fp-box:is(.fp-kurz, .fp-cta, .fp-fazit) { box-shadow: var(--shadow); }
+.prose-fp details:hover { border-color: var(--brand); }
