@@ -6,8 +6,8 @@ import { parseFilters } from "@/lib/filters";
 import { getCategories } from "@/lib/queries";
 
 export const metadata: Metadata = {
-  title: "Alle Futtertests",
-  description: "Alle Hunde- und Katzenfutter-Tests im Überblick – filtern nach Punkten, Preisklasse und Tierart.",
+  title: "Futtertests Hund & Katze 2026",
+  description: "Alle Futtertests für Hund und Katze: über 110 Produkte mit Punkten und Ampel, von Grün bis Rot. Filtern nach Tierart, Preisklasse und Punkten.",
   alternates: { canonical: "/tests" },
 };
 

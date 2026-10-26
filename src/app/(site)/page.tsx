@@ -17,7 +17,7 @@ import { AllLink } from "@/components/all-link";
 import { DEFAULT_OG_IMAGE, SITE, pageAlternates } from "@/lib/site";
 import { PUBLISHED_CRITERIA } from "@/lib/scoring";
 import {
-  HOME_DESCRIPTION,
+  HOME_META_DESCRIPTION,
   HOME_FAQ,
   HOME_GUIDES,
   HOME_H1,
@@ -36,7 +36,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const title = homeTitle(await getNewestReviewUpdate());
   return {
     title: { absolute: title },
-    description: HOME_DESCRIPTION,
+    description: HOME_META_DESCRIPTION,
     alternates: pageAlternates("/"),
     openGraph: {
       type: "website",

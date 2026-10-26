@@ -2,7 +2,8 @@ const ENTITIES: Record<string, string> = { "&amp;": "&", "&lt;": "<", "&gt;": ">
 
 function text(html: string): string {
   return html
-    .replace(/<[^>]+>/g, " ")
+    .replace(/<br\s*\/?>|<\/(?:p|li|div|h[1-6]|ul|ol)>/gi, " ") // Blockgrenzen trennen Wörter
+    .replace(/<[^>]+>/g, "") // Inline-Tags (a, strong, em …) fügen kein Leerzeichen ein, sonst wird aus „machen.“ ein „machen .“
     .replace(/&(?:amp|lt|gt|quot|apos|nbsp|#39);/g, (e) => ENTITIES[e] ?? e)
     .replace(/\s+/g, " ")
     .trim();

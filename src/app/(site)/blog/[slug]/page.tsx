@@ -36,7 +36,12 @@ export const revalidate = 3600;
 const BODY_JSON_LD_SLUGS = new Set(["nassfutter-test-rind-hund-oktober-2026", "gelenk-test-hund-oktober-2026", "lachsoel-test-hund-oktober-2026", "algenoel-test-hund-oktober-2026"]);
 
 /** Beiträge, bei denen der sichtbare Abschnitt „Häufige Fragen“ als FAQPage-JSON-LD ausgegeben wird (Text kommt aus dem Beitrag selbst). */
-const BODY_FAQ_SLUGS = new Set(["fischmehl-ueberfischung-tierfutter"]);
+const BODY_FAQ_SLUGS = new Set([
+  "fischmehl-ueberfischung-tierfutter",
+  "pfotenbalsam-selber-machen-hund",
+  "nasenbalsam-hund-selber-machen",
+  "hund-po-wund-pflegebalsam-selber-machen",
+]);
 
 function bodyJsonLd(slug: string, html: string | null | undefined): Record<string, unknown> | null {
   if (!html || !BODY_JSON_LD_SLUGS.has(slug)) return null;
