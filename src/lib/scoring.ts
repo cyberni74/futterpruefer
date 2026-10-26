@@ -13,23 +13,22 @@ export type Scores = Record<CriterionKey, number>;
 export const MAX_TOTAL = CRITERIA.reduce((s, c) => s + c.max, 0);
 
 /**
- * Veröffentlichte Gewichtung ab 16.10.2026 für Methodik-Seite und Kriterienlisten.
- * `previousMax` ist der bisherige Höchstwert. CRITERIA bleibt die Skala bereits
- * gespeicherter Tests; deren Punktzahlen werden nicht umgerechnet.
+ * Veröffentlichte Gewichtung für Methodik-Seite und Kriterienlisten (Alleinfutter).
+ * Entspricht seit 26.10.2026 wieder exakt CRITERIA, also der Skala, nach der alle
+ * gespeicherten Alleinfutter-Tests bewertet sind (Korrektur § 5 UWG, Rechtsprüfung 26.10.2026).
  */
-export const METHODOLOGY_STAND = "16.10.2026";
+export const METHODOLOGY_STAND = "26.10.2026";
 
 export const METHODOLOGY_CHANGELOG =
-  "16.10.2026 – Neues Kriterium „Transparenz / Herstellerunterlagen“ (max. 10 Punkte, abgestuft nach Beweiswert). Die übrigen Kriterien wurden anteilig auf 90 Punkte angepasst, die Ampelgrenzen bleiben gleich. Das Kriterium gilt für neue und aktualisierte Tests ab diesem Datum.";
+  "26.10.2026 – Korrektur: Vom 16.10. bis 26.10.2026 nannten diese Seite und einige andere Seiten von Futterprüfer für Alleinfutter sieben Kriterien, darunter „Transparenz / Herstellerunterlagen“ (10 Punkte), und eine auf 90 Punkte verkleinerte Gewichtung der übrigen sechs. Angewandt haben wir diese Gewichtung in keinem Test. Alle veröffentlichten Alleinfutter-Tests sind nach den sechs Kriterien in der Tabelle bewertet, auch die seit dem 16.10.2026 erschienenen. Durch diese Korrektur hat sich keine Punktzahl geändert.";
 
 export const PUBLISHED_CRITERIA = [
-  { key: "scoreRaw", label: "Rohstoffqualität", description: "Sinnhaftigkeit und Qualität der Rohstoffe", max: 27, previousMax: 30 },
-  { key: "scoreHarmful", label: "Schadstoffe & Bedenkliches", description: "Ungeeignete oder problematische Inhaltsstoffe", max: 18, previousMax: 20 },
-  { key: "scoreNutrients", label: "Nährstoffprofil", description: "Protein, Fett, Vitamine, Mineralstoffe", max: 18, previousMax: 20 },
-  { key: "scoreDeclaration", label: "Deklaration & Transparenz", description: "Nachvollziehbare Angaben auf Etikett und Website, ehrliche Werbeaussagen statt solcher, die wir für irreführend halten", max: 13, previousMax: 15 },
-  { key: "scoreNeeds", label: "Bedarfsdeckung", description: "Passt das Produkt zum Bedarf des Tiers?", max: 9, previousMax: 10 },
-  { key: "scoreValue", label: "Preis-Leistung", description: "Preis-Leistungs-Verhältnis", max: 5, previousMax: 5 },
-  { key: "scoreTransparency", label: "Transparenz / Herstellerunterlagen", description: "Belegt der Hersteller seine Angaben mit prüfbaren Unterlagen?", max: 10, previousMax: null },
+  { key: "scoreRaw", label: "Rohstoffqualität", description: "Sinnhaftigkeit und Qualität der Rohstoffe", max: 30 },
+  { key: "scoreHarmful", label: "Schadstoffe & Bedenkliches", description: "Ungeeignete oder problematische Inhaltsstoffe", max: 20 },
+  { key: "scoreNutrients", label: "Nährstoffprofil", description: "Protein, Fett, Vitamine, Mineralstoffe", max: 20 },
+  { key: "scoreDeclaration", label: "Deklaration & Transparenz", description: "Nachvollziehbare Angaben auf Etikett und Website, ehrliche Werbeaussagen statt solcher, die wir für irreführend halten", max: 15 },
+  { key: "scoreNeeds", label: "Bedarfsdeckung", description: "Passt das Produkt zum Bedarf des Tiers?", max: 10 },
+  { key: "scoreValue", label: "Preis-Leistung", description: "Preis-Leistungs-Verhältnis", max: 5 },
 ] as const;
 
 export const PUBLISHED_MAX_TOTAL = PUBLISHED_CRITERIA.reduce((sum, criterion) => sum + criterion.max, 0);

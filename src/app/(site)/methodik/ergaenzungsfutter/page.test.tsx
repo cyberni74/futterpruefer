@@ -20,6 +20,8 @@ describe("Methodik Ergänzungsfutter", () => {
     expect(html).toContain("2,1 × 10⁹ KBE pro Tier und Tag");
     expect(html).toContain("href=\"/methodik\"");
     expect(html).toContain("PMID 16647870");
+    expect(html).toContain("(nur Unterlagen, die der Hersteller von sich aus einreicht oder die öffentlich zugänglich sind; wir fragen Hersteller nicht an)");
+    expect(html).not.toContain("auf unsere Anfrage hin");
   });
 
   it("veröffentlicht keine internen Abschnitte", () => {

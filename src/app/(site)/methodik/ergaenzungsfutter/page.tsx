@@ -355,7 +355,7 @@ export default function ErgaenzungsfutterMethodikPage() {
 
         <h2 id="transparenz">Wann gibt es Punkte für Transparenz? (15 Punkte)</h2>
         <p><strong>Deklarierte Wirkstoffmengen (0–5):</strong> 5 = alle Wirkstoffe mit Menge pro Tagesdosis oder pro kg; 2–3 = nur Prozentangaben oder nur teilweise; 0 = keine Menge.</p>
-        <p><strong>Herstellerunterlagen (0–10)</strong>, wie bei Alleinfutter, nur für Unterlagen, die der Hersteller von sich aus einreicht oder die öffentlich zugänglich sind (nicht für Unterlagen auf unsere Anfrage hin):</p>
+        <p><strong>Herstellerunterlagen (0–10)</strong> (nur Unterlagen, die der Hersteller von sich aus einreicht oder die öffentlich zugänglich sind; wir fragen Hersteller nicht an):</p>
         <ul>
           <li><strong>10:</strong> nur mit echter Laboranalyse des fertigen Produkts (akkreditiertes Labor, Charge, Datum) mit Wirkstoffgehalt</li>
           <li><strong>6–8:</strong> unterschriebene Unterlagen, Wirkstoffspezifikation, Rohstoffzertifikate</li>

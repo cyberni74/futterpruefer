@@ -6,15 +6,15 @@ import { PageShell } from "@/components/page-shell";
 
 export const metadata: Metadata = {
   title: "Methodik: So bewerten wir Hunde- und Katzenfutter",
-  description: trimMetaDescription("Sieben Kriterien, 100 Punkte, offene Gewichtung: So prüfen wir Rohstoffe, Zusatzstoffe, Nährstoffprofil, Deklaration, Herstellerunterlagen und Werbeaussagen von Hunde- und Katzenfutter."),
+  description: trimMetaDescription("Sechs Kriterien, 100 Punkte, offene Gewichtung: So prüfen wir Rohstoffe, Zusatzstoffe, Nährstoffprofil, Deklaration, Bedarfsdeckung, Preis und Werbeaussagen von Hunde- und Katzenfutter."),
   alternates: { canonical: "/methodik" },
   openGraph: { type: "article", url: "/methodik", title: "Methodik: So bewerten wir Hunde- und Katzenfutter", images: [{ url: "/opengraph-image.png", width: 1200, height: 630 }] },
 };
 
 const SECTIONS = [
   ["grundsaetze", "Unsere Grundsätze"],
-  ["kriterien", "Die sieben Kriterien im Detail"],
-  ["transparenz", "Transparenz / Herstellerunterlagen"],
+  ["kriterien", "Die sechs Kriterien im Detail"],
+  ["transparenz", "Herstellerunterlagen"],
   ["gesamtnote", "Gesamtnote, Ampel und Warnsignal"],
   ["ablauf", "Ablauf einer Bewertung"],
   ["quellen", "Woher die Informationen stammen"],
@@ -68,7 +68,7 @@ const SOURCES = [
 
 export default function MethodikPage() {
   return (
-    <PageShell crumb="Methodik" path="/methodik" title="Unsere Methodik" intro={`Jedes Produkt durchläuft dieselbe Prüfung mit sieben Kriterien und maximal ${PUBLISHED_MAX_TOTAL} Punkten. Stand ${METHODOLOGY_STAND}. Hier steht, was wir prüfen, woher die Informationen stammen und wo die Grenzen eines Tests liegen.`}>
+    <PageShell crumb="Methodik" path="/methodik" title="Unsere Methodik" intro={`Jedes Alleinfutter durchläuft dieselbe Prüfung mit sechs Kriterien und maximal ${PUBLISHED_MAX_TOTAL} Punkten. Stand ${METHODOLOGY_STAND}. Hier steht, was wir prüfen, woher die Informationen stammen und wo die Grenzen eines Tests liegen.`}>
       <nav aria-label="Inhalt dieser Seite" className="rounded-2xl border border-border bg-surface p-5 shadow-card">
         <p className="text-sm font-bold uppercase tracking-wide text-muted">Auf dieser Seite</p>
         <ol className="mt-3 grid gap-x-6 gap-y-1 sm:grid-cols-2">
@@ -86,21 +86,21 @@ export default function MethodikPage() {
         <p>Futter ist die wichtigste tägliche Entscheidung für die Gesundheit von Hund und Katze, und die Verpackung zeigt vor allem Werbung. Unsere Bewertung soll Ihnen helfen, hinter diese Werbung zu schauen. Dafür gelten drei Regeln:</p>
         <ul>
           <li><strong>Nachvollziehbar:</strong> Jedes Kriterium, jede Gewichtung und jede Punktzahl ist offengelegt. Auf jeder Testseite sehen Sie, wie die Note zustande kommt.</li>
-          <li><strong>Gleiche Maßstäbe:</strong> Alle Produkte einer Methodik-Version werden nach denselben Kriterien bewertet, getrennt nach Hunden und Katzen sowie nach Alleinfutter und <Link href="/methodik/ergaenzungsfutter">Ergänzungsfutter</Link>. Ab dem {METHODOLOGY_STAND} sind das sieben Kriterien.</li>
+          <li><strong>Gleiche Maßstäbe:</strong> Alle Produkte einer Methodik-Version werden nach denselben Kriterien bewertet, getrennt nach Hunden und Katzen sowie nach Alleinfutter und <Link href="/methodik/ergaenzungsfutter">Ergänzungsfutter</Link>. Für Alleinfutter sind das die sechs Kriterien unten. Ältere Tests von Snacks, Kauartikeln und Ergänzungsfuttermitteln sind ebenfalls nach diesen sechs Kriterien bewertet, erkennbar an den sechs Teilnoten im Testergebnis.</li>
           <li><strong>Begründet:</strong> Kritik wird immer erklärt und, wo möglich, mit einer Quelle belegt. Unsere Einstufungen sind begründete fachliche Einschätzungen.</li>
         </ul>
       </div>
 
       <section id="kriterien" aria-labelledby="kriterien-h" className="mt-12 scroll-mt-28">
-        <h2 id="kriterien-h" className="text-2xl font-extrabold">Die sieben Kriterien im Detail</h2>
-        <p className="mt-2 text-muted">Jedes Produkt durchläuft dieselbe Prüfung mit sieben Kriterien und maximal {PUBLISHED_MAX_TOTAL} Punkten. Damit das neue Kriterium die Gesamtpunktzahl nicht erhöht, wurden die bisherigen sechs Kriterien anteilig auf 90 Punkte verkleinert (Faktor 0,9, auf ganze Punkte gerundet). Das Verhältnis der Kriterien zueinander bleibt so fast gleich. Rohstoffe und Zusätze machen zusammen 45 der 100 Punkte aus, der Preis fünf.</p>
+        <h2 id="kriterien-h" className="text-2xl font-extrabold">Die sechs Kriterien im Detail</h2>
+        <p className="mt-2 text-muted">Jedes Alleinfutter durchläuft dieselbe Prüfung mit sechs Kriterien und maximal {PUBLISHED_MAX_TOTAL} Punkten. Rohstoffe und Zusätze machen zusammen 50 der 100 Punkte aus, der Preis fünf. Diese Gewichtung gilt für alle veröffentlichten Alleinfutter-Tests.</p>
         <div className="mt-5 overflow-x-auto rounded-2xl border border-border">
           <table className="w-full text-left text-sm">
             <caption className="sr-only">Bewertungskriterien und Gewichtung, Stand {METHODOLOGY_STAND}</caption>
-            <thead className="bg-bg-soft"><tr><th scope="col" className="p-3">Kriterium</th><th scope="col" className="p-3">Inhalt</th><th scope="col" className="p-3 text-right">Punkte (bisher)</th></tr></thead>
+            <thead className="bg-bg-soft"><tr><th scope="col" className="p-3">Kriterium</th><th scope="col" className="p-3">Inhalt</th><th scope="col" className="p-3 text-right">Punkte</th></tr></thead>
             <tbody>
               {PUBLISHED_CRITERIA.map((c) => (
-                <tr key={c.key} className="border-t border-border"><th scope="row" className="p-3 font-semibold">{c.label}</th><td className="p-3 text-muted">{c.description}</td><td className="p-3 text-right font-bold tabular-nums">{c.max} ({c.previousMax ?? "neu"})</td></tr>
+                <tr key={c.key} className="border-t border-border"><th scope="row" className="p-3 font-semibold">{c.label}</th><td className="p-3 text-muted">{c.description}</td><td className="p-3 text-right font-bold tabular-nums">{c.max}</td></tr>
               ))}
               <tr className="border-t border-border bg-bg-soft"><th scope="row" className="p-3 font-bold">Gesamt</th><td /><td className="p-3 text-right font-extrabold">{PUBLISHED_MAX_TOTAL}</td></tr>
             </tbody>
@@ -130,49 +130,24 @@ export default function MethodikPage() {
 
         <article id="transparenz" className="mt-8 scroll-mt-28 rounded-2xl border border-border bg-surface p-5 shadow-card">
           <div className="flex items-baseline justify-between gap-3">
-            <h3 className="text-lg font-extrabold"><span className="mr-2 text-sm tabular-nums text-muted">7.</span>Transparenz / Herstellerunterlagen</h3>
-            <span className="shrink-0 rounded-full bg-brand-soft px-3 py-1 text-sm font-bold text-brand-strong tabular-nums">10 Punkte</span>
+            <h3 className="text-lg font-extrabold">Herstellerunterlagen</h3>
+            <span className="shrink-0 rounded-full bg-brand-soft px-3 py-1 text-sm font-bold text-brand-strong">nicht Teil der Note</span>
           </div>
-          <p className="mt-3">Mit diesem Kriterium bewerten wir, ob ein Hersteller seine Angaben mit Unterlagen belegt, die wir prüfen können. Es ergänzt das Kriterium „Deklaration & Transparenz“. Dort bewerten wir, was auf Etikett und Website steht. Hier bewerten wir die Belege, die der Hersteller zusätzlich vorlegt.</p>
-          <h4 className="mt-4 font-extrabold">Stufen nach Beweiswert</h4>
-          <div className="mt-3 overflow-x-auto rounded-2xl border border-border">
-            <table className="w-full text-left text-sm">
-              <caption className="sr-only">Stufen für Transparenz und Herstellerunterlagen</caption>
-              <thead className="bg-bg-soft"><tr><th scope="col" className="p-3 text-right">Punkte</th><th scope="col" className="p-3">Voraussetzung</th></tr></thead>
-              <tbody>
-                <tr className="border-t border-border"><th scope="row" className="p-3 text-right tabular-nums">0</th><td className="p-3">Keine Unterlagen vorgelegt. Unsere Bewertung stützt sich auf die Amazon-Produktseite, die Deklaration und öffentlich zugängliche Herstellerangaben.</td></tr>
-                <tr className="border-t border-border"><th scope="row" className="p-3 text-right tabular-nums">2</th><td className="p-3">Unterlagen ohne Unterschrift oder ohne erkennbares Labor. Dazu gehören auch Unterlagen ohne nachprüfbare Herkunft, zum Beispiel formlose Produktbeschreibungen oder Auszüge aus Korrespondenz.</td></tr>
-                <tr className="border-t border-border"><th scope="row" className="p-3 text-right tabular-nums">4</th><td className="p-3">Unterschriebene Herstellererklärungen mit Datum und verantwortlicher Person (z. B. HACCP-Nachweis, Konformitätserklärung, Rohstoffspezifikation, Registrierung als Futtermittelunternehmer). Endproduktanalysen mit nicht verifizierbarem Labor zählen ebenfalls zur Stufe 4.</td></tr>
-                <tr className="border-t border-border"><th scope="row" className="p-3 text-right tabular-nums">7</th><td className="p-3">Analysebericht eines akkreditierten Labors (Akkreditierung überprüfbar), der nur Rohstoffe oder Vorprodukte betrifft.</td></tr>
-                <tr className="border-t border-border"><th scope="row" className="p-3 text-right tabular-nums">10</th><td className="p-3">Analysebericht des verkaufsfertigen Endprodukts von einem akkreditierten Labor (z. B. DAkkS oder gleichwertig nach DIN EN ISO/IEC 17025). Die Akkreditierung muss über die Registrierungsnummer überprüfbar sein, und der Bericht muss einer Charge zugeordnet und höchstens 24 Monate alt sein.</td></tr>
-              </tbody>
-            </table>
-          </div>
-          <p className="mt-3">Es zählt die höchste erreichte Stufe, die Punkte werden nicht addiert. Wir bewerten nur Unterlagen, die uns schriftlich vorliegen und die der Hersteller von sich aus eingereicht hat oder die öffentlich zugänglich sind. Unterlagen, die wir beim Hersteller anfordern, berücksichtigen wir nicht. Mündliche oder telefonische Angaben zählen nicht.</p>
-          <h4 className="mt-4 font-extrabold">Grundsätze</h4>
-          <ul className="mt-2 list-disc space-y-1 pl-5 text-muted">
-            <li><strong className="text-fg">Gleich für alle:</strong> Das Kriterium gilt für alle Hersteller in gleicher Weise, unabhängig davon, ob sie ein Produkt eingereicht haben, ob ein Werbe- oder Partnerverhältnis besteht oder ob sie mit uns in Kontakt stehen. Jeder Hersteller kann uns Unterlagen schicken.</li>
-            <li><strong className="text-fg">Kein Ausgleich inhaltlicher Schwächen:</strong> Unterlagen belegen Angaben, sie verbessern das Produkt nicht. Die Bewertung von Rohstoffen, Zusatzstoffen, Nährstoffprofil und Tierschutzaspekten bleibt davon unberührt. Ein Warnsignal bei „Schadstoffe & Bedenkliches“ bleibt auch bei voller Punktzahl in diesem Kriterium bestehen.</li>
-            <li><strong className="text-fg">Keine Belohnung für Heilaussagen:</strong> Unterlagen, die gesundheitsbezogene oder krankheitsbezogene Werbeaussagen stützen sollen, bringen keine Punkte. Aussagen, die wir für irreführend halten, werden weiterhin bei „Deklaration & Transparenz“ abgezogen.</li>
-            <li><strong className="text-fg">Gesprächsbereitschaft allein zählt nicht:</strong> Interviews, Stellungnahmen oder Anfragen ohne prüfbare Unterlagen bringen keine Punkte.</li>
-            <li><strong className="text-fg">Offenlegung im Test:</strong> Jede Testseite nennt die berücksichtigten Unterlagen, die vergebene Stufe und eventuelle Einschränkungen, z. B. „Analyse betrifft nur den Rohstoff“.</li>
-            <li><strong className="text-fg">Widerlegte Angaben:</strong> Stellt sich eine Unterlage als falsch oder nicht mehr gültig heraus, entfallen die Punkte und der Test wird aktualisiert.</li>
-          </ul>
-          <h4 className="mt-4 font-extrabold">Stichtag und Übergang</h4>
-          <p className="mt-2">Das Kriterium gilt für alle Tests, die ab dem {METHODOLOGY_STAND} veröffentlicht oder aktualisiert werden. Ältere Tests behalten ihre bisherige Bewertung, bis wir sie das nächste Mal aktualisieren. Dabei bewerten wir sie nach der neuen Gewichtung, und Hersteller können vorher Unterlagen nachreichen. Auf jeder Testseite steht, nach welcher Methodik-Version bewertet wurde.</p>
-          <p className="mt-2">Tests nach der bisherigen und nach der neuen Methodik sind nicht unmittelbar vergleichbar. Ranglisten und Vergleichstabellen berücksichtigen nur Tests derselben Methodik-Version.</p>
+          <p className="mt-3">Bei Alleinfutter fließen Unterlagen des Herstellers, etwa Laboranalysen oder unterschriebene Erklärungen, derzeit nicht in die Note ein. Wir bewerten, was auf der Amazon-Produktseite, der Verpackung und der Herstellerseite steht. Fehlende oder widersprüchliche Angaben wirken sich im Kriterium „Deklaration & Transparenz“ aus.</p>
+          <p className="mt-2">Bei Ergänzungsfuttermitteln bewerten wir Herstellerunterlagen mit bis zu 10 Punkten nach festen Stufen, beschrieben in der <Link href="/methodik/ergaenzungsfutter#transparenz">Methodik für Ergänzungsfutter</Link>.</p>
+          <p className="mt-2">Ändern wir die Gewichtung für Alleinfutter, steht das mit Datum in der Änderungshistorie auf dieser Seite.</p>
         </article>
       </section>
 
       <div className="prose-fp mt-12">
         <h2 id="gesamtnote">Gesamtnote, Ampel und Warnsignal</h2>
-        <p>Die Punkte der sieben Kriterien werden zur Gesamtnote von maximal {PUBLISHED_MAX_TOTAL} Punkten addiert. Die Ampelfarbe zeigt auf einen Blick, wie das Produkt abschneidet:</p>
+        <p>Die Punkte der sechs Kriterien werden zur Gesamtnote von maximal {PUBLISHED_MAX_TOTAL} Punkten addiert. Die Ampelfarbe zeigt auf einen Blick, wie das Produkt abschneidet:</p>
         <ul>
           <li><strong className="text-good">Grün (ab {RATING_THRESHOLDS.gut} Punkten):</strong> empfehlenswert</li>
           <li><strong className="text-mid">Gelb ({RATING_THRESHOLDS.mittel}–{RATING_THRESHOLDS.gut - 1} Punkte):</strong> mit Abstrichen</li>
           <li><strong className="text-bad">Rot (unter {RATING_THRESHOLDS.mittel} Punkten):</strong> nicht empfehlenswert</li>
         </ul>
-        <p>Erreicht ein Produkt im Kriterium „Schadstoffe & Bedenkliches“ weniger als {HARMFUL_FAIL_RATIO * 100} % der Punkte, erscheint unabhängig von der Gesamtnote ein rotes Warnsignal mit Begründung. Nach der Gewichtung vom {METHODOLOGY_STAND} sind das unter 9 von 18 Punkten. Ein Futter kann also insgesamt gut abschneiden und trotzdem eine deutliche Warnung tragen, wenn einzelne Zusätze problematisch sind.</p>
+        <p>Erreicht ein Produkt im Kriterium „Schadstoffe & Bedenkliches“ weniger als {HARMFUL_FAIL_RATIO * 100} % der Punkte, erscheint unabhängig von der Gesamtnote ein rotes Warnsignal mit Begründung. Das sind unter 10 von 20 Punkten. Ein Futter kann also insgesamt gut abschneiden und trotzdem eine deutliche Warnung tragen, wenn einzelne Zusätze problematisch sind.</p>
         <p>Zu jeder Note gehören ein kurzes Fazit sowie eine Liste von Pro- und Contra-Punkten. Die Punktzahl ist ein Anhaltspunkt für den Vergleich, kein Urteil über das einzelne Tier.</p>
 
         <h2 id="ablauf">Ablauf einer Bewertung</h2>
@@ -202,7 +177,7 @@ export default function MethodikPage() {
           <li><strong className="text-mid">Fragwürdig:</strong> nicht ohne Weiteres nachprüfbar oder unscharf, zum Beispiel ein undefinierter Begriff oder fehlende Mengenangaben.</li>
           <li><strong className="text-bad">Halten wir für irreführend:</strong> nach unserer Einschätzung nicht mit dem Kennzeichnungsrecht oder dem Wettbewerbsrecht vereinbar, zum Beispiel krankheitsbezogene Versprechen bei einem Futtermittel.</li>
         </ul>
-        <p>Als Richtwert für den Abzug im Kriterium „Deklaration & Transparenz“ gelten 3 Punkte je Aussage, die wir für irreführend halten, und 1 Punkt je fragwürdiger Aussage, insgesamt höchstens 13 Punkte. Der Abzug kann im Einzelfall abweichen. Jede Einstufung ist mit einer Begründung und, wo möglich, einer Rechtsgrundlage versehen. Sie ist unsere fachliche Meinung und keine Rechtsberatung. Aussagen, die wir für irreführend halten, erscheinen zusätzlich als Contra-Punkt und mit einem Hinweis oben im Test.</p>
+        <p>Als Richtwert für den Abzug im Kriterium „Deklaration & Transparenz“ gelten 3 Punkte je Aussage, die wir für irreführend halten, und 1 Punkt je fragwürdiger Aussage, insgesamt höchstens 15 Punkte. Der Abzug kann im Einzelfall abweichen. Jede Einstufung ist mit einer Begründung und, wo möglich, einer Rechtsgrundlage versehen. Sie ist unsere fachliche Meinung und keine Rechtsberatung. Aussagen, die wir für irreführend halten, erscheinen zusätzlich als Contra-Punkt und mit einem Hinweis oben im Test.</p>
 
         <h2 id="grenzen">Was ein Test nicht leisten kann</h2>
         <ul>
@@ -216,7 +191,7 @@ export default function MethodikPage() {
         <p>Bei Rezepturänderungen, neuen Erkenntnissen oder Rückrufen wird ein Test überarbeitet. Der Hinweis „Zuletzt aktualisiert“ nennt das Datum. Haben wir einen Fehler gemacht, korrigieren wir ihn sichtbar. Hinweise auf sachliche Fehler senden Sie bitte über das <Link href="/kontakt">Kontaktformular</Link>. Wir prüfen jeden Hinweis anhand der Quellen. Die Bewertung selbst ist nicht verhandelbar.</p>
 
         <h2 id="unabhaengigkeit">Finanzierung und Hersteller</h2>
-        <p>Hersteller beauftragen oder bezahlen keine Tests und haben keinen Einfluss auf die Punkte. Futterprüfer finanziert sich über Provisionen aus dem Amazon-Partnerprogramm. Die Provision hängt nicht von der Punktzahl ab. Auch bei Produkten mit Rot-Bewertung verlinken wir die Amazon-Produktseite; ein solcher Link ist keine Kaufempfehlung. Wir fragen Hersteller nicht an. Belege, die Hersteller von sich aus einsenden, berücksichtigen wir nach den auf dieser Seite beschriebenen Kriterien.</p>
+        <p>Hersteller beauftragen oder bezahlen keine Tests und haben keinen Einfluss auf die Punkte. Futterprüfer finanziert sich über Provisionen aus dem Amazon-Partnerprogramm. Die Provision hängt nicht von der Punktzahl ab. Auch bei Produkten mit Rot-Bewertung verlinken wir die Amazon-Produktseite; ein solcher Link ist keine Kaufempfehlung. Wir fragen Hersteller nicht an. Belege, die Hersteller von sich aus einsenden, lesen wir. Bei Alleinfutter fließen sie derzeit nicht in die Note ein, bei Ergänzungsfuttermitteln nach der <Link href="/methodik/ergaenzungsfutter#transparenz">Ergänzungsfutter-Methodik</Link>.</p>
         <p>Begriffe aus den Tests erklären wir im <Link href="/lexikon">Futter-Lexikon</Link> und im <Link href="/glossar">Glossar</Link>. Antworten auf häufige Fragen finden Sie in der <Link href="/faq">FAQ</Link>. Hier geht es direkt zu den <Link href="/tests">Tests</Link>.</p>
       </div>
     </PageShell>

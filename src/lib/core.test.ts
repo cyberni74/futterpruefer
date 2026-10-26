@@ -7,8 +7,9 @@ import { formatDate } from "./site";
 describe("scoring", () => {
   it("Maximum ist 100", () => expect(MAX_TOTAL).toBe(100));
   it("veröffentlicht 27/18/18/13/9/5/10 und rechnet gespeicherte Noten nicht um", () => {
-    expect(METHODOLOGY_STAND).toBe("16.10.2026");
-    expect(PUBLISHED_CRITERIA.map((criterion) => criterion.max)).toEqual([27, 18, 18, 13, 9, 5, 10]);
+    expect(METHODOLOGY_STAND).toBe("26.10.2026");
+    expect(PUBLISHED_CRITERIA.map((criterion) => criterion.max)).toEqual(CRITERIA.map((criterion) => criterion.max));
+    expect(PUBLISHED_CRITERIA.map((criterion) => criterion.key)).toEqual(CRITERIA.map((criterion) => criterion.key));
     expect(PUBLISHED_MAX_TOTAL).toBe(100);
     expect(CRITERIA.map((criterion) => criterion.max)).toEqual([30, 20, 20, 15, 10, 5]);
     expect(totalScore({ scoreRaw: 30, scoreHarmful: 20, scoreNutrients: 20, scoreDeclaration: 15, scoreNeeds: 10, scoreValue: 5 })).toBe(100);

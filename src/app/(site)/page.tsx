@@ -132,7 +132,7 @@ export default async function Home() {
         <section aria-labelledby="methodik-teaser" className="mt-16 flex flex-col items-start gap-4 rounded-3xl border border-border bg-bg-soft p-6 md:flex-row md:p-8">
           <ShieldCheck className="size-12 shrink-0 text-brand" aria-hidden />
           <div className="flex-1">
-            <h2 id="methodik-teaser" className="text-xl font-extrabold">So testen wir: 100 Punkte, sieben Kriterien</h2>
+            <h2 id="methodik-teaser" className="text-xl font-extrabold">So testen wir: 100 Punkte, sechs Kriterien</h2>
             <ul className="mt-2 grid gap-x-6 gap-y-1 text-muted sm:grid-cols-2">
               {PUBLISHED_CRITERIA.map((c) => (
                 <li key={c.key}>{c.label}: <strong className="text-fg">{c.max} Punkte</strong></li>

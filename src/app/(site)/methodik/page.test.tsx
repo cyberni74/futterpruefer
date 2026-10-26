@@ -8,23 +8,24 @@ describe("Methodik Transparenz", () => {
   const html = renderToStaticMarkup(<MethodikPage />);
 
   it("zeigt die neue Gewichtung, den Stand und die Changelog-Zeile", () => {
-    expect(html).toContain("Stand 16.10.2026");
+    expect(html).toContain("Stand 26.10.2026");
     expect(html).toContain(METHODOLOGY_CHANGELOG);
-    expect(html).toContain("27 (30)");
-    expect(html).toContain("18 (20)");
-    expect(html).toContain("13 (15)");
-    expect(html).toContain("9 (10)");
-    expect(html).toContain("5 (5)");
-    expect(html).toContain("10 (neu)");
-    expect(html).toContain("Transparenz / Herstellerunterlagen");
+    expect(html).toContain("sechs Kriterien");
+    expect(html).not.toMatch(/Die sieben Kriterien|mit sieben Kriterien und maximal|Punkte der sieben/);
+    expect(html).not.toContain("10 (neu)");
+    expect(html).toContain("Das sind unter 10 von 20 Punkten.");
+    expect(html).toContain("insgesamt höchstens 15 Punkte");
+    expect(html).toContain("Bei Alleinfutter fließen Unterlagen des Herstellers");
+    expect(html).toContain("Wir bewerten, was auf der Amazon-Produktseite, der Verpackung und der Herstellerseite steht.");
+    expect(html).not.toContain("Die Seite beschreibt jetzt, was tatsächlich gilt");
+    expect(METHODOLOGY_CHANGELOG).toContain("nannten diese Seite und einige andere Seiten von Futterprüfer für Alleinfutter sieben Kriterien");
+    expect(METHODOLOGY_CHANGELOG).toContain("Durch diese Korrektur hat sich keine Punktzahl geändert.");
   });
 
-  it("übernimmt die rechtlich vorgegebenen Stufen und den Vergleichshinweis", () => {
+  it("verweist für Herstellerunterlagen auf die Ergänzungsfutter-Methodik", () => {
     expect(html).not.toContain("Vor jedem Test bitten wir den Hersteller per E-Mail");
-    expect(html).toContain("Unterlagen ohne Unterschrift oder ohne erkennbares Labor.");
-    expect(html).toContain("Endproduktanalysen mit nicht verifizierbarem Labor zählen ebenfalls zur Stufe 4.");
-    expect(html).toContain("Analysebericht eines akkreditierten Labors (Akkreditierung überprüfbar), der nur Rohstoffe oder Vorprodukte betrifft.");
-    expect(html).toContain("Tests nach der bisherigen und nach der neuen Methodik sind nicht unmittelbar vergleichbar. Ranglisten und Vergleichstabellen berücksichtigen nur Tests derselben Methodik-Version.");
+    expect(html).toContain('href="/methodik/ergaenzungsfutter#transparenz"');
+    expect(html).not.toContain("Auf jeder Testseite steht, nach welcher Methodik-Version bewertet wurde.");
   });
 
   it("verwendet keine Einstufung „zulässig“/„unzulässig“ (Rechtsprüfung 23.10.)", () => {
@@ -34,6 +35,6 @@ describe("Methodik Transparenz", () => {
 
   it("nennt den optionalen Satz für Hersteller", () => {
     const manufacturer = renderToStaticMarkup(<ManufacturerPage />);
-    expect(manufacturer).toContain("Sie können zusätzlich prüfbare Unterlagen einreichen (z. B. unterschriebene Herstellererklärungen oder Laboranalysen des Endprodukts). Diese bewerten wir im Kriterium „Transparenz / Herstellerunterlagen“ nach festen Stufen. Eine Einreichung kauft auch hier keine Note.");
+    expect(manufacturer).toContain("Sie können zusätzlich prüfbare Unterlagen einreichen (z. B. unterschriebene Herstellererklärungen oder Laboranalysen des Endprodukts). Bei Ergänzungsfuttermitteln bewerten wir sie im Kriterium „Herstellerunterlagen“ nach festen Stufen, bei Alleinfutter fließen sie derzeit nicht in die Note ein. Eine Einreichung kauft auch hier keine Note.");
   });
 });
