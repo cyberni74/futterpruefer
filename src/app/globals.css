@@ -495,3 +495,15 @@ html, body { overflow-x: clip; }
 .prose-fp .fp-box:not([class*="vt-"]) { border-radius: 1.25rem; }
 .prose-fp .fp-box:is(.fp-kurz, .fp-cta, .fp-fazit) { box-shadow: var(--shadow); }
 .prose-fp details:hover { border-color: var(--brand); }
+
+/* Ampel-Badge (aus renderArticle: „78, Gelb“ in Ergebnis-Zellen) */
+.fp-score {
+  display: inline-flex; align-items: center; gap: .35em; padding: .15em .7em; border-radius: 9999px;
+  font-size: .85em; font-weight: 700; line-height: 1.5; text-decoration: none; white-space: nowrap;
+}
+.fp-score::before { content: ""; width: .6em; height: .6em; border-radius: 9999px; background: currentColor; }
+.fp-score b { font-weight: 800; font-variant-numeric: tabular-nums; }
+.fp-score-gruen { background: var(--good-soft); color: var(--good); }
+.fp-score-gelb { background: var(--mid-soft); color: var(--mid); }
+.fp-score-rot { background: var(--bad-soft); color: var(--bad); }
+.prose-fp a:has(> .fp-score) { text-decoration: none; }

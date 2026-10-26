@@ -7,6 +7,7 @@ import { fitsAnimal, subjectAnimal, type AnimalKind } from "@/lib/animals";
 import { sanitize, stripHtml } from "@/lib/sanitize";
 import { stripAffiliateForRot } from "@/lib/rot-guard";
 import { linkify, type LinkTerm } from "@/lib/linkify";
+import { badgeScores } from "@/lib/score-badge";
 
 export const getLexikonEntries = cache(() =>
   prisma.lexikonEntry.findMany({ where: publishedWhere(), orderBy: { name: "asc" } }),
@@ -42,7 +43,7 @@ export const getLinkTerms = cache(async (): Promise<LinkTerm[]> => {
 /** Artikel-HTML: bereinigen, dann Lexikon-/Glossarbegriffe verlinken. */
 export async function renderArticle(html: string | null | undefined, exclude: string[] = [], opts: { rot?: boolean } = {}): Promise<string> {
   const terms = (await getLinkTerms()).filter((t) => !exclude.includes(t.href));
-  const clean = autolinkUrls(sanitize(html));
+  const clean = badgeScores(autolinkUrls(sanitize(html)));
   // Rot-Regel: auf Testseiten unter 60 Punkten kein Partner-Link und keine Amazon-CTA-Box.
   return linkify(opts.rot ? stripAffiliateForRot(clean) : clean, terms);
 }
