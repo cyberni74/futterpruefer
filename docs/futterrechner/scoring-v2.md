@@ -186,3 +186,14 @@ T8 (Snack) unverändert, keine Note.
 - Fettreiche Futter (P:F um 1 : 1, mehr als 60 % der Energie aus Fett) landen bei „ausreichend“ oder darunter.
 - Viel Protein wird nie bestraft.
 - Neu und optional: Feld „Erste Zutaten (optional)“. Ohne Eintrag bleibt alles „nach den Nährwerten“.
+
+## 8. Nachtrag 27.10.2026: Stand nach Rechtsprüfung (Auflagen A1–A9)
+Verbindlich für die Umsetzung ist `designer-nachtrag-scoring-v2-rechtspruefung.md` in diesem Ordner. Er ersetzt die Kollagen-Texte K1/K2 aus Abschnitt 4 und den Quellenblock. Die Angabe „Knochenprotein besteht zu etwa 83 % aus Kollagen“ ist gestrichen.
+- **A5:** Stufe 1 löst nur den Hinweis K1 aus und zieht 0 Punkte ab (höchstens 3 möglich, kein Ca-Zusatzabzug). Sammelbegriffe ziehen 0 Punkte ab und lösen nur den K2-Zusatz aus. Starke Begriffe ziehen wie bisher 4 Punkte ab, +2 je weiterem, höchstens 6.
+- **Schalter:** `KOLLAGEN_ABZUG_AKTIV = False` bleibt so, bis alles umgesetzt ist.
+- **A1:** Untergrenze 60 für FEDIAF-konforme Futter als Schalter `UNTERGRENZE_FEDIAF_KONFORM = False`, die Entscheidung ist offen. Bedingungen: Protein- und Fett-Minimum erfüllt, kein Ca-Deckel, Taurin (falls angegeben) nicht unter dem Minimum. Die Untergrenze gilt nach dem Kollagen-Abzug.
+- **Verteilung** an den 38 Futtern (intern, `kalibrierung_v2.py`), A5-Regeln, Abzug an:
+  - Untergrenze aus: Ø 73,5 (Nährwerte) bzw. 73,4 (mit Zutaten). 8 / 18 / 9 / 3 (21 / 47 / 24 / 8 %).
+  - Untergrenze an: Ø 73,7 bzw. 73,6. 8 / 18 / 11 / 1 (21 / 47 / 29 / 3 %). Die Untergrenze greift bei 2 Futtern.
+  - Die Bänder sind ≥ 80 / 70–79 / 60–69 / < 60.
+- Zu Abschnitt 3, „steht schon so im Rechner“: Das trifft nicht zu. Der Satz kommt mit A7 neu an die Note.

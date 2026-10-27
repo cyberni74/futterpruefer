@@ -1,8 +1,8 @@
 """Kalibrierung Scoring v2 an realen Futtern (Futterprüfer-Testdaten Review.json, nur lesend, keine DB).
-Aufruf: python3 kalibrierung_v2.py [Pfad zu Review.json]   (rechner.py und rechner_v1.py im selben Ordner)"""
+Aufruf: python3 kalibrierung_v2.py [Pfad zu Review.json] [-v]   (rechner.py und rechner_v1.py im selben Ordner)"""
 import json
 import sys
-SRC=sys.argv[1] if len(sys.argv)>1 else '/workspace/futterpruefer/bestes-hundefutter-2026-10/data/Review.json'
+SRC=next((x for x in sys.argv[1:] if not x.startswith('-')), None) or '/workspace/futterpruefer/bestes-hundefutter-2026-10/data/Review.json'
 CAT={'cmuz23zll':'hund','cmuz23zoi':'katze'}
 def g(a,names):
     for x in a:
@@ -31,17 +31,35 @@ import rechner_v1 as v1, rechner as v2
 COMP={r['slug']:(r.get('composition') or '') for r in json.load(open(SRC))}
 def band(s): return 'grün ≥80' if s>=80 else ('gelb 70–79' if s>=70 else ('orange 60–69' if s>=60 else 'rot <60'))
 def ampel(s): return 'grün' if s>=80 else ('gelb' if s>=60 else 'rot')
-rows=laden(); out=[]
-for r in rows:
-    t=HUND if r['art']=='hund' else KATZE
-    a=v1.bewerte(r['futter'],t)
-    fz=dict(r['futter']); b0=v2.bewerte(fz,t)            # v2 nur Nährwerte
-    fz2=dict(fz, zutaten=COMP[r['slug']]); b1=v2.bewerte(fz2,t)  # v2 + Zutatenfeld
-    out.append((r,a,b0,b1))
+rows=laden()
+# Konfigurationen nach Rechtsprüfung 27.10.2026 (A1, A5). Jeweils ohne und mit Zutatenfeld.
+KONFIG = [('Standard (Abzug aus, Boden aus)', dict()),
+          ('A5 an, Boden aus', dict(abzug_aktiv=True)),
+          ('A5 an, Boden an', dict(abzug_aktiv=True, untergrenze=True)),
+          ('Abzug aus, Boden an', dict(untergrenze=True))]
+def lauf(cfg):
+    out=[]
+    for r in rows:
+        t=HUND if r['art']=='hund' else KATZE
+        a=v1.bewerte(r['futter'],t)
+        fz=dict(r['futter']); b0=v2.bewerte(fz,t,**cfg)                     # v2 nur Nährwerte
+        fz2=dict(fz, zutaten=COMP[r['slug']]); b1=v2.bewerte(fz2,t,**cfg)   # v2 + Zutatenfeld
+        out.append((r,a,b0,b1))
+    return out
+def vert(sc, notes):
+    c=Counter(band(s) for s in sc); n=len(sc)
+    return (f"n {n} Ø {sum(sc)/n:.1f} min {min(sc)} max {max(sc)} | "
+            + ' | '.join(f"{k}: {c.get(k,0)} ({c.get(k,0)/n*100:.0f} %)" for k in ['grün ≥80','gelb 70–79','orange 60–69','rot <60'])
+            + ' | Noten ' + ', '.join(f"{k} {v}" for k,v in sorted(Counter(notes).items())))
+out = lauf({})
 if __name__=='__main__':
-    for key,lab in [(1,'v1'),(2,'v2 Nährwerte'),(3,'v2 + Zutaten')]:
-        sc=[o[key]['score'] for o in out]
-        c=Counter(band(s) for s in sc); n=len(sc)
-        print(lab, 'n',n,'Ø',round(sum(sc)/n,1),'min',min(sc),'max',max(sc),'≥90:',sum(s>=90 for s in sc), {k:f"{v} ({v/n*100:.0f} %)" for k,v in sorted(c.items())}, 'Noten',Counter(o[key]['note'] for o in out))
-    for r,a,b0,b1 in sorted(out,key=lambda o:-o[2]['score']):
-        print(f"{r['art']:5} {r['typ']:7} {r['preis'][:4]} v1 {a['score']:3} → v2 {b0['basis']:5.1f}-{b0['abzug']} = {b0['score']:3} {b0['note']:12} | +Zut -{b1['kollagen']['abzug_zutaten']} = {b1['score']:3} {b1['note']:12} PF {b0['pf']:.2f} PE {b0['energie_anteile']['p']:.0f}% {b0['pts']} {b1['kollagen']['treffer']} {r['slug'][:32]}")
+    print('v1                                  ', vert([o[1]['score'] for o in out], [o[1]['note'] for o in out]))
+    for lab,cfg in KONFIG:
+        o2=lauf(cfg)
+        print(f"{lab:32} Nährwerte ", vert([o[2]['score'] for o in o2], [o[2]['note'] for o in o2]))
+        print(f"{lab:32} + Zutaten ", vert([o[3]['score'] for o in o2], [o[3]['note'] for o in o2]),
+              '| Boden gegriffen:', sum(o[3]['untergrenze_gegriffen'] for o in o2), '| K-Hinweis:', sum(o[3]['kollagen']['flag'] for o in o2))
+    if '-v' in sys.argv:
+        o2=lauf(dict(abzug_aktiv=True, untergrenze=True))
+        for r,a,b0,b1 in sorted(o2,key=lambda o:-o[2]['score']):
+            print(f"{r['art']:5} {r['typ']:7} {r['preis'][:4]} v1 {a['score']:3} → v2 {b0['basis']:5.1f}-{b0['abzug']} = {b0['score']:3} {b0['note']:12} | +Zut -{b1['kollagen']['abzug_zutaten']} = {b1['score']:3} {b1['note']:12} Boden {b1['untergrenze_gegriffen']} PF {b0['pf']:.2f} PE {b0['energie_anteile']['p']:.0f}% {b1['kollagen']['treffer']} {r['slug'][:32]}")

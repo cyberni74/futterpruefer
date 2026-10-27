@@ -1,4 +1,4 @@
-"""Referenzimplementierung Futter-Rechner, Bewertung v2 (Scoring v2, 27.10.2026).
+"""Referenzimplementierung Futter-Rechner, Bewertung v2 (Scoring v2, 27.10.2026; Stand nach Rechtsprüfung A1/A5).
 Python-Spiegel des TS-Moduls src/lib/futterrechner. Energie/Bedarf/Spalten unverändert gegenüber v1;
 geändert ist nur die Punktevergabe in bewerte() (siehe docs/futterrechner/scoring-v2.md).
 """
@@ -91,12 +91,25 @@ GEWICHT = {'hund': dict(pf=35, pe=15, pmin=10, fmin=5, nfe=5, capr=20, plaus=10)
 PLAUS_ABZUG = dict(feuchte_geschaetzt=2, asche_ausserhalb=3, faser_hund=3)
 
 # (8) Kollagen-Heuristik: Abzug in Score-Punkten nach der Normierung, KEIN Deckel.
-#   Stufe 1 (immer, nur Nährwerte): Rohprotein TS >= protein_ts_ab UND Rohasche TS > 10 %
-#            -> rund(lin(Asche TS; 10; 14) × 6), zusätzlich 2, wenn Ca TS > 2,0 %.  Max. 8.
+#   Stand nach Rechtsprüfung 27.10.2026 (A5):
+#   Stufe 1 (nur Nährwerte): Rohprotein TS >= protein_ts_ab UND Rohasche TS > 10 % -> Hinweis K1.
+#            Punktabzug nach A5(a) standardmäßig 0 (KOLL_STUFE1_MAX = 0). Falls Manni einen Abzug will:
+#            höchstens 3 Punkte, rund(lin(Asche TS; 10; 14) × KOLL_STUFE1_MAX), KEIN Ca-Zusatzabzug mehr (Doppelzählung).
 #   Stufe 2 (nur mit Feld „Erste Zutaten“): Schlagwort in den ersten 5 Zutaten.
-#            stark: 4 + 2 je weiterem starken Begriff; schwach (Sammelbegriff): 2. Max. 6.
-KOLL = dict(asche_ab=10.0, asche_voll=14.0, asche_max=6, ca_ts_ab=2.0, ca_abzug=2,
+#            stark: 4 + 2 je weiterem starken Begriff, max. 6 (A5(c), bleibt).
+#            schwach (Sammelbegriff „Nebenerzeugnisse“, „hydrolysierte Tierproteine“): KEIN Abzug, nur Hinweis (A5(b)).
+#   Schalter KOLLAGEN_ABZUG_AKTIV: False = gar kein Kollagen-Abzug (Hinweise erscheinen trotzdem).
+#            Bleibt False, bis A5 komplett umgesetzt ist (A5(e)); Aktivierung erfolgt separat.
+KOLLAGEN_ABZUG_AKTIV = False
+KOLL_STUFE1_MAX = 0          # A5(a): 0 = nur Hinweis; erlaubter Höchstwert laut Rechtsprüfung: 3
+KOLL_STUFE1_MAX_GRENZE = 3
+KOLL = dict(asche_ab=10.0, asche_voll=14.0,
             protein_ts_ab={'hund': 25.0, 'katze': 30.0}, zutaten_positionen=5, zutaten_max=6)
+# (9) A1 Untergrenze 60 für FEDIAF-konforme Futter. Entscheidung Manni offen -> Standard False.
+#   Greift nur, wenn rp >= 1,0 UND rf >= 1,0, kein Ca-Deckel (Ca über Maximum oder Ca/P 0 Punkte im Wachstum)
+#   UND (Katze, falls angegeben) Taurin TS >= Minimum. Gilt NACH dem Kollagen-Abzug: score = max(score, 60).
+UNTERGRENZE_FEDIAF_KONFORM = False
+UNTERGRENZE_WERT = 60
 # Schlagwörter, geprüft auf jede der ersten 5 Zutaten (klein geschrieben, Regex ohne Wortanfang, damit Komposita greifen)
 KOLL_STARK = [r'kollagen', r'gelatine', r'knorpel', r'haut\b', r'häute', r'schwarte', r'feder(n|mehl|hydrolysat)?\b',
               r'sehne', r'luftröhre', r'grieben', r'knochenmehl', r'tiermehl', r'schlachtabf']
@@ -125,12 +138,15 @@ def zutaten_liste(text, n):
     if cur.strip(): teile.append(cur.strip())
     return teile[:n]
 
-def kollagen(sp, p_ts, a_ts, ca_ts, zutaten):
-    """Gibt dict(abzug_naehrwerte, abzug_zutaten, treffer, flag) zurück. Abzug in Punkten (0–12)."""
-    a1=0; ca_extra=0
-    if p_ts >= KOLL['protein_ts_ab'][sp] and a_ts > KOLL['asche_ab']:
-        a1 = rund(lin(a_ts, KOLL['asche_ab'], KOLL['asche_voll']) * KOLL['asche_max'])
-        if ca_ts is not None and ca_ts > KOLL['ca_ts_ab']: ca_extra = KOLL['ca_abzug']
+def kollagen(sp, p_ts, a_ts, ca_ts, zutaten, abzug_aktiv=None, stufe1_max=None):
+    """A5-Regeln. Gibt dict(stufe1, abzug_naehrwerte, abzug_zutaten, treffer, treffer_stark, treffer_schwach,
+    flag, zutaten_geprueft) zurück. flag = irgendein Hinweis (K1/K2/K2-Zusatz) anzeigen, auch ohne Abzug.
+    ca_ts bleibt als Parameter (Schnittstelle), wird nach A5(a) nicht mehr verwendet."""
+    aktiv = KOLLAGEN_ABZUG_AKTIV if abzug_aktiv is None else abzug_aktiv
+    s1max = KOLL_STUFE1_MAX if stufe1_max is None else stufe1_max
+    assert 0 <= s1max <= KOLL_STUFE1_MAX_GRENZE, 'A5(a): Stufe-1-Abzug höchstens 3 Punkte'
+    stufe1 = p_ts >= KOLL['protein_ts_ab'][sp] and a_ts > KOLL['asche_ab']
+    a1 = rund(lin(a_ts, KOLL['asche_ab'], KOLL['asche_voll']) * s1max) if stufe1 else 0
     stark=[]; schwach=[]
     if zutaten:
         for z in zutaten_liste(zutaten, KOLL['zutaten_positionen']):
@@ -142,12 +158,14 @@ def kollagen(sp, p_ts, a_ts, ca_ts, zutaten):
             if (re.search(HYDRO_JA, zl) and re.search(HYDRO_KONTEXT, zl) and not re.search(HYDRO_NEIN, zl)
                     and 'hydrolysat' not in schwach and not any(re.search(k, zl) for k in KOLL_STARK)):
                 schwach.append('hydrolysat')
-    a2 = (4 + 2*(len(stark)-1) if stark else 0) + (2 if schwach else 0)   # schwach zählt einmal
-    a2 = min(a2, KOLL['zutaten_max'])
-    return dict(abzug_naehrwerte=a1+ca_extra, abzug_zutaten=a2, treffer=stark+schwach,
-                flag=(a1+ca_extra+a2)>0, zutaten_geprueft=bool((zutaten or '').strip()))
+    a2 = min(4 + 2*(len(stark)-1), KOLL['zutaten_max']) if stark else 0   # A5(b): schwach = 0 Punkte
+    if not aktiv: a1 = 0; a2 = 0
+    return dict(stufe1=stufe1, abzug_naehrwerte=a1, abzug_zutaten=a2, treffer=stark+schwach,
+                treffer_stark=stark, treffer_schwach=schwach,
+                flag=bool(stufe1 or stark or schwach), zutaten_geprueft=bool((zutaten or '').strip()))
 
-def bewerte(futter, tier):
+def bewerte(futter, tier, untergrenze=None, abzug_aktiv=None, stufe1_max=None):
+    """untergrenze/abzug_aktiv/stufe1_max: None = Konstanten UNTERGRENZE_FEDIAF_KONFORM / KOLLAGEN_ABZUG_AKTIV / KOLL_STUFE1_MAX."""
     sp=tier['art']; caps=[]
     P,F,Fa,A=futter['p'],futter['f'],futter['fa'],futter['a']
     M=futter.get('m'); est_m=False
@@ -185,24 +203,26 @@ def bewerte(futter, tier):
     nfe_ts=dm(nfe_c); lo,hi=NFE_BAND[sp]
     pts['nfe']=r1(W['nfe']*(1-lin(nfe_ts,lo,hi))); maxp['nfe']=W['nfe']
     # 5) Ca/P (20) – Regeln wie v1
-    ca,ph=futter.get('ca'),futter.get('ph'); capr=None; ca_ts=None
+    ca,ph=futter.get('ca'),futter.get('ph'); capr=None; ca_ts=None; ca_deckel=False
     if ca is not None and ph is not None and ph>0:
         cr=ca_rules(sp,col,tier.get('endgewicht')); ratio=ca/ph; ca_ts=dm(ca); p_dm=dm(ph)
         ok_r = cr['r_min']<=ratio<=cr['r_max']; ok_ca = ca_ts>=cr['ca_min'] and (cr['ca_max'] is None or ca_ts<=cr['ca_max'])
         ok_p = p_dm>=cr['p_min'] and (cr['p_max'] is None or p_dm<=cr['p_max'])
         near = (cr['r_min']-0.1)<=ratio<=(cr['r_max']+0.1)
         pts['capr']=W['capr'] if (ok_r and ok_ca and ok_p) else (W['capr']/2 if near and ok_ca else 0); maxp['capr']=W['capr']
-        if pts['capr']==0 and col.startswith('wachstum'): caps.append('ausreichend')
-        if cr['ca_max'] is not None and ca_ts>cr['ca_max']: caps.append('mangelhaft' if col.startswith('wachstum') else 'ausreichend')
+        if pts['capr']==0 and col.startswith('wachstum'): caps.append('ausreichend'); ca_deckel=True
+        if cr['ca_max'] is not None and ca_ts>cr['ca_max']: caps.append('mangelhaft' if col.startswith('wachstum') else 'ausreichend'); ca_deckel=True
         capr=dict(ratio=ratio, ca_dm=ca_ts, p_dm=p_dm, rules=cr)
     else:
         caps.append('gut')
     # 6) Taurin (Katze, 10) – unverändert, kein Deckel
+    taurin_unter_min=False
     if sp=='katze':
         tau=futter.get('taurin_mgkg')
         if tau is not None:
             tdm=tau/10000/ts*100; tmin=TAURIN_MIN[(col,'nass' if futter['typ']=='nass' else 'trocken')]
             pts['taurin']=W['taurin'] if tdm>=tmin else 0; maxp['taurin']=W['taurin']
+            taurin_unter_min = tdm<tmin
     # 7) Plausibilität (10)
     a_dm=dm(A); plaus=W['plaus']
     if est_m: plaus-=PLAUS_ABZUG['feuchte_geschaetzt']
@@ -211,9 +231,14 @@ def bewerte(futter, tier):
     pts['plaus']=max(plaus,0); maxp['plaus']=W['plaus']
     basis=sum(pts.values())/sum(maxp.values())*100
     # 8) Kollagen-Heuristik: Abzug vom Score, kein Deckel
-    k=kollagen(sp, dm(P), a_dm, ca_ts, futter.get('zutaten'))
+    k=kollagen(sp, dm(P), a_dm, ca_ts, futter.get('zutaten'), abzug_aktiv, stufe1_max)
     abzug=k['abzug_naehrwerte']+k['abzug_zutaten']
     score=max(0, rund(basis - abzug))
+    # 9) A1 Untergrenze (nach dem Kollagen-Abzug)
+    ug = UNTERGRENZE_FEDIAF_KONFORM if untergrenze is None else untergrenze
+    fediaf_konform = rp>=1.0 and rf>=1.0 and not ca_deckel and not taurin_unter_min
+    untergrenze_gegriffen = bool(ug and fediaf_konform and score < UNTERGRENZE_WERT)
+    if untergrenze_gegriffen: score = UNTERGRENZE_WERT
     note = 'sehr gut' if score>=90 else 'gut' if score>=80 else 'befriedigend' if score>=70 else 'ausreichend' if score>=60 else 'mangelhaft'
     order=['sehr gut','gut','befriedigend','ausreichend','mangelhaft']
     for c in caps:
@@ -222,5 +247,6 @@ def bewerte(futter, tier):
     return dict(status='ok', M=M, est_m=est_m, ts=ts, nfe=e['nfe'], nfe_dm=nfe_ts, ge=e['ge'], dig=e['dig'], de=e['de'], me_calc=e['me'], me=me,
                 p_dm=dm(P), f_dm=dm(F), a_dm=a_dm, fa_dm=dm(Fa), p1000=p1000, f1000=f1000, col=col, mins=mins, rp=rp, rf=rf,
                 pf=pf, energie_anteile=dict(p=pe, f=fe, c=ce), pe_lo=pe_lo,
-                capr=capr, pts=pts, maxp=maxp, basis=basis, kollagen=k, abzug=abzug, score=score, note=note, caps=caps, bedarf=b, menge=menge,
+                capr=capr, pts=pts, maxp=maxp, basis=basis, kollagen=k, abzug=abzug, score=score, note=note, caps=caps,
+                fediaf_konform=fediaf_konform, untergrenze_gegriffen=untergrenze_gegriffen, bedarf=b, menge=menge,
                 menge_lo=b['lo']/me*100, menge_hi=b['hi']/me*100)
