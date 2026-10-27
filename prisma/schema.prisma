@@ -145,6 +145,11 @@ model Review {
   /// Slug aus src/lib/authors.ts. Leer = Standardautor.
   authorSlug  String?
 
+  /// Leer = bisheriges Layout. "TESTVORLAGE_V2" aktiviert die feste Testvorlage (Inhalte in layoutData).
+  layout     String @default("")
+  /// Strukturierte Inhalte der Testvorlage, Schema siehe docs/testvorlage-v2.md. Ungültig = Rückfall auf das bisherige Layout.
+  layoutData Json?
+
   /// Bestehende Tests bleiben Alleinfutter. Die ef-Felder zählen nur bei ERGAENZUNGSFUTTER.
   bewertungsart   Bewertungsart @default(ALLEINFUTTER)
   methodikVersion String        @default("")

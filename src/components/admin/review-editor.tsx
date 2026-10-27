@@ -21,6 +21,10 @@ import { RichEditor } from "./rich-editor";
 import { SeoPanel } from "./seo-panel";
 import { AuthorField } from "./author-field";
 import { Field, Section, describe, inputCls, textareaCls } from "./ui";
+import { TESTVORLAGE_V2, parseLayoutData } from "@/components/testvorlage-v2/schema";
+import { draftToLayoutData, draftTotal, emptyDraft, layoutDataToDraft, type Draft } from "@/lib/admin/testvorlage-form";
+import { TestvorlageEditor } from "./testvorlage-editor";
+import { TestvorlageLive } from "./testvorlage-live";
 
 export type ReviewEditorData = {
   id?: string;
@@ -64,6 +68,9 @@ export type ReviewEditorData = {
   updatedAt: string | null;
   bewertungsart: "ALLEINFUTTER" | "ERGAENZUNGSFUTTER";
   ef: EfFormState;
+  /** "" = klassisch, "TESTVORLAGE_V2" = feste Testvorlage */
+  layout?: string;
+  layoutData?: unknown;
 };
 
 type Props = {
@@ -118,6 +125,13 @@ export function ReviewEditor({ initial, categories, referenzen = [], brands = []
   const [bewertungsart, setBewertungsart] = useState(initial.bewertungsart ?? "ALLEINFUTTER");
   const [ef, setEf] = useState<EfFormState>(initial.ef ?? EMPTY_EF_FORM);
   const [tab, setTab] = useState<"form" | "preview">("form");
+  const [layout, setLayout] = useState(initial.layout === TESTVORLAGE_V2 ? TESTVORLAGE_V2 : "");
+  const [draft, setDraft] = useState<Draft>(() => {
+    const p = initial.layoutData ? parseLayoutData(initial.layoutData) : null;
+    return p?.ok ? layoutDataToDraft(p.data) : emptyDraft();
+  });
+  const isV2 = layout === TESTVORLAGE_V2;
+  const layoutJson = draftToLayoutData(draft);
   const bodyRef = useRef(initial.bodyHtml);
 
   const numericScores = Object.fromEntries(CRITERIA.map((c) => [c.key, clampScore(c.key, scores[c.key])])) as Scores;
@@ -173,7 +187,7 @@ export function ReviewEditor({ initial, categories, referenzen = [], brands = []
             onClick={() => setTab(t)}
             className={`min-h-11 rounded-lg text-sm font-semibold ${tab === t ? "bg-surface text-fg shadow-card" : "text-muted"}`}
           >
-            {t === "form" ? "Bearbeiten" : `Fazit-Vorschau (${total})`}
+            {t === "form" ? "Bearbeiten" : isV2 ? `Vorschau (${draftTotal(draft)})` : `Fazit-Vorschau (${total})`}
           </button>
         ))}
       </div>
@@ -197,6 +211,17 @@ export function ReviewEditor({ initial, categories, referenzen = [], brands = []
           noValidate
         >
           <div id="pane-form" className="space-y-6">
+            <input type="hidden" name="layout" value={layout} />
+            {isV2 && <input type="hidden" name="layoutData" value={JSON.stringify(layoutJson)} />}
+            <Section title="Layout" id="sec-layout" description="Klassisch bleibt unverändert. Die Testvorlage V2 erzeugt den Artikel aus den strukturierten Feldern unten, ohne HTML von Hand.">
+              <Field id="layoutSelect" label="Layout des Tests">
+                <select id="layoutSelect" value={layout} onChange={(e) => setLayout(e.target.value)} className={inputCls}>
+                  <option value="">Klassisch (bisherige Maske)</option>
+                  <option value={TESTVORLAGE_V2}>TESTVORLAGE_V2</option>
+                </select>
+              </Field>
+              {isV2 && <p className="text-xs text-muted">Bei der Testvorlage entfallen Bewertungsmaske, Testbericht und Fazit-Felder der klassischen Maske. Stammdaten, Bilder, Produktdaten, Werbeaussagen, SEO und Veröffentlichung bleiben.</p>}
+            </Section>
             <BewertungsartSwitch
               value={bewertungsart}
               onChange={setBewertungsart}
@@ -345,6 +370,8 @@ export function ReviewEditor({ initial, categories, referenzen = [], brands = []
               <GalleryField initial={initial.gallery} nameSource={productLabel || title} error={errors.gallery} />
             </Section>
 
+            {!isV2 && (
+            <>
             <div hidden={bewertungsart !== "ALLEINFUTTER"} className="space-y-6">
             <Section title="Bewertungsmaske" id="sec-bewertung" description={`Punkte je Kriterium – die Gesamtwertung (max. ${MAX_TOTAL}) wird automatisch berechnet.`}>
               <div className="space-y-5">
@@ -409,6 +436,19 @@ export function ReviewEditor({ initial, categories, referenzen = [], brands = []
             <div hidden={bewertungsart !== "ERGAENZUNGSFUTTER"}>
               <ErgaenzungFields value={ef} onChange={setEf} errors={errors} referenzen={referenzen} tierart={efTier} />
             </div>
+            </>
+            )}
+
+            {isV2 && (
+              <>
+                <Section title="Teaser für die Vorschau-Karte" id="sec-v2-teaser">
+                  <Field id="teaser" label="Teaser (max. 100 Zeichen = drei Zeilen)" error={errors.teaser} hint={`${teaser.length}/100 Zeichen – erscheint auf Startseite, Testübersicht und Kategorien unter dem Titel`}>
+                    <textarea id="teaser" name="teaser" value={teaser} onChange={(e) => setTeaser(e.target.value)} rows={2} maxLength={100} className={textareaCls} {...describe("teaser", errors.teaser, true)} />
+                  </Field>
+                </Section>
+                <TestvorlageEditor draft={draft} onChange={setDraft} bewertungsart={bewertungsart} errors={errors} />
+              </>
+            )}
 
             <Section title="Produktdaten" id="sec-produktdaten" description="Erscheint als eigener Block auf der Testseite. Leere Felder werden ausgeblendet.">
               <div className="grid gap-4 sm:grid-cols-2">
@@ -446,6 +486,8 @@ export function ReviewEditor({ initial, categories, referenzen = [], brands = []
               />
             </Section>
 
+            {!isV2 && (
+            <>
             <Section title="Fazit, Pro & Contra" id="sec-fazit">
               <Field id="teaser" label="Teaser für die Vorschau-Karte (neugierig machen, max. 100 Zeichen = drei Zeilen)" error={errors.teaser} hint={`${teaser.length}/100 Zeichen – erscheint auf Startseite, Testübersicht und Kategorien unter dem Titel`}>
                 <textarea id="teaser" name="teaser" value={teaser} onChange={(e) => setTeaser(e.target.value)} rows={2} maxLength={100} placeholder="z. B. Lachs im Namen – aber nur 4 % in der Tüte. Trotzdem 76 Punkte." className={textareaCls} {...describe("teaser", errors.teaser, true)} />
@@ -469,6 +511,9 @@ export function ReviewEditor({ initial, categories, referenzen = [], brands = []
               </div>
             </Section>
 
+            </>
+            )}
+
             <Section title="SEO" id="sec-seo">
               <SeoPanel
                 kind="review"
@@ -489,7 +534,16 @@ export function ReviewEditor({ initial, categories, referenzen = [], brands = []
           <SaveBar pending={pending} state={state} />
         </form>
 
-        <aside id="pane-preview" aria-label="Live-Vorschau des Fazits" className={`min-w-0 ${tab === "preview" ? "" : "hidden lg:block"}`}>
+        <aside id="pane-preview" aria-label={isV2 ? "Live-Vorschau der Testvorlage" : "Live-Vorschau des Fazits"} className={`min-w-0 ${tab === "preview" ? "" : "hidden lg:block"}`}>
+          {isV2 ? (
+            <div className="lg:sticky lg:top-6">
+              <p className="mb-2 text-xs font-bold tracking-wide text-muted uppercase">Live-Vorschau · so rendert die öffentliche Seite die Vorlage</p>
+              <TestvorlageLive layoutData={layoutJson} totalScore={draftTotal(draft)} titel={title} />
+              <button type="button" onClick={() => setTab("form")} className="mt-4 min-h-11 w-full rounded-xl border border-border text-sm font-semibold lg:hidden">
+                Zurück zum Formular
+              </button>
+            </div>
+          ) : (
           <div className="lg:sticky lg:top-6">
             <p className="mb-2 text-xs font-bold tracking-wide text-muted uppercase">Live-Vorschau · so erscheint das Fazit</p>
             <VerdictPanel
@@ -503,6 +557,7 @@ export function ReviewEditor({ initial, categories, referenzen = [], brands = []
               Zurück zum Formular
             </button>
           </div>
+          )}
         </aside>
       </div>
 

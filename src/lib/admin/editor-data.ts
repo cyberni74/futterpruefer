@@ -49,6 +49,8 @@ type ReviewRow = {
   publishedAt: Date | null;
   updatedAt: Date;
   bewertungsart?: "ALLEINFUTTER" | "ERGAENZUNGSFUTTER";
+  layout?: string;
+  layoutData?: unknown;
   methodikVersion?: string;
   efWirkstoffAuswahl?: number | null;
   efWirkstoffAuswahlBegruendung?: string;
@@ -117,6 +119,8 @@ export function reviewToEditorData(r: ReviewRow, now = new Date()) {
     scheduledAt: mode === "scheduled" ? dateToBerlinLocal(r.publishedAt) : "",
     updatedAt: r.updatedAt.toISOString(),
     bewertungsart: r.bewertungsart ?? "ALLEINFUTTER",
+    layout: r.layout ?? "",
+    layoutData: r.layoutData ?? null,
     ef: r.efWirkstoffAuswahl === undefined && r.bewertungsart === undefined ? EMPTY_EF_FORM : efFormFromReview({
       efWirkstoffAuswahl: r.efWirkstoffAuswahl ?? null,
       efWirkstoffAuswahlBegruendung: r.efWirkstoffAuswahlBegruendung ?? "",
