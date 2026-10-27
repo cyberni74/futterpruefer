@@ -11,23 +11,23 @@ export type SeitenKey = "hub" | "hund" | "katze";
 export const META: Record<SeitenKey, { path: string; title: string; description: string; h1: string; ogTitel: string }> = {
   hub: {
     path: "/futterrechner",
-    title: "Futterrechner Hund & Katze: Futter prüfen | Futterprüfer",
-    description: "Futterrechner für Hund und Katze: Analysewerte vom Etikett eintippen, Note nach FEDIAF und Tagesmenge sehen. Ohne Anmeldung, nichts gespeichert.",
+    title: "Futterrechner Hund & Katze: Nährwert-Check | Futterprüfer",
+    description: "Futterrechner für Hund und Katze: Analysewerte vom Etikett eintippen, Nährwert-Check nach FEDIAF und Tagesmenge sehen. Ohne Anmeldung, nichts gespeichert.",
     h1: "Futterrechner für Hund und Katze",
     ogTitel: "Futterrechner für Hund und Katze",
   },
   hund: {
     path: "/futterrechner/hund",
-    title: "Futterrechner Hund: Hundefutter prüfen & Menge berechnen",
-    description: "Hundefutter-Rechner: Rohprotein, Rohfett & Co. eintippen und Nährwert-Note, kcal und Futtermenge pro Tag sehen. Nach FEDIAF, für Welpen bis Senioren.",
-    h1: "Futterrechner Hund: Hundefutter prüfen und Tagesmenge berechnen",
+    title: "Futterrechner Hund: Nährwert-Check & Menge berechnen",
+    description: "Hundefutter-Rechner: Rohprotein, Rohfett & Co. eintippen und Nährwert-Check, kcal und Futtermenge pro Tag sehen. Nach FEDIAF, für Welpen bis Senioren.",
+    h1: "Futterrechner Hund: Nährwert-Check und Tagesmenge berechnen",
     ogTitel: "Futterrechner Hund",
   },
   katze: {
     path: "/futterrechner/katze",
-    title: "Futterrechner Katze: Katzenfutter prüfen & Menge berechnen",
-    description: "Katzenfutter-Rechner: Analysewerte eintippen, Nährwert-Note nach FEDIAF, kcal und Futtermenge pro Tag sehen. Für Kitten, Wohnungskatzen und Freigänger.",
-    h1: "Futterrechner Katze: Katzenfutter prüfen und Tagesmenge berechnen",
+    title: "Futterrechner Katze: Nährwert-Check & Menge berechnen",
+    description: "Katzenfutter-Rechner: Analysewerte eintippen, Nährwert-Check nach FEDIAF, kcal und Futtermenge pro Tag sehen. Für Kitten, Wohnungskatzen und Freigänger.",
+    h1: "Futterrechner Katze: Nährwert-Check und Tagesmenge berechnen",
     ogTitel: "Futterrechner Katze",
   },
 };
