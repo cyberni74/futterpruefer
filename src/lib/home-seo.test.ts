@@ -176,10 +176,10 @@ describe("JSON-LD Startseiten-URL", () => {
 });
 
 describe("Meta-Description der Startseite", () => {
-  it("nennt die geprüften Beispiele und bleibt in der Längengrenze", () => {
-    expect(HOME_META_DESCRIPTION).toBe("Hunde- und Katzenfutter im Test: über 110 Produkte nach 100-Punkte-Schema, von Leonardo (Grün) bis Whiskas (Rot). Wir lesen das Kleingedruckte.");
+  it("nennt die Ampel ohne einzelne Produktnoten und bleibt in der Längengrenze", () => {
+    expect(HOME_META_DESCRIPTION).toBe("Hunde- und Katzenfutter im Test: über 110 Produkte nach 100-Punkte-Schema, Ampel Grün, Gelb oder Rot. Wir lesen das Kleingedruckte.");
     expect(HOME_META_DESCRIPTION.length).toBeLessThanOrEqual(155);
-    expect(HOME_META_DESCRIPTION).not.toMatch(/Josera/);
+    expect(HOME_META_DESCRIPTION).not.toMatch(/Josera|MjAMjAM|Leonardo|Whiskas|unabhängig/i);
   });
 
   it("lässt die Beschreibung der Organization im JSON-LD unverändert", () => {
