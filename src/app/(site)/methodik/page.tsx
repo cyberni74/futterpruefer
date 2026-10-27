@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { trimMetaDescription } from "@/lib/seo";
-import { HARMFUL_FAIL_RATIO, METHODOLOGY_CHANGELOG, METHODOLOGY_CHANGELOG_ERGAENZUNG, METHODOLOGY_STAND, PUBLISHED_CRITERIA, PUBLISHED_MAX_TOTAL, RATING_THRESHOLDS, type CriterionKey } from "@/lib/scoring";
+import { HARMFUL_FAIL_RATIO, METHODOLOGY_CHANGELOG, METHODOLOGY_CHANGELOG_ABGRENZUNG, METHODOLOGY_CHANGELOG_ERGAENZUNG, METHODOLOGY_STAND, PUBLISHED_CRITERIA, PUBLISHED_MAX_TOTAL, RATING_THRESHOLDS, type CriterionKey } from "@/lib/scoring";
 import { PageShell } from "@/components/page-shell";
 
 export const metadata: Metadata = {
@@ -107,6 +107,7 @@ export default function MethodikPage() {
           </table>
         </div>
         <p className="mt-3 text-sm text-muted">Stand {METHODOLOGY_STAND}. {METHODOLOGY_CHANGELOG_ERGAENZUNG}</p>
+        <p className="mt-2 text-sm text-muted">{METHODOLOGY_CHANGELOG_ABGRENZUNG}</p>
         <p className="mt-2 text-sm text-muted">{METHODOLOGY_CHANGELOG}</p>
 
         <div className="mt-8 space-y-5">
@@ -178,6 +179,7 @@ export default function MethodikPage() {
           <li><strong className="text-mid">Fragwürdig:</strong> nicht ohne Weiteres nachprüfbar oder unscharf, zum Beispiel ein undefinierter Begriff oder fehlende Mengenangaben.</li>
           <li><strong className="text-bad">Halten wir für irreführend:</strong> nach unserer Einschätzung nicht mit dem Kennzeichnungsrecht oder dem Wettbewerbsrecht vereinbar, zum Beispiel krankheitsbezogene Versprechen bei einem Futtermittel.</li>
         </ul>
+        <p>Allgemeine Anpreisungen ohne prüfbaren Inhalt, etwa ‚Premium‘ oder ‚Beste Qualität‘, stufen wir als ‚Unbelegt‘ ein. Begriffe mit einem prüfbaren Gehalt, die der Hersteller weder erklärt noch belegt, etwa ‚Lebensmittelqualität‘ oder ‚nachhaltige Verpackung‘, stufen wir als ‚Fragwürdig‘ ein. Erklärt der Hersteller einen solchen Begriff nachvollziehbar, bleibt es bei ‚Unbelegt‘; ist er belegt, werten wir ‚Ohne Einwand‘.</p>
         <p>Als Richtwert für den Abzug im Kriterium „Deklaration & Transparenz“ gelten 3 Punkte je Aussage, die wir für irreführend halten, und 1 Punkt je fragwürdiger Aussage, insgesamt höchstens 15 Punkte. Der Abzug kann im Einzelfall abweichen. Jede Einstufung ist mit einer Begründung und, wo möglich, einer Rechtsgrundlage versehen. Sie ist unsere fachliche Meinung und keine Rechtsberatung. Aussagen, die wir für irreführend halten, erscheinen zusätzlich als Contra-Punkt und mit einem Hinweis oben im Test.</p>
 
         <h2 id="grenzen">Was ein Test nicht leisten kann</h2>
