@@ -2,8 +2,8 @@ import type { Eingabe } from "./index";
 import { mengenRisiko, risikenFuer, type RisikoGrund } from "./risiken";
 import type { Ergebnis, ErgebnisOk, Grund, Hinweis, Note } from "./types";
 import {
-  ASCHE_BAND, ATWATER, FASER_GRENZE_HUND, GEWICHT, KOLLAGEN_TEXT_FREIGEGEBEN, LECKERLI_ANTEIL, MINDEST, NFE_BAND, NOTEN_REIHE, NOTEN_SCHWELLEN,
-  PE_SOCKEL, PE_ZIEL, PF_BAND, PLAUS_ABZUG,
+  ASCHE_BAND, ATWATER, FASER_GRENZE_HUND, GEWICHT, KOLLAGEN_ABZUG_AKTIV, KOLLAGEN_TEXT_FREIGEGEBEN, KOLL_STUFE1_MAX, LECKERLI_ANTEIL, MINDEST, NFE_BAND,
+  NOTEN_REIHE, NOTEN_SCHWELLEN, PE_SOCKEL, PE_ZIEL, PF_BAND, PLAUS_ABZUG, UNTERGRENZE_FEDIAF_KONFORM, UNTERGRENZE_WERT,
 } from "./fediaf";
 import { inTs, meNrc2006 } from "./energie";
 import { bedarf, rer, spalte as waehleSpalte } from "./bedarf";
@@ -13,7 +13,13 @@ import * as T from "./texte";
 export const noteFuer = (score: number): Note => NOTEN_SCHWELLEN.find(([s]) => score >= s)?.[1] ?? "mangelhaft";
 const schlechter = (a: Note, b: Note) => NOTEN_REIHE.indexOf(a) > NOTEN_REIHE.indexOf(b);
 
-export function bewerte({ futter, tier, ergaenzung, stueckGramm }: Eingabe): Ergebnis {
+/** Schalter nur für Tests; ohne Angabe gelten die Konstanten aus fediaf.ts. */
+export type BewertungsOptionen = { untergrenze?: boolean; abzugAktiv?: boolean; stufe1Max?: number };
+
+export function bewerte(
+  { futter, tier, ergaenzung, stueckGramm }: Eingabe,
+  { untergrenze = UNTERGRENZE_FEDIAF_KONFORM, abzugAktiv = KOLLAGEN_ABZUG_AKTIV, stufe1Max = KOLL_STUFE1_MAX }: BewertungsOptionen = {},
+): Ergebnis {
   const { p, f, fa, a } = futter;
   let m = futter.m ?? null;
   let feuchteGeschaetzt = false;
@@ -67,6 +73,8 @@ export function bewerte({ futter, tier, ergaenzung, stueckGramm }: Eingabe): Erg
   const punkte: Record<string, number> = {};
   const max: Record<string, number> = {};
   const deckel: Note[] = [];
+  let caDeckel = false;
+  let taurinUnterMin = false;
   const gruende: Grund[] = [];
 
   const W = GEWICHT[tier.art];
@@ -107,7 +115,7 @@ export function bewerte({ futter, tier, ergaenzung, stueckGramm }: Eingabe): Erg
   gruende.push({ id: "fett", art: rf >= 1 ? "ok" : rf >= 0.9 ? "warn" : "bad", titel: "Rohfett", text: T.fettGrund(f1000, mindest.f, rf), verhaeltnis: rf });
   gruende.push({
     id: "pf", art: pfAnteil >= 0.75 ? "ok" : pfAnteil >= 0.35 ? "warn" : "bad", titel: "Protein-Fett-Verhältnis",
-    text: T.pfGrund(pf, energieAnteile.p, energieAnteile.f, energieAnteile.c, band.hi, pfAnteil < 0.35),
+    text: T.pfGrund(pf, energieAnteile.p, energieAnteile.f, energieAnteile.c, band.hi),
   });
 
   // Calcium / Phosphor
@@ -118,8 +126,14 @@ export function bewerte({ futter, tier, ergaenzung, stueckGramm }: Eingabe): Erg
     const c = caPCheck(tier.art, col, ca, ph, m, tier.art === "hund" && tier.phase === "welpe" ? tier.endgewicht : null, tier.art === "hund" && tier.phase === "welpe" ? tier.wochen : undefined);
     punkte.capr = c.okRatio && c.okCa && c.okP ? W.capr : c.nah && c.okCa ? W.capr / 2 : 0;
     max.capr = W.capr;
-    if (punkte.capr === 0 && welpe) deckel.push("ausreichend");
-    if (c.caUeber) deckel.push(welpe ? "mangelhaft" : "ausreichend");
+    if (punkte.capr === 0 && welpe) {
+      deckel.push("ausreichend");
+      caDeckel = true;
+    }
+    if (c.caUeber) {
+      deckel.push(welpe ? "mangelhaft" : "ausreichend");
+      caDeckel = true;
+    }
     capr = { ratio: c.ratio, caTs: c.caTs, pTs: c.pTs, regel: c.regel };
     const ziel = T.zielgruppe(col);
     const artPunkte: Grund["art"] = punkte.capr === W.capr ? "ok" : punkte.capr > 0 ? "warn" : "bad";
@@ -146,6 +160,7 @@ export function bewerte({ futter, tier, ergaenzung, stueckGramm }: Eingabe): Erg
   if (tier.art === "katze") {
     if (futter.taurinMgKg != null) {
       const t = taurinCheck(futter.taurinMgKg, m, col, futter.typ === "nass" || m >= 60);
+      taurinUnterMin = !t.ok;
       punkte.taurin = t.ok ? 10 : 0;
       max.taurin = 10;
       taurin = { ts: t.ts, min: t.min };
@@ -169,27 +184,34 @@ export function bewerte({ futter, tier, ergaenzung, stueckGramm }: Eingabe): Erg
   );
   if (tier.art === "hund" && faTs > FASER_GRENZE_HUND) gruende.push({ id: "faser", art: "warn", titel: "Rohfaser", text: T.FASER_HINWEIS });
   gruende.push({ id: "nfe", art: "info", titel: "NfE", text: T.nfeInfo(nfeTs, W.nfe, nfeBand.lo, nfeBand.hi) });
-  // Kollagen-Heuristik: Abzug vom Score nach der Normierung, kein Deckel
-  const koll = kollagen(art, inTs(p, m), aTs, capr?.caTs ?? null, futter.zutaten);
+  // Kollagen-Heuristik (A5): Abzug vom Score nach der Normierung, kein Deckel; Hinweise erscheinen auch ohne Abzug
+  const koll = kollagen(art, inTs(p, m), aTs, capr?.caTs ?? null, futter.zutaten, abzugAktiv, stufe1Max);
   const abzug = koll.abzugNaehrwerte + koll.abzugZutaten;
   if (koll.flag) {
-    const treffer = koll.treffer.join(", ");
     const teile: string[] = [];
-    if (koll.abzugZutaten > 0) {
-      teile.push(KOLLAGEN_TEXT_FREIGEGEBEN ? T.kollagenLangZutaten(treffer) : T.kollagenKurzZutaten(treffer));
-      if (KOLLAGEN_TEXT_FREIGEGEBEN && koll.schwach) teile.push(T.KOLLAGEN_LANG_SAMMELBEGRIFF);
+    const starkText = koll.trefferStark.join(", ");
+    const zutatenTreffer = koll.trefferStark.length > 0 || koll.trefferSchwach.length > 0;
+    if (koll.trefferStark.length > 0) {
+      teile.push(KOLLAGEN_TEXT_FREIGEGEBEN ? T.kollagenK2(starkText, koll.trefferStark.some((w) => /mehl/i.test(w))) : T.kollagenKurzZutaten(starkText));
     }
-    if (koll.abzugNaehrwerte > 0) teile.push(KOLLAGEN_TEXT_FREIGEGEBEN ? T.kollagenLangNaehrwerte(inTs(p, m), aTs) : T.KOLLAGEN_KURZ_NAEHRWERTE);
-    if (KOLLAGEN_TEXT_FREIGEGEBEN) teile.push(T.KOLLAGEN_QUELLEN_ZEILE);
+    if (koll.trefferSchwach.length > 0) teile.push(T.KOLLAGEN_K2_ZUSATZ);
+    if (koll.stufe1) teile.push(KOLLAGEN_TEXT_FREIGEGEBEN ? T.kollagenK1(inTs(p, m), aTs) : T.KOLLAGEN_KURZ_NAEHRWERTE);
     gruende.push({
-      id: "kollagen", art: "warn", titel: koll.abzugZutaten > 0 ? T.KOLLAGEN_TITEL_ZUTATEN : T.KOLLAGEN_TITEL_NAEHRWERTE, text: teile.join(" "),
+      id: "kollagen", art: "warn", titel: zutatenTreffer ? T.KOLLAGEN_TITEL_ZUTATEN : T.KOLLAGEN_TITEL_NAEHRWERTE, text: teile.join(" "),
     });
   }
 
   const summePunkte = Object.values(punkte).reduce((x, y) => x + y, 0);
   const summeMax = Object.values(max).reduce((x, y) => x + y, 0);
   const basis = (summePunkte / summeMax) * 100;
-  const score = Math.max(0, Math.round(basis - abzug));
+  // Untergrenze (A1): Futter, die alle FEDIAF-Mindestwerte erfüllen, nicht unter UNTERGRENZE_WERT, auch nach dem Kollagen-Abzug
+  const fediafKonform = rp >= 1 && rf >= 1 && !caDeckel && !taurinUnterMin;
+  let score = Math.max(0, Math.round(basis - abzug));
+  const untergrenzeGegriffen = untergrenze && fediafKonform && score < UNTERGRENZE_WERT;
+  if (untergrenzeGegriffen) {
+    score = UNTERGRENZE_WERT;
+    gruende.splice(gruende.findIndex((g) => g.id === "pf") + 1, 0, { id: "untergrenze", art: "info", titel: "Mindestnote", text: T.untergrenzeGrund(energieAnteile.f) });
+  }
   let note = noteFuer(score);
   for (const c of deckel) if (schlechter(c, note)) note = c;
 
@@ -241,6 +263,8 @@ export function bewerte({ futter, tier, ergaenzung, stueckGramm }: Eingabe): Erg
     basis,
     kollagen: koll,
     abzug,
+    fediafKonform,
+    untergrenzeGegriffen,
     mengeRisiko: null,
   };
   const auswahl = risikenFuer(ergebnis, { futter, tier });

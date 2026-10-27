@@ -1,5 +1,5 @@
 import type { Art, CaRegel, Spalte } from "./types";
-import { ASCHE_BAND, KOLLAGEN, TAURIN_MIN, caRegel } from "./fediaf";
+import { ASCHE_BAND, KOLLAGEN, KOLLAGEN_ABZUG_AKTIV, KOLL_STUFE1_MAX, KOLL_STUFE1_MAX_GRENZE, TAURIN_MIN, caRegel } from "./fediaf";
 import { inTs } from "./energie";
 
 /** g je 1000 kcal = Wert wie gefüttert (g/100 g) ÷ ME (kcal/100 g) × 1000 */
@@ -60,12 +60,17 @@ export function zutatenListe(text: string, n: number): string[] {
 }
 
 export type KollagenErgebnis = {
+  /** Protein und Asche (in der Trockenmasse) beide hoch: Hinweis K1, nur aus den Nährwerten */
+  stufe1: boolean;
   abzugNaehrwerte: number;
   abzugZutaten: number;
-  /** Lesbare Begriffe aus den eingegebenen Zutaten (nicht der Regex) */
+  /** Alle gefundenen Wörter aus den Zutaten (stark, dann Sammelbegriffe) */
   treffer: string[];
-  /** mindestens ein Sammelbegriff („Nebenerzeugnisse“, „hydrolysierte Tierproteine“) getroffen */
-  schwach: boolean;
+  /** Starke Begriffe (Kollagen, Knorpel, Knochenmehl …): lösen Abzug und K2 aus */
+  trefferStark: string[];
+  /** Sammelbegriffe („Nebenerzeugnisse“, „hydrolysierte Tierproteine“): nie Abzug, nur K2-Zusatz */
+  trefferSchwach: string[];
+  /** Hinweis anzeigen, auch ohne Abzug */
   flag: boolean;
   zutatenGeprueft: boolean;
 };
@@ -81,17 +86,18 @@ function wortUm(original: string, index: number, laenge: number): string {
 }
 
 /**
- * Kollagen-Heuristik (Abzug in Punkten, kein Deckel). Stufe 1 nur aus den Nährwerten, Stufe 2 aus den ersten fünf eingegebenen Zutaten.
- * pTs, aTs, caTs in % der Trockenmasse.
+ * Kollagen-Heuristik nach A5 (Rechtsprüfung 27.10.2026). Stufe 1 nur aus den Nährwerten, Stufe 2 aus den ersten fünf eingegebenen Zutaten.
+ * pTs, aTs in % der Trockenmasse. caTs bleibt nur als Parameter erhalten (der Ca-Zusatzabzug entfällt).
+ * Der Abzug gilt nur bei abzugAktiv; die Hinweise (flag) erscheinen unabhängig davon.
  */
-export function kollagen(art: Art, pTs: number, aTs: number, caTs: number | null, zutaten?: string | null): KollagenErgebnis {
+export function kollagen(
+  art: Art, pTs: number, aTs: number, _caTs: number | null, zutaten?: string | null,
+  abzugAktiv: boolean = KOLLAGEN_ABZUG_AKTIV, stufe1Max: number = KOLL_STUFE1_MAX,
+): KollagenErgebnis {
+  if (!(stufe1Max >= 0 && stufe1Max <= KOLL_STUFE1_MAX_GRENZE)) throw new Error(`stufe1Max muss zwischen 0 und ${KOLL_STUFE1_MAX_GRENZE} liegen`);
   const K = KOLLAGEN;
-  let a1 = 0;
-  let caExtra = 0;
-  if (pTs >= K.proteinTsAb[art] && aTs > K.ascheAb) {
-    a1 = Math.round(lin(aTs, K.ascheAb, K.ascheVoll) * K.ascheMax);
-    if (caTs != null && caTs > K.caTsAb) caExtra = K.caAbzug;
-  }
+  const stufe1 = pTs >= K.proteinTsAb[art] && aTs > K.ascheAb;
+  const a1 = stufe1 ? Math.round(lin(aTs, K.ascheAb, K.ascheVoll) * stufe1Max) : 0;
   const stark = new Map<string, string>();
   const schwach = new Map<string, string>();
   if (zutaten) {
@@ -115,13 +121,17 @@ export function kollagen(art: Art, pTs: number, aTs: number, caTs: number | null
       }
     }
   }
-  const a2 = Math.min((stark.size ? 4 + 2 * (stark.size - 1) : 0) + (schwach.size ? 2 : 0), K.zutatenMax);
+  const trefferStark = [...new Set(stark.values())];
+  const trefferSchwach = [...new Set(schwach.values())];
+  const a2 = stark.size ? Math.min(4 + 2 * (stark.size - 1), K.zutatenMax) : 0;
   return {
-    abzugNaehrwerte: a1 + caExtra,
-    abzugZutaten: a2,
-    treffer: [...new Set([...stark.values(), ...schwach.values()])],
-    schwach: schwach.size > 0,
-    flag: a1 + caExtra + a2 > 0,
+    stufe1,
+    abzugNaehrwerte: abzugAktiv ? a1 : 0,
+    abzugZutaten: abzugAktiv ? a2 : 0,
+    treffer: [...trefferStark, ...trefferSchwach],
+    trefferStark,
+    trefferSchwach,
+    flag: stufe1 || trefferStark.length > 0 || trefferSchwach.length > 0,
     zutatenGeprueft: (zutaten ?? "").trim().length > 0,
   };
 }

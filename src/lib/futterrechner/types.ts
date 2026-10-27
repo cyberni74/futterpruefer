@@ -130,6 +130,10 @@ export type ErgebnisOk = {
   kollagen: import("./naehrstoffe").KollagenErgebnis;
   /** Abzug der Kollagen-Heuristik in Punkten */
   abzug: number;
+  /** Alle FEDIAF-Mindestwerte erfüllt (Protein, Fett, kein Ca-Deckel, Taurin falls angegeben) */
+  fediafKonform: boolean;
+  /** Die Untergrenze hat den Score angehoben */
+  untergrenzeGegriffen: boolean;
   /** Info-Box „Gut zu wissen“ unter der Tagesmenge */
   mengeRisiko: RisikoId | null;
 };

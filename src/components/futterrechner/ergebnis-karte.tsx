@@ -5,7 +5,7 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { NOTEN } from "@/lib/futterrechner/fediaf";
 import type { Ergebnis, ErgebnisOk, Grund, Note } from "@/lib/futterrechner/types";
-import { ERGAENZUNG_TEXT, GUTE_WERTE, NICHT_GEZEIGT_VORN, NUR_NAEHRWERTE, n0, n1, n2 } from "@/lib/futterrechner/texte";
+import { ERGAENZUNG_TEXT, GUTE_WERTE, NICHT_GEZEIGT_VORN, NOTE_ABGRENZUNG, NUR_NAEHRWERTE, kollagenAbzugStufe1, kollagenAbzugStufe2, n0, n1, n2 } from "@/lib/futterrechner/texte";
 import { MAX_OFFEN } from "@/lib/futterrechner/risiken";
 import { FazitBox } from "./fazit-box";
 import { Gauge, useZaehler } from "./gauge";
@@ -36,6 +36,11 @@ const GRUND_STIL: Record<Grund["art"], { icon: typeof Info; farbe: string }> = {
   info: { icon: Info, farbe: "text-brand" },
 };
 
+/** `**fett**` im Text der Gründe als <strong> ausgeben. */
+function MitFett({ text }: { text: string }) {
+  return text.split("**").map((teil, i) => (i % 2 ? <strong key={i}>{teil}</strong> : teil));
+}
+
 function Balken({ verhaeltnis }: { verhaeltnis: number }) {
   const breite = Math.min(100, (verhaeltnis / 2) * 100);
   const farbe = verhaeltnis >= 1 ? "bg-good" : verhaeltnis >= 0.9 ? "bg-mid-fill" : "bg-bad";
@@ -63,7 +68,10 @@ function RechenwegZeilen({ r }: { r: ErgebnisOk }) {
     ["Protein : Fett", `${n1(r.pf)} : 1`],
     ["Energie aus Protein / Fett / Kohlenhydraten", `${n0(r.energieAnteile.p)} / ${n0(r.energieAnteile.f)} / ${n0(r.energieAnteile.c)} %`],
     ["Punkte vor Abzug", `${n1(r.basis)}`],
-    ...(r.abzug > 0 ? ([["Abzug Kollagen-Heuristik", `−${r.abzug} Punkte`]] as Array<[string, string]>) : []),
+  ];
+  const abzugsZeilen = [
+    ...(r.kollagen.abzugNaehrwerte > 0 ? [kollagenAbzugStufe1(r.kollagen.abzugNaehrwerte)] : []),
+    ...(r.kollagen.abzugZutaten > 0 ? [kollagenAbzugStufe2(r.kollagen.abzugZutaten, r.kollagen.trefferStark.join(", "))] : []),
   ];
   return (
     <dl className="grid grid-cols-[1fr_auto] gap-x-4 gap-y-1.5 text-sm">
@@ -73,6 +81,7 @@ function RechenwegZeilen({ r }: { r: ErgebnisOk }) {
           <dd className="text-right font-semibold tabular-nums">{v}</dd>
         </div>
       ))}
+      {abzugsZeilen.map((z) => <div key={z} className="col-span-2 font-semibold">{z}</div>)}
       <div className="col-span-2 mt-2 text-xs text-muted">Quelle: FEDIAF Nutritional Guidelines 2025, NRC 2006 (Vierschrittverfahren). Kastriert-Faktor × 0,9: eigene Ableitung aus AAHA 2021.</div>
     </dl>
   );
@@ -131,6 +140,7 @@ export function ErgebnisKarte({ ergebnis: roh, nochFehlt, fehlerText, onTeilen, 
             <Gauge score={ok.score} titel={`Nährwert-Check ${ok.score} von 100`} />
             <p className="font-display -mt-2 text-5xl font-extrabold tabular-nums leading-none">{zahl}</p>
             <div className="mt-3"><NoteBadge note={ok.note} gross puls /></div>
+            <p className="mx-auto mt-3 max-w-sm text-sm">{NOTE_ABGRENZUNG}</p>
             <p className="mx-auto mt-3 max-w-sm text-sm text-muted">{NUR_NAEHRWERTE}</p>
           </div>
 
@@ -162,7 +172,7 @@ export function ErgebnisKarte({ ergebnis: roh, nochFehlt, fehlerText, onTeilen, 
                     <Icon aria-hidden className={`mt-0.5 size-5 shrink-0 ${farbe}`} />
                     <span className="min-w-0 flex-1">
                       <span className="sr-only">{g.titel}: </span>
-                      {g.text}
+                      <MitFett text={g.text} />
                       {g.verhaeltnis != null && <Balken verhaeltnis={g.verhaeltnis} />}
                       {g.risiken?.map((rid, i) => <RisikoBox key={rid} id={rid} stufe={g.risikoStufen?.[i] ?? "warn"} offen={offenFlags[i] ?? false} />)}
                     </span>
@@ -201,4 +211,4 @@ export function ErgebnisKarte({ ergebnis: roh, nochFehlt, fehlerText, onTeilen, 
 
 /** Kurzfassung für die Live-Region. */
 export const vorlesetext = (e: Ergebnis | null) =>
-  e?.status === "ok" ? `Nährwert-Check ${e.score} von 100, ${NOTEN[e.note]}.${e.menge != null ? ` Tagesmenge ${n0(e.menge)} Gramm.` : ""}` : "";
+  e?.status === "ok" ? `Nährwert-Check ${e.score} von 100, ${NOTEN[e.note]}. ${NOTE_ABGRENZUNG}${e.menge != null ? ` Tagesmenge ${n0(e.menge)} Gramm.` : ""}` : "";

@@ -1,5 +1,5 @@
 import type { Ergebnis, FutterInput, TierInput } from "./types";
-import { bewerte } from "./bewertung";
+import { bewerte, type BewertungsOptionen } from "./bewertung";
 
 export type Eingabe = {
   futter: FutterInput;
@@ -9,10 +9,11 @@ export type Eingabe = {
   stueckGramm?: number | null;
 };
 
-/** Reine Funktion: Eingabe → Ergebnis. Läuft nur im Browser, nichts wird gespeichert. */
-export function berechne(eingabe: Eingabe): Ergebnis {
-  return bewerte(eingabe);
+/** Reine Funktion: Eingabe → Ergebnis. Läuft nur im Browser, nichts wird gespeichert. Die Optionen überschreiben die Schalter aus fediaf.ts nur für Tests. */
+export function berechne(eingabe: Eingabe, optionen?: BewertungsOptionen): Ergebnis {
+  return bewerte(eingabe, optionen);
 }
 
+export type { BewertungsOptionen } from "./bewertung";
 export * from "./types";
 export { NOTEN, NOTEN_REIHE } from "./fediaf";

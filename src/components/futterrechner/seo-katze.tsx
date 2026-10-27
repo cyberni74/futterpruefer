@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { gewichtungSatz } from "@/lib/futterrechner/texte";
 import { Infografik2, Infografik3, Infografik4, Infografik5, Infografik6 } from "./infografiken";
 
 const a = "font-semibold text-brand underline underline-offset-4 hover:text-brand-strong";
@@ -62,7 +63,7 @@ export function SeoKatze() {
       <p>Kitten mit 5 Monaten und 2,5 kg, Trockenfutter mit 34 % Protein, 20 % Fett, 8 % Feuchte und 2.000 mg/kg Taurin. Energie: 409,6 kcal/100 g. Bedarf: 100 × 2,5<sup>0,67</sup> × 1,875 = 346 kcal, das sind 85 g am Tag (76 bis 93 g). Protein 83 g je 1000 kcal (Minimum 70 g). Auf 1 g Fett kommen 1,7 g Protein, Kitten brauchen viel Energie und bekommen sie hier zu einem guten Teil aus Fett. Ergebnis: 71 Punkte, „befriedigend“.</p>
       <h2 id="so-bewerten-wir">So bewerten wir: was die Note sagt und was nicht</h2>
       <p>
-        Der Nährwert-Check vergibt Punkte für das Protein-Fett-Verhältnis (35, volle Punkte ab 2,75 g Protein je g Fett wie in der Beute verwilderter Katzen, Plantinga et al. 2011), Calcium und Phosphor (20), den Protein-Energieanteil (15), das Protein-Minimum (10), Taurin (10), Kohlenhydrate (10), Plausibilität (10) und das Fett-Minimum (5). Die Summe wird auf 100 umgerechnet. Liegt Protein oder Fett unter 90 % des FEDIAF-Minimums, gibt es höchstens „mangelhaft“. Die Note bewertet nur die Nährwerte, die Sie eingegeben haben. Zutaten, Rohstoffqualität und Zusatzstoffe kann ein Rechner nicht prüfen. Das tun unsere <Link href="/tests" className={a}>Tests</Link> nach der 100-Punkte-<Link href="/methodik" className={a}>Methodik</Link>. Gute Werte machen noch kein gutes Futter. Ergänzungsfutter und Snacks bekommen keine Note: <Link href="/blog/alleinfuttermittel-ergaenzungsfuttermittel" className={a}>Alleinfutter oder Ergänzungsfutter</Link>.
+        Der Nährwert-Check vergibt Punkte für das Protein-Fett-Verhältnis (35, volle Punkte ab 2,75 g Protein je g Fett wie in der Beute verwilderter Katzen, Plantinga et al. 2011), Calcium und Phosphor (20), den Protein-Energieanteil (15), das Protein-Minimum (10), Taurin (10), Kohlenhydrate (10), Plausibilität (10) und das Fett-Minimum (5). Die Summe wird auf 100 umgerechnet. {gewichtungSatz()} Liegt Protein oder Fett unter 90 % des FEDIAF-Minimums, gibt es höchstens „mangelhaft“. Die Note bewertet nur die Nährwerte, die Sie eingegeben haben. Zutaten, Rohstoffqualität und Zusatzstoffe kann ein Rechner nicht prüfen. Das tun unsere <Link href="/tests" className={a}>Tests</Link> nach der 100-Punkte-<Link href="/methodik" className={a}>Methodik</Link>. Gute Werte machen noch kein gutes Futter. Ergänzungsfutter und Snacks bekommen keine Note: <Link href="/blog/alleinfuttermittel-ergaenzungsfuttermittel" className={a}>Alleinfutter oder Ergänzungsfutter</Link>.
       </p>
       <Infografik6 />
     </div>

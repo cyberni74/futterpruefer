@@ -112,15 +112,27 @@ export const PLAUS_ABZUG = { feuchteGeschaetzt: 2, ascheAusserhalb: 3, faserHund
 
 /** Kollagen-Heuristik: Abzug vom Score nach der Normierung, kein Deckel. */
 export const KOLLAGEN = {
-  ascheAb: 10, ascheVoll: 14, ascheMax: 6, caTsAb: 2.0, caAbzug: 2,
+  ascheAb: 10, ascheVoll: 14,
+  /** @deprecated A5 (27.10.2026): Stufe 1 zieht höchstens KOLL_STUFE1_MAX ab. Nicht mehr verwendet. */
+  ascheMax: 6,
+  /** @deprecated A5(a): Der Ca-Zusatzabzug entfällt (Doppelzählung mit Ca/P). Nicht mehr verwendet. */
+  caTsAb: 2.0,
+  /** @deprecated A5(a): Der Ca-Zusatzabzug entfällt (Doppelzählung mit Ca/P). Nicht mehr verwendet. */
+  caAbzug: 2,
   proteinTsAb: { hund: 25, katze: 30 }, zutatenPositionen: 5, zutatenMax: 6,
   stark: [/kollagen/, /gelatine/, /knorpel/, /haut\b/, /häute/, /schwarte/, /feder(n|mehl|hydrolysat)?\b/, /sehne/, /luftröhre/, /grieben/, /knochenmehl/, /tiermehl/, /schlachtabf/],
   schwach: [/nebenerzeugnis/],
   hydroJa: /hydrolys/, hydroKontext: /protein|tier/, hydroNein: /leber|hefe|fisch|pflanz|soja|reis|weizen|mais|erbs|kartoffel/,
 } as const;
 
-/**
- * Schalter für die Langtexte des Kollagen-Hinweises (K1, K2). Entwurf, Rechtsprüfung offen:
- * nicht ohne Freigabe auf true setzen. Der Punktabzug gilt unabhängig vom Schalter.
- */
-export const KOLLAGEN_TEXT_FREIGEGEBEN = false;
+/** Die Hinweistexte K1/K2 in der Fassung der Rechtsprüfung vom 27.10.2026. Bei false erscheint der Kurztext. */
+export const KOLLAGEN_TEXT_FREIGEGEBEN = true;
+
+/** A5(e) Rechtsprüfung 27.10.2026: Kollagen-Punktabzug. Bleibt false, bis alles aus dem Nachtrag umgesetzt ist. Aktivierung erfolgt separat, nicht eigenmächtig umstellen. */
+export const KOLLAGEN_ABZUG_AKTIV = false;
+/** A5(a): Stufe-1-Abzug (nur Nährwerte). 0 = nur Hinweis. Höchstens 3, kein Ca-Zusatzabzug. */
+export const KOLL_STUFE1_MAX = 0;
+export const KOLL_STUFE1_MAX_GRENZE = 3;
+/** A1: Untergrenze 60 für FEDIAF-konforme Futter. Von Manni am 27.10.2026 eingeschaltet. */
+export const UNTERGRENZE_FEDIAF_KONFORM = true;
+export const UNTERGRENZE_WERT = 60;
