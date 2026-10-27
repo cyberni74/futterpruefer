@@ -68,7 +68,7 @@ function statements(items: string[]) {
  * Kein Offer: Testseite, kein Shop (sonst Händlereintrags-Warnungen).
  * Die bewertete Sache ist das Produkt, nicht die Organization der Website.
  */
-export function productReviewJsonLd(r: ProductReviewInput, options: { aggregateRating?: boolean } = {}) {
+export function productReviewJsonLd(r: ProductReviewInput) {
   const name = productLabel(r.brand, r.productName);
   const images = r.images.filter(Boolean).map((u) => (u.startsWith("http") ? u : absoluteUrl(u)));
   const headline = reviewHeadline(name);
@@ -87,10 +87,6 @@ export function productReviewJsonLd(r: ProductReviewInput, options: { aggregateR
     category: r.categoryName,
     ...(images.length ? { image: images } : {}),
     ...(sku ? { sku } : {}),
-    // Nur auf ausdrücklichen Wunsch (Testvorlage V2): die eine redaktionelle Wertung als Gesamtwertung, Skala 0–100.
-    ...(options.aggregateRating
-      ? { aggregateRating: { "@type": "AggregateRating" as const, ratingValue: r.totalScore, bestRating: REVIEW_BEST_RATING, worstRating: REVIEW_WORST_RATING, ratingCount: 1, reviewCount: 1 } }
-      : {}),
     review: {
       "@type": "Review" as const,
       ...(headline ? { name: headline } : {}),
@@ -111,14 +107,12 @@ export function productReviewJsonLd(r: ProductReviewInput, options: { aggregateR
 }
 
 /** Kritische Punkte aus Googles Produkt-Snippet-Regeln. Leer = kein bekannter Fehler. */
-export function productSnippetIssues(data: ReturnType<typeof productReviewJsonLd>, options: { allowAggregateRating?: boolean } = {}): string[] {
+export function productSnippetIssues(data: ReturnType<typeof productReviewJsonLd>): string[] {
   const issues: string[] = [];
   const json = JSON.stringify(data);
   if (data["@type"] !== "Product" || !data.name?.trim()) issues.push("Product.name fehlt");
   if (!data.review || data.review["@type"] !== "Review") issues.push("verschachteltes Review fehlt");
-  if (!options.allowAggregateRating && json.toLowerCase().includes("aggregaterating")) issues.push("aggregateRating ist nicht erlaubt");
-  const agg = (data as { aggregateRating?: { ratingValue: number; bestRating: number; worstRating: number } }).aggregateRating;
-  if (agg && (agg.bestRating !== 100 || agg.worstRating !== 0 || agg.ratingValue < 0 || agg.ratingValue > 100)) issues.push("aggregateRating außerhalb 0–100");
+  if (json.toLowerCase().includes("aggregaterating")) issues.push("aggregateRating ist nicht erlaubt");
   if ("gtin" in data || "gtin13" in data || "gtin12" in data || "gtin8" in data || "gtin14" in data) issues.push("GTIN ohne gespeicherte Prüfziffer");
   const rating = data.review?.reviewRating;
   if (!rating || rating.ratingValue < rating.worstRating || rating.ratingValue > rating.bestRating) issues.push("reviewRating außerhalb 0–100");

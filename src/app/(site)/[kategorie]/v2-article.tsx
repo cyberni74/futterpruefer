@@ -81,7 +81,6 @@ export async function ReviewV2Article({ r, data, draftPreview }: { r: Review; da
               publishedAt: r.publishedAt, updatedAt: r.updatedAt, authorSlug: r.authorSlug, images, pros: data.pros ?? r.pros, cons: data.cons ?? r.cons,
               price: r.price == null ? null : Number(r.price), url,
             },
-            { aggregateRating: true },
           ),
           {
             "@context": "https://schema.org",

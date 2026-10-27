@@ -2,6 +2,8 @@
 import { act } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { renderToStaticMarkup } from "react-dom/server";
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
 import { afterEach, beforeAll, describe, expect, it } from "vitest";
 import { CostCalculator } from "./CostCalculator";
 import { TestvorlageV2 } from "./TestvorlageV2";
@@ -118,15 +120,17 @@ describe("FAQ und Schema", () => {
   it("ohne FAQ kein Schema", () => {
     expect(faqPageJsonLd(faqItems({}))).toBeNull();
   });
-  it("Product mit aggregateRating und reviewRating, Skala 0 bis 100", () => {
+  it("Product mit reviewRating (Skala 0 bis 100), ohne aggregateRating (eine redaktionelle Wertung)", () => {
     const j = productReviewJsonLd(
       { brand: "Marke", productName: "Produkt", categoryName: "Kat", totalScore: 87, verdict: "Urteil", publishedAt: null, updatedAt: new Date(), authorSlug: null, images: [], pros: ["a", "b"], cons: ["c", "d"] },
-      { aggregateRating: true },
-    ) as unknown as { aggregateRating: Record<string, unknown>; review: { reviewRating: Record<string, unknown> } };
-    expect(j.aggregateRating).toMatchObject({ "@type": "AggregateRating", ratingValue: 87, bestRating: 100, worstRating: 0, ratingCount: 1, reviewCount: 1 });
+    ) as unknown as { review: { reviewRating: Record<string, unknown> } };
     expect(j.review.reviewRating).toMatchObject({ ratingValue: 87, bestRating: 100, worstRating: 0 });
-    expect(productSnippetIssues(j as never, { allowAggregateRating: true }).filter((i) => i.includes("aggregateRating"))).toEqual([]);
-    expect(productSnippetIssues(j as never)).toContain("aggregateRating ist nicht erlaubt");
+    expect(JSON.stringify(j)).not.toContain("aggregateRating");
+    expect(productSnippetIssues(j as never)).toEqual([]);
+  });
+  it("V2-Seite gibt kein aggregateRating aus (Googles Regel zu selbst ausgestellten Bewertungen)", () => {
+    const src = readFileSync(resolve(__dirname, "../../app/(site)/[kategorie]/v2-article.tsx"), "utf8");
+    expect(src).not.toMatch(/aggregateRating/);
   });
   it("klassische Seiten behalten kein aggregateRating", () => {
     const j = productReviewJsonLd({ brand: "M", productName: "P", categoryName: "K", totalScore: 70, verdict: "", publishedAt: null, updatedAt: new Date(), authorSlug: null, images: [], pros: [], cons: [] });

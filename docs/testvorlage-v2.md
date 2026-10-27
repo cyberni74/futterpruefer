@@ -58,7 +58,7 @@ Rich-Text (`kapitel[].html`, `fazit.html`) läuft immer durch `sanitize()` (kein
 - Bleibt: Breadcrumbs, H1 (`reviewH1`), Metazeile, Produktbilder (plus `bildnachweis`), Warnhinweis bei irreführenden Werbeaussagen, Offenlegung, Teilen, „Ähnliche Tests“ (`aehnlicheTests` oder automatisch), Fachartikel.
 - Entfällt bei der Vorlage: `VerdictPanel`, bisheriges Inhaltsverzeichnis, „Kurz gesagt“, Fazit-Doppelblock, automatische FAQ.
 - `generateMetadata` ist unverändert (Self-Canonical, `metaTitle`/`metaDescription`, index/follow). Im Entwurf-Preview gilt weiter `noindex`.
-- JSON-LD: `Product` mit `review.reviewRating` und `aggregateRating` (`ratingValue = totalScore`, `bestRating 100`, `worstRating 0`), ein `Article`, genau ein `FAQPage` aus `layoutData.faq` (sichtbar 1:1 wie im Schema).
+- JSON-LD: `Product` mit `review.reviewRating` (`ratingValue = totalScore`, `bestRating 100`, `worstRating 0`), bewusst **ohne** `aggregateRating` (eine einzelne redaktionelle Wertung; Googles Regel zu selbst ausgestellten Bewertungen), ein `Article`, genau ein `FAQPage` aus `layoutData.faq` (sichtbar 1:1 wie im Schema).
 - Amazon-Button: nur mit `asin` (oder einer `kaufUrl` mit Partner-Tag). Link `https://www.amazon.de/dp/<ASIN>?tag=<Partner-Tag>`, `rel="sponsored nofollow noopener"`, `target="_blank"`, darunter der Affiliate-Hinweis.
 
 ## Admin
