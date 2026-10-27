@@ -369,3 +369,11 @@ model GlossaryTerm {
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 }
+
+/// Anonymer Zähler „gerade online“: zufällige ID je Seitenaufruf, nur Zeitstempel, keine IP, kein Cookie. Einträge verfallen nach Minuten.
+model LiveVisitor {
+  id     String   @id
+  seenAt DateTime @default(now())
+
+  @@index([seenAt])
+}

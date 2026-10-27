@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { AMAZON_PARTNER_NOTICE, FOOTER_CLAIM } from "@/lib/site";
 import { Logo } from "./logo";
+import { OnlineCounter } from "./online-counter";
 
 const COLS = [
   { title: "Tests", links: [["Alleinfuttermittel Hund", "/alleinfuttermittel-hund"], ["Alleinfuttermittel Katze", "/alleinfuttermittel-katze"], ["Ergänzungsfuttermittel Hund", "/ergaenzungsfuttermittel-hund"], ["Ergänzungsfuttermittel Katze", "/ergaenzungsfuttermittel-katze"], ["Alle Marken", "/marken"], ["Produkt des Monats", "/produkt-des-monats"]] },
@@ -27,10 +28,13 @@ export function SiteFooter() {
           </nav>
         ))}
       </div>
-      <p className="border-t border-border px-4 py-5 text-center text-xs text-muted">
-        © {new Date().getFullYear()} Futterprüfer.de · Alle Bewertungen nach offengelegter Methodik
-        <span className="mt-1 block">{AMAZON_PARTNER_NOTICE}</span>
-      </p>
+      <div className="border-t border-border px-4 py-5 text-center text-xs text-muted">
+        <p>
+          © {new Date().getFullYear()} Futterprüfer.de · Alle Bewertungen nach offengelegter Methodik
+          <span className="mt-1 block">{AMAZON_PARTNER_NOTICE}</span>
+        </p>
+        <OnlineCounter />
+      </div>
     </footer>
   );
 }
