@@ -1,6 +1,6 @@
 import { isAuthorSlug } from "@/lib/authors";
 import { isAllowedImageUrl } from "@/lib/image-hosts";
-import { parseAnalysis, parseClaims } from "@/lib/product-data";
+import { CLAIM_RATINGS, parseAnalysis, parseClaims, type ClaimRating } from "@/lib/product-data";
 import { z } from "zod";
 import { CRITERIA, type CriterionKey } from "@/lib/scoring";
 import { parseKeywords } from "./seo";
@@ -136,6 +136,14 @@ const jsonArray = <T,>(parse: (j: unknown) => T[], label: string, max: number) =
       }
     });
 
+/** Stufen im Feld claims. Bestehende Einträge mit ZULAESSIG bleiben gültig. */
+export const claimRatingSchema = z.enum(CLAIM_RATINGS);
+
+/** Nur „Ohne Einwand“ darf ohne Begründung bleiben. Unbelegt und Plausibel brauchen eine Einschätzung. */
+export function needsClaimReason(rating: ClaimRating): boolean {
+  return rating !== "ZULAESSIG";
+}
+
 const galleryUrls = z
   .array(z.string().trim().max(500))
   .transform((a) => a.filter(Boolean))
@@ -194,7 +202,12 @@ export const reviewSchema = z
     if (!vorlage && v.scoreHarmful < 10 && v.harmfulReason.length < 10)
       ctx.addIssue({ code: "custom", path: ["harmfulReason"], message: "Schadstoff-Kriterium unter 10 Punkten: bitte eine Kurzbegründung für den Warnhinweis angeben." });
     v.claims.forEach((c, i) => {
-      if (c.rating !== "ZULAESSIG" && c.reason.length < 10)
+      const rating = claimRatingSchema.safeParse(c.rating);
+      if (!rating.success) {
+        ctx.addIssue({ code: "custom", path: ["claims"], message: `Werbeaussage ${i + 1} („${c.claim}“): unbekannte Stufe.` });
+        return;
+      }
+      if (needsClaimReason(rating.data) && c.reason.length < 10)
         ctx.addIssue({ code: "custom", path: ["claims"], message: `Werbeaussage ${i + 1} („${c.claim}“): bitte die Einschätzung begründen.` });
     });
   });

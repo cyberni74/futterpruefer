@@ -65,11 +65,11 @@ export type ReviewSeoInput = {
 
 const lowerFirst = (s: string) => s.charAt(0).toLocaleLowerCase("de") + s.slice(1);
 
-/** Erster Satz: beantwortet „Lohnt sich …?“ direkt mit Punkten und Ampel. */
+/** Erster Satz: beantwortet „Wie schneidet … im Test ab?“ direkt mit Punkten und Ampel. */
 export function directAnswer(r: ReviewSeoInput): string {
   const rating = ratingFor(r.totalScore);
   const d = dayDate(r.testedAt);
-  return `Lohnt sich ${r.name}? Nach unserem Bewertungsschema: ${lowerFirst(RATING_LABEL[rating])}. ${r.name} erreicht im Test${d ? ` vom ${d}` : ""} ${r.totalScore} von 100 Punkten, Ampel ${AMPEL_WORD[rating]}.`;
+  return `Wie schneidet ${r.name} im Test ab? Nach unserem Bewertungsschema: ${lowerFirst(RATING_LABEL[rating])}. ${r.name} erreicht im Test${d ? ` vom ${d}` : ""} ${r.totalScore} von 100 Punkten, Ampel ${AMPEL_WORD[rating]}.`;
 }
 
 function priceText(r: ReviewSeoInput): string {

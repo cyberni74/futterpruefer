@@ -1,5 +1,5 @@
-import { CheckCircle2, AlertTriangle, XCircle, Scale } from "lucide-react";
-import { CLAIM_LABEL, type Claim, type ClaimRating } from "@/lib/product-data";
+import { CheckCircle2, AlertTriangle, XCircle, Scale, CircleDashed, CircleDot } from "lucide-react";
+import { CLAIM_BADGE_CLASS, CLAIM_LABEL, claimStageSummary, type Claim, type ClaimRating } from "@/lib/product-data";
 import { FpImage } from "./fp-image";
 
 function ClaimPhoto({ src, claim }: { src: string; claim: string }) {
@@ -13,17 +13,19 @@ function ClaimPhoto({ src, claim }: { src: string; claim: string }) {
   );
 }
 
-const TONE: Record<ClaimRating, { cls: string; Icon: typeof CheckCircle2 }> = {
-  ZULAESSIG: { cls: "bg-good-soft text-good", Icon: CheckCircle2 },
-  FRAGWUERDIG: { cls: "bg-mid-soft text-mid", Icon: AlertTriangle },
-  UNZULAESSIG: { cls: "bg-bad-soft text-bad", Icon: XCircle },
+const ICON: Record<ClaimRating, typeof CheckCircle2> = {
+  ZULAESSIG: CheckCircle2,
+  PLAUSIBEL: CircleDot,
+  UNBELEGT: CircleDashed,
+  FRAGWUERDIG: AlertTriangle,
+  UNZULAESSIG: XCircle,
 };
 
 function Badge({ rating }: { rating: ClaimRating }) {
-  const t = TONE[rating];
+  const Icon = ICON[rating];
   return (
-    <span className={`inline-flex items-center gap-1.5 whitespace-nowrap rounded-full px-2.5 py-1 text-xs font-bold ${t.cls}`}>
-      <t.Icon className="size-3.5" aria-hidden />
+    <span className={`inline-flex items-center gap-1.5 whitespace-nowrap rounded-full px-2.5 py-1 text-xs font-bold ${CLAIM_BADGE_CLASS[rating]}`}>
+      <Icon className="size-3.5" aria-hidden />
       {CLAIM_LABEL[rating]}
     </span>
   );
@@ -35,7 +37,8 @@ export function ClaimsCheck({ claims, brand, sourceLabel }: { claims: Claim[]; b
   return (
     <section id="werbeaussagen" aria-labelledby="werbeaussagen-h" className="scroll-mt-28">
       <h2 id="werbeaussagen-h" className="text-2xl font-extrabold">Werbeversprechen im Faktencheck</h2>
-      <p className="mt-2 text-muted">{sourceLabel ?? `Wir haben die Werbeaussagen von ${brand} auf der Verpackung und im Shop geprüft.`} Die Bewertungen sind unsere begründete fachliche Einschätzung.</p>
+      <p className="mt-2 text-muted">{sourceLabel ?? `Geprüft haben wir Aussagen zu ${brand} auf der Verpackung, beim Hersteller und im Amazon-Listing. Wer die Angaben im Amazon-Listing eingetragen hat, ist uns nicht bekannt.`} Die Bewertungen sind unsere begründete fachliche Einschätzung.</p>
+      <p className="mt-2 text-sm text-muted">{claimStageSummary(claims)}</p>
 
       <ul className="mt-5 space-y-3 md:hidden">
         {claims.map((c, i) => (

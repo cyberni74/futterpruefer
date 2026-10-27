@@ -15,7 +15,8 @@ describe("review-seo", () => {
     expect(keywordName("", null, "Produkt X")).toBe("Produkt X");
   });
   it("erster Satz beantwortet die Frage mit Punkten und Ampel", () => {
-    expect(directAnswer(base)).toContain("45 von 100 Punkten, Ampel Rot");
+    expect(directAnswer(base)).toBe("Wie schneidet Testfutter Rind im Test ab? Nach unserem Bewertungsschema: nicht empfehlenswert. Testfutter Rind erreicht im Test vom 23.10.2026 45 von 100 Punkten, Ampel Rot.");
+    expect(directAnswer(base)).not.toContain("Lohnt sich");
   });
   it("Kurz gesagt nennt Ampel, Plus, Minus, Irreführung, Preis", () => {
     const k = kurzGesagt(base).join(" ");

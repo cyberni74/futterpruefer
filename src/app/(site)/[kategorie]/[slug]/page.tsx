@@ -25,7 +25,6 @@ import { AnalysisTable } from "@/components/analysis-table";
 import { PriceBlock } from "@/components/price-block";
 import { ClaimsCheck } from "@/components/claims-check";
 import { FpImage } from "@/components/fp-image";
-import { isAmazonHotlink } from "@/lib/image-hosts";
 import { ReadAloud } from "@/components/read-aloud";
 import { ShareButtons } from "@/components/share-buttons";
 import { ShareBar } from "@/components/share-bar";
@@ -182,7 +181,6 @@ export default async function ReviewPage({ params }: PageProps<"/[kategorie]/[sl
   const abs = (u: string) => (u.startsWith("http") ? u : absoluteUrl(u));
   const author = contentAuthor(r.authorSlug);
   const draftPreview = allowDrafts && !isPublicReview(r);
-  const amazonListing = [r.imageUrl, r.contentImageUrl].some((src) => src != null && isAmazonHotlink(src));
 
   return (
     <div className="mx-auto max-w-6xl px-4">
@@ -363,7 +361,7 @@ export default async function ReviewPage({ params }: PageProps<"/[kategorie]/[sl
 
           {/* 7b. Werbeaussagen-Check */}
           {claims.length > 0 && (
-            <div className="mt-12"><ClaimsCheck claims={claims} brand={r.brand} sourceLabel={amazonListing ? `Die folgenden Sätze stehen im Amazon-Listing zu ${r.brand}. Wer sie dort eingetragen hat, ist uns nicht bekannt.` : undefined} /></div>
+            <div className="mt-12"><ClaimsCheck claims={claims} brand={r.brand} /></div>
           )}
 
           {/* 8. Teilen */}

@@ -4,7 +4,7 @@ import { prisma } from "@/lib/db";
 import { publishedWhere } from "@/lib/queries";
 import { reviewPath } from "@/lib/urls";
 import { trimMetaDescription } from "@/lib/seo";
-import { parseClaims } from "@/lib/product-data";
+import { objectedClaims, parseClaims } from "@/lib/product-data";
 import { PageShell } from "@/components/page-shell";
 
 export const revalidate = 3600;
@@ -30,7 +30,7 @@ export default async function WerbeaussagenPage() {
   for (const r of reviews) {
     const claims = parseClaims(r.claims);
     if (claims.length === 0) continue;
-    const flagged = claims.filter((c) => c.rating !== "ZULAESSIG");
+    const flagged = objectedClaims(claims);
     const unz = claims.filter((c) => c.rating === "UNZULAESSIG");
     totalClaims += claims.length; totalFlagged += flagged.length; totalUnz += unz.length;
     const row: Row = {

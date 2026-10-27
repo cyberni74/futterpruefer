@@ -37,7 +37,13 @@ export function AnalysisField({ initial, error }: { initial: Array<{ name: strin
 
 // ---------- Werbeaussagen ----------
 const EMPTY: Claim = { claim: "", rating: "FRAGWUERDIG", reason: "", legal: "", imageUrl: "" };
-const RATING_TONE = { ZULAESSIG: "border-good", FRAGWUERDIG: "border-mid", UNZULAESSIG: "border-bad" } as const;
+const RATING_TONE: Record<Claim["rating"], string> = {
+  ZULAESSIG: "border-good",
+  PLAUSIBEL: "border-brand",
+  UNBELEGT: "border-muted",
+  FRAGWUERDIG: "border-mid",
+  UNZULAESSIG: "border-bad",
+};
 
 async function uploadImage(file: File, nameSource: string, variant = ""): Promise<{ url?: string; error?: string }> {
   const fd = new FormData();
