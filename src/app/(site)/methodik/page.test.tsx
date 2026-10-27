@@ -28,8 +28,9 @@ describe("Methodik Transparenz", () => {
     expect(html).toContain(METHODOLOGY_CHANGELOG_ABGRENZUNG);
     expect(METHODOLOGY_CHANGELOG_ABGRENZUNG).toBe("27.10.2026: Abgrenzung Unbelegt/Fragwürdig ergänzt; entspricht unserer bisherigen Bewertungspraxis, keine Punktzahl geändert.");
     expect(html).toContain("Allgemeine Anpreisungen ohne prüfbaren Inhalt, etwa ‚Premium‘ oder ‚Beste Qualität‘, stufen wir als ‚Unbelegt‘ ein. Begriffe mit einem prüfbaren Gehalt, die der Hersteller weder erklärt noch belegt, etwa ‚Lebensmittelqualität‘ oder ‚nachhaltige Verpackung‘, stufen wir als ‚Fragwürdig‘ ein. Erklärt der Hersteller einen solchen Begriff nachvollziehbar, bleibt es bei ‚Unbelegt‘; ist er belegt, werten wir ‚Ohne Einwand‘.");
-    expect(html).toContain("Wir unterscheiden vier Stufen:");
-    expect(html).not.toContain("Wir unterscheiden drei Stufen:");
+    expect(html).toContain("Wir unterscheiden fünf Stufen:");
+    expect(html).not.toContain("Wir unterscheiden vier Stufen:");
+    expect(html).toContain("Plausibel:</strong> Es gibt nachvollziehbare Gründe für die Aussage, ein vollständiger Beleg fehlt.");
     expect(html).toContain('<strong class="text-good">Ohne Einwand:</strong>');
     expect(html).toContain('<strong class="text-muted">Unbelegt:</strong> allgemeine Anpreisung ohne prüfbaren Inhalt oder ein vom Hersteller erklärter, aber nicht belegter Begriff. Wir können die Aussage weder bestätigen noch widerlegen.');
     const ohne = html.indexOf('<strong class="text-good">Ohne Einwand:</strong>');

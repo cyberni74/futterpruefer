@@ -452,8 +452,11 @@ async function ensureMammalyTests() {
   for (const t of [...MAMMALY_TESTS, ...BUGBELL_TESTS, ...BETTERCAT_TESTS, ...WOLFSBLUT_TESTS, ...MEDIDOG_DENTAL_TESTS, ...KAUARTIKEL_FUNKTION_TESTS, ...TREND_OKT_TESTS, ...DAILY_OKT16_TESTS]) {
     const category = { id: categories.get(t.categorySlug) };
     if (!category.id) { console.log(`Test ${t.slug} übersprungen: Kategorie ${t.categorySlug} fehlt.`); continue; }
-    const existing = await prisma.review.findUnique({ where: { slug: t.slug }, select: { id: true, bodyHtml: true } });
+    const existing = await prisma.review.findUnique({ where: { slug: t.slug }, select: { id: true, bodyHtml: true, layout: true } });
     if (existing) {
+      // Tests in der festen Testvorlage (layout gesetzt, Inhalte in layoutData) werden nur noch über Admin/Go-live gepflegt.
+      // Ohne diese Sperre überschreibt der Seed bei jedem Build die freigegebene Fassung mit der alten (z. B. MjAMjAM Möhrchen 75 → 87, 27.10.2026).
+      if (existing.layout) { console.log(`Test ${t.slug}: Testvorlage ${existing.layout}, Seed-Abgleich übersprungen.`); continue; }
       // Überarbeitete (strengere) Wertung einspielen, solange die Kennung der Neufassung im Text fehlt; spätere Admin-Änderungen bleiben unberührt.
       const marker = (t as { syncMarker?: string }).syncMarker;
       const imgMarker = (t as { imageMarker?: string }).imageMarker ?? "Presse-Kit";

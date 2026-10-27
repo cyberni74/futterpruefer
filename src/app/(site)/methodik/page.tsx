@@ -176,14 +176,15 @@ export default function MethodikPage() {
         <p>Beispiel: 10 % Rohprotein bei 80 % Feuchtigkeit ergeben 10 ÷ 20 × 100 = 50 % Rohprotein in der Trockensubstanz. Diese Umrechnung zeigen wir auf jeder Testseite automatisch, sobald die Feuchtigkeit angegeben ist. Fehlt sie, weisen wir darauf hin.</p>
 
         <h2 id="werbeaussagen">Der Werbeaussagen-Check</h2>
-        <p>Aussagen wie „stärkt das Immunsystem“, „natürlich“ oder „für gesunde Gelenke“ klingen nach Information, sind aber oft Marketing. Im Werbeaussagen-Check stellen wir jede Aussage des Herstellers der Bewertung gegenüber. Wir unterscheiden vier Stufen:</p>
+        <p>Aussagen wie „stärkt das Immunsystem“, „natürlich“ oder „für gesunde Gelenke“ klingen nach Information, sind aber oft Marketing. Im Werbeaussagen-Check stellen wir jede Aussage des Herstellers der Bewertung gegenüber. Wir unterscheiden fünf Stufen:</p>
         <ul>
           <li><strong className="text-good">Ohne Einwand:</strong> sachlich richtig oder eine erkennbare Anpreisung ohne irreführenden Gehalt.</li>
+          <li><strong className="text-brand">Plausibel:</strong> Es gibt nachvollziehbare Gründe für die Aussage, ein vollständiger Beleg fehlt.</li>
           <li><strong className="text-muted">Unbelegt:</strong> allgemeine Anpreisung ohne prüfbaren Inhalt oder ein vom Hersteller erklärter, aber nicht belegter Begriff. Wir können die Aussage weder bestätigen noch widerlegen.</li>
           <li><strong className="text-mid">Fragwürdig:</strong> nicht ohne Weiteres nachprüfbar oder unscharf, zum Beispiel ein undefinierter Begriff oder fehlende Mengenangaben.</li>
           <li><strong className="text-bad">Halten wir für irreführend:</strong> nach unserer Einschätzung nicht mit dem Kennzeichnungsrecht oder dem Wettbewerbsrecht vereinbar, zum Beispiel krankheitsbezogene Versprechen bei einem Futtermittel.</li>
         </ul>
-        <p>Allgemeine Anpreisungen ohne prüfbaren Inhalt, etwa ‚Premium‘ oder ‚Beste Qualität‘, stufen wir als ‚Unbelegt‘ ein. Begriffe mit einem prüfbaren Gehalt, die der Hersteller weder erklärt noch belegt, etwa ‚Lebensmittelqualität‘ oder ‚nachhaltige Verpackung‘, stufen wir als ‚Fragwürdig‘ ein. Erklärt der Hersteller einen solchen Begriff nachvollziehbar, bleibt es bei ‚Unbelegt‘; ist er belegt, werten wir ‚Ohne Einwand‘.</p>
+        <p>Allgemeine Anpreisungen ohne prüfbaren Inhalt, etwa ‚Premium‘ oder ‚Beste Qualität‘, stufen wir als ‚Unbelegt‘ ein. Begriffe mit einem prüfbaren Gehalt, die der Hersteller weder erklärt noch belegt, etwa ‚Lebensmittelqualität‘ oder ‚nachhaltige Verpackung‘, stufen wir als ‚Fragwürdig‘ ein. Erklärt der Hersteller einen solchen Begriff nachvollziehbar, bleibt es bei ‚Unbelegt‘; ist er belegt, werten wir ‚Ohne Einwand‘. ‚Plausibel‘ und ‚Unbelegt‘ gelten nicht als ‚Ohne Einwand‘ und führen zu keinem Punktabzug.</p>
         <p>Als Richtwert für den Abzug im Kriterium „Deklaration & Transparenz“ gelten 3 Punkte je Aussage, die wir für irreführend halten, und 1 Punkt je fragwürdiger Aussage, insgesamt höchstens 15 Punkte. Der Abzug kann im Einzelfall abweichen. Jede Einstufung ist mit einer Begründung und, wo möglich, einer Rechtsgrundlage versehen. Sie ist unsere fachliche Meinung und keine Rechtsberatung. Aussagen, die wir für irreführend halten, erscheinen zusätzlich als Contra-Punkt und mit einem Hinweis oben im Test.</p>
 
         <h2 id="grenzen">Was ein Test nicht leisten kann</h2>
