@@ -11,7 +11,7 @@ export const HOME_DESCRIPTION =
 
 /** Meta-Description der Startseite. HOME_DESCRIPTION bleibt unverändert, weil sie auch die Organization im JSON-LD beschreibt. */
 export const HOME_META_DESCRIPTION =
-  "Hunde- und Katzenfutter im Test: über 110 Produkte nach 100-Punkte-Schema, von MjAMjAM und Leonardo (Grün) bis Whiskas (Rot). Wir lesen das Kleingedruckte.";
+  "Hunde- und Katzenfutter im Test: über 110 Produkte nach 100-Punkte-Schema, Ampel Grün, Gelb oder Rot. Wir lesen das Kleingedruckte.";
 
 export const OG_TITLE = `Hundefutter & Katzenfutter im Test – ${SITE.name}`;
 export const OG_DESCRIPTION =
