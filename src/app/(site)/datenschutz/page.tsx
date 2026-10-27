@@ -21,6 +21,7 @@ export default function DatenschutzPage() {
         <p>Die Inhalte der Website und Kontaktanfragen werden in einer Datenbank von Supabase (Rechenzentrum in Frankfurt am Main, Deutschland) gespeichert. Mit Supabase besteht eine Vereinbarung zur Auftragsverarbeitung (Art. 28 DSGVO) (Data Processing Addendum, Bestandteil der Supabase-Nutzungsbedingungen).</p>
         <h2>3. Reichweitenmessung</h2>
         <p>Wir nutzen Vercel Web Analytics. Es werden keine Cookies gesetzt und keine personenbezogenen Profile gebildet; Besuche werden anonymisiert gezählt (Art. 6 Abs. 1 lit. f DSGVO).</p>
+        <p>Im Footer zeigen wir an, wie viele Personen gerade auf der Seite sind. Dafür sendet Ihr Browser alle 30 Sekunden eine zufällige Kennung an unseren Server. Die Kennung liegt nur im Arbeitsspeicher Ihres Browsers und wird weder in einem Cookie noch im lokalen Speicher abgelegt. Wir speichern sie mit einem Zeitstempel für höchstens zehn Minuten, ohne Ihre IP-Adresse und ohne Zuordnung zu Ihrer Person (Art. 6 Abs. 1 lit. f DSGVO).</p>
         <h2>4. Lokale Speicherung</h2>
         <p>Im lokalen Speicher Ihres Browsers werden ausschließlich Ihre Farbschema-Wahl (hell/dunkel) und die Kenntnisnahme des Datenschutzhinweises gespeichert. Diese Daten verlassen Ihr Gerät nicht.</p>
         <h2>5. Kontaktformular</h2>
