@@ -2,17 +2,15 @@
 
 import { useEffect, useId, useRef, useState } from "react";
 import { parseZahl } from "@/lib/futterrechner/validierung";
+import { sliderText, sliderZahl } from "./slider-text";
 
-const fmt = (x: number, step: number) => {
-  const dec = step >= 1 ? 0 : step >= 0.1 ? 1 : 2;
-  return new Intl.NumberFormat("de-DE", { minimumFractionDigits: 0, maximumFractionDigits: Math.max(dec, 2) }).format(x);
-};
+const fmt = sliderZahl;
 
 export type Marker = { wert: number; label: string };
 
 /** Regler + Zahlenfeld (6.2). Natives <input type="range">, Zahlenfeld synchron, Startzustand „noch nicht gesetzt“. */
 export function ValueSlider({
-  label, einheit, value, onChange, min, max, step, platzhalter, marker, fehler, warnung, hilfe, valueText, mitte, skala, textAnzeige, id: idProp, fehlt,
+  label, einheit, value, onChange, min, max, step, platzhalter, marker, fehler, warnung, hilfe, valueText, mitte, skala, textAnzeige, id: idProp, fehlt, blaseSichtbar,
 }: {
   label: string; einheit: string; value: number | null; onChange: (v: number | null) => void;
   min: number; max: number; step: number; platzhalter: number; marker?: Marker | null;
@@ -25,6 +23,8 @@ export function ValueSlider({
   id?: string;
   /** Pflichtangabe fehlt nach Klick auf „Jetzt Futter analysieren“ */
   fehlt?: boolean;
+  /** Nur für Tests: Wert-Blase immer rendern */
+  blaseSichtbar?: boolean;
 }) {
   const gen = useId();
   const id = idProp ?? gen;
@@ -56,7 +56,7 @@ export function ValueSlider({
       <div className="flex items-center justify-between gap-3">
         <label id={labelId} htmlFor={`${id}-r`} className="text-sm font-bold">{label}</label>
         {textAnzeige ? (
-          <span className="font-display text-xl font-bold tabular-nums">{value == null ? <span className="text-sm font-normal text-muted">bitte wählen</span> : textAnzeige(value)}</span>
+          <span data-anzeige className="font-display text-xl font-bold tabular-nums">{value == null ? <span className="text-sm font-normal text-muted">bitte wählen</span> : sliderText(value, { step, einheit, textAnzeige })}</span>
         ) : (
         <span className="flex shrink-0 items-center gap-1.5">
           <input
@@ -76,10 +76,14 @@ export function ValueSlider({
         </span>
         )}
       </div>
-      <div className="relative">
-        {aktiv && value != null && (
-          <span aria-hidden className="pointer-events-none absolute -top-5 z-10 -translate-x-1/2 rounded-lg bg-brand px-2 py-0.5 text-xs font-bold tabular-nums text-white dark:text-black" style={{ left: `calc(${pct}% + ${(0.5 - pct / 100) * 28}px)` }}>
-            {fmt(value, step)}
+      <div className="relative mt-7">
+        {(aktiv || blaseSichtbar) && value != null && (
+          <span
+            aria-hidden data-blase
+            className="pointer-events-none absolute -top-7 z-10 -translate-x-1/2 whitespace-nowrap rounded-lg bg-brand px-2 py-0.5 text-xs font-bold tabular-nums text-white dark:text-black"
+            style={{ left: `clamp(2.25rem, calc(${pct}% + ${(0.5 - pct / 100) * 28}px), calc(100% - 2.25rem))` }}
+          >
+            {sliderText(value, { step, einheit, textAnzeige })}
           </span>
         )}
         <input

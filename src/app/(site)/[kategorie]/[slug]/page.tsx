@@ -374,7 +374,7 @@ export default async function ReviewPage({ params }: PageProps<"/[kategorie]/[sl
                 </Link>
               </div>
               <h3 className="sr-only">Verwandte Tests</h3>
-              <ul className="grid gap-x-5 gap-y-8 sm:grid-cols-2 xl:grid-cols-3">{related.map((x) => <li key={x.id}><ReviewCard review={x} /></li>)}</ul>
+              <ul className="grid gap-x-5 gap-y-8 sm:grid-cols-2 xl:grid-cols-3">{related.map((x) => <li key={x.id}><ReviewCard review={x} eager /></li>)}</ul>
               <Link href={`/${r.category.slug}`} className="mt-6 inline-flex min-h-11 items-center gap-1 font-bold text-brand hover:underline">
                 Alle Tests: {r.category.name} <ArrowRight className="size-4" aria-hidden />
               </Link>
