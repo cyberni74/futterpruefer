@@ -150,7 +150,7 @@ export default function MethodikPage() {
         <ul>
           <li><strong className="text-good">Grün (ab {RATING_THRESHOLDS.gut} Punkten):</strong> empfehlenswert</li>
           <li><strong className="text-mid">Gelb ({RATING_THRESHOLDS.mittel}–{RATING_THRESHOLDS.gut - 1} Punkte):</strong> mit Abstrichen</li>
-          <li><strong className="text-bad">Rot (unter {RATING_THRESHOLDS.mittel} Punkten):</strong> nicht empfehlenswert</li>
+          <li><strong className="text-bad">Rot (unter {RATING_THRESHOLDS.mittel} Punkten):</strong> keine Empfehlung</li>
         </ul>
         <p>Erreicht ein Produkt im Kriterium „Schadstoffe & Bedenkliches“ weniger als {HARMFUL_FAIL_RATIO * 100} % der Punkte, erscheint unabhängig von der Gesamtnote ein rotes Warnsignal mit Begründung. Das sind unter 10 von 20 Punkten. Ein Futter kann also insgesamt gut abschneiden und trotzdem eine deutliche Warnung tragen, wenn einzelne Zusätze problematisch sind.</p>
         <p>Zu jeder Note gehören ein kurzes Fazit sowie eine Liste von Pro- und Contra-Punkten. Die Punktzahl ist ein Anhaltspunkt für den Vergleich, kein Urteil über das einzelne Tier.</p>

@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { renderToStaticMarkup } from "react-dom/server";
+import { RATING_THRESHOLDS } from "@/lib/scoring";
 import MethodikPage from "../page";
 import ErgaenzungsfutterMethodikPage, { ERGAENZUNG_FAQ } from "./page";
 
@@ -30,6 +31,15 @@ describe("Methodik Ergänzungsfutter", () => {
     expect(html).toContain("PMID 16647870");
     expect(html).toContain("(nur Unterlagen, die der Hersteller von sich aus einreicht oder die öffentlich zugänglich sind; wir fragen Hersteller nicht an)");
     expect(html).not.toContain("auf unsere Anfrage hin");
+  });
+
+  it("nennt die rote Ampel „keine Empfehlung“ und behält die Punktspannen", () => {
+    expect(RATING_THRESHOLDS).toEqual({ gut: 80, mittel: 60 });
+    expect(html).toContain('<strong class="text-good">Grün</strong> ab 80 (empfehlenswert)');
+    expect(html).toContain('<strong class="text-mid">Gelb</strong> 60–79 (mit Abstrichen)');
+    expect(html).toContain('<strong class="text-bad">Rot</strong> unter 60 (keine Empfehlung)');
+    expect(html).not.toContain("nicht empfehlenswert");
+    expect(html).toContain("Das ist die Studiendosis, keine Empfehlung für Ihren Hund.");
   });
 
   it("veröffentlicht keine internen Abschnitte", () => {
