@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { ONLINE_FENSTER_MS, PING_INTERVALL_MS, bremse, gueltigeId } from "./online";
+import { ONLINE_FENSTER_MS, PING_INTERVALL_MS, bremse, gueltigeId, ipSchluessel, istBot } from "./online";
 
 describe("Online-Zähler: Eingaben und Bremse", () => {
   it("nur zufällige Kennungen werden angenommen", () => {
@@ -15,5 +15,28 @@ describe("Online-Zähler: Eingaben und Bremse", () => {
     expect(b("a", 10)).toBe(true);
     expect(b("b", 10)).toBe(false);
     expect(b("a", 2000)).toBe(false);
+  });
+  it("abgelaufene Einträge werden bei JEDEM Aufruf entfernt", () => {
+    const b = bremse(3, 1000);
+    for (let i = 0; i < 50; i++) b(`k${i}`, 0);
+    expect(b.groesse()).toBe(50);
+    b("neu", 5000);
+    expect(b.groesse()).toBe(1);
+  });
+  it("IP nur als gesalzener Hash: stabil, 64 Hex-Zeichen, ohne die IP selbst", () => {
+    const h = ipSchluessel("203.0.113.7");
+    expect(h).toMatch(/^[0-9a-f]{64}$/);
+    expect(h).toBe(ipSchluessel("203.0.113.7"));
+    expect(h).not.toContain("203");
+    expect(h).not.toBe(ipSchluessel("203.0.113.8"));
+  });
+});
+
+describe("Bots", () => {
+  it("bekannte Bots, Werkzeuge und fehlende User-Agents zählen nicht", () => {
+    for (const ua of ["Googlebot/2.1", "Mozilla/5.0 (compatible; AhrefsBot/7.0)", "facebookexternalhit/1.1", "curl/8.4.0", "python-requests/2.31", "Lighthouse", "Mozilla/5.0 HeadlessChrome/120", "", null, undefined]) expect(istBot(ua)).toBe(true);
+  });
+  it("normale Browser zählen", () => {
+    for (const ua of ["Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36", "Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1", "Mozilla/5.0 (X11; Linux x86_64; rv:121.0) Gecko/20100101 Firefox/121.0"]) expect(istBot(ua)).toBe(false);
   });
 });

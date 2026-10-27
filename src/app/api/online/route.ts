@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
-import { ONLINE_AUFBEWAHRUNG_MS, ONLINE_FENSTER_MS, bremse, gueltigeId } from "@/lib/online";
+import { ONLINE_AUFBEWAHRUNG_MS, ONLINE_FENSTER_MS, bremse, gueltigeId, ipSchluessel, istBot } from "@/lib/online";
 
 export const dynamic = "force-dynamic";
 
@@ -10,10 +10,13 @@ const KEIN_CACHE = { "Cache-Control": "no-store" };
 /**
  * Meldet „diese Seite ist offen“ und liefert die Zahl der Besucher der letzten 90 Sekunden.
  * Gespeichert werden nur eine zufällige ID und der Zeitstempel (keine IP, kein User-Agent, kein Cookie).
+ * Die IP wird nur als gesalzener Hash im Arbeitsspeicher für die Bremse genutzt. Der Browser sendet nur nach Zustimmung.
  */
 export async function POST(request: Request) {
   const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unbekannt";
-  if (zuSchnell(ip)) return NextResponse.json({ count: null }, { status: 429, headers: KEIN_CACHE });
+  if (zuSchnell(ipSchluessel(ip))) return NextResponse.json({ count: null }, { status: 429, headers: KEIN_CACHE });
+  // Bots und Crawler werden weder gespeichert noch gezählt
+  if (istBot(request.headers.get("user-agent"))) return NextResponse.json({ count: null }, { headers: KEIN_CACHE });
   let id: unknown;
   try {
     id = (await request.json())?.id;

@@ -4,7 +4,8 @@ const db = vi.hoisted(() => ({ upsert: vi.fn(), count: vi.fn(), deleteMany: vi.f
 vi.mock("@/lib/db", () => ({ prisma: { liveVisitor: db } }));
 import { POST } from "./route";
 
-const req = (body: unknown, ip = "1.2.3.4") => new Request("http://x/api/online", { method: "POST", headers: { "x-forwarded-for": ip, "content-type": "application/json" }, body: typeof body === "string" ? body : JSON.stringify(body) });
+const BROWSER = "Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1";
+const req = (body: unknown, ip = "1.2.3.4", ua = BROWSER) => new Request("http://x/api/online", { method: "POST", headers: { "x-forwarded-for": ip, "content-type": "application/json", "user-agent": ua }, body: typeof body === "string" ? body : JSON.stringify(body) });
 const ID = "3b241101-e2bb-4255-8caf-4136c566a962";
 
 beforeEach(() => { vi.clearAllMocks(); db.count.mockResolvedValue(18); db.upsert.mockResolvedValue({}); db.deleteMany.mockResolvedValue({ count: 0 }); });
@@ -29,6 +30,14 @@ describe("POST /api/online", () => {
     const gte = (db.count.mock.calls[0][0] as { where: { seenAt: { gte: Date } } }).where.seenAt.gte.getTime();
     expect(Date.now() - gte).toBeGreaterThan(89_000);
     expect(Date.now() - gte).toBeLessThan(91_000);
+  });
+  it("Bots und Crawler werden weder gespeichert noch gezählt", async () => {
+    for (const [i, ua] of ["Googlebot/2.1 (+http://www.google.com/bot.html)", "Mozilla/5.0 (compatible; bingbot/2.0)", "curl/8.4.0", "Mozilla/5.0 HeadlessChrome/120.0", "", "x"].entries()) {
+      const r = await POST(req({ id: ID }, `10.2.0.${i}`, ua));
+      expect(await r.json()).toEqual({ count: null });
+    }
+    expect(db.upsert).not.toHaveBeenCalled();
+    expect(db.count).not.toHaveBeenCalled();
   });
   it("lehnt ungültige Kennungen und kaputtes JSON ab", async () => {
     expect((await POST(req({ id: "<x>" }, "10.0.0.3"))).status).toBe(400);

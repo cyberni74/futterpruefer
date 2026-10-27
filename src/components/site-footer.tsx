@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { AMAZON_PARTNER_NOTICE, FOOTER_CLAIM } from "@/lib/site";
 import { Logo } from "./logo";
+import { ConsentSettingsLink } from "./consent-settings-link";
 import { OnlineCounter } from "./online-counter";
 
 const COLS = [
@@ -24,6 +25,7 @@ export function SiteFooter() {
               {col.links.map(([label, href]) => (
                 <li key={href}><Link href={href} className="inline-flex min-h-9 items-center text-sm text-muted hover:text-fg hover:underline">{label}</Link></li>
               ))}
+              {col.title === "Kontakt" && <li><ConsentSettingsLink /></li>}
             </ul>
           </nav>
         ))}
