@@ -20,21 +20,21 @@ export default function FutterrechnerHub() {
       <header className="mt-4">
         <p className="inline-flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wide text-brand"><Calculator aria-hidden className="size-4" /> Futterrechner</p>
         <h1 className="mt-2 text-3xl font-extrabold md:text-5xl">{META.hub.h1}</h1>
-        <p className="mt-4 max-w-2xl text-lg text-muted">Analysewerte vom Etikett eintippen, Note nach FEDIAF und Tagesmenge sofort sehen. Kostenlos, ohne Anmeldung, nichts gespeichert.</p>
+        <p className="mt-4 max-w-2xl text-lg text-muted">Analysewerte vom Etikett eintippen, Nährwert-Check nach FEDIAF und Tagesmenge sofort sehen. Kostenlos, ohne Anmeldung, nichts gespeichert.</p>
       </header>
 
       <div className="mt-8 grid gap-4 sm:grid-cols-2">
         <Link href="/futterrechner/hund" className={karte}>
           <Dog aria-hidden className="size-10 text-brand" />
           <span>
-            <span className="font-display block text-2xl font-extrabold">Hundefutter prüfen</span>
+            <span className="font-display block text-2xl font-extrabold">Nährwert-Check Hund</span>
             <span className="mt-1 block text-sm text-muted">Welpen, erwachsene Hunde und Senioren, Trocken- und Nassfutter.</span>
           </span>
         </Link>
         <Link href="/futterrechner/katze" className={karte}>
           <Cat aria-hidden className="size-10 text-brand" />
           <span>
-            <span className="font-display block text-2xl font-extrabold">Katzenfutter prüfen</span>
+            <span className="font-display block text-2xl font-extrabold">Nährwert-Check Katze</span>
             <span className="mt-1 block text-sm text-muted">Kitten, Wohnungskatzen und Freigänger, mit Taurin-Prüfung.</span>
           </span>
         </Link>
@@ -46,7 +46,7 @@ export default function FutterrechnerHub() {
           <li>Analysewerte auf Trockenmasse und Energie (ME) umrechnen, nach dem Verfahren des NRC (2006).</li>
           <li>Den Energiebedarf Ihres Tieres schätzen und daraus die Tagesmenge als Startwert berechnen.</li>
           <li>Protein und Fett je 1000 kcal sowie Calcium, Phosphor und Taurin mit den FEDIAF-Mindestwerten vergleichen.</li>
-          <li>Eine Nährwert-Note mit nachvollziehbarer Begründung und aufklappbarem Rechenweg nennen.</li>
+          <li>Einen Nährwert-Check mit Note, nachvollziehbarer Begründung und aufklappbarem Rechenweg ausgeben.</li>
         </ul>
         <h2 id="was-er-nicht-kann">Was er nicht kann</h2>
         <p>
