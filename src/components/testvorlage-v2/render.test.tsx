@@ -64,16 +64,32 @@ describe("TestvorlageV2: Server-Rendering", () => {
     expect(h).not.toContain("style=\"color");
     expect(h).toContain("Text");
   });
-  it("Kauflink nur mit ASIN: tag, sponsored, target und Affiliate-Hinweis", () => {
+  it("Kauflink nur mit ASIN: tag, sponsored, target und Affiliate-Hinweis, oben nach der Gesamtwertung und unten bei den Quellen", () => {
     const { data, totalScore } = ok(5);
     const mit = html(data, totalScore);
     expect(mit).toContain("https://www.amazon.de/dp/B000000000?tag=cyberni7400-21");
     expect(mit).toContain('rel="sponsored nofollow noopener"');
     expect(mit).toContain('target="_blank"');
-    expect(mit).toContain("*Affiliate-Link: Wir erhalten bei einem Kauf eine Provision, der Preis ändert sich für Sie nicht. Die Provision hat keinen Einfluss auf unsere Bewertung.");
+    expect(mit.match(/Jetzt bei Amazon entdecken\*/g)).toHaveLength(2);
+    expect(mit.match(/\*Affiliate-Link: Wir erhalten bei einem Kauf eine Provision, der Preis ändert sich für Sie nicht\. Die Provision hat keinen Einfluss auf unsere Bewertung\./g)).toHaveLength(2);
+    const heroEnde = mit.indexOf('class="stripe"');
+    const oben = mit.slice(0, heroEnde);
+    expect(oben).toContain("Jetzt bei Amazon entdecken*");
+    expect(oben.indexOf('class="hero"')).toBeLessThan(oben.indexOf("Jetzt bei Amazon entdecken*"));
     const ohne = html({ ...data, asin: undefined }, totalScore);
     expect(ohne).not.toContain("amazon.de");
     expect(ohne).not.toContain("Affiliate-Link");
+    expect(ohne).not.toContain("Jetzt bei Amazon entdecken*");
+    const nurUrl = html({ ...data, asin: undefined, kaufUrl: "https://www.amazon.de/dp/B000000000?tag=cyberni7400-21" }, totalScore);
+    expect(nurUrl.match(/Jetzt bei Amazon entdecken\*/g)).toHaveLength(1);
+  });
+  it("bei Ampel Rot steht der Hinweis an jedem Amazon-Button, ab Gelb nicht", () => {
+    const { data } = ok(5);
+    const rot = html(data, 59);
+    expect(rot.match(/Unsere Bewertung: Rot; der Link ist keine Kaufempfehlung\./g)).toHaveLength(2);
+    expect(html(data, 60)).not.toContain("keine Kaufempfehlung");
+    expect(html(data, 80)).not.toContain("keine Kaufempfehlung");
+    expect(html({ ...data, asin: undefined }, 40)).not.toContain("keine Kaufempfehlung");
   });
   it("externe Quellen: nofollow noopener noreferrer, DOI-Link", () => {
     const h = html(ok(5).data, 87);

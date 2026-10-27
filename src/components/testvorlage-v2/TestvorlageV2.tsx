@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { isRotScore } from "@/lib/rot-guard";
 import { AnalyticalValues } from "./AnalyticalValues";
 import { ArticleNavigation } from "./ArticleNavigation";
 import { CostCalculator } from "./CostCalculator";
@@ -15,7 +16,7 @@ import { SafetyAssessment } from "./SafetyAssessment";
 import { ScientificEvidence } from "./ScientificEvidence";
 import { ScoreBreakdown } from "./ScoreBreakdown";
 import { TvSection } from "./Section";
-import { Sources } from "./Sources";
+import { AmazonKauf, Sources } from "./Sources";
 import { baueAbschnitte, kaufLink, type BlockTyp, type LayoutData } from "./schema";
 import "@/styles/testvorlage-v2.css";
 
@@ -41,9 +42,12 @@ const LABEL: Record<string, string> = { urteil: "URTEIL", kapitel: "KAPITEL", bl
 export function TestvorlageV2({ data, totalScore, ampelLabel, kopf, medien }: { data: LayoutData; totalScore: number; ampelLabel: string; kopf?: ReactNode; medien?: ReactNode }) {
   const abschnitte = baueAbschnitte(data);
   const kauf = kaufLink(data);
+  const asinKauf = data.asin ? kaufLink({ asin: data.asin }) : null;
+  const rot = isRotScore(totalScore);
   return (
     <div className="tv2" data-layout="TESTVORLAGE_V2">
       <ProductTestHero hero={data.hero} totalScore={totalScore} ampelLabel={ampelLabel} kopf={kopf} />
+      {asinKauf && <AmazonKauf url={asinKauf} rot={rot} className="kauf kauf-top" />}
       <ProductFacts kennzahlen={data.kennzahlen} />
       {medien}
       <ArticleNavigation abschnitte={abschnitte} variante="mobil" />
@@ -73,7 +77,7 @@ export function TestvorlageV2({ data, totalScore, ampelLabel, kopf, medien }: { 
               case "quellen":
                 return (
                   <TvSection key={a.id} id={a.id} nummer={a.nummer} label={label} titel={a.titel}>
-                    <Sources quellen={data.quellen} pruefstand={data.pruefstand} methodikHinweis={data.methodikHinweis} kaufUrl={kauf} kaufLabel={data.kaufLabel} />
+                    <Sources quellen={data.quellen} pruefstand={data.pruefstand} methodikHinweis={data.methodikHinweis} kaufUrl={kauf} rot={rot} />
                   </TvSection>
                 );
             }

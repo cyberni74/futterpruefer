@@ -112,8 +112,9 @@
 .tv2 .source-list{font-size:.91rem}
 .tv2 .source-list li{margin-bottom:13px}
 .tv2 .bottom-note{padding:18px 23px;background:#edf1ed;border-radius:13px;font-size:.8rem;color:#53675b}
-.tv2 .btn{display:inline-flex;align-items:center;justify-content:center;border:0;border-radius:12px;background:var(--forest);color:#fff;padding:13px 20px;text-decoration:none;font-weight:850;font-size:.9rem}
-.tv2 .btn:hover{color:#fff;background:#0b3525}
+.tv2 .btn{display:flex;align-items:center;justify-content:center;width:100%;box-sizing:border-box;border:0;border-radius:9999px;background:var(--accent);color:var(--cta-on-accent,#fff);padding:.9rem 1.5rem;min-height:3.25rem;text-decoration:none;font-weight:800;font-size:1.05rem;line-height:1.25;text-align:center}
+.tv2 .btn:hover{color:var(--cta-on-accent,#fff);background:var(--accent-strong)}
+.tv2 .btn:focus-visible{outline:3px solid var(--ring);outline-offset:2px}
 @media(max-width:1023px){
 .tv2 .layout{grid-template-columns:1fr}
 .tv2 .sidebar{position:static;display:none}
@@ -174,6 +175,11 @@
 .tv2 .callout.red{background:#fdf3f1;border-color:var(--red)}
 .tv2 .metric{margin-bottom:0}
 .tv2 button,.tv2 select,.tv2 input{font:inherit;color:inherit}
+/* Vorlesen sitzt im Hero: ohne eigene Farbe erbt der Button das Dunkelgrün. Akzent-Buttons behalten Weiß bzw. Schwarz. */
+.tv2 button.bg-accent{color:var(--cta-on-accent,#fff);font-size:.875rem;font-weight:700}
+.tv2 button.bg-accent:hover{color:var(--cta-on-accent,#fff)}
+.tv2 button.bg-accent:focus-visible{outline:3px solid var(--ring);outline-offset:2px}
+.tv2 button.bg-accent svg{color:inherit;stroke:currentColor}
 .tv2 em{font-style:italic}
 .tv2 table.data{display:block;max-width:100%;overflow-x:auto}
 .tv2 .section{scroll-margin-top:96px}
@@ -228,8 +234,10 @@
 .tv2 .source-list li{margin-bottom:13px}
 .tv2 .source-list .hinweis{display:block;color:var(--muted);font-size:.85rem}
 .tv2 .kauf{margin-top:20px}
-.tv2 .affiliate-note{margin:10px 0 0;font-size:.8rem;color:#53675b}
-.tv2 .btn{min-height:48px}
+.tv2 .kauf-top{background:#fff;border:1px solid #DCE8DE;border-radius:18px;padding:22px}
+.tv2 .affiliate-note,.tv2 .rot-hinweis{margin:10px 0 0;font-size:.8rem;color:#173C2D}
+.tv2 .rot-hinweis{font-weight:700;font-size:.9rem}
+.tv2 .btn{min-height:3.25rem}
 .tv2 .pruefstand{margin-top:16px;font-size:.85rem;color:#53675b}
 .tv2 .stripe{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
 @media(max-width:767px){.tv2 .stripe{grid-template-columns:repeat(auto-fit,minmax(130px,1fr))}}
