@@ -110,9 +110,10 @@ export default function ErgaenzungsfutterMethodikPage() {
 
       <div className="prose-fp mt-10">
         <p><strong>Kurz gesagt:</strong> Ergänzungsfutter deckt allein nicht den Tagesbedarf, sondern soll vor allem bestimmte Stoffe liefern (vgl. Art. 3 Abs. 2 Buchst. j VO (EG) Nr. 767/2009). Darum gibt es die Hälfte der Punkte nur für den Wirkstoff: Ist es der richtige, und steckt genug davon drin? Die andere Hälfte verteilt sich auf ehrliche Werbung, einen sauberen Träger und offene Angaben. Sicherheitsprobleme bringen keine Punkte, sondern ein Warnsignal und eine schlechtere Ampel. Die Ampel ist dieselbe wie bei Alleinfutter.</p>
-        <p><em>Stand: 25.10.2026 · Verantwortlich: Redaktion Futterprüfer · Methodik-Version: ergaenzung-v1.1</em></p>
+        <p><em>Stand: 27.10.2026 · Verantwortlich: Redaktion Futterprüfer · Methodik-Version: ergaenzung-v1.1</em></p>
         <p><strong>Änderungsprotokoll:</strong></p>
         <ul>
+          <li><strong>27.10.2026:</strong> Geltungsbereich festgelegt (Abschnitt 1, „Für welche Ergänzungsfutter gilt diese Bewertung?“): Ergänzungsfutter, die ein Futter im Alltagssinn sind und keinen benannten Wirkstoff haben, etwa Nassfutter-Filets und Snacks, bewerten wir nach der <Link href="/methodik">Methodik für Alleinfutter</Link> mit sechs Kriterien. Die fünf Kriterien dieser Seite gelten für funktionelle Ergänzungsfutter mit Wirkstoff oder Wirkversprechen.</li>
           <li><strong>27.10.2026:</strong> Renaltec als Lücke in die Referenztabelle aufgenommen (Begründung in der Tabelle).</li>
           <li><strong>25.10.2026 – ergaenzung-v1.1:</strong> Drei Regeln für Omega-3-Produkte ergänzt: Abzug für Omega-3-Quellen ohne Wirksamkeitsstudie beim Hund (Abschnitt 3), Abzug je weiterem Öl ohne belegten Nutzen (Abschnitt 3), Stufung der Dosierung bei Haut und Fell (Abschnitt 4). Auf unseren Lachsöl-Test vom 23.10.2026 angewendet, ändern die Regeln keine Punktzahl. Erstmals angewendet im Algenöl-Test Oktober 2026.</li>
           <li>17.10.2026 – Erstveröffentlichung</li>
@@ -120,6 +121,10 @@ export default function ErgaenzungsfutterMethodikPage() {
 
         <h2 id="warum">Warum eine eigene Bewertung für Ergänzungsfutter?</h2>
         <p>Ein Alleinfutter muss den ganzen Tagesbedarf decken, deshalb zählen dort Rohstoffe und Nährstoffprofil (<Link href="/methodik">Methodik Alleinfutter</Link>). Ergänzungsfutter wird in kleinen Mengen gegeben und soll einen bestimmten Stoff liefern, etwa Glucosamin, Omega-3-Fettsäuren oder Flohsamen. Alles andere ist Träger, der den Wirkstoff schmackhaft und haltbar macht. Eine Bewertung von Protein und Fett wäre hier sinnlos.</p>
+
+        <h3 id="geltungsbereich">Für welche Ergänzungsfutter gilt diese Bewertung?</h3>
+        <p>Die fünf Kriterien unten gelten für funktionelle Ergänzungsfutter: Produkte mit einem benannten Wirkstoff oder einem Wirkversprechen, etwa Tropfen, Pulver, Öle, Pasten und Tabletten. Wirbt ein Snack mit einer Wirkung, zum Beispiel für Zähne oder Gelenke, gehört er ebenfalls hierher.</p>
+        <p>Viele Ergänzungsfutter sind dagegen ein Futter im Alltagssinn, etwa Nassfutter-Filets und Snacks ohne benannten Wirkstoff. Sie liefern keinen bestimmten Stoff, den man dosieren könnte. Diese Produkte bewerten wir nach den sechs Kriterien der <Link href="/methodik">Methodik für Alleinfutter</Link>, damit sie mit unseren bisherigen Tests vergleichbar bleiben. Festgelegt am 27.10.2026.</p>
 
         <h2 id="kriterien">Welche Kriterien zählen?</h2>
       </div>
