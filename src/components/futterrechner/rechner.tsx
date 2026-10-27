@@ -1,6 +1,7 @@
 "use client";
 
 import { Bone, Cat, Dog, Footprints, House, Mountain, Sofa, Trash2, Trees, Zap } from "lucide-react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { BEREICHE, hundKgAusPos, hundPosAusKg, hundGewichtPos } from "@/lib/futterrechner/bereiche";
@@ -8,7 +9,7 @@ import { berechne } from "@/lib/futterrechner";
 import { decodeHash, encodeHash } from "@/lib/futterrechner/hash";
 import {
   ALTER_MAX, alterAusPosition, alterText, lebensphase, positionAusAlter, startState,
-  type FormState, type FutterartWahl, type Lebensphase, type Werte,
+  type FormState, type Lebensphase, type Werte,
 } from "@/lib/futterrechner/state";
 import { parseZahl, pruefe } from "@/lib/futterrechner/validierung";
 import type { Art, ErgebnisOk } from "@/lib/futterrechner/types";
@@ -282,7 +283,7 @@ export function Rechner({ art, ctas }: { art: Art; ctas?: RechnerCtas }) {
             <details className="group mt-3 rounded-2xl bg-bg-soft p-3">
               <summary className="min-h-11 cursor-pointer list-none text-sm font-bold leading-[2.75rem]">Wo steht das? So lesen Sie das Etikett</summary>
               <div className="mt-2"><Infografik1 /></div>
-              <p className="mt-2 text-sm">Mehr dazu: <a href="/blog/futterdeklaration-richtig-lesen" className="font-semibold text-brand underline underline-offset-4">Futterdeklaration richtig lesen</a>.</p>
+              <p className="mt-2 text-sm">Mehr dazu: <Link href="/blog/futterdeklaration-richtig-lesen" className="font-semibold text-brand underline underline-offset-4">Futterdeklaration richtig lesen</Link>.</p>
             </details>
             <p className="mt-3 text-sm text-muted">Alle Werte in %, so wie auf der Packung („wie gefüttert“).</p>
             <div className="mt-2 divide-y divide-border">
@@ -292,6 +293,7 @@ export function Rechner({ art, ctas }: { art: Art; ctas?: RechnerCtas }) {
               {feld("a", "Rohasche", "Auch „Ascherückstand“ oder „anorganischer Stoff“.")}
               {feld("m", "Feuchte", s.futterart === "nass" ? "Pflichtangabe bei Nassfutter." : "Pflicht erst über 14 %. Fehlt sie, rechnen wir mit 10 %.")}
             </div>
+            {!ergaenzung && <ZutatenFeld value={w.zutaten} onChange={(v) => setWert({ zutaten: v })} />}
             <details className="group mt-3 rounded-2xl border border-border p-3">
               <summary className="min-h-11 cursor-pointer list-none text-sm font-bold leading-[2.75rem]">Mehr Werte (genauer)</summary>
               <div className="mt-2 divide-y divide-border">
@@ -354,6 +356,21 @@ export function Rechner({ art, ctas }: { art: Art; ctas?: RechnerCtas }) {
   );
 }
 
+/** Optionales Feld „Erste Zutaten“: ändert nur den Kollagen-Abzug, wird nicht gespeichert und nicht in den Teilen-Link übernommen. */
+function ZutatenFeld({ value, onChange }: { value: string | null; onChange: (v: string | null) => void }) {
+  return (
+    <div className="mt-4 py-1">
+      <label htmlFor="zutaten-feld" className="text-sm font-bold">Erste Zutaten (optional)</label>
+      <textarea
+        id="zutaten-feld" rows={2} maxLength={600} value={value ?? ""} aria-describedby="zutaten-hilfe" autoComplete="off"
+        onChange={(e) => onChange(e.target.value === "" ? null : e.target.value)}
+        className="mt-1 w-full rounded-xl border border-border bg-bg-soft px-3 py-2 text-base focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2"
+      />
+      <p id="zutaten-hilfe" className="mt-1 text-xs text-muted">Die ersten Zutaten von der Packung, durch Komma getrennt. Wir prüfen die ersten fünf auf Bindegewebe-Rohstoffe.</p>
+    </div>
+  );
+}
+
 function Kopf({ nr, id, titel }: { nr: number; id: string; titel: string }) {
   return (
     <h2 id={id} className="flex items-center gap-3 font-display text-lg font-extrabold">
@@ -365,6 +382,8 @@ function Kopf({ nr, id, titel }: { nr: number; id: string; titel: string }) {
 
 function EnergieFeld({ w, onChange, fehler }: { w: Werte; onChange: (p: Partial<Werte>) => void; fehler?: string }) {
   const [t, setT] = useState(w.me == null ? "" : String(w.me).replace(".", ","));
+  // Feld an Wert von außen angleichen (Zurücksetzen, Teilen-Link); Tippen setzt w.me selbst
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => { setT(w.me == null ? "" : String(w.me).replace(".", ",")); }, [w.me]);
   return (
     <div className="py-2">

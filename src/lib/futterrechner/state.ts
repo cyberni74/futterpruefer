@@ -11,6 +11,8 @@ export type Werte = {
   ca: Num; ph: Num; taurin: Num;
   me: Num; meEinheit: EnergieEinheit;
   stueck: Num;
+  /** Erste Zutaten (optional, Freitext), nur für die Kollagen-Heuristik; nicht im Teilen-Link */
+  zutaten: string | null;
 };
 
 export type FormState = {
@@ -27,7 +29,7 @@ export type FormState = {
   kastriert: boolean | null;
 };
 
-export const leereWerte = (): Werte => ({ p: null, f: null, fa: null, a: null, m: null, ca: null, ph: null, taurin: null, me: null, meEinheit: "kcal100g", stueck: null });
+export const leereWerte = (): Werte => ({ p: null, f: null, fa: null, a: null, m: null, ca: null, ph: null, taurin: null, me: null, meEinheit: "kcal100g", stueck: null, zutaten: null });
 
 export const startState = (art: Art = "hund", futterart: FutterartWahl = "trocken"): FormState => ({
   art,

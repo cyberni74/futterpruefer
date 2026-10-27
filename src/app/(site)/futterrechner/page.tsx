@@ -45,7 +45,7 @@ export default function FutterrechnerHub() {
         <ul>
           <li>Analysewerte auf Trockenmasse und Energie (ME) umrechnen, nach dem Verfahren des NRC (2006).</li>
           <li>Den Energiebedarf Ihres Tieres schätzen und daraus die Tagesmenge als Startwert berechnen.</li>
-          <li>Protein und Fett je 1000 kcal sowie Calcium, Phosphor und Taurin mit den FEDIAF-Mindestwerten vergleichen.</li>
+          <li>Protein und Fett je 1000 kcal sowie Calcium, Phosphor und Taurin mit den FEDIAF-Mindestwerten vergleichen und das Verhältnis von Protein zu Fett bewerten.</li>
           <li>Einen Nährwert-Check mit Note, nachvollziehbarer Begründung und aufklappbarem Rechenweg ausgeben.</li>
         </ul>
         <h2 id="was-er-nicht-kann">Was er nicht kann</h2>
@@ -54,7 +54,7 @@ export default function FutterrechnerHub() {
         </p>
         <h2 id="rechenbasis">Unsere Rechenbasis</h2>
         <p>
-          Grundlage sind die FEDIAF Nutritional Guidelines (September 2025) und das Energieverfahren des NRC (2006). Eigene Festlegungen sind benannt: der Kastriert-Faktor × 0,9 (abgeleitet aus AAHA 2021), die Spanne von ±10 % und das Rohasche-Band von 3 bis 12 % der Trockenmasse. Alles wird in Ihrem Browser berechnet. Es gibt keinen Server-Aufruf mit Ihren Werten und keine Datenbank. Die Einzelheiten stehen auf den Seiten für <Link href="/futterrechner/hund" className={a}>Hundefutter</Link> und <Link href="/futterrechner/katze" className={a}>Katzenfutter</Link>.
+          Grundlage sind die FEDIAF Nutritional Guidelines (September 2025) und das Energieverfahren des NRC (2006). Eigene Festlegungen sind benannt: der Kastriert-Faktor × 0,9 (abgeleitet aus AAHA 2021), die Spanne von ±10 %, das Rohasche-Band von 3 bis 12 % der Trockenmasse, die Bänder für das Protein-Fett-Verhältnis und die Kohlenhydrate (NfE) sowie die Kollagen-Heuristik (Schätzung bei viel Protein und viel Rohasche). Alles wird in Ihrem Browser berechnet. Es gibt keinen Server-Aufruf mit Ihren Werten und keine Datenbank. Die Einzelheiten stehen auf den Seiten für <Link href="/futterrechner/hund" className={a}>Hundefutter</Link> und <Link href="/futterrechner/katze" className={a}>Katzenfutter</Link>.
         </p>
         <Infografik6 />
       </div>

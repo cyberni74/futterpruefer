@@ -87,3 +87,40 @@ export const ASCHE_BAND = { min: 3, max: 12 } as const;
 export const FASER_GRENZE_HUND = 8;
 /** Umrechnung MJ → kcal. */
 export const KCAL_JE_MJ = 239;
+
+// ---------------------------------------------------------------------------
+// Bewertung v2 („Scoring v2“, 27.10.2026): Energieverteilung statt nur Mindestwerte.
+// Referenz: docs/futterrechner/scoring-v2.md und rechner.py (Branch docs/futterrechner-scoring-v2).
+// ---------------------------------------------------------------------------
+
+/** Modifizierte Atwater-Faktoren (kcal/g) nur für die Energieverteilung (NRC 2006). */
+export const ATWATER = { p: 3.5, f: 8.5, c: 3.5 } as const;
+/** Protein:Fett (g:g). lo → 0 Punkte, hi → volle Punkte. Hund hi: Wolfsbeute 54:45 % Energie (Bosch 2015); Katze hi: 62,7/22,8 (Plantinga 2011). */
+export const PF_BAND = { hund: { lo: 1.0, hi: 2.9 }, katze: { lo: 1.0, hi: 2.75 } } as const;
+/** Ziel Protein-Energieanteil in %: Hund 30 (Hewson-Hughes 2013), Katze 52 (Hewson-Hughes 2011, Plantinga 2011). */
+export const PE_ZIEL = { hund: 30, katze: 52 } as const;
+/** Anteil der PE-Punkte, sobald das FEDIAF-Minimum (in Energie-%) erreicht ist. */
+export const PE_SOCKEL = 0.5;
+/** NfE in % TS: volle Punkte bis lo, 0 ab hi (eigene Festlegung, FEDIAF nennt kein Minimum). */
+export const NFE_BAND = { hund: { lo: 35, hi: 55 }, katze: { lo: 15, hi: 40 } } as const;
+/** Höchstpunkte je Kriterium. Hund 100, Katze 115; Ca/P und Taurin zählen nur, wenn angegeben. */
+export const GEWICHT = {
+  hund: { pf: 35, pe: 15, pmin: 10, fmin: 5, nfe: 5, capr: 20, plaus: 10 },
+  katze: { pf: 35, pe: 15, pmin: 10, fmin: 5, nfe: 10, capr: 20, taurin: 10, plaus: 10 },
+} as const;
+export const PLAUS_ABZUG = { feuchteGeschaetzt: 2, ascheAusserhalb: 3, faserHund: 3 } as const;
+
+/** Kollagen-Heuristik: Abzug vom Score nach der Normierung, kein Deckel. */
+export const KOLLAGEN = {
+  ascheAb: 10, ascheVoll: 14, ascheMax: 6, caTsAb: 2.0, caAbzug: 2,
+  proteinTsAb: { hund: 25, katze: 30 }, zutatenPositionen: 5, zutatenMax: 6,
+  stark: [/kollagen/, /gelatine/, /knorpel/, /haut\b/, /häute/, /schwarte/, /feder(n|mehl|hydrolysat)?\b/, /sehne/, /luftröhre/, /grieben/, /knochenmehl/, /tiermehl/, /schlachtabf/],
+  schwach: [/nebenerzeugnis/],
+  hydroJa: /hydrolys/, hydroKontext: /protein|tier/, hydroNein: /leber|hefe|fisch|pflanz|soja|reis|weizen|mais|erbs|kartoffel/,
+} as const;
+
+/**
+ * Schalter für die Langtexte des Kollagen-Hinweises (K1, K2). Entwurf, Rechtsprüfung offen:
+ * nicht ohne Freigabe auf true setzen. Der Punktabzug gilt unabhängig vom Schalter.
+ */
+export const KOLLAGEN_TEXT_FREIGEGEBEN = false;

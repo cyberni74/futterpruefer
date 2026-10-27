@@ -33,9 +33,11 @@ describe("Testfälle aus Konzept 9.4 (Referenz: rechner.py)", () => {
     near(r.capr!.caTs, 1.44, 0.01);
     near(r.capr!.pTs, 1.06, 0.01);
     near(r.aTs, 7.8, 0.05);
-    expect(r.punkte).toEqual({ protein: 35, fett: 20, capr: 20, plaus: 15 });
-    expect(r.score).toBe(100);
-    expect(r.note).toBe("sehr gut");
+    expect(r.punkte).toEqual({ pf: 14.5, pe: 12.3, pmin: 10, fmin: 5, nfe: 2.2, capr: 20, plaus: 10 });
+    expect(r.score).toBe(74);
+    expect(r.note).toBe("befriedigend");
+    expect(r.kollagen).toMatchObject({ abzugNaehrwerte: 0, abzugZutaten: 0, zutatenGeprueft: false });
+    near(r.pf, 1.786, 0.001);
   });
 
   it("T2 Hund adult, Nassfutter, kastriert, wenig aktiv", () => {
@@ -55,8 +57,9 @@ describe("Testfälle aus Konzept 9.4 (Referenz: rechner.py)", () => {
     near(r.p1000, 97.33, 0.05);
     near(r.f1000, 64.89, 0.05);
     near(r.aTs, 10.0, 0.05);
-    expect(r.score).toBe(100);
-    expect(r.note).toBe("sehr gut");
+    expect(r.punkte).toEqual({ pf: 9.2, pe: 15, pmin: 10, fmin: 5, nfe: 5, capr: 20, plaus: 10 });
+    expect(r.score).toBe(74);
+    expect(r.note).toBe("befriedigend");
   });
 
   const T3: FutterInput = { typ: "trocken", p: 28, f: 17, fa: 2.5, a: 7.5, m: 10, ca: 1.3, ph: 1.0 };
@@ -75,8 +78,9 @@ describe("Testfälle aus Konzept 9.4 (Referenz: rechner.py)", () => {
     near(r.rf, 2.09, 0.01);
     near(r.capr!.ratio, 1.3, 0.01);
     near(r.capr!.caTs, 1.44, 0.01);
-    expect(r.score).toBe(100);
-    expect(r.note).toBe("sehr gut");
+    expect(r.punkte).toEqual({ pf: 11.9, pe: 13.1, pmin: 10, fmin: 5, nfe: 4, capr: 20, plaus: 10 });
+    expect(r.score).toBe(74);
+    expect(r.note).toBe("befriedigend");
     expect(r.hinweise.some((h) => h.id === "welpe")).toBe(true);
   });
 
@@ -86,7 +90,8 @@ describe("Testfälle aus Konzept 9.4 (Referenz: rechner.py)", () => {
     near(r.rf, 1.78, 0.01);
     near(r.capr!.ratio, 1.37, 0.01);
     near(r.menge, 348.26, 0.5);
-    expect(r.score).toBe(100);
+    expect(r.punkte).toEqual({ pf: 14.5, pe: 11.9, pmin: 10, fmin: 5, nfe: 2.2, capr: 20, plaus: 10 });
+    expect(r.score).toBe(74);
   });
 
   it("T4 Senior-Hund, Feuchte und Ca/P fehlen", () => {
@@ -101,9 +106,9 @@ describe("Testfälle aus Konzept 9.4 (Referenz: rechner.py)", () => {
     near(r.menge, 275.01, 0.5);
     expect(r.spalte).toBe("adult95");
     near(r.rp, 1.21, 0.01);
-    expect(r.punkte).toEqual({ protein: 30, fett: 20, plaus: 10 });
-    expect(r.score).toBe(86);
-    expect(r.note).toBe("gut");
+    expect(r.punkte).toEqual({ pf: 22.1, pe: 10.7, pmin: 10, fmin: 5, nfe: 0.3, plaus: 8 });
+    expect(r.score).toBe(70);
+    expect(r.note).toBe("befriedigend");
     expect(r.deckel).toContain("gut");
   });
 
@@ -120,8 +125,9 @@ describe("Testfälle aus Konzept 9.4 (Referenz: rechner.py)", () => {
     near(r.p1000, 115.34, 0.05);
     near(r.f1000, 57.67, 0.05);
     near(r.taurin!.ts, 0.5, 0.01);
-    expect(r.punkte).toEqual({ protein: 35, fett: 20, capr: 20, taurin: 10, plaus: 15 });
-    expect(r.score).toBe(100);
+    expect(r.punkte).toEqual({ pf: 20, pe: 12.1, pmin: 10, fmin: 5, nfe: 10, capr: 20, taurin: 10, plaus: 10 });
+    expect(r.score).toBe(84);
+    expect(r.note).toBe("gut");
   });
 
   it("T6 Kitten 5 Monate, 2,5 kg, Trockenfutter", () => {
@@ -135,9 +141,9 @@ describe("Testfälle aus Konzept 9.4 (Referenz: rechner.py)", () => {
     expect(r.spalte).toBe("wachstum");
     near(r.rp, 1.19, 0.01);
     near(r.taurin!.ts, 0.22, 0.01);
-    expect(r.punkte).toEqual({ protein: 30, fett: 20, capr: 20, taurin: 10, plaus: 15 });
-    expect(r.score).toBe(95);
-    expect(r.note).toBe("sehr gut");
+    expect(r.punkte).toEqual({ pf: 14, pe: 9.2, pmin: 10, fmin: 5, nfe: 3.6, capr: 20, taurin: 10, plaus: 10 });
+    expect(r.score).toBe(71);
+    expect(r.note).toBe("befriedigend");
   });
 
   it("T7 Mangelhaftes Futter: Hund adult, wenig aktiv", () => {
@@ -152,8 +158,8 @@ describe("Testfälle aus Konzept 9.4 (Referenz: rechner.py)", () => {
     near(r.f1000, 14.75, 0.05);
     near(r.rp, 0.94, 0.01);
     near(r.capr!.caTs, 2.67, 0.01);
-    expect(r.punkte).toEqual({ protein: 10, fett: 14, capr: 0, plaus: 15 });
-    expect(r.score).toBe(43);
+    expect(r.punkte).toEqual({ pf: 35, pe: 0, pmin: 5, fmin: 5, nfe: 0, capr: 0, plaus: 10 });
+    expect(r.score).toBe(55);
     expect(r.note).toBe("mangelhaft");
     expect(r.deckel).toEqual(["ausreichend", "ausreichend"]);
   });

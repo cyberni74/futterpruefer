@@ -60,6 +60,7 @@ export function Infografik4({ art = "hund" }: { art?: Art }) {
         <ul className="mt-1 divide-y divide-border">{FETT.map((z) => <Skala key={z.name} z={z} />)}</ul>
       </Karte>
       <p className="text-sm font-semibold">Wer weniger frisst, braucht mehr Nährstoff pro Kalorie. Deshalb ist der Wert für kastrierte Katzen höher.</p>
+      <p className="text-sm">Das Minimum zu erreichen bringt 10 bzw. 5 Punkte. Den größeren Teil der Note bestimmt das Verhältnis von Protein zu Fett.</p>
     </Rahmen>
   );
 }

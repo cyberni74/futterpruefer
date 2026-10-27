@@ -98,6 +98,7 @@ export function pruefe(s: FormState): Pruefung {
     p: w.p!, f: w.f!, fa: w.fa!, a: w.a!, m: w.m,
     ca: w.ca, ph: w.ph, taurinMgKg: art === "katze" ? w.taurin : null,
     meHersteller: meKcal,
+    zutaten: w.zutaten?.trim() ? w.zutaten.trim().slice(0, 600) : null,
   };
   const kastriert = s.kastriert === true;
   let tier: TierInput;

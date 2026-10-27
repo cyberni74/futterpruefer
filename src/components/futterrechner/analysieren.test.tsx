@@ -30,14 +30,14 @@ describe("Jetzt Futter analysieren", () => {
   });
   it("vor dem Klick zeigt die Karte kein Ergebnis", () => {
     const html = karte(t1, hund, false);
-    expect(html).not.toContain("SEHR GUT");
+    expect(html).not.toContain("BEFRIEDIGEND");
     expect(html).not.toContain("Warum?");
     expect(html).toContain("Jetzt Futter analysieren");
   });
   it("nach dem Klick erscheint das Ergebnis", () => {
     const html = karte(t1, hund, true);
     expect(html).toContain("Warum?");
-    expect(html).toContain("sehr gut");
+    expect(html).toContain("befriedigend");
   });
   it("fehlende Angabe: Hinweis am Feld, aria-invalid, Rahmen in Akzentfarbe", () => {
     const html = renderToStaticMarkup(
