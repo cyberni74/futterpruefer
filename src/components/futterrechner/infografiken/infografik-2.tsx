@@ -11,10 +11,13 @@ function Fall({ titel, protein, feuchte, ts, ergebnis }: { titel: string; protei
       <p className="font-display text-lg font-extrabold">{titel}</p>
       <p className="mt-1 text-sm text-muted">{protein} Rohprotein · {feuchte} % Feuchte</p>
       <div className="mt-3 flex h-6 overflow-hidden rounded-full border border-border" role="img" aria-label={`${feuchte} Prozent Wasser, ${ts} Prozent Trockenmasse`}>
-        <span className="flex items-center justify-center bg-border text-xs font-bold text-muted" style={{ width: `${feuchte}%` }}>Wasser {feuchte} %</span>
-        <span className="flex items-center justify-center bg-brand text-xs font-bold text-white dark:text-black" style={{ width: `${ts}%` }}>{ts} %</span>
+        <span className="bg-border" style={{ width: `${feuchte}%` }} />
+        <span className="bg-brand" style={{ width: `${ts}%` }} />
       </div>
-      <p className="mt-3 text-sm">Trockenmasse {ts} %</p>
+      <p className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-xs font-bold">
+        <span className="inline-flex items-center gap-1.5"><i className="size-3 rounded-sm bg-border" /> Wasser {feuchte} %</span>
+        <span className="inline-flex items-center gap-1.5"><i className="size-3 rounded-sm bg-brand" /> Trockenmasse {ts} %</span>
+      </p>
       <p className="mt-1 text-sm tabular-nums">{protein.replace(" %", "")} ÷ {ts} × 100 = <strong className="text-lg text-brand">{ergebnis} % Protein in der TS</strong></p>
     </Karte>
   );

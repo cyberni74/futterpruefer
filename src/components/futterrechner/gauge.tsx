@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
+import { motion, useReducedMotion, useSpring, useTransform } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 
 const C = { x: 100, y: 100, r: 80 };
@@ -48,21 +48,19 @@ export function useZaehler(ziel: number) {
 
 export function Gauge({ score, klein = false, titel }: { score: number; klein?: boolean; titel: string }) {
   const reduziert = useReducedMotion();
-  const winkel = -90 + score * 1.8;
+  const laenge = klein ? 70 : 66;
+  // Nadel als Linie von der Mitte aus: Endpunkt direkt aus dem Winkel, keine Transform-Drehung (die Drehung ließ die Nadel am Rand abschneiden)
+  const wert = useSpring(score, reduziert ? { duration: 0 } : { stiffness: 200, damping: 25 });
+  useEffect(() => { wert.set(score); }, [score, wert]);
+  const x2 = useTransform(wert, (v) => C.x + laenge * Math.cos(Math.PI * (1 - Math.min(100, Math.max(0, v)) / 100)));
+  const y2 = useTransform(wert, (v) => C.y - laenge * Math.sin(Math.PI * (1 - Math.min(100, Math.max(0, v)) / 100)));
   return (
-    <svg viewBox="0 0 200 112" role="img" aria-label={titel} className={klein ? "h-10 w-[4.5rem]" : "mx-auto w-full max-w-[17rem]"}>
+    <svg viewBox="-10 0 220 112" overflow="visible" role="img" aria-label={titel} className={klein ? "h-10 w-[4.5rem]" : "mx-auto w-full max-w-[17rem]"}>
       {SEGMENTE.map(([a, b, farbe, op]) => (
         <path key={a} d={arc(a + 0.6, b - 0.6)} fill="none" stroke={farbe} strokeOpacity={op} strokeWidth={klein ? 20 : 16} strokeLinecap="butt" />
       ))}
-      <motion.g
-        initial={false}
-        animate={{ rotate: winkel }}
-        transition={reduziert ? { duration: 0 } : { type: "spring", stiffness: 200, damping: 25 }}
-        style={{ originX: "100px", originY: "100px" }}
-      >
-        <line x1="100" y1="100" x2="100" y2={klein ? 30 : 34} stroke="var(--fg)" strokeWidth={klein ? 7 : 5} strokeLinecap="round" />
-        <circle cx="100" cy="100" r={klein ? 11 : 9} fill="var(--fg)" />
-      </motion.g>
+      <motion.line x1={C.x} y1={C.y} x2={x2} y2={y2} stroke="var(--fg)" strokeWidth={klein ? 7 : 5} strokeLinecap="round" />
+      <circle cx={C.x} cy={C.y} r={klein ? 11 : 9} fill="var(--fg)" />
     </svg>
   );
 }
