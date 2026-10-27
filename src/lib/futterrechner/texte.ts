@@ -1,3 +1,4 @@
+import { UNTERGRENZE_FEDIAF_KONFORM } from "./fediaf";
 import type { Spalte } from "./types";
 
 const de = (digits: number) => new Intl.NumberFormat("de-DE", { minimumFractionDigits: digits, maximumFractionDigits: digits });
@@ -71,26 +72,30 @@ export const ascheOk = (aTs: number) => `Rohasche: ${n1(aTs)} % der Trockenmasse
 export const nfeInfo = (nfeTs: number, punkte: number, lo: number, hi: number) =>
   `Rechnerische Kohlenhydrate (NfE): ${n0(nfeTs)} % der Trockenmasse, vor allem Stärke. Fließt mit ${punkte} Punkten in die Note ein: volle Punkte bis ${lo} %, keine ab ${hi} %.`;
 
-export function pfGrund(pf: number, pe: number, fe: number, ce: number, hi: number, fettbetont: boolean) {
-  const basis = `Auf 1 g Fett kommen ${n1(pf)} g Protein. Damit stammen ${n0(pe)} % der Energie aus Protein, ${n0(fe)} % aus Fett und ${n0(ce)} % aus Kohlenhydraten. Volle Punkte gibt es ab ${nMin(hi)} : 1 – so ist das Verhältnis in der natürlichen Beute (Hund: Wolf, Katze: Mäuse und Vögel).`;
-  return fettbetont
-    ? `${basis} Das Futter ist fettbetont. Fett macht schmackhaft und liefert viel Energie, deshalb fressen Tiere davon leicht mehr als nötig (Hewson-Hughes et al. 2013).`
-    : basis;
+export function pfGrund(pf: number, pe: number, fe: number, ce: number, hi: number) {
+  return `Auf 1 g Fett kommen ${n1(pf)} g Protein. Damit stammen ${n0(pe)} % der Energie aus Protein, ${n0(fe)} % aus Fett und ${n0(ce)} % aus Kohlenhydraten. Volle Punkte gibt es ab ${nMin(hi)} : 1 – so ist das Verhältnis in der natürlichen Beute (Hund: Wolf, Katze: Mäuse und Vögel).`;
 }
 
 export const KOLLAGEN_TITEL_NAEHRWERTE = "Hinweis zur Proteinqualität (nach den Nährwerten)";
 export const KOLLAGEN_TITEL_ZUTATEN = "Hinweis zur Proteinqualität (nach Ihren Zutatenangaben)";
+/** Kurztexte als Rückfall bei KOLLAGEN_TEXT_FREIGEGEBEN = false. */
 export const KOLLAGEN_KURZ_NAEHRWERTE = "Viel Rohprotein bei viel Rohasche: Ein Teil des Eiweißes kann aus Bindegewebe stammen (Schätzung nach den Nährwerten).";
 export const kollagenKurzZutaten = (treffer: string) =>
   `In den ersten fünf Zutaten, die Sie eingegeben haben, steht „${treffer}“. Solche Bestandteile können viel Bindegewebe-Eiweiß enthalten.`;
-/** Langtexte K1/K2 (Entwurf, Rechtsprüfung offen): nur mit KOLLAGEN_TEXT_FREIGEGEBEN. Wortlaut aus scoring-v2.md, Abschnitt 4. */
-export const kollagenLangNaehrwerte = (pTs: number, aTs: number) =>
-  `Ihr Futter hat viel Rohprotein (${n1(pTs)} % der Trockenmasse) und zugleich viel Rohasche (${n1(aTs)} %). Diese Kombination entsteht oft, wenn ein Teil des Eiweißes aus Knochen, Knorpel, Haut oder Sehnen stammt. Dieses Bindegewebe-Eiweiß (Kollagen) enthält kein Tryptophan, eine essenzielle Aminosäure. Für sich allein hat es deshalb eine Proteinqualität (PDCAAS) von null (Paul et al. 2019). In Fleischknochenmehl sinkt der Gehalt an essenziellen Aminosäuren je Gramm Rohprotein mit steigendem Aschegehalt (Shirley & Parsons 2001). Die Analyse auf der Packung kann das nicht unterscheiden, denn „Rohprotein“ zählt jedes Eiweiß gleich. Das ist eine Schätzung nach den Nährwerten, keine Aussage über die Zutaten. Was Sie tun können: Prüfen Sie, ob in der Zutatenliste Fleisch oder Innereien mit Prozentangabe vorne stehen. Tragen Sie die ersten Zutaten oben ein, dann wird der Hinweis genauer.`;
-export const kollagenLangZutaten = (treffer: string) =>
-  `In den ersten fünf Zutaten, die Sie eingegeben haben, steht „${treffer}“. Solche Bestandteile können viel Bindegewebe-Eiweiß (Kollagen) liefern. Kollagen enthält kein Tryptophan und hat für sich allein eine Proteinqualität (PDCAAS) von null (Paul et al. 2019). Tierische Mehle aus Schlachtnebenprodukten haben oft eine geringere Proteinqualität als frische Rohstoffe (Cramer et al. 2007). Im Mischfutter wird das teilweise durch anderes Eiweiß ausgeglichen. Was Sie tun können: Ein Futter wählen, das Fleisch oder Innereien mit Prozentangabe an erster Stelle nennt.`;
-export const KOLLAGEN_LANG_SAMMELBEGRIFF =
+/** Hinweistexte K1, K2, K2-Zusatz: Fassung der Rechtsprüfung vom 27.10.2026 (A3, A4), wörtlich. */
+export const kollagenK1 = (pTs: number, aTs: number) =>
+  `Ihr Futter hat viel Rohprotein (${n0(pTs)} % der Trockenmasse) und zugleich viel Rohasche (${n0(aTs)} %). Das **kann** darauf hindeuten, dass ein Teil des Eiweißes aus Knochen oder Knorpel stammt. Hohe Asche kann aber auch von zugesetzten Mineralstoffen oder von Fisch mit Gräten kommen. Die Analyse auf der Packung unterscheidet das nicht, denn „Rohprotein“ zählt jedes Eiweiß gleich. Warum das wichtig sein kann: Bindegewebe-Eiweiß (Kollagen) enthält kein Tryptophan, eine Aminosäure, die Hund und Katze mit dem Futter aufnehmen müssen. Für sich allein ist es deshalb ein unvollständiges Eiweiß (Paul et al. 2019). In Versuchen an Küken und Hähnen sank in Fleischknochenmehl der Anteil fast aller essenziellen Aminosäuren am Rohprotein, je mehr Asche es enthielt (Shirley & Parsons 2001). Im fertigen Futter gleicht anderes Eiweiß das oft aus. Das ist eine Schätzung nach den Nährwerten, keine Aussage über die Zutaten. **Was Sie tun können:** Schauen Sie, ob in der Zutatenliste Fleisch oder Innereien mit Prozentangabe vorne stehen, und tragen Sie die ersten Zutaten oben ein. Dann wird der Hinweis genauer.`;
+export const KOLLAGEN_MEHL_SATZ =
+  "In Versuchen an Küken und Hähnen hatten ausgeschmolzene Tiermehle meist eine geringere Proteinqualität als rohe, gefriergetrocknete Nebenprodukte wie Lunge oder Leber (Cramer et al. 2007).";
+export const kollagenK2 = (treffer: string, mehl: boolean) =>
+  `In den ersten fünf Zutaten, die Sie eingegeben haben, steht „${treffer}“. Solche Bestandteile können viel Bindegewebe-Eiweiß (Kollagen) liefern. Kollagen enthält kein Tryptophan und ist für sich allein ein unvollständiges Eiweiß (Paul et al. 2019). ${mehl ? `${KOLLAGEN_MEHL_SATZ} ` : ""}Im fertigen Futter wird das oft durch anderes Eiweiß ausgeglichen. Wie groß der Anteil ist, verrät die Zutatenliste nicht. **Wenn Sie sichergehen möchten:** Achten Sie auf Futter, die Fleisch oder Innereien mit Prozentangabe an erster Stelle nennen.`;
+export const KOLLAGEN_K2_ZUSATZ =
   "„Tierische Nebenerzeugnisse“ ist ein Sammelbegriff. Er kann wertvolle Innereien wie Leber oder Herz ebenso umfassen wie Haut, Knorpel oder Sehnen. Welcher Anteil es ist, verrät die Deklaration nicht.";
-export const KOLLAGEN_QUELLEN_ZEILE = "Quellen: Paul et al. 2019; Shirley & Parsons 2001; Cramer et al. 2007; Kazimierska et al. 2020.";
+/** Sichtbare Abzugszeilen (A5), nur bei Abzug > 0. */
+export const kollagenAbzugStufe1 = (n: number) => `−${n} Punkte: Hinweis zur Proteinqualität (Schätzung nach den Nährwerten)`;
+export const kollagenAbzugStufe2 = (n: number, treffer: string) => `−${n} Punkte: ${treffer} in den ersten fünf Zutaten (Ihre Angabe)`;
+export const untergrenzeGrund = (fettProzent: number) =>
+  `Alle FEDIAF-Mindestwerte sind erfüllt. Die Energie kommt aber zu einem großen Teil aus Fett (${n0(fettProzent)} %), deshalb nur „ausreichend“.`;
 export const taurinFehlt =
   "Taurin ist für Katzen lebensnotwendig. Auf der Packung steht meist nur die zugesetzte Menge. Ohne Angabe prüfen wir es nicht.";
 export const taurinText = (ts: number, min: number, ok: boolean) =>
@@ -106,4 +111,11 @@ export const NUR_NAEHRWERTE =
   "Diese Note bewertet nur die Nährwerte, die Sie eingegeben haben. Zutaten, Rohstoffqualität und Zusatzstoffe kann ein Rechner nicht prüfen. Dafür gibt es unsere Tests.";
 export const NICHT_GEZEIGT_VORN =
   "Woher das Protein stammt, wie viel Fleisch drin ist, welche Zusatzstoffe zugesetzt wurden und wie die Rohstoffe verarbeitet sind, steht nicht in den Analysewerten. Das prüfen wir in unseren";
+/** A6 Pflichtsatz zur Gewichtung. Der letzte Satz gilt nur bei aktiver Untergrenze (UNTERGRENZE_FEDIAF_KONFORM). */
+export const gewichtungSatz = (untergrenze: boolean = UNTERGRENZE_FEDIAF_KONFORM) =>
+  "Das Protein-Fett-Verhältnis ist unsere eigene Gewichtung. Sie orientiert sich an der Beute von Wolf und verwilderter Katze (Bosch et al. 2015; Plantinga et al. 2011). FEDIAF nennt dafür keinen Grenzwert. Hunde selbst wählen bei freier Wahl eher fettreich (Hewson-Hughes et al. 2013)."
+  + (untergrenze ? " Futter, die alle FEDIAF-Mindestwerte erfüllen, bekommen deshalb mindestens „ausreichend“." : "");
+/** A7: direkt an der Note, überall wo Score oder Notenwort erscheinen. */
+export const NOTE_ABGRENZUNG =
+  "Nährwert-Note, kein Testurteil. Unsere Tests prüfen zusätzlich Zutaten, Rohstoffqualität und Zusatzstoffe und können deshalb anders ausfallen.";
 export const GUTE_WERTE = "Gute Werte machen noch kein gutes Futter.";

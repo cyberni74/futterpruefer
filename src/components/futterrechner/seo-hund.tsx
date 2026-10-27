@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { gewichtungSatz } from "@/lib/futterrechner/texte";
 import { Infografik2, Infografik3, Infografik4, Infografik5, Infografik6 } from "./infografiken";
 
 const a = "font-semibold text-brand underline underline-offset-4 hover:text-brand-strong";
@@ -61,7 +62,7 @@ export function SeoHund() {
       <p>Nassfutter mit 10 % Rohprotein, 9 % Rohfett, 2,3 % Rohasche und 76 % Feuchte für einen Hund mit 20 kg. Es erfüllt alle FEDIAF-Mindestwerte, auf 1 g Fett kommen aber nur 1,11 g Protein, und 64 % der Energie stammen aus Fett. Fett macht schmackhaft und liefert viel Energie, deshalb fressen Tiere davon leicht mehr als nötig (Hewson-Hughes et al. 2013). Ergebnis: 67 Punkte, „ausreichend“.</p>
       <h2 id="so-bewerten-wir">So bewerten wir: was die Note sagt und was nicht</h2>
       <p>
-        Der Nährwert-Check vergibt bis zu 100 Punkte: Protein-Fett-Verhältnis 35, Calcium und Phosphor 20, Protein-Energieanteil 15, Protein-Minimum 10, Plausibilität 10, Fett-Minimum 5, Kohlenhydrate 5. Liegt Protein oder Fett unter 90 % des FEDIAF-Minimums, gibt es höchstens „mangelhaft“. Die Note bewertet nur die Nährwerte, die Sie eingegeben haben. Zutaten, Rohstoffqualität und Zusatzstoffe kann ein Rechner nicht prüfen. Das tun unsere <Link href="/tests" className={a}>Tests</Link> nach der 100-Punkte-<Link href="/methodik" className={a}>Methodik</Link>. Gute Werte machen noch kein gutes Futter. Ergänzungsfutter und Snacks bekommen keine Note, mehr dazu in <Link href="/blog/alleinfuttermittel-ergaenzungsfuttermittel" className={a}>Alleinfutter oder Ergänzungsfutter</Link>.
+        Der Nährwert-Check vergibt bis zu 100 Punkte: Protein-Fett-Verhältnis 35, Calcium und Phosphor 20, Protein-Energieanteil 15, Protein-Minimum 10, Plausibilität 10, Fett-Minimum 5, Kohlenhydrate 5. {gewichtungSatz()} Liegt Protein oder Fett unter 90 % des FEDIAF-Minimums, gibt es höchstens „mangelhaft“. Die Note bewertet nur die Nährwerte, die Sie eingegeben haben. Zutaten, Rohstoffqualität und Zusatzstoffe kann ein Rechner nicht prüfen. Das tun unsere <Link href="/tests" className={a}>Tests</Link> nach der 100-Punkte-<Link href="/methodik" className={a}>Methodik</Link>. Gute Werte machen noch kein gutes Futter. Ergänzungsfutter und Snacks bekommen keine Note, mehr dazu in <Link href="/blog/alleinfuttermittel-ergaenzungsfuttermittel" className={a}>Alleinfutter oder Ergänzungsfutter</Link>.
       </p>
       <Infografik6 />
     </div>

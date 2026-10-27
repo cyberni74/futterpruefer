@@ -4,6 +4,7 @@ import { Breadcrumbs } from "@/components/breadcrumbs";
 import { JsonLd } from "@/components/json-ld";
 import { FaqListe, QuellenUndAutor } from "@/components/futterrechner/faq-quellen";
 import { Infografik6 } from "@/components/futterrechner/infografiken";
+import { gewichtungSatz } from "@/lib/futterrechner/texte";
 import { futterrechnerMetadata } from "@/lib/futterrechner/seite";
 import { FAQ_HUB, META, futterrechnerJsonLd } from "@/lib/futterrechner/seo";
 
@@ -54,7 +55,17 @@ export default function FutterrechnerHub() {
         </p>
         <h2 id="rechenbasis">Unsere Rechenbasis</h2>
         <p>
-          Grundlage sind die FEDIAF Nutritional Guidelines (September 2025) und das Energieverfahren des NRC (2006). Eigene Festlegungen sind benannt: der Kastriert-Faktor × 0,9 (abgeleitet aus AAHA 2021), die Spanne von ±10 %, das Rohasche-Band von 3 bis 12 % der Trockenmasse, die Bänder für das Protein-Fett-Verhältnis und die Kohlenhydrate (NfE) sowie die Kollagen-Heuristik (Schätzung bei viel Protein und viel Rohasche). Alles wird in Ihrem Browser berechnet. Es gibt keinen Server-Aufruf mit Ihren Werten und keine Datenbank. Die Einzelheiten stehen auf den Seiten für <Link href="/futterrechner/hund" className={a}>Hundefutter</Link> und <Link href="/futterrechner/katze" className={a}>Katzenfutter</Link>.
+          Grundlage sind die FEDIAF Nutritional Guidelines (September 2025) und das Energieverfahren des NRC (2006). Eigene Festlegungen sind benannt: der Kastriert-Faktor × 0,9 (abgeleitet aus AAHA 2021), die Spanne von ±10 %, das Rohasche-Band von 3 bis 12 % der Trockenmasse, die Bänder für das Protein-Fett-Verhältnis und die Kohlenhydrate (NfE) sowie die Kollagen-Heuristik (Schätzung bei viel Protein und viel Rohasche).</p>
+        <h3 id="gewichtung">So gewichten wir</h3>
+        <p>
+          Das Protein-Fett-Verhältnis, der Protein-Energieanteil, die FEDIAF-Mindestwerte, Calcium und Phosphor, Taurin (nur Katze), Kohlenhydrate und die Plausibilität Ihrer Angaben fließen mit festen Höchstpunkten in die Note ein; die Summe wird auf 100 umgerechnet. {gewichtungSatz()}
+        </p>
+        <h3 id="kollagen-begriffe">Suchbegriffe der Kollagen-Heuristik</h3>
+        <p>
+          Haben Sie die ersten Zutaten eingetragen, suchen wir in den ersten fünf nach diesen Begriffen: Kollagen, Gelatine, Knorpel, Haut, Häute, Schwarte, Federn, Federmehl, Federhydrolysat, Sehne, Luftröhre, Grieben, Knochenmehl, Tiermehl und Schlachtabfälle. Die Sammelbegriffe „Nebenerzeugnisse“ und „hydrolysierte Tierproteine“ lösen nur einen Hinweis aus, keinen Punktabzug.
+        </p>
+        <p>
+          Alles wird in Ihrem Browser berechnet. Es gibt keinen Server-Aufruf mit Ihren Werten und keine Datenbank. Die Einzelheiten stehen auf den Seiten für <Link href="/futterrechner/hund" className={a}>Hundefutter</Link> und <Link href="/futterrechner/katze" className={a}>Katzenfutter</Link>.
         </p>
         <Infografik6 />
       </div>
