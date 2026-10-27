@@ -173,9 +173,10 @@ export default function MethodikPage() {
         <p>Beispiel: 10 % Rohprotein bei 80 % Feuchtigkeit ergeben 10 ÷ 20 × 100 = 50 % Rohprotein in der Trockensubstanz. Diese Umrechnung zeigen wir auf jeder Testseite automatisch, sobald die Feuchtigkeit angegeben ist. Fehlt sie, weisen wir darauf hin.</p>
 
         <h2 id="werbeaussagen">Der Werbeaussagen-Check</h2>
-        <p>Aussagen wie „stärkt das Immunsystem“, „natürlich“ oder „für gesunde Gelenke“ klingen nach Information, sind aber oft Marketing. Im Werbeaussagen-Check stellen wir jede Aussage des Herstellers der Bewertung gegenüber. Wir unterscheiden drei Stufen:</p>
+        <p>Aussagen wie „stärkt das Immunsystem“, „natürlich“ oder „für gesunde Gelenke“ klingen nach Information, sind aber oft Marketing. Im Werbeaussagen-Check stellen wir jede Aussage des Herstellers der Bewertung gegenüber. Wir unterscheiden vier Stufen:</p>
         <ul>
           <li><strong className="text-good">Ohne Einwand:</strong> sachlich richtig oder eine erkennbare Anpreisung ohne irreführenden Gehalt.</li>
+          <li><strong className="text-muted">Unbelegt:</strong> allgemeine Anpreisung ohne prüfbaren Inhalt oder ein vom Hersteller erklärter, aber nicht belegter Begriff. Wir können die Aussage weder bestätigen noch widerlegen.</li>
           <li><strong className="text-mid">Fragwürdig:</strong> nicht ohne Weiteres nachprüfbar oder unscharf, zum Beispiel ein undefinierter Begriff oder fehlende Mengenangaben.</li>
           <li><strong className="text-bad">Halten wir für irreführend:</strong> nach unserer Einschätzung nicht mit dem Kennzeichnungsrecht oder dem Wettbewerbsrecht vereinbar, zum Beispiel krankheitsbezogene Versprechen bei einem Futtermittel.</li>
         </ul>
