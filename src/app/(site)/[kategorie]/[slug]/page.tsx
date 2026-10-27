@@ -35,7 +35,7 @@ import { NewsletterBox } from "@/components/newsletter-box";
 import { WishBox } from "@/components/wish-box";
 import { Disclosure } from "@/components/disclosure";
 import { JsonLd } from "@/components/json-ld";
-import { directAnswer, keywordName, kurzGesagt, renameBodyFazit, reviewFaq, seoFazitHeading, type ReviewSeoInput } from "@/lib/review-seo";
+import { directAnswer, keywordName, kurzGesagt, priceSourceFromArticle, renameBodyFazit, reviewFaq, seoFazitHeading, type ReviewSeoInput } from "@/lib/review-seo";
 import { comparisonForReview, isInComparison } from "@/lib/comparison-links";
 import { reviewH1 } from "@/lib/review-extra-faq";
 import { faqPageJsonLd } from "@/lib/faq-schema";
@@ -171,7 +171,7 @@ export default async function ReviewPage({ params }: PageProps<"/[kategorie]/[sl
   const gallery = (r.gallery ?? []).filter(Boolean);
   const seoInput: ReviewSeoInput = {
     slug: r.slug, name: keywordName(r.keyword, r.brand, name), totalScore: r.totalScore, testedAt, verdict: r.verdict, pros: r.pros, cons: consWithClaims(r.cons, claims), claims,
-    price: r.price, packageSize: r.packageSize, pricePerKg: r.pricePerKg, pricePerDay: r.pricePerDay, priceDate: r.priceDate,
+    price: r.price, packageSize: r.packageSize, pricePerKg: r.pricePerKg, pricePerDay: r.pricePerDay, priceDate: r.priceDate, priceSource: priceSourceFromArticle(r.bodyHtml),
     composition: r.composition, ergaenzung: Boolean(efResult),
   };
   const moisture = analysis.find((a) => /feucht|wasser/i.test(a.name))?.value ?? null;
@@ -353,7 +353,7 @@ export default async function ReviewPage({ params }: PageProps<"/[kategorie]/[sl
               )}
               {(r.price != null || r.pricePerKg != null || r.pricePerDay != null) && (
                 <Section id="preis" title={`Preis${r.priceClass ? ` · Preisklasse ${PRICE_CLASS_LABEL[r.priceClass]}` : ""}`}>
-                  <PriceBlock price={r.price} packageSize={r.packageSize} pricePerKg={r.pricePerKg} pricePerDay={r.pricePerDay} priceDate={r.priceDate} />
+                  <PriceBlock price={r.price} packageSize={r.packageSize} pricePerKg={r.pricePerKg} pricePerDay={r.pricePerDay} priceDate={r.priceDate} priceSource={seoInput.priceSource} />
                 </Section>
               )}
             </section>

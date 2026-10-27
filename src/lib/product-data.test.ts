@@ -95,6 +95,20 @@ describe("Zusammensetzung", () => {
     expect(splitComposition(null)).toEqual([]);
     expect(splitComposition(" , ,")).toEqual([]);
   });
+  it("lässt Dezimalkommas in Zusatzstoffen ganz", () => {
+    expect(splitComposition("Vitamin E 150 mg, Vitamin C 245 mg; Jod 2,5 mg, Selen 0,05 mg.")).toEqual([
+      "Vitamin E 150 mg",
+      "Vitamin C 245 mg",
+      "Jod 2,5 mg",
+      "Selen 0,05 mg",
+    ]);
+    expect(splitComposition("Jod 2, 5 mg; Selen 0;05 mg")).toEqual(["Jod 2, 5 mg", "Selen 0;05 mg"]);
+    expect(splitComposition("Meeres-Zooplankton (Krill) (2,5 %); Fischmehl (2,5 %)")).toEqual([
+      "Meeres-Zooplankton (Krill) (2,5 %)",
+      "Fischmehl (2,5 %)",
+    ]);
+    expect(splitComposition("72,5 % Rind, Huhn")).toEqual(["72,5 % Rind", "Huhn"]);
+  });
   it("findet Lexikon-Einträge als ganze Wörter, längster gewinnt", () => {
     const lex: LexRef[] = [
       { slug: "zucker", name: "Zucker", synonyms: [], concern: "BEDENKLICH", shortDescription: "" },

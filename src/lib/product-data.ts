@@ -106,16 +106,27 @@ export function dryMatter(rows: AnalysisRow[]): AnalysisRow[] | null {
 }
 
 // ---------- Zusammensetzung ----------
-/** Teilt die Zusammensetzung an Kommas/Semikolons außerhalb von Klammern. */
+/** Komma oder Semikolon zwischen zwei Ziffern (auch „2, 5“) ist ein Dezimalkomma, kein Listentrenner. */
+function betweenDigits(text: string, index: number): boolean {
+  const prev = text[index - 1];
+  let nextIndex = index + 1;
+  while (text[nextIndex] === " ") nextIndex++;
+  const next = text[nextIndex];
+  return prev != null && next != null && /\d/.test(prev) && /\d/.test(next);
+}
+
+/** Teilt Zutaten- und Zusatzstofflisten an Kommas/Semikolons außerhalb von Klammern. */
 export function splitComposition(text: string | null | undefined): string[] {
   if (!text) return [];
+  const normalized = text.replace(/\s+/g, " ");
   const out: string[] = [];
   let depth = 0;
   let cur = "";
-  for (const ch of text.replace(/\s+/g, " ")) {
+  for (let i = 0; i < normalized.length; i++) {
+    const ch = normalized[i];
     if (ch === "(" || ch === "[") depth++;
     if ((ch === ")" || ch === "]") && depth > 0) depth--;
-    if ((ch === "," || ch === ";") && depth === 0) {
+    if (depth === 0 && (ch === "," || ch === ";") && !betweenDigits(normalized, i)) {
       out.push(cur);
       cur = "";
     } else cur += ch;

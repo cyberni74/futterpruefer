@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { directAnswer, keywordName, kurzGesagt, renameBodyFazit, reviewFaq, seoFazitHeading, withoutLeadingScore } from "./review-seo";
+import { directAnswer, keywordName, kurzGesagt, priceCite, priceSourceFromArticle, renameBodyFazit, reviewFaq, seoFazitHeading, withoutLeadingScore } from "./review-seo";
 import { comparisonForPost, comparisonForReview, isInComparison } from "./comparison-links";
 import { faqPageJsonLd } from "./faq-schema";
 
@@ -73,6 +73,31 @@ describe("review-seo", () => {
     const faq = reviewFaq({ ...base, totalScore: 22, verdict: "22 von 100 Punkten, Rot (nicht empfehlenswert). Pluspunkt: Prozente." });
     expect(faq[0].answer.match(/22 von 100 Punkten/g)).toHaveLength(1);
     expect(faq[0].answer).toContain("Pluspunkt: Prozente.");
+  });
+  it("nennt die Preisquelle nur, wenn sie vorliegt", () => {
+    expect(priceCite("Amazon", "23.10.2026")).toBe("Preis bei Amazon, Stand 23.10.2026");
+    expect(priceCite("Amazon", "")).toBe("Preis bei Amazon");
+    expect(priceCite("", "23.10.2026")).toBe("Preisstand 23.10.2026");
+    expect(priceCite("", "")).toBe("");
+    const withSource = kurzGesagt({ ...base, priceSource: "Amazon" }).join(" ");
+    expect(withSource).toContain("Preis bei Amazon, Stand 23.10.2026");
+    expect(kurzGesagt(base).join(" ")).toContain("(Preisstand 23.10.2026)");
+    expect(kurzGesagt(base).join(" ")).not.toContain("Preis bei");
+    const faq = reviewFaq({ ...base, priceSource: "Hersteller-Shop" }).find((f) => f.question.startsWith("Was kostet"));
+    expect(faq?.answer).toContain("Preis bei Hersteller-Shop, Stand 23.10.2026");
+    expect(faq?.answer).toContain("Preise können je nach Händler abweichen.");
+  });
+  it("liest die Preisquelle nur aus einer ausdrücklichen Preisangabe", () => {
+    expect(priceSourceFromArticle("<p>Im Hersteller-Shop kostet die 300-g-Packung 5,19 €.</p>")).toBe("Hersteller-Shop");
+    expect(priceSourceFromArticle("<p>Bei Fressnapf kostet der Sack 67,49 €.</p>")).toBe("Fressnapf");
+    expect(priceSourceFromArticle("<p>Bei zooplus kostet die Dose 1,69 €.</p>")).toBe("zooplus");
+    expect(priceSourceFromArticle("<p>Auf happydog.at kostet die Packung 2,63 €.</p>")).toBe("happydog.at");
+    expect(priceSourceFromArticle("<p>Amazon nannte am 17.10.2026 14,75 Euro für 4 kg.</p>")).toBe("Amazon");
+    expect(priceSourceFromArticle("<li>Amazon-Preis am 17.10.2026: 14,75 Euro für 4 kg.</li>")).toBe("Amazon");
+    expect(priceSourceFromArticle('<p><a href="https://www.amazon.de/dp/B000">bei Amazon ansehen</a></p>')).toBeNull();
+    expect(priceSourceFromArticle("<p>Die Packung kostet laut Shop 2,79 €.</p>")).toBeNull();
+    expect(priceSourceFromArticle("<p>Amazon zeigte kein Angebot.</p>")).toBeNull();
+    expect(priceSourceFromArticle(null)).toBeNull();
   });
   it("ordnet Vergleichstests zu", () => {
     expect(comparisonForReview({ title: "Premium Lachsöl", categorySlug: "ergaenzungsfuttermittel-hund" })?.slug).toBe("lachsoel-test-hund-oktober-2026");

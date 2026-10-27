@@ -59,6 +59,8 @@ export type ReviewSeoInput = {
   pricePerKg?: unknown;
   pricePerDay?: unknown;
   priceDate?: Date | null;
+  /** Shop oder Seite, von der der Preis stammt. Leer = keine Quelle nennen. */
+  priceSource?: string | null;
   composition?: string | null;
   ergaenzung: boolean;
 };
@@ -72,6 +74,35 @@ export function directAnswer(r: ReviewSeoInput): string {
   return `Wie schneidet ${r.name} im Test ab? Nach unserem Bewertungsschema: ${lowerFirst(RATING_LABEL[rating])}. ${r.name} erreicht im Test${d ? ` vom ${d}` : ""} ${r.totalScore} von 100 Punkten, Ampel ${AMPEL_WORD[rating]}.`;
 }
 
+/**
+ * Preisquelle nur aus übergebenen Daten.
+ * Quelle und Datum: „Preis bei Amazon, Stand 23.10.2026“.
+ * Nur Quelle: „Preis bei Amazon“. Nur Datum: „Preisstand 23.10.2026“. Sonst leer.
+ */
+export function priceCite(source: string | null | undefined, date: string | null | undefined): string {
+  const src = source?.trim() ?? "";
+  const d = date?.trim() ?? "";
+  if (src && d) return `Preis bei ${src}, Stand ${d}`;
+  if (src) return `Preis bei ${src}`;
+  if (d) return `Preisstand ${d}`;
+  return "";
+}
+
+/**
+ * Liest eine ausdrücklich genannte Preisquelle aus dem Testtext.
+ * Affiliate-Buttons und bloße Amazon-Erwähnungen zählen nicht.
+ */
+export function priceSourceFromArticle(html: string | null | undefined): string | null {
+  const text = (html ?? "").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ");
+  const bisPreis = "(?:(?!\\.\\s)[\\s\\S]){0,180}?(?:€|Euro)";
+  const match = new RegExp(`Im Hersteller-Shop kostet|Bei ([A-Za-zÄÖÜäöüß][\\p{L}\\d.&-]{1,40}) kostet|Auf ([a-z0-9][a-z0-9.-]*\\.[a-z]{2,}) kostet|Amazon nannte\\b${bisPreis}|Amazon-Preis\\b${bisPreis}`, "iu").exec(text);
+  if (!match) return null;
+  if (match[1]) return match[1];
+  if (match[2]) return match[2];
+  if (/^Im Hersteller-Shop/i.test(match[0])) return "Hersteller-Shop";
+  return "Amazon";
+}
+
 function priceText(r: ReviewSeoInput): string {
   const p = num(r.price), kg = num(r.pricePerKg), day = num(r.pricePerDay);
   const parts: string[] = [];
@@ -79,8 +110,8 @@ function priceText(r: ReviewSeoInput): string {
   if (kg != null) parts.push(`${eur(kg)} pro Kilogramm`);
   if (day != null) parts.push(`${eur(day)} pro Tagesration`);
   if (!parts.length) return "";
-  const d = dayDate(r.priceDate);
-  return `${parts.join(", ")}${d ? ` (Preisstand ${d})` : ""}`;
+  const cite = priceCite(r.priceSource, dayDate(r.priceDate));
+  return `${parts.join(", ")}${cite ? ` (${cite})` : ""}`;
 }
 
 export function kurzGesagt(r: ReviewSeoInput): string[] {
