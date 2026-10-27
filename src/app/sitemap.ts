@@ -30,7 +30,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       ...(entry.changeFrequency ? { changeFrequency: entry.changeFrequency } : {}),
       priority: entry.priority,
     }));
-  } catch {
+  } catch (error) {
+    // Rückfall auf statische Seiten, aber nicht still: in den Vercel-Logs sichtbar machen
+    console.error("sitemap: Datenbankabfrage fehlgeschlagen, es werden nur statische Seiten ausgeliefert", error);
     return sitemapEntries({ categories: [], reviews: [], posts: [], lexikon: [], glossary: [] }).map((entry) => ({
       url: absoluteUrl(entry.path),
       changeFrequency: entry.changeFrequency,
