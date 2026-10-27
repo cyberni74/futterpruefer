@@ -33,13 +33,14 @@ export function ReadAloud({ targetId }: { targetId: string }) {
     setState("playing");
   };
 
-  const btn = "inline-flex min-h-11 items-center gap-2 rounded-full border border-border bg-surface px-4 text-sm font-semibold hover:bg-bg-soft";
+  const btn = "inline-flex min-h-11 items-center gap-2 rounded-full bg-accent px-5 text-sm font-bold text-white hover:bg-accent-strong focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-[var(--ring)] dark:text-black";
+  const icon = "size-4 shrink-0 text-current";
   return (
     <div className="flex gap-2">
-      {state === "idle" && <button type="button" onClick={start} className={btn}><Play className="size-4" aria-hidden />Vorlesen</button>}
-      {state === "playing" && <button type="button" onClick={() => { window.speechSynthesis.pause(); setState("paused"); }} className={btn}><Pause className="size-4" aria-hidden />Pause</button>}
-      {state === "paused" && <button type="button" onClick={() => { window.speechSynthesis.resume(); setState("playing"); }} className={btn}><Play className="size-4" aria-hidden />Weiter</button>}
-      {state !== "idle" && <button type="button" onClick={() => { window.speechSynthesis.cancel(); setState("idle"); }} className={btn} aria-label="Vorlesen beenden"><Square className="size-4" aria-hidden />Stopp</button>}
+      {state === "idle" && <button type="button" onClick={start} className={btn}><Play className={icon} aria-hidden />Vorlesen</button>}
+      {state === "playing" && <button type="button" onClick={() => { window.speechSynthesis.pause(); setState("paused"); }} className={btn}><Pause className={icon} aria-hidden />Pause</button>}
+      {state === "paused" && <button type="button" onClick={() => { window.speechSynthesis.resume(); setState("playing"); }} className={btn}><Play className={icon} aria-hidden />Weiter</button>}
+      {state !== "idle" && <button type="button" onClick={() => { window.speechSynthesis.cancel(); setState("idle"); }} className={btn} aria-label="Vorlesen beenden"><Square className={icon} aria-hidden />Stopp</button>}
     </div>
   );
 }
