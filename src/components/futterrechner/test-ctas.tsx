@@ -13,7 +13,7 @@ export function TestCtas({ tests, art, futterart }: { tests: TestCta[]; art: "hu
           <p className="mt-1 text-sm text-muted">Unsere Tests mit Grün oder Gelb, {wort}. Die Note des Rechners ersetzt kein Testergebnis.</p>
           <ul className="mt-3 grid gap-3 sm:grid-cols-3 lg:grid-cols-1">
             {tests.map((t) => (
-              <li key={t.id}><ReviewCard review={t} variant="tile" /></li>
+              <li key={t.id}><ReviewCard review={t} variant="tile" eager imageSizes="(min-width:1024px) 360px, (min-width:640px) 30vw, 85vw" /></li>
             ))}
           </ul>
         </>
