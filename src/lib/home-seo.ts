@@ -142,7 +142,7 @@ export const HOME_FAQ: readonly HomeFaq[] = [
   },
   {
     q: "Was bedeuten die Punkte und Farben?",
-    a: "Ab 80 Punkten ist ein Futter grün und empfehlenswert, von 60 bis 79 Punkten gelb (mit Abstrichen), unter 60 Punkten rot (nicht empfehlenswert). Erreicht ein Produkt bei „Schadstoffe & Bedenkliches“ weniger als die Hälfte der Punkte, erscheint zusätzlich ein rotes Warnsignal.",
+    a: "Ab 80 Punkten ist ein Futter grün und empfehlenswert, von 60 bis 79 Punkten gelb (mit Abstrichen), unter 60 Punkten rot (keine Empfehlung). Erreicht ein Produkt bei „Schadstoffe & Bedenkliches“ weniger als die Hälfte der Punkte, erscheint zusätzlich ein rotes Warnsignal.",
     links: [["Ampel und Warnsignal erklärt", "/methodik"]],
   },
   {

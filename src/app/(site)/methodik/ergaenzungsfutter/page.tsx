@@ -394,7 +394,7 @@ export default function ErgaenzungsfutterMethodikPage() {
           <li>Sicherheit mittel: max. 59 + Warnsignal</li>
           <li>Sicherheit schwer: max. 39 + Warnsignal</li>
         </ul>
-        <p><strong className="text-good">Grün</strong> ab 80 (empfehlenswert) · <strong className="text-mid">Gelb</strong> 60–79 (mit Abstrichen) · <strong className="text-bad">Rot</strong> unter 60 (nicht empfehlenswert). Auch bei roter Ampel verlinken wir die Amazon-Produktseite; das ist keine Kaufempfehlung.</p>
+        <p><strong className="text-good">Grün</strong> ab 80 (empfehlenswert) · <strong className="text-mid">Gelb</strong> 60–79 (mit Abstrichen) · <strong className="text-bad">Rot</strong> unter 60 (keine Empfehlung). Auch bei roter Ampel verlinken wir die Amazon-Produktseite; das ist keine Kaufempfehlung.</p>
 
         <h2 id="faq">Häufige Fragen</h2>
         {ERGAENZUNG_FAQ.map((item) => (

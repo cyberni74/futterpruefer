@@ -2,7 +2,7 @@ import { readFileSync } from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { suggestedDeclarationDeduction } from "./product-data";
-import { CRITERIA, HARMFUL_FAIL_RATIO, PUBLISHED_CRITERIA, RATING_THRESHOLDS } from "./scoring";
+import { CRITERIA, HARMFUL_FAIL_RATIO, PUBLISHED_CRITERIA, RATING_LABEL, RATING_THRESHOLDS } from "./scoring";
 import { FOOTER_CLAIM, SITE } from "./site";
 import { HOME_DESCRIPTION, HOME_META_DESCRIPTION, HOME_FAQ, HOME_GUIDES, HOME_H1, INTRO, METHODIK_NOTE, OG_DESCRIPTION, homeJsonLd, homeTitle, introPlain, linkedAnswer } from "./home-seo";
 
@@ -59,7 +59,9 @@ describe("Startseiten-Text", () => {
     expect(intro).toContain(`${harmful.label} (${harmful.max}; bewertet anhand der deklarierten Zutaten und Zusatzstoffe)`);
     expect(HOME_FAQ[1].a).toContain(`Ab ${RATING_THRESHOLDS.gut} Punkten`);
     expect(HOME_FAQ[1].a).toContain(`von ${RATING_THRESHOLDS.mittel} bis ${RATING_THRESHOLDS.gut - 1} Punkten`);
-    expect(HOME_FAQ[1].a).toContain(`unter ${RATING_THRESHOLDS.mittel} Punkten`);
+    expect(HOME_FAQ[1].a).toContain(`unter ${RATING_THRESHOLDS.mittel} Punkten rot (keine Empfehlung)`);
+    expect(HOME_FAQ[1].a).not.toContain("nicht empfehlenswert");
+    expect(RATING_LABEL.schlecht).toBe("Rot – keine Empfehlung");
     const storedHarmful = CRITERIA.find((c) => c.key === "scoreHarmful")!;
     expect(storedHarmful.max * HARMFUL_FAIL_RATIO).toBe(10);
     expect(HOME_FAQ[1].a).toContain("weniger als die Hälfte");

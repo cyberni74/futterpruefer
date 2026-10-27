@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { renderToStaticMarkup } from "react-dom/server";
 import MethodikPage from "./page";
 import ManufacturerPage from "../fuer-hersteller/page";
-import { METHODOLOGY_CHANGELOG, METHODOLOGY_CHANGELOG_ABGRENZUNG, METHODOLOGY_CHANGELOG_ERGAENZUNG } from "@/lib/scoring";
+import { METHODOLOGY_CHANGELOG, METHODOLOGY_CHANGELOG_ABGRENZUNG, METHODOLOGY_CHANGELOG_ERGAENZUNG, RATING_LABEL, RATING_THRESHOLDS } from "@/lib/scoring";
 
 describe("Methodik Transparenz", () => {
   const html = renderToStaticMarkup(<MethodikPage />);
@@ -60,6 +60,12 @@ describe("Methodik Transparenz", () => {
   it("verwendet keine Einstufung „zulässig“/„unzulässig“ (Rechtsprüfung 23.10.)", () => {
     expect(html).not.toMatch(/zuläss/i);
     expect(html).toContain("Aussagen, die wir für irreführend halten, führen zu Abzügen");
+  });
+
+  it("nennt die rote Ampel „keine Empfehlung“, passend zum Notenwort", () => {
+    expect(RATING_LABEL.schlecht).toBe("Rot – keine Empfehlung");
+    expect(html).toContain(`<strong class="text-bad">Rot (unter ${RATING_THRESHOLDS.mittel} Punkten):</strong> keine Empfehlung`);
+    expect(html).not.toContain("nicht empfehlenswert");
   });
 
   it("nennt den optionalen Satz für Hersteller", () => {
