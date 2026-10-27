@@ -106,9 +106,11 @@ export default function MethodikPage() {
             </tbody>
           </table>
         </div>
-        <p className="mt-3 text-sm text-muted">Stand {METHODOLOGY_STAND}. {METHODOLOGY_CHANGELOG_ERGAENZUNG}</p>
+        <p className="mt-3 text-sm text-muted">{METHODOLOGY_CHANGELOG[0]}</p>
+        <p className="mt-2 text-sm text-muted">{METHODOLOGY_CHANGELOG[1]}</p>
+        <p className="mt-2 text-sm text-muted">Stand {METHODOLOGY_STAND}. {METHODOLOGY_CHANGELOG_ERGAENZUNG}</p>
         <p className="mt-2 text-sm text-muted">{METHODOLOGY_CHANGELOG_ABGRENZUNG}</p>
-        <p className="mt-2 text-sm text-muted">{METHODOLOGY_CHANGELOG}</p>
+        <p className="mt-2 text-sm text-muted">{METHODOLOGY_CHANGELOG[2]}</p>
 
         <div className="mt-8 space-y-5">
           {PUBLISHED_CRITERIA.filter((c): c is typeof c & { key: CriterionKey } => c.key in DETAIL).map((c, i) => {
