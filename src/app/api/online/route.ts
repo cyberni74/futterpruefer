@@ -24,7 +24,8 @@ export async function POST(request: Request) {
   try {
     const jetzt = Date.now();
     await prisma.liveVisitor.upsert({ where: { id }, create: { id }, update: { seenAt: new Date(jetzt) } });
-    if (Math.random() < 0.05) await prisma.liveVisitor.deleteMany({ where: { seenAt: { lt: new Date(jetzt - ONLINE_AUFBEWAHRUNG_MS) } } });
+    // bei jedem Ping aufräumen, damit nichts länger als ONLINE_AUFBEWAHRUNG_MS (10 Minuten) gespeichert bleibt
+    await prisma.liveVisitor.deleteMany({ where: { seenAt: { lt: new Date(jetzt - ONLINE_AUFBEWAHRUNG_MS) } } });
     const count = await prisma.liveVisitor.count({ where: { seenAt: { gte: new Date(jetzt - ONLINE_FENSTER_MS) } } });
     return NextResponse.json({ count }, { headers: KEIN_CACHE });
   } catch (error) {

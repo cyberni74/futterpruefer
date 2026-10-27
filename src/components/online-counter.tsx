@@ -29,14 +29,12 @@ export function OnlineCounter() {
     document.addEventListener("visibilitychange", sichtbar);
     return () => { aktiv = false; clearInterval(t); document.removeEventListener("visibilitychange", sichtbar); };
   }, []);
+  // Ohne Zahl nichts rendern: kein Leerraum unter dem Footer
+  if (count == null) return null;
   return (
-    <div className="mt-2 flex min-h-5 items-center justify-center gap-2 text-xs text-muted" aria-live="off">
-      {count != null && (
-        <>
-          <span aria-hidden className="online-dot" />
-          <span><strong className="font-semibold tabular-nums text-fg">{count}</strong> {count === 1 ? "Person" : "Personen"} gerade online</span>
-        </>
-      )}
+    <div className="mt-2 flex items-center justify-center gap-2 text-xs text-muted" aria-live="off">
+      <span aria-hidden className="online-dot" />
+      <span><strong className="font-semibold tabular-nums text-fg">{count}</strong> {count === 1 ? "Person" : "Personen"} gerade online</span>
     </div>
   );
 }

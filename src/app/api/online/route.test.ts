@@ -7,7 +7,7 @@ import { POST } from "./route";
 const req = (body: unknown, ip = "1.2.3.4") => new Request("http://x/api/online", { method: "POST", headers: { "x-forwarded-for": ip, "content-type": "application/json" }, body: typeof body === "string" ? body : JSON.stringify(body) });
 const ID = "3b241101-e2bb-4255-8caf-4136c566a962";
 
-beforeEach(() => { vi.clearAllMocks(); db.count.mockResolvedValue(18); db.upsert.mockResolvedValue({}); });
+beforeEach(() => { vi.clearAllMocks(); db.count.mockResolvedValue(18); db.upsert.mockResolvedValue({}); db.deleteMany.mockResolvedValue({ count: 0 }); });
 
 describe("POST /api/online", () => {
   it("speichert nur ID und Zeit und liefert die gezählte Zahl", async () => {
@@ -16,6 +16,13 @@ describe("POST /api/online", () => {
     expect(await r.json()).toEqual({ count: 18 });
     expect(db.upsert).toHaveBeenCalledWith({ where: { id: ID }, create: { id: ID }, update: { seenAt: expect.any(Date) } });
     expect(r.headers.get("cache-control")).toBe("no-store");
+  });
+  it("löscht bei JEDEM Ping Einträge, die älter als zehn Minuten sind", async () => {
+    for (let i = 0; i < 5; i++) await POST(req({ id: ID }, `10.1.0.${i}`));
+    expect(db.deleteMany).toHaveBeenCalledTimes(5);
+    const lt = (db.deleteMany.mock.calls[0][0] as { where: { seenAt: { lt: Date } } }).where.seenAt.lt.getTime();
+    expect(Date.now() - lt).toBeGreaterThan(599_000);
+    expect(Date.now() - lt).toBeLessThan(601_000);
   });
   it("zählt nur das Fenster der letzten 90 Sekunden", async () => {
     await POST(req({ id: ID }, "10.0.0.2"));

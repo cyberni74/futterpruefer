@@ -10,7 +10,7 @@ beforeAll(() => { (globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REAC
 afterEach(() => { act(() => root?.unmount()); host?.remove(); vi.unstubAllGlobals(); vi.useRealTimers(); });
 
 async function mount(antwort: () => Promise<Response>) {
-  const fetchMock = vi.fn((..._args: [string, RequestInit?]) => antwort());
+  const fetchMock = vi.fn<(url: string, init?: RequestInit) => Promise<Response>>(() => antwort());
   vi.stubGlobal("fetch", fetchMock);
   host = document.createElement("div");
   document.body.appendChild(host);
@@ -44,6 +44,7 @@ describe("OnlineCounter", () => {
   it("bei Fehler oder fehlender Antwort bleibt nichts sichtbar (keine erfundene Zahl)", async () => {
     const a = await mount(() => json(null, 503));
     expect(a.host.textContent).toBe("");
+    expect(a.host.innerHTML).toBe(""); // kein leeres Element, kein Leerraum unter dem Footer
     act(() => root?.unmount());
     a.host.remove();
     const b = await mount(() => Promise.reject(new Error("offline")));
