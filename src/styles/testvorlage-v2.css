@@ -293,3 +293,21 @@
 @media(min-width:640px){.tv2 .medien.zwei{grid-template-columns:1fr 1fr}}
 .tv2 .medien figure{margin:0}
 .tv2 .medien figcaption{margin-top:6px;font-size:.8125rem;color:var(--fp-text-muted)}
+
+/* Handy (unter md): HTML-Tabellen mit mindestens drei Spalten – Werbeaussagen, Nährwerte, Preise –
+   als Karten. Spaltenname aus data-label über dem Wert. Zwei-Spalten-Tabellen (.data ohne dritte Spalte)
+   und der Desktop bleiben Tabellen. Keine neue Farbe: Fläche, Rahmen und Text der Vorlage. */
+@media(max-width:767px){
+.tv2 .tbl{max-width:100%;overflow:visible}
+.tv2 table.data:not(:has(tr > :nth-child(3))){display:table;width:100%;max-width:100%;overflow:visible}
+.tv2 table.data:not(:has(tr > :nth-child(3))) td{overflow-wrap:anywhere}
+.tv2 table.data:not(:has(tr > :nth-child(3))) th{overflow-wrap:anywhere}
+.tv2 table:has(td[data-label]):has(tr > :nth-child(3)):not(:has(tr > :nth-child(5))){display:block;width:100%;max-width:100%;margin:0 0 8px;overflow:visible;height:auto;border:0}
+.tv2 table:has(td[data-label]):has(tr > :nth-child(3)):not(:has(tr > :nth-child(5))) thead{display:none}
+.tv2 table:has(td[data-label]):has(tr > :nth-child(3)):not(:has(tr > :nth-child(5))) tbody{display:block;height:auto}
+.tv2 table:has(td[data-label]):has(tr > :nth-child(3)):not(:has(tr > :nth-child(5))) tfoot{display:block;height:auto}
+.tv2 table:has(td[data-label]):has(tr > :nth-child(3)):not(:has(tr > :nth-child(5))) tr{display:block;width:auto;height:auto;min-height:0;margin:0 0 12px;padding:14px 16px;border:1px solid var(--fp-border);border-radius:var(--fp-radius-lg);background:var(--fp-surface)}
+.tv2 table:has(td[data-label]):has(tr > :nth-child(3)):not(:has(tr > :nth-child(5))) td{display:block;width:auto;max-width:none;height:auto;min-width:0;min-height:0;padding:10px 0 0;border:0;background:none;text-align:left;vertical-align:top;white-space:normal;overflow-wrap:anywhere;word-break:normal}
+.tv2 table:has(td[data-label]):has(tr > :nth-child(3)):not(:has(tr > :nth-child(5))) td:first-child{padding-top:0;font-weight:700}
+.tv2 table:has(td[data-label]):has(tr > :nth-child(3)):not(:has(tr > :nth-child(5))) td[data-label]::before{content:attr(data-label);display:block;margin:0 0 2px;font-size:.72rem;font-weight:800;letter-spacing:.04em;line-height:1.3;text-transform:uppercase;color:var(--fp-text-muted)}
+}

@@ -26,7 +26,7 @@ export function beispielDaten(kriterien: 5 | 6 = 5): { data: LayoutData; totalSc
     kriterien: liste.map(([name, punkte, max]) => ({ name, punkte, max, kurz: "Kurzbewertung im Beispiel.", begruendung: "Ausführliche Begründung im Beispiel." })),
     kapitel: [
       { titel: "Erstes Kapitel", html: "<p>Beispieltext mit <strong>Hervorhebung</strong>.</p><h3>Unterüberschrift</h3><p>Weiterer Beispieltext.</p><ul><li>Punkt A</li><li>Punkt B</li></ul>" },
-      { titel: "Zweites Kapitel", html: "<p>Noch ein Beispieltext.</p><table class=\"data\"><tr><th>Spalte</th><th>Wert</th></tr><tr><td>Zeile</td><td>00</td></tr></table>" },
+      { titel: "Zweites Kapitel", html: "<p>Noch ein Beispieltext.</p><table class=\"data\"><tr><th>Spalte</th><th>Wert</th></tr><tr><td>Zeile</td><td>00</td></tr></table><div class=\"tbl\"><table><thead><tr><th>Aussage</th><th>Quelle</th><th>Einstufung</th><th>Begründung</th></tr></thead><tbody><tr><td>Beispielaussage für die Karte</td><td>Beispielquelle</td><td>Beispiel</td><td>Beispielbegründung, lang genug für den Umbruch auf dem Handy.</td></tr></tbody></table></div>" },
     ],
     zutaten: [
       { name: "Zutat A", menge: "00 mg", funktion: "Beispiel für die Funktion.", bewertung: "Beispiel für die Bewertung." },

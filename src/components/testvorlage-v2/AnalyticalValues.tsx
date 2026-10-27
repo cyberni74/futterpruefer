@@ -10,7 +10,11 @@ export function AnalyticalValues({ werte }: { werte?: LayoutData["analysewerte"]
       <thead><tr><th scope="col">Wert</th><th scope="col">Gehalt</th>{mitHinweis && <th scope="col">Hinweis</th>}</tr></thead>
       <tbody>
         {werte.map((w) => (
-          <tr key={w.name}><td className="left-val">{w.name}</td><td>{w.wert}</td>{mitHinweis && <td className="left-val">{w.hinweis ?? ""}</td>}</tr>
+          <tr key={w.name}>
+            <td className="left-val" data-label="Wert">{w.name}</td>
+            <td data-label="Gehalt">{w.wert}</td>
+            {mitHinweis && <td className="left-val" data-label="Hinweis">{w.hinweis ?? ""}</td>}
+          </tr>
         ))}
       </tbody>
     </table>

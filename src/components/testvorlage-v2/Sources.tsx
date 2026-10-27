@@ -6,15 +6,18 @@ export const AFFILIATE_HINWEIS =
 
 export const AMAZON_CTA = "Jetzt bei Amazon entdecken*";
 
-/** Steht bei Ampel Rot direkt am Kauf-Button. Wortlaut der Redaktion, ohne Produktname. */
-export const ROT_KEINE_KAUFEMPFEHLUNG = "Unsere Bewertung: Rot; der Link ist keine Kaufempfehlung.";
+/** Bei Ampel Rot: neutraler Preis-Hinweis statt Entdecken-Formulierung. */
+export const AMAZON_CTA_ROT = "Aktuellen Preis bei Amazon ansehen*";
 
-/** Kauf-Button mit Affiliate-Hinweis. Bei Rot zusätzlich der Hinweis, dass der Link keine Kaufempfehlung ist. */
+/** Steht bei Ampel Rot direkt unter dem Kauf-Button. Wortlaut der Redaktion, ohne Produktname. */
+export const ROT_KEINE_KAUFEMPFEHLUNG = "Unsere Bewertung für dieses Produkt ist Rot; der Link ist keine Kaufempfehlung.";
+
+/** Kauf-Button mit Affiliate-Hinweis. Bei Rot andere Beschriftung und der Hinweis, dass der Link keine Kaufempfehlung ist. */
 export function AmazonKauf({ url, rot, className = "kauf" }: { url: string; rot: boolean; className?: string }) {
   const rel = isSponsoredHref(url) ? "sponsored nofollow noopener" : "nofollow noopener noreferrer";
   return (
     <div className={className}>
-      <a className="btn" href={url} target="_blank" rel={rel}>{AMAZON_CTA}</a>
+      <a className="btn" href={url} target="_blank" rel={rel}>{rot ? AMAZON_CTA_ROT : AMAZON_CTA}</a>
       {rot ? <p className="rot-hinweis">{ROT_KEINE_KAUFEMPFEHLUNG}</p> : null}
       <p className="affiliate-note">{AFFILIATE_HINWEIS}</p>
     </div>
