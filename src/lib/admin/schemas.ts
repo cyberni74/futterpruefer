@@ -178,6 +178,8 @@ export const reviewSchema = z
     authorSlug,
     publishMode,
     scheduledAt: z.string().max(30),
+    /** "" = klassisch, "TESTVORLAGE_V2" = feste Testvorlage (Inhalte in layoutData, eigene Prüfung) */
+    layout: z.string().max(40),
   })
   .superRefine((v, ctx) => {
     if (v.imageUrl && !v.imageAlt) ctx.addIssue({ code: "custom", path: ["imageAlt"], message: "Bitte einen Alt-Text für das Bild angeben." });
@@ -185,10 +187,11 @@ export const reviewSchema = z
     if (v.publishMode === "draft") return;
     if (!v.imageUrl) ctx.addIssue({ code: "custom", path: ["imageUrl"], message: "Zum Veröffentlichen bitte ein Foto der Verpackung hochladen." });
     if (!v.contentImageUrl) ctx.addIssue({ code: "custom", path: ["contentImageUrl"], message: "Zum Veröffentlichen bitte ein Foto des Futters selbst hochladen." });
-    if (v.verdict.length < 10) ctx.addIssue({ code: "custom", path: ["verdict"], message: "Zum Veröffentlichen bitte ein Fazit (1–2 Sätze) angeben." });
-    if (v.pros.length < 2) ctx.addIssue({ code: "custom", path: ["pros"], message: "Zum Veröffentlichen mindestens 2 Pro-Punkte angeben." });
-    if (v.cons.length < 2) ctx.addIssue({ code: "custom", path: ["cons"], message: "Zum Veröffentlichen mindestens 2 Contra-Punkte angeben." });
-    if (v.scoreHarmful < 10 && v.harmfulReason.length < 10)
+    const vorlage = v.layout === "TESTVORLAGE_V2";
+    if (!vorlage && v.verdict.length < 10) ctx.addIssue({ code: "custom", path: ["verdict"], message: "Zum Veröffentlichen bitte ein Fazit (1–2 Sätze) angeben." });
+    if (!vorlage && v.pros.length < 2) ctx.addIssue({ code: "custom", path: ["pros"], message: "Zum Veröffentlichen mindestens 2 Pro-Punkte angeben." });
+    if (!vorlage && v.cons.length < 2) ctx.addIssue({ code: "custom", path: ["cons"], message: "Zum Veröffentlichen mindestens 2 Contra-Punkte angeben." });
+    if (!vorlage && v.scoreHarmful < 10 && v.harmfulReason.length < 10)
       ctx.addIssue({ code: "custom", path: ["harmfulReason"], message: "Schadstoff-Kriterium unter 10 Punkten: bitte eine Kurzbegründung für den Warnhinweis angeben." });
     v.claims.forEach((c, i) => {
       if (c.rating !== "ZULAESSIG" && c.reason.length < 10)
@@ -312,6 +315,7 @@ export function reviewFormToRaw(fd: FormData) {
     authorSlug: str(fd, "authorSlug"),
     publishMode: str(fd, "publishMode"),
     scheduledAt: str(fd, "scheduledAt"),
+    layout: str(fd, "layout"),
   };
 }
 

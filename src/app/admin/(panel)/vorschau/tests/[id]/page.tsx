@@ -9,6 +9,8 @@ import { STATUS_LABEL, statusKey } from "@/lib/admin/publish";
 import { formatDateTime } from "@/lib/admin/datetime";
 import { resolveAuthor } from "@/lib/authors";
 import { PRICE_CLASS_LABEL } from "@/lib/site";
+import { TestvorlageV2, resolveLayout } from "@/components/testvorlage-v2";
+import { RATING_LABEL, ratingFor } from "@/lib/scoring";
 import { capNote, efBars, prepareErgaenzungArticle, renderStudienListe, scoreErgaenzung, studieDosisText, type EfInput } from "@/lib/ergaenzung";
 
 export const dynamic = "force-dynamic";
@@ -21,6 +23,16 @@ export default async function ReviewPreviewPage({ params }: { params: Promise<{ 
     include: { category: true, studien: { orderBy: [{ wirkstoff: { sortOrder: "asc" } }, { createdAt: "asc" }], include: { wirkstoff: true } } },
   });
   if (!r) notFound();
+  const vorlage = resolveLayout({ slug: r.slug, layout: r.layout, layoutData: r.layoutData, totalScore: r.totalScore });
+  if (vorlage) {
+    const k = statusKey(r.status, r.publishedAt);
+    return (
+      <article className="mx-auto max-w-6xl">
+        <PreviewBanner editHref={`/admin/tests/${r.id}`} note={`Testvorlage V2 · Status: ${STATUS_LABEL[k]}${k === "geplant" ? ` (${formatDateTime(r.publishedAt)})` : ""}`} />
+        <TestvorlageV2 data={vorlage} totalScore={r.totalScore} ampelLabel={RATING_LABEL[ratingFor(r.totalScore)]} kopf={<h1>{r.title}</h1>} />
+      </article>
+    );
+  }
   const efInput: EfInput | null = r.bewertungsart === "ERGAENZUNGSFUTTER" ? {
     auswahl: r.efWirkstoffAuswahl ?? 0,
     dosierung: r.efWirkstoffDosierung ?? 0,

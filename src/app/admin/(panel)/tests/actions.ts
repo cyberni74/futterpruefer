@@ -13,12 +13,32 @@ import { resolvePublish, statusKey, STATUS_LABEL } from "@/lib/admin/publish";
 import { applyRedirectPlan, contentPath, planSlugRedirect } from "@/lib/admin/redirects";
 import { fail, guard, ok, revalidateAdmin } from "@/lib/admin/guard";
 import { canonicalBrand, getBrands } from "@/lib/admin/brands";
+import type { Prisma } from "@/generated/prisma/client";
+import { TESTVORLAGE_V2, parseLayoutData, pruefeVorVeroeffentlichung, summeKriterien, type LayoutData } from "@/components/testvorlage-v2/schema";
 
 export async function saveReview(id: string | null, _prev: ActionResult | null, formData: FormData): Promise<ActionResult> {
   const denied = await guard();
   if (denied) return denied;
 
-  const parsed = reviewSchema.safeParse(reviewFormToRaw(formData));
+  const raw = reviewFormToRaw(formData);
+  // Testvorlage V2: Inhalte stehen in layoutData (JSON), nicht in den klassischen Feldern
+  const isV2 = raw.layout === TESTVORLAGE_V2;
+  let layoutData: LayoutData | null = null;
+  if (isV2) {
+    let json: unknown = null;
+    try {
+      json = JSON.parse(String(formData.get("layoutData") ?? "null"));
+    } catch {
+      return fail("Die Daten der Testvorlage sind kein gültiges JSON.", { layoutData: "Ungültiges JSON." });
+    }
+    const p = parseLayoutData(json);
+    if (!p.ok) return fail("Bitte die Daten der Testvorlage korrigieren.", { layoutData: p.error.split("; ").join("\n") });
+    layoutData = p.data;
+    raw.verdict = (layoutData.hero?.gesamturteil ?? "").slice(0, 400);
+    raw.pros = layoutData.pros ?? [];
+    raw.cons = layoutData.cons ?? [];
+  }
+  const parsed = reviewSchema.safeParse(raw);
   if (!parsed.success) return fail("Bitte die markierten Felder korrigieren.", toFieldErrors(parsed.error));
   const v = parsed.data;
 
@@ -29,9 +49,14 @@ export async function saveReview(id: string | null, _prev: ActionResult | null, 
   if (!category) return fail("Bitte eine gültige Kategorie wählen.", { categoryId: "Kategorie nicht gefunden." });
 
   const bewertungsart: "ALLEINFUTTER" | "ERGAENZUNGSFUTTER" = formData.get("bewertungsart") === "ERGAENZUNGSFUTTER" ? "ERGAENZUNGSFUTTER" : "ALLEINFUTTER";
+  const vorlageTotal = layoutData ? summeKriterien(layoutData) : 0;
+  if (layoutData && v.publishMode !== "draft") {
+    const issues = pruefeVorVeroeffentlichung(layoutData, { bewertungsart, totalScore: vorlageTotal });
+    if (issues.length) return fail("Zum Veröffentlichen fehlt noch etwas in der Testvorlage.", { layoutData: issues.map((i) => i.message).join("\n") });
+  }
   const efState = efFormFromFormData(formData);
-  const efChecked = checkEfForm(efState, category.animal === "KATZE" ? "KATZE" : "HUND", v.publishMode !== "draft");
-  if (bewertungsart === "ERGAENZUNGSFUTTER" && !efChecked.ok) return fail(efChecked.message, efChecked.fieldErrors);
+  const efChecked = isV2 ? ({ ok: false, message: "", fieldErrors: {} } as const) : checkEfForm(efState, category.animal === "KATZE" ? "KATZE" : "HUND", v.publishMode !== "draft");
+  if (!isV2 && bewertungsart === "ERGAENZUNGSFUTTER" && !efChecked.ok) return fail(efChecked.message, efChecked.fieldErrors);
   const efScores = efChecked.ok ? efChecked.scores : efInputFromForm(efState);
   const efResult = previewEf({ ...efState, ...{
     auswahl: String(efScores.auswahl),
@@ -73,10 +98,12 @@ export async function saveReview(id: string | null, _prev: ActionResult | null, 
     contentImageUrl: v.contentImageUrl || null,
     contentImageAlt: v.contentImageAlt,
     contentImageBlur: v.contentImageBlur || null,
-    ...scores,
-    totalScore: bewertungsart === "ERGAENZUNGSFUTTER" ? efResult.gesamt : totalScore(scores),
+    ...(isV2 ? {} : scores),
+    totalScore: isV2 ? vorlageTotal : bewertungsart === "ERGAENZUNGSFUTTER" ? efResult.gesamt : totalScore(scores),
     bewertungsart,
-    ...(bewertungsart === "ERGAENZUNGSFUTTER" || efChecked.ok ? {
+    layout: isV2 ? TESTVORLAGE_V2 : "",
+    ...(layoutData ? { layoutData: layoutData as unknown as Prisma.InputJsonValue } : {}),
+    ...(!isV2 && (bewertungsart === "ERGAENZUNGSFUTTER" || efChecked.ok) ? {
     methodikVersion: bewertungsart === "ERGAENZUNGSFUTTER" ? EF_METHODIK_VERSION : "",
     efWirkstoffAuswahl: efScores.auswahl,
     efWirkstoffAuswahlBegruendung: efState.auswahlBegruendung.trim(),
@@ -100,7 +127,7 @@ export async function saveReview(id: string | null, _prev: ActionResult | null, 
     efPreisTagesdosisEur: preis == null ? null : Math.round(preis * 100) / 100,
     } : {}),
     verdict: v.verdict,
-    harmfulReason: v.harmfulReason,
+    ...(isV2 ? {} : { harmfulReason: v.harmfulReason }),
     composition: v.composition,
     analysis: v.analysis,
     packageSize: v.packageSize,
@@ -112,9 +139,8 @@ export async function saveReview(id: string | null, _prev: ActionResult | null, 
     claims: v.claims,
     pros: v.pros,
     cons: v.cons,
-    bodyHtml: autolinkUrls(sanitize(v.bodyHtml)),
+    ...(isV2 ? {} : { bodyHtml: autolinkUrls(sanitize(v.bodyHtml)), conclusionHtml: autolinkUrls(sanitize(v.conclusionHtml)) }),
     teaser: v.teaser,
-    conclusionHtml: autolinkUrls(sanitize(v.conclusionHtml)),
     metaTitle: v.metaTitle,
     metaDescription: v.metaDescription,
     keywords: v.keywords,
@@ -127,7 +153,7 @@ export async function saveReview(id: string | null, _prev: ActionResult | null, 
   try {
     savedId = await prisma.$transaction(async (tx) => {
       const saved = existing ? await tx.review.update({ where: { id: existing.id }, data }) : await tx.review.create({ data });
-      if (bewertungsart === "ERGAENZUNGSFUTTER" || efChecked.ok) {
+      if (!isV2 && (bewertungsart === "ERGAENZUNGSFUTTER" || efChecked.ok)) {
       await tx.ergaenzungStudie.deleteMany({ where: { reviewId: saved.id } });
       await tx.ergaenzungWirkstoff.deleteMany({ where: { reviewId: saved.id } });
       const idByKey = new Map<string, string>();

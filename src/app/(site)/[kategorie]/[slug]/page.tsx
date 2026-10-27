@@ -41,6 +41,7 @@ import { comparisonForReview, isInComparison } from "@/lib/comparison-links";
 import { reviewH1 } from "@/lib/review-extra-faq";
 import { faqPageJsonLd } from "@/lib/faq-schema";
 import "@/styles/vergleichstest.css";
+import { resolveLayout } from "@/components/testvorlage-v2/schema";
 
 export const revalidate = 3600;
 /** Draft-Slugs stehen nicht in generateStaticParams und rendern auf der Preview on-demand. */
@@ -101,6 +102,14 @@ export default async function ReviewPage({ params }: PageProps<"/[kategorie]/[sl
   }
   // Kanonische URL erzwingen (falsche Kategorie im Pfad → 301)
   if (r.category.slug !== kategorie) permanentRedirect(reviewPath(r));
+
+  // Opt-in: TESTVORLAGE_V2 mit gültigen layoutData. Alles andere rendert wie bisher (bei ungültigen Daten mit Fehler im Log).
+  const layoutV2 = resolveLayout({ slug: r.slug, layout: r.layout, layoutData: r.layoutData, totalScore: r.totalScore });
+  if (layoutV2) {
+    // Erst hier laden: klassische Seiten bekommen weder das CSS noch den Client-Code der Vorlage
+    const { ReviewV2Article } = await import("../v2-article");
+    return <ReviewV2Article r={r} data={layoutV2} draftPreview={previewDraftsEnabled() && !isPublicReview(r)} />;
+  }
 
   const scores = Object.fromEntries(CRITERIA.map((c) => [c.key, r[c.key]])) as Scores;
   const efInput: EfInput | null = r.bewertungsart === "ERGAENZUNGSFUTTER" ? {

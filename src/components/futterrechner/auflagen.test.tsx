@@ -147,6 +147,10 @@ describe("Sperrwörter", () => {
   const dateien = [join(dir, "texte.ts"), join(dir, "fazit-texte.ts"), join(dir, "risiken-daten.ts"), join(dir, "seo.ts")];
   for (const f of readdirSync(__dirname)) if (/\.tsx?$/.test(f) && !/\.test\./.test(f)) dateien.push(join(__dirname, f));
   for (const f of readdirSync(join(__dirname, "infografiken"))) if (/\.tsx?$/.test(f)) dateien.push(join(__dirname, "infografiken", f));
+  // Testvorlage V2: sichtbare Komponenten, Beispieldaten und Admin-Maske (schema.ts enthält die Sperrliste selbst und ist ausgenommen)
+  const tv2 = join(__dirname, "../testvorlage-v2");
+  for (const f of readdirSync(tv2)) if (/\.tsx?$/.test(f) && !/\.test\./.test(f) && f !== "schema.ts") dateien.push(join(tv2, f));
+  dateien.push(join(__dirname, "../admin/testvorlage-editor.tsx"), join(__dirname, "../../styles/testvorlage-v2.css"));
   it.each(dateien.map((d) => [d.split("/src/")[1], d]))("%s", (_n, d) => {
     const s = readFileSync(d, "utf-8");
     expect(s).not.toMatch(/unzulässig|zulässig|rechtlich angreifbar|betrug/i);
