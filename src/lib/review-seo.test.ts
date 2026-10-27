@@ -88,7 +88,10 @@ describe("review-seo", () => {
     expect(kurzGesagt(base).join(" ")).not.toContain("Preis bei");
     const faq = reviewFaq({ ...base, priceSource: "Hersteller-Shop" }).find((f) => f.question.startsWith("Was kostet"));
     expect(faq?.answer).toContain("Preis im Hersteller-Shop, Stand 23.10.2026");
-    expect(faq?.answer).toContain("Preise können je nach Händler abweichen.");
+    expect(faq?.answer).toContain("laut Hersteller, Stand 23.10.2026");
+    expect(faq?.answer).not.toContain("je nach Händler");
+    const haendler = reviewFaq({ ...base, priceSource: "Fressnapf" }).find((f) => f.question.startsWith("Was kostet"));
+    expect(haendler?.answer).toContain("Preise können je nach Händler abweichen.");
     const amazonFaq = reviewFaq({ ...base, priceSource: "Amazon" }).find((f) => f.question.startsWith("Was kostet"));
     expect(amazonFaq?.answer).toContain("Preise können sich seitdem geändert haben.");
     const undatiert = { ...base, priceDate: null };

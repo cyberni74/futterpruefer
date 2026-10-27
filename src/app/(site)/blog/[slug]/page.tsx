@@ -22,18 +22,11 @@ import { WishBox } from "@/components/wish-box";
 import { BodyGauges } from "@/components/body-gauges";
 import "@/styles/vergleichstest.css";
 import { comparisonForPost } from "@/lib/comparison-links";
-import { normalizeStoredJsonLd } from "@/lib/review-schema";
+import { bodyJsonLd } from "@/lib/body-jsonld";
 import { extractFaq } from "@/lib/faq-extract";
 import { faqPageJsonLd } from "@/lib/faq-schema";
 
 export const revalidate = 3600;
-
-/**
- * Vergleichstests liegen als BlogPost vor. Ihr ItemList-JSON-LD (Reviews der Plätze) steht im bodyHtml,
- * das der Sanitizer samt <script> entfernt. Nur für diese Slugs wird es hier als geparstes JSON
- * ausgegeben; Article-Knoten entfallen, weil die Seite ihr eigenes Article-JSON-LD rendert.
- */
-const BODY_JSON_LD_SLUGS = new Set(["nassfutter-test-rind-hund-oktober-2026", "gelenk-test-hund-oktober-2026", "lachsoel-test-hund-oktober-2026", "algenoel-test-hund-oktober-2026"]);
 
 /** Beiträge, bei denen der sichtbare Abschnitt „Häufige Fragen“ als FAQPage-JSON-LD ausgegeben wird (Text kommt aus dem Beitrag selbst). */
 const BODY_FAQ_SLUGS = new Set([
@@ -44,21 +37,6 @@ const BODY_FAQ_SLUGS = new Set([
   "hund-po-wund-pflegebalsam-selber-machen",
   "bestes-hundefutter-zusammensetzung",
 ]);
-
-function bodyJsonLd(slug: string, html: string | null | undefined): Record<string, unknown> | null {
-  if (!html || !BODY_JSON_LD_SLUGS.has(slug)) return null;
-  const nodes: Record<string, unknown>[] = [];
-  for (const m of html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)) {
-    try {
-      const data = JSON.parse(m[1]) as Record<string, unknown>;
-      const graph = Array.isArray(data["@graph"]) ? (data["@graph"] as Record<string, unknown>[]) : [data];
-      nodes.push(...(graph.filter((n) => n && typeof n === "object" && n["@type"] !== "Article").map(normalizeStoredJsonLd) as Record<string, unknown>[]));
-    } catch {
-      // ungültiges JSON: nichts ausgeben
-    }
-  }
-  return nodes.length ? { "@context": "https://schema.org", "@graph": nodes.map((n) => { const { "@context": _ctx, ...rest } = n; void _ctx; return rest; }) } : null;
-}
 
 export async function generateStaticParams() {
   try {

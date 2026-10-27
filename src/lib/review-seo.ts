@@ -98,6 +98,13 @@ export function priceNotice(source: string | null | undefined): string {
   return source?.trim() === "Amazon" ? "Preise können sich seitdem geändert haben." : "Preise können je nach Händler abweichen.";
 }
 
+/** Preis-FAQ: Herstellerpreis mit Datum statt „je nach Händler“. Datum ist bereits TT.MM.JJJJ. */
+function priceFaqNotice(source: string | null | undefined, stand: string): string {
+  const src = source?.trim() ?? "";
+  if (src === "Hersteller" || src === "Hersteller-Shop") return `laut Hersteller, Stand ${stand}`;
+  return priceNotice(source);
+}
+
 /**
  * Liest eine ausdrücklich genannte Preisquelle aus dem Testtext.
  * Affiliate-Buttons und bloße Amazon-Erwähnungen zählen nicht.
@@ -179,8 +186,9 @@ export function reviewFaq(r: ReviewSeoInput, comparison?: { title: string } | nu
       answer: mis.map((c) => `„${clean(c.claim)}“${clean(c.reason) ? `: ${sentence(clean(c.reason))}` : "."}`).join(" "),
     });
   }
+  const stand = priceStandDate(r.priceDate);
   const price = priceText(r);
-  if (price) out.push({ question: `Was kostet ${r.name}?`, answer: `${price}. ${priceNotice(r.priceSource)}` });
+  if (price && stand) out.push({ question: `Was kostet ${r.name}?`, answer: `${price}. ${priceFaqNotice(r.priceSource, stand)}` });
   const parts = splitComposition(r.composition);
   if (parts.length) {
     const first = parts.slice(0, 5).join(", ");
