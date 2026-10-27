@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { trimMetaDescription } from "@/lib/seo";
-import { HARMFUL_FAIL_RATIO, METHODOLOGY_CHANGELOG, METHODOLOGY_STAND, PUBLISHED_CRITERIA, PUBLISHED_MAX_TOTAL, RATING_THRESHOLDS, type CriterionKey } from "@/lib/scoring";
+import { HARMFUL_FAIL_RATIO, METHODOLOGY_CHANGELOG, METHODOLOGY_CHANGELOG_ERGAENZUNG, METHODOLOGY_STAND, PUBLISHED_CRITERIA, PUBLISHED_MAX_TOTAL, RATING_THRESHOLDS, type CriterionKey } from "@/lib/scoring";
 import { PageShell } from "@/components/page-shell";
 
 export const metadata: Metadata = {
@@ -86,7 +86,7 @@ export default function MethodikPage() {
         <p>Futter ist die wichtigste tägliche Entscheidung für die Gesundheit von Hund und Katze, und die Verpackung zeigt vor allem Werbung. Unsere Bewertung soll Ihnen helfen, hinter diese Werbung zu schauen. Dafür gelten drei Regeln:</p>
         <ul>
           <li><strong>Nachvollziehbar:</strong> Jedes Kriterium, jede Gewichtung und jede Punktzahl ist offengelegt. Auf jeder Testseite sehen Sie, wie die Note zustande kommt.</li>
-          <li><strong>Gleiche Maßstäbe:</strong> Alle Produkte einer Methodik-Version werden nach denselben Kriterien bewertet, getrennt nach Hunden und Katzen sowie nach Alleinfutter und <Link href="/methodik/ergaenzungsfutter">Ergänzungsfutter</Link>. Für Alleinfutter sind das die sechs Kriterien unten. Ältere Tests von Snacks, Kauartikeln und Ergänzungsfuttermitteln sind ebenfalls nach diesen sechs Kriterien bewertet, erkennbar an den sechs Teilnoten im Testergebnis.</li>
+          <li><strong>Gleiche Maßstäbe:</strong> Alle Produkte einer Methodik-Version werden nach denselben Kriterien bewertet, getrennt nach Hunden und Katzen sowie nach Alleinfutter und <Link href="/methodik/ergaenzungsfutter">Ergänzungsfutter</Link>. Für Alleinfutter sind das die sechs Kriterien unten. Ältere Tests von Snacks, Kauartikeln und Ergänzungsfuttermitteln sind ebenfalls nach diesen sechs Kriterien bewertet, erkennbar an den sechs Teilnoten im Testergebnis. Seit dem 27.10.2026 gilt: Ergänzungsfutter, die ein Futter im Alltagssinn sind und keinen benannten Wirkstoff haben, etwa Nassfutter-Filets und Snacks, bewerten wir weiterhin nach diesen sechs Kriterien, damit sie vergleichbar bleiben. Funktionelle Ergänzungsfutter mit Wirkstoff oder Wirkversprechen, etwa Tropfen, Pulver, Öle und Tabletten, bewerten wir nach den fünf Kriterien der <Link href="/methodik/ergaenzungsfutter#geltungsbereich">Ergänzungsfutter-Methodik</Link>.</li>
           <li><strong>Begründet:</strong> Kritik wird immer erklärt und, wo möglich, mit einer Quelle belegt. Unsere Einstufungen sind begründete fachliche Einschätzungen.</li>
         </ul>
       </div>
@@ -106,7 +106,8 @@ export default function MethodikPage() {
             </tbody>
           </table>
         </div>
-        <p className="mt-3 text-sm text-muted">Stand {METHODOLOGY_STAND}. {METHODOLOGY_CHANGELOG}</p>
+        <p className="mt-3 text-sm text-muted">Stand {METHODOLOGY_STAND}. {METHODOLOGY_CHANGELOG_ERGAENZUNG}</p>
+        <p className="mt-2 text-sm text-muted">{METHODOLOGY_CHANGELOG}</p>
 
         <div className="mt-8 space-y-5">
           {PUBLISHED_CRITERIA.filter((c): c is typeof c & { key: CriterionKey } => c.key in DETAIL).map((c, i) => {
