@@ -113,6 +113,7 @@ export default function ErgaenzungsfutterMethodikPage() {
         <p><em>Stand: 25.10.2026 · Verantwortlich: Redaktion Futterprüfer · Methodik-Version: ergaenzung-v1.1</em></p>
         <p><strong>Änderungsprotokoll:</strong></p>
         <ul>
+          <li><strong>27.10.2026:</strong> Renaltec als Lücke in die Referenztabelle aufgenommen (Begründung in der Tabelle).</li>
           <li><strong>25.10.2026 – ergaenzung-v1.1:</strong> Drei Regeln für Omega-3-Produkte ergänzt: Abzug für Omega-3-Quellen ohne Wirksamkeitsstudie beim Hund (Abschnitt 3), Abzug je weiterem Öl ohne belegten Nutzen (Abschnitt 3), Stufung der Dosierung bei Haut und Fell (Abschnitt 4). Auf unseren Lachsöl-Test vom 23.10.2026 angewendet, ändern die Regeln keine Punktzahl. Erstmals angewendet im Algenöl-Test Oktober 2026.</li>
           <li>17.10.2026 – Erstveröffentlichung</li>
         </ul>
@@ -308,6 +309,13 @@ export default function ErgaenzungsfutterMethodikPage() {
               <td className="p-3">–</td>
               <td className="p-3">–</td>
               <td className="p-3"><strong>Lücke</strong></td>
+            </tr>
+            <tr className="border-t border-border">
+              <th scope="row" className="p-3 font-semibold">Renaltec (kugelförmiges Kohlenstoff-Adsorbens)</th>
+              <td className="p-3">– (Lücke)</td>
+              <td className="p-3">Katze</td>
+              <td className="p-3"><Quelle href="https://pmc.ncbi.nlm.nih.gov/articles/PMC12967344/">Elzenbeck 2026</Quelle></td>
+              <td className="p-3">Studienmenge 500 mg pro Katze und Tag senkte Indoxylsulfat, ohne Unterschied bei Kreatinin, SDMA und Krankheitsverlauf (Elzenbeck 2026, Pilotstudie); keine Dosis mit belegter Wirkung auf die Nierenfunktion.</td>
             </tr>
           </tbody>
         </table>
