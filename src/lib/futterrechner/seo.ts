@@ -1,9 +1,10 @@
 import { absoluteUrl, OPERATOR, SITE } from "@/lib/site";
+import { KOLLAGEN_TEXT_FREIGEGEBEN } from "./fediaf";
 import { contentAuthor } from "@/lib/attribution";
 
 /** Stand der Rechenbasis und der Seitentexte. */
-export const STAND_ISO = "2026-10-26";
-export const STAND_TEXT = "26.10.2026";
+export const STAND_ISO = "2026-10-27";
+export const STAND_TEXT = "27.10.2026";
 
 export type SeitenKey = "hub" | "hund" | "katze";
 
@@ -98,4 +99,15 @@ export const QUELLEN: Array<{ text: string; href: string }> = [
   { text: "Verordnung (EG) Nr. 767/2009 über das Inverkehrbringen und die Verwendung von Futtermitteln", href: "https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:32009R0767" },
   { text: "AAHA (2021): Nutrition and Weight Management Guidelines for Dogs and Cats", href: "https://www.aaha.org/wp-content/uploads/2021/06/new-2021-aaha-nutrition-and-weight-management-guidelines-with-ref.pdf" },
   { text: "Kazimierska K., Biel W., Witkowicz R. (2020): Mineral Composition of Cereal and Cereal-Free Dry Dog Foods versus Nutritional Guidelines. Molecules 25: 5173", href: "https://doi.org/10.3390/molecules25215173" },
+  { text: "Bosch G. et al. (2015): Energieverteilung der Wolfsbeute (Protein : Fett : Kohlenhydrate), Br J Nutr", href: "https://doi.org/10.1017/S0007114514002311" },
+  { text: "Plantinga E. A. et al. (2011): Nährstoffprofil der Beute verwilderter Katzen, Br J Nutr", href: "https://doi.org/10.1017/S0007114511002285" },
+  { text: "Hewson-Hughes A. K. et al. (2011): Geometric analysis of macronutrient selection in the adult domestic cat, Felis catus. J Exp Biol 214: 1039", href: "https://doi.org/10.1242/jeb.049429" },
+  { text: "Hewson-Hughes A. K. et al. (2013): Macronutrient-Auswahl bei Hunderassen (freie Wahl), Behav Ecol 24: 293", href: "https://doi.org/10.1093/beheco/ars168" },
+  ...(KOLLAGEN_TEXT_FREIGEGEBEN
+    ? [
+        { text: "Paul C., Leser S., Oesser S. (2019): Significant Amounts of Functional Collagen Peptides Can Be Incorporated in the Diet While Maintaining Indispensable Amino Acid Balance. Nutrients 11(5): 1079", href: "https://doi.org/10.3390/nu11051079" },
+        { text: "Shirley R. B., Parsons C. M. (2001): Effect of ash content on protein quality of meat and bone meal. Poult Sci 80(5): 626–632", href: "https://doi.org/10.1093/ps/80.5.626" },
+        { text: "Cramer K. R. et al. (2007): Protein quality of various raw and rendered by-product meals commonly incorporated into companion animal diets. J Anim Sci 85(12): 3285–3293", href: "https://doi.org/10.2527/jas.2006-225" },
+      ]
+    : []),
 ];

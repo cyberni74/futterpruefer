@@ -46,10 +46,10 @@ describe("Kantenfälle", () => {
     expect(r.menge).toBeNull();
     expect(r.hinweise.some((h) => h.id === "endgewicht")).toBe(true);
   });
-  it("Hund mit Rohfaser 9 % TS → Hinweis und −5", () => {
+  it("Hund mit Rohfaser 9 % TS → Hinweis und −3", () => {
     const r = berechne({ futter: { ...base, fa: 9 }, tier: hund }) as ErgebnisOk;
     expect(r.hinweise.some((h) => h.id === "faser")).toBe(true);
-    expect(r.punkte.plaus).toBe(10);
+    expect(r.punkte.plaus).toBe(7);
   });
   it("Katze unkastriert mit Freigang → Spalte 100 (Protein-Min. 62,5)", () => {
     const r = berechne({
@@ -62,10 +62,11 @@ describe("Kantenfälle", () => {
   });
   it("Ca/P fehlt → höchstens gut", () => {
     const r = berechne({ futter: { ...base, ca: null, ph: null }, tier: hund }) as ErgebnisOk;
-    expect(r.note).toBe("gut");
+    expect(r.deckel).toContain("gut");
+    expect(["gut", "befriedigend", "ausreichend", "mangelhaft"]).toContain(r.note);
   });
-  it("Rohasche außerhalb des Bands → −5", () => {
+  it("Rohasche außerhalb des Bands → −3", () => {
     const r = berechne({ futter: { ...base, a: 14 }, tier: hund }) as ErgebnisOk;
-    expect(r.punkte.plaus).toBe(10);
+    expect(r.punkte.plaus).toBe(7);
   });
 });

@@ -18,6 +18,8 @@ export type FutterInput = {
   taurinMgKg?: number | null;
   /** Herstellerangabe ME in kcal/100 g */
   meHersteller?: number | null;
+  /** Erste Zutaten von der Packung (optional, freier Text), nur für die Kollagen-Heuristik */
+  zutaten?: string | null;
 };
 
 export type TierInput =
@@ -117,6 +119,17 @@ export type ErgebnisOk = {
   mengeHi: number | null;
   gruende: Grund[];
   hinweise: Hinweis[];
+  /** Protein:Fett in g:g */
+  pf: number;
+  /** Energieverteilung nach Atwater in % */
+  energieAnteile: { p: number; f: number; c: number };
+  /** FEDIAF-Minimum Protein in Energie-% */
+  peLo: number;
+  /** Punkte-Anteil vor dem Kollagen-Abzug (0–100) */
+  basis: number;
+  kollagen: import("./naehrstoffe").KollagenErgebnis;
+  /** Abzug der Kollagen-Heuristik in Punkten */
+  abzug: number;
   /** Info-Box „Gut zu wissen“ unter der Tagesmenge */
   mengeRisiko: RisikoId | null;
 };

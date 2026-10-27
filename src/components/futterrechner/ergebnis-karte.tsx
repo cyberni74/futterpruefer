@@ -60,6 +60,10 @@ function RechenwegZeilen({ r }: { r: ErgebnisOk }) {
     ["Energiebedarf MER" + (r.bedarf.faktor ? ` (Faktor ${n1(r.bedarf.faktor)})` : ""), Number.isFinite(r.bedarf.kcal) ? `${n0(r.bedarf.kcal)} kcal/Tag` : "–"],
     ["Rohprotein je 1000 kcal", `${n1(r.p1000)} g (Minimum ${r.mindest.p} g)`],
     ["Rohfett je 1000 kcal", `${n1(r.f1000)} g (Minimum ${r.mindest.f} g)`],
+    ["Protein : Fett", `${n1(r.pf)} : 1`],
+    ["Energie aus Protein / Fett / Kohlenhydraten", `${n0(r.energieAnteile.p)} / ${n0(r.energieAnteile.f)} / ${n0(r.energieAnteile.c)} %`],
+    ["Punkte vor Abzug", `${n1(r.basis)}`],
+    ...(r.abzug > 0 ? ([["Abzug Kollagen-Heuristik", `−${r.abzug} Punkte`]] as Array<[string, string]>) : []),
   ];
   return (
     <dl className="grid grid-cols-[1fr_auto] gap-x-4 gap-y-1.5 text-sm">

@@ -1,10 +1,13 @@
 import type { Eingabe } from "./index";
 import { mengenRisiko, risikenFuer, type RisikoGrund } from "./risiken";
 import type { Ergebnis, ErgebnisOk, Grund, Hinweis, Note } from "./types";
-import { ASCHE_BAND, FASER_GRENZE_HUND, LECKERLI_ANTEIL, MINDEST, NOTEN_REIHE, NOTEN_SCHWELLEN } from "./fediaf";
+import {
+  ASCHE_BAND, ATWATER, FASER_GRENZE_HUND, GEWICHT, KOLLAGEN_TEXT_FREIGEGEBEN, LECKERLI_ANTEIL, MINDEST, NFE_BAND, NOTEN_REIHE, NOTEN_SCHWELLEN,
+  PE_SOCKEL, PE_ZIEL, PF_BAND, PLAUS_ABZUG,
+} from "./fediaf";
 import { inTs, meNrc2006 } from "./energie";
 import { bedarf, rer, spalte as waehleSpalte } from "./bedarf";
-import { ascheImBand, caPCheck, proTausendKcal, stufe, taurinCheck } from "./naehrstoffe";
+import { ascheImBand, caPCheck, kollagen, lin, proTausendKcal, r1, taurinCheck } from "./naehrstoffe";
 import * as T from "./texte";
 
 export const noteFuer = (score: number): Note => NOTEN_SCHWELLEN.find(([s]) => score >= s)?.[1] ?? "mangelhaft";
@@ -66,17 +69,46 @@ export function bewerte({ futter, tier, ergaenzung, stueckGramm }: Eingabe): Erg
   const deckel: Note[] = [];
   const gruende: Grund[] = [];
 
-  punkte.protein = stufe(rp, [[1.3, 35], [1.1, 30], [1.0, 22], [0.9, 10]]);
-  max.protein = 35;
-  punkte.fett = stufe(rf, [[1.2, 20], [1.0, 14], [0.9, 6]]);
-  max.fett = 20;
+  const W = GEWICHT[tier.art];
+  const art = tier.art;
+
+  // 1) Protein:Fett-Verhältnis (35): stärkstes Kriterium, linear von lo (0 Punkte) bis hi (volle Punkte)
+  const pf = f > 0 ? p / f : 99;
+  const band = PF_BAND[art];
+  const pfAnteil = lin(pf, band.lo, band.hi);
+  punkte.pf = r1(W.pf * pfAnteil);
+  max.pf = W.pf;
+  // 2) Protein-Energieanteil (15): unter dem FEDIAF-Minimum (in Energie-%) 0, ab Minimum Sockel, voll beim Ziel
+  const nfeC = Math.max(e.nfe, 0);
+  const eP = ATWATER.p * p;
+  const eF = ATWATER.f * f;
+  const eC = ATWATER.c * nfeC;
+  const eS = eP + eF + eC;
+  const energieAnteile = { p: (eP / eS) * 100, f: (eF / eS) * 100, c: (eC / eS) * 100 };
+  const peLo = (mindest.p * ATWATER.p) / 10;
+  punkte.pe = energieAnteile.p >= peLo ? r1(W.pe * (PE_SOCKEL + (1 - PE_SOCKEL) * lin(energieAnteile.p, peLo, PE_ZIEL[art]))) : 0;
+  max.pe = W.pe;
+  // 3) FEDIAF-Minimum Protein (10) und Fett (5); die Deckel aus v1 bleiben
+  punkte.pmin = rp >= 1 ? W.pmin : rp >= 0.9 ? W.pmin / 2 : 0;
+  max.pmin = W.pmin;
+  punkte.fmin = rf >= 1 ? W.fmin : rf >= 0.9 ? W.fmin / 2 : 0;
+  max.fmin = W.fmin;
   if (rp < 0.9 || rf < 0.9) deckel.push("mangelhaft");
   else if (rp < 1 || rf < 1) deckel.push("ausreichend");
+  // 4) NfE / Kohlenhydrate: Hund 5, Katze 10 Punkte
+  const nfeTs = inTs(nfeC, m);
+  const nfeBand = NFE_BAND[art];
+  punkte.nfe = r1(W.nfe * (1 - lin(nfeTs, nfeBand.lo, nfeBand.hi)));
+  max.nfe = W.nfe;
 
   gruende.push({ id: "protein", art: rp >= 1 ? "ok" : rp >= 0.9 ? "warn" : "bad", titel: "Rohprotein", text: T.proteinGrund(p1000, mindest.p, rp, col), verhaeltnis: rp });
   const wechsel = T.spaltenWechsel(col, mindest.p);
   if (wechsel) gruende.push({ id: "spalte", art: "info", titel: "Warum dieser Mindestwert?", text: wechsel });
   gruende.push({ id: "fett", art: rf >= 1 ? "ok" : rf >= 0.9 ? "warn" : "bad", titel: "Rohfett", text: T.fettGrund(f1000, mindest.f, rf), verhaeltnis: rf });
+  gruende.push({
+    id: "pf", art: pfAnteil >= 0.75 ? "ok" : pfAnteil >= 0.35 ? "warn" : "bad", titel: "Protein-Fett-Verhältnis",
+    text: T.pfGrund(pf, energieAnteile.p, energieAnteile.f, energieAnteile.c, band.hi, pfAnteil < 0.35),
+  });
 
   // Calcium / Phosphor
   const ca = futter.ca ?? null;
@@ -84,13 +116,13 @@ export function bewerte({ futter, tier, ergaenzung, stueckGramm }: Eingabe): Erg
   let capr: ErgebnisOk["capr"] = null;
   if (ca != null && ph != null && ph > 0) {
     const c = caPCheck(tier.art, col, ca, ph, m, tier.art === "hund" && tier.phase === "welpe" ? tier.endgewicht : null, tier.art === "hund" && tier.phase === "welpe" ? tier.wochen : undefined);
-    punkte.capr = c.okRatio && c.okCa && c.okP ? 20 : c.nah && c.okCa ? 10 : 0;
-    max.capr = 20;
+    punkte.capr = c.okRatio && c.okCa && c.okP ? W.capr : c.nah && c.okCa ? W.capr / 2 : 0;
+    max.capr = W.capr;
     if (punkte.capr === 0 && welpe) deckel.push("ausreichend");
     if (c.caUeber) deckel.push(welpe ? "mangelhaft" : "ausreichend");
     capr = { ratio: c.ratio, caTs: c.caTs, pTs: c.pTs, regel: c.regel };
     const ziel = T.zielgruppe(col);
-    const artPunkte: Grund["art"] = punkte.capr === 20 ? "ok" : punkte.capr === 10 ? "warn" : "bad";
+    const artPunkte: Grund["art"] = punkte.capr === W.capr ? "ok" : punkte.capr > 0 ? "warn" : "bad";
     gruende.push(
       c.caUeber
         ? { id: "ca", art: "bad", titel: "Calcium", text: welpe ? T.caZuHoch : T.caZuHochAdult }
@@ -123,12 +155,12 @@ export function bewerte({ futter, tier, ergaenzung, stueckGramm }: Eingabe): Erg
 
   // Plausibilität & Vollständigkeit
   const aTs = inTs(a, m);
-  let plaus = 15;
-  if (feuchteGeschaetzt) plaus -= 5;
-  if (!ascheImBand(aTs)) plaus -= 5;
-  if (tier.art === "hund" && faTs > FASER_GRENZE_HUND) plaus -= 5;
+  let plaus: number = W.plaus;
+  if (feuchteGeschaetzt) plaus -= PLAUS_ABZUG.feuchteGeschaetzt;
+  if (!ascheImBand(aTs)) plaus -= PLAUS_ABZUG.ascheAusserhalb;
+  if (tier.art === "hund" && faTs > FASER_GRENZE_HUND) plaus -= PLAUS_ABZUG.faserHund;
   punkte.plaus = Math.max(plaus, 0);
-  max.plaus = 15;
+  max.plaus = W.plaus;
   if (feuchteGeschaetzt) gruende.push({ id: "feuchte", art: "warn", titel: "Feuchte geschätzt", text: T.feuchteGeschaetzt });
   gruende.push(
     ascheImBand(aTs)
@@ -136,12 +168,28 @@ export function bewerte({ futter, tier, ergaenzung, stueckGramm }: Eingabe): Erg
       : { id: "asche", art: "warn", titel: "Rohasche", text: aTs < ASCHE_BAND.min ? T.ascheNiedrig(aTs) : T.ascheAuffaellig(aTs) },
   );
   if (tier.art === "hund" && faTs > FASER_GRENZE_HUND) gruende.push({ id: "faser", art: "warn", titel: "Rohfaser", text: T.FASER_HINWEIS });
-  const nfeTs = inTs(Math.max(e.nfe, 0), m);
-  gruende.push({ id: "nfe", art: "info", titel: "NfE", text: T.nfeInfo(nfeTs) });
+  gruende.push({ id: "nfe", art: "info", titel: "NfE", text: T.nfeInfo(nfeTs, W.nfe, nfeBand.lo, nfeBand.hi) });
+  // Kollagen-Heuristik: Abzug vom Score nach der Normierung, kein Deckel
+  const koll = kollagen(art, inTs(p, m), aTs, capr?.caTs ?? null, futter.zutaten);
+  const abzug = koll.abzugNaehrwerte + koll.abzugZutaten;
+  if (koll.flag) {
+    const treffer = koll.treffer.join(", ");
+    const teile: string[] = [];
+    if (koll.abzugZutaten > 0) {
+      teile.push(KOLLAGEN_TEXT_FREIGEGEBEN ? T.kollagenLangZutaten(treffer) : T.kollagenKurzZutaten(treffer));
+      if (KOLLAGEN_TEXT_FREIGEGEBEN && koll.schwach) teile.push(T.KOLLAGEN_LANG_SAMMELBEGRIFF);
+    }
+    if (koll.abzugNaehrwerte > 0) teile.push(KOLLAGEN_TEXT_FREIGEGEBEN ? T.kollagenLangNaehrwerte(inTs(p, m), aTs) : T.KOLLAGEN_KURZ_NAEHRWERTE);
+    if (KOLLAGEN_TEXT_FREIGEGEBEN) teile.push(T.KOLLAGEN_QUELLEN_ZEILE);
+    gruende.push({
+      id: "kollagen", art: "warn", titel: koll.abzugZutaten > 0 ? T.KOLLAGEN_TITEL_ZUTATEN : T.KOLLAGEN_TITEL_NAEHRWERTE, text: teile.join(" "),
+    });
+  }
 
   const summePunkte = Object.values(punkte).reduce((x, y) => x + y, 0);
   const summeMax = Object.values(max).reduce((x, y) => x + y, 0);
-  const score = Math.round((summePunkte / summeMax) * 100);
+  const basis = (summePunkte / summeMax) * 100;
+  const score = Math.max(0, Math.round(basis - abzug));
   let note = noteFuer(score);
   for (const c of deckel) if (schlechter(c, note)) note = c;
 
@@ -187,6 +235,12 @@ export function bewerte({ futter, tier, ergaenzung, stueckGramm }: Eingabe): Erg
     mengeHi: mengeOk ? (b.hi / me) * 100 : null,
     gruende,
     hinweise,
+    pf,
+    energieAnteile,
+    peLo,
+    basis,
+    kollagen: koll,
+    abzug,
     mengeRisiko: null,
   };
   const auswahl = risikenFuer(ergebnis, { futter, tier });

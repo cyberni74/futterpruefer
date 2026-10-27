@@ -292,6 +292,7 @@ export function Rechner({ art, ctas }: { art: Art; ctas?: RechnerCtas }) {
               {feld("a", "Rohasche", "Auch „Ascherückstand“ oder „anorganischer Stoff“.")}
               {feld("m", "Feuchte", s.futterart === "nass" ? "Pflichtangabe bei Nassfutter." : "Pflicht erst über 14 %. Fehlt sie, rechnen wir mit 10 %.")}
             </div>
+            {!ergaenzung && <ZutatenFeld value={w.zutaten} onChange={(v) => setWert({ zutaten: v })} />}
             <details className="group mt-3 rounded-2xl border border-border p-3">
               <summary className="min-h-11 cursor-pointer list-none text-sm font-bold leading-[2.75rem]">Mehr Werte (genauer)</summary>
               <div className="mt-2 divide-y divide-border">
@@ -350,6 +351,21 @@ export function Rechner({ art, ctas }: { art: Art; ctas?: RechnerCtas }) {
           <button type="button" className="min-h-11 rounded-full px-3 font-bold underline" onClick={() => { setS(undo); setUndo(null); }}>Rückgängig</button>
         </div>
       )}
+    </div>
+  );
+}
+
+/** Optionales Feld „Erste Zutaten“: ändert nur den Kollagen-Abzug, wird nicht gespeichert und nicht in den Teilen-Link übernommen. */
+function ZutatenFeld({ value, onChange }: { value: string | null; onChange: (v: string | null) => void }) {
+  return (
+    <div className="mt-4 py-1">
+      <label htmlFor="zutaten-feld" className="text-sm font-bold">Erste Zutaten (optional)</label>
+      <textarea
+        id="zutaten-feld" rows={2} maxLength={600} value={value ?? ""} aria-describedby="zutaten-hilfe" autoComplete="off"
+        onChange={(e) => onChange(e.target.value === "" ? null : e.target.value)}
+        className="mt-1 w-full rounded-xl border border-border bg-bg-soft px-3 py-2 text-base focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2"
+      />
+      <p id="zutaten-hilfe" className="mt-1 text-xs text-muted">Die ersten Zutaten von der Packung, durch Komma getrennt. Wir prüfen die ersten fünf auf Bindegewebe-Rohstoffe.</p>
     </div>
   );
 }

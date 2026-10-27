@@ -31,7 +31,7 @@ export function QuellenUndAutor() {
             <li key={q.href}><a href={q.href} target="_blank" rel="noopener noreferrer" className="break-words underline underline-offset-4 hover:text-brand">{q.text}</a></li>
           ))}
         </ol>
-        <p className="mt-3 text-sm text-muted">Eigene Festlegungen sind im Text als solche genannt: der Kastriert-Faktor × 0,9 (abgeleitet aus AAHA 2021), die Spanne von ±10 % und das Rohasche-Band von 3 bis 12 % der Trockenmasse.</p>
+        <p className="mt-3 text-sm text-muted">Eigene Festlegungen sind im Text als solche genannt: der Kastriert-Faktor × 0,9 (abgeleitet aus AAHA 2021), die Spanne von ±10 %, das Rohasche-Band von 3 bis 12 % der Trockenmasse, die Bänder für das Protein-Fett-Verhältnis und die Kohlenhydrate (NfE) sowie die Kollagen-Heuristik.</p>
       </section>
       <aside className="mt-8 rounded-3xl border border-border bg-bg-soft p-5 text-sm">
         <p><strong>Autor:</strong> <Link href={authorPath(DEFAULT_AUTHOR)} className="font-semibold text-brand underline underline-offset-4">{DEFAULT_AUTHOR.name}</Link> · Stand: {STAND_TEXT}</p>
