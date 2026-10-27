@@ -19,7 +19,7 @@ export function StartseitenTeaser() {
         <div>
           <p className="flex items-center gap-2 text-xs font-extrabold uppercase tracking-wide text-brand"><Calculator aria-hidden className="size-4" /> Neu: Futterrechner</p>
           <h2 id="futterrechner-teaser" className="font-display mt-2 text-2xl font-extrabold md:text-3xl">Stimmen die Nährwerte Ihres Futters?</h2>
-          <p className="mt-2 text-muted">Werte von der Packung eintippen, Nährwert-Check nach FEDIAF und Tagesmenge sofort sehen.</p>
+          <p className="mt-2 text-muted">Zu wenig Eiweiß oder zu viel Calcium sieht man auf dem Etikett nicht auf den ersten Blick. Gerade bei Welpen und Kitten zählt das Gleichgewicht der Nährstoffe. Prüfen Sie Ihr Futter in einer Minute nach den FEDIAF-Richtwerten.</p>
         </div>
         <div className="mt-4 space-y-3 md:mt-0">
           <fieldset>
@@ -27,12 +27,12 @@ export function StartseitenTeaser() {
             <div className="flex gap-2">{seg("trocken", "Trocken")}{seg("nass", "Nass")}</div>
           </fieldset>
           <Link href={`/futterrechner/hund#typ=${typ}`} className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-accent px-6 font-bold text-white hover:bg-accent-strong dark:text-black">
-            <Dog aria-hidden className="size-5" /> Nährwert-Check Hund
+            <Dog aria-hidden className="size-5" /> Hundefutter prüfen
           </Link>
-          <Link href={`/futterrechner/katze#typ=${typ}`} className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full border-2 border-accent bg-transparent px-6 font-bold text-accent hover:bg-surface">
-            <Cat aria-hidden className="size-5" /> Nährwert-Check Katze
+          <Link href={`/futterrechner/katze#typ=${typ}`} className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-accent px-6 font-bold text-white hover:bg-accent-strong dark:text-black">
+            <Cat aria-hidden className="size-5" /> Katzenfutter prüfen
           </Link>
-          <p className="text-xs text-muted">Kostenlos · ohne Anmeldung · nichts gespeichert</p>
+          <p className="text-xs text-muted">Kostenlos · ohne Anmeldung · nichts gespeichert · bewertet nur Nährwerte, keine Zutaten</p>
         </div>
       </div>
     </section>
