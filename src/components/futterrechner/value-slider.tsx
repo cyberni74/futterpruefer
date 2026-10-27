@@ -12,7 +12,7 @@ export type Marker = { wert: number; label: string };
 
 /** Regler + Zahlenfeld (6.2). Natives <input type="range">, Zahlenfeld synchron, Startzustand „noch nicht gesetzt“. */
 export function ValueSlider({
-  label, einheit, value, onChange, min, max, step, platzhalter, marker, fehler, warnung, hilfe, valueText, mitte, skala, textAnzeige,
+  label, einheit, value, onChange, min, max, step, platzhalter, marker, fehler, warnung, hilfe, valueText, mitte, skala, textAnzeige, id: idProp, fehlt,
 }: {
   label: string; einheit: string; value: number | null; onChange: (v: number | null) => void;
   min: number; max: number; step: number; platzhalter: number; marker?: Marker | null;
@@ -21,8 +21,13 @@ export function ValueSlider({
   skala?: { max: number; zuPos: (v: number) => number; vonPos: (p: number) => number };
   /** Statt Zahlenfeld nur Text (z. B. „17 Wochen“); value/min/max sind dann Positionen. */
   textAnzeige?: (v: number) => string;
+  /** Stabile Feld-ID (Fokus bei fehlenden Pflichtangaben); der Regler hat die ID `${id}-r`. */
+  id?: string;
+  /** Pflichtangabe fehlt nach Klick auf „Jetzt Futter analysieren“ */
+  fehlt?: boolean;
 }) {
-  const id = useId();
+  const gen = useId();
+  const id = idProp ?? gen;
   const labelId = `${id}-l`;
   const descId = `${id}-d`;
   const [text, setText] = useState(value == null ? "" : fmt(value, step));
@@ -44,10 +49,10 @@ export function ValueSlider({
   const ausserhalb = !textAnzeige && value != null && (value < min || value > max);
   const markerPct = marker && !skala ? pos(marker.wert) : null;
   const tone = value == null || !marker ? undefined : value < marker.wert * 0.9 ? "bad" : value < marker.wert ? "mid" : undefined;
-  const beschr = [hilfe, ausserhalb ? "Außerhalb des üblichen Bereichs." : null, fehler, warnung].filter(Boolean).length ? descId : undefined;
+  const beschr = [hilfe, ausserhalb ? "Außerhalb des üblichen Bereichs." : null, fehler, warnung, fehlt].filter(Boolean).length ? descId : undefined;
 
   return (
-    <div className="py-1">
+    <div id={`${id}-feld`} className={`py-1 ${fehlt ? "-mx-2 rounded-2xl px-2 ring-2 ring-accent" : ""}`}>
       <div className="flex items-center justify-between gap-3">
         <label id={labelId} htmlFor={`${id}-r`} className="text-sm font-bold">{label}</label>
         {textAnzeige ? (
@@ -55,7 +60,7 @@ export function ValueSlider({
         ) : (
         <span className="flex shrink-0 items-center gap-1.5">
           <input
-            type="text" inputMode="decimal" autoComplete="off" aria-labelledby={labelId} aria-invalid={fehler || ungueltig ? true : undefined}
+            type="text" inputMode="decimal" autoComplete="off" aria-labelledby={labelId} aria-invalid={fehler || ungueltig || fehlt ? true : undefined}
             aria-describedby={beschr} placeholder={`typ. ${fmt(platzhalter, step)}`} value={text}
             onFocus={() => (fokus.current = true)}
             onBlur={() => { fokus.current = false; setText(value == null ? "" : fmt(value, step)); setUngueltig(false); }}
@@ -80,7 +85,7 @@ export function ValueSlider({
         <input
           id={`${id}-r`} type="range" min={rMin} max={rMax} step={rStep} value={Math.min(rMax, Math.max(rMin, rWert))}
           className="fp-range" data-unset={value == null} data-tone={tone} style={{ ["--pct" as string]: `${pct}%` }}
-          aria-labelledby={labelId} aria-describedby={beschr}
+          aria-labelledby={labelId} aria-describedby={beschr} aria-invalid={fehlt ? true : undefined}
           aria-valuetext={value == null ? "noch nicht gesetzt" : valueText ? valueText(value) : `${fmt(value, step)} ${einheit}`}
           onChange={(e) => { const n = Number(e.target.value); onChange(skala ? skala.vonPos(n) : n); }}
           onPointerDown={() => { setAktiv(true); if (value == null) onChange(platzhalter); }}
@@ -101,6 +106,7 @@ export function ValueSlider({
         {ausserhalb && <p className="text-muted">Außerhalb des üblichen Bereichs, der Wert wird trotzdem verwendet.</p>}
         {ungueltig && <p role="alert" className="font-semibold text-bad">Bitte eine Zahl eingeben.</p>}
         {fehler && <p role="alert" className="font-semibold text-bad">{fehler}</p>}
+        {fehlt && <p className="font-bold text-accent">Hier fehlt noch Ihre Angabe</p>}
         {warnung && !fehler && <p className="font-semibold text-mid">{warnung}</p>}
       </div>
     </div>

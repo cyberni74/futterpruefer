@@ -1,6 +1,7 @@
 import type { Eingabe } from "./index";
+import { mengenRisiko, risikenFuer, type RisikoGrund } from "./risiken";
 import type { Ergebnis, ErgebnisOk, Grund, Hinweis, Note } from "./types";
-import { FASER_GRENZE_HUND, LECKERLI_ANTEIL, MINDEST, NOTEN_REIHE, NOTEN_SCHWELLEN } from "./fediaf";
+import { ASCHE_BAND, FASER_GRENZE_HUND, LECKERLI_ANTEIL, MINDEST, NOTEN_REIHE, NOTEN_SCHWELLEN } from "./fediaf";
 import { inTs, meNrc2006 } from "./energie";
 import { bedarf, rer, spalte as waehleSpalte } from "./bedarf";
 import { ascheImBand, caPCheck, proTausendKcal, stufe, taurinCheck } from "./naehrstoffe";
@@ -48,6 +49,7 @@ export function bewerte({ futter, tier, ergaenzung, stueckGramm }: Eingabe): Erg
       budgetKcal,
       budgetGramm: (budgetKcal / me) * 100,
       kcalStueck: stueckGramm ? (me * stueckGramm) / 100 : null,
+      leckerliRisiko: "R-LECKERLI",
       hinweise: [...hinweise, { id: "erk", text: T.ERKRANKUNG_HINWEIS }],
     };
   }
@@ -87,12 +89,20 @@ export function bewerte({ futter, tier, ergaenzung, stueckGramm }: Eingabe): Erg
     if (punkte.capr === 0 && welpe) deckel.push("ausreichend");
     if (c.caUeber) deckel.push(welpe ? "mangelhaft" : "ausreichend");
     capr = { ratio: c.ratio, caTs: c.caTs, pTs: c.pTs, regel: c.regel };
+    const ziel = T.zielgruppe(col);
+    const artPunkte: Grund["art"] = punkte.capr === 20 ? "ok" : punkte.capr === 10 ? "warn" : "bad";
     gruende.push(
       c.caUeber
         ? { id: "ca", art: "bad", titel: "Calcium", text: welpe ? T.caZuHoch : T.caZuHochAdult }
-        : punkte.capr === 20
-          ? { id: "ca", art: "ok", titel: "Calcium und Phosphor", text: T.caPPasst(c.ratio, c.regel.rMin, c.regel.rMax) }
-          : { id: "ca", art: punkte.capr === 10 ? "warn" : "bad", titel: "Calcium und Phosphor", text: T.caPDaneben(c.ratio, c.regel.rMax, T.zielgruppe(col)) },
+        : !c.okCa
+          ? { id: "ca", art: artPunkte, titel: "Calcium", text: T.caZuNiedrig(c.caTs, c.regel.caMin) }
+          : c.ratio < c.regel.rMin
+            ? { id: "ca", art: artPunkte, titel: "Calcium und Phosphor", text: T.caPZuNiedrig(c.ratio, c.regel.rMin, ziel) }
+            : c.ratio > c.regel.rMax
+              ? { id: "ca", art: artPunkte, titel: "Calcium und Phosphor", text: T.caPDaneben(c.ratio, c.regel.rMax, ziel) }
+              : !c.okP
+                ? { id: "ca", art: artPunkte, titel: "Phosphor", text: T.phosphorAusserhalb(c.pTs, c.regel.pMin, c.regel.pMax) }
+                : { id: "ca", art: "ok", titel: "Calcium und Phosphor", text: T.caPPasst(c.ratio, c.regel.rMin, c.regel.rMax) },
     );
   } else {
     deckel.push("gut");
@@ -123,8 +133,9 @@ export function bewerte({ futter, tier, ergaenzung, stueckGramm }: Eingabe): Erg
   gruende.push(
     ascheImBand(aTs)
       ? { id: "asche", art: "ok", titel: "Rohasche", text: T.ascheOk(aTs) }
-      : { id: "asche", art: "warn", titel: "Rohasche", text: T.ascheAuffaellig(aTs) },
+      : { id: "asche", art: "warn", titel: "Rohasche", text: aTs < ASCHE_BAND.min ? T.ascheNiedrig(aTs) : T.ascheAuffaellig(aTs) },
   );
+  if (tier.art === "hund" && faTs > FASER_GRENZE_HUND) gruende.push({ id: "faser", art: "warn", titel: "Rohfaser", text: T.FASER_HINWEIS });
   const nfeTs = inTs(Math.max(e.nfe, 0), m);
   gruende.push({ id: "nfe", art: "info", titel: "NfE", text: T.nfeInfo(nfeTs) });
 
@@ -140,7 +151,7 @@ export function bewerte({ futter, tier, ergaenzung, stueckGramm }: Eingabe): Erg
   if (welpe && !mengeOk) hinweise.push({ id: "endgewicht", text: "Ohne erwartetes Endgewicht kann die Tagesmenge für Welpen nicht berechnet werden. Die Bewertung läuft mit der strengeren Annahme „Endgewicht über 15 kg“." });
   hinweise.push({ id: "erk", text: T.ERKRANKUNG_HINWEIS });
 
-  return {
+  const ergebnis: ErgebnisOk = {
     status: "ok",
     feuchte: m,
     feuchteGeschaetzt,
@@ -176,5 +187,17 @@ export function bewerte({ futter, tier, ergaenzung, stueckGramm }: Eingabe): Erg
     mengeHi: mengeOk ? (b.hi / me) * 100 : null,
     gruende,
     hinweise,
+    mengeRisiko: null,
   };
+  const auswahl = risikenFuer(ergebnis, { futter, tier });
+  for (const g of ergebnis.gruende) {
+    const t = auswahl[g.id as RisikoGrund];
+    if (!t?.length) continue;
+    g.risiken = t.map((x) => x.id);
+    g.risikoStufen = t.map((x) => x.art);
+    if (t.some((x) => x.art === "bad") && g.art !== "bad") g.art = "bad";
+    else if (g.art === "ok" || g.art === "info") g.art = "warn";
+  }
+  ergebnis.mengeRisiko = mengenRisiko(ergebnis, { tier });
+  return ergebnis;
 }

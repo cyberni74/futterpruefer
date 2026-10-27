@@ -45,3 +45,11 @@
 .prose-fp [data-infografik] li::marker { content: none; }
 .prose-fp [data-infografik] a.fp-btn { color: #fff; text-decoration: none; font-weight: 700; }
 .dark .prose-fp [data-infografik] a.fp-btn { color: #000; }
+
+/* Risiko- und Mengen-Boxen in der Ergebnis-Karte: vorhandene fp-box-Varianten, <details> ohne zusätzlichen Rahmen */
+.fp-ergebnis-box { font-size: 1rem; }
+.prose-fp .fp-box details { border: 0; padding: 0; background: none; }
+.prose-fp .fp-box details[open] > summary { margin-bottom: .6em; }
+.prose-fp .fp-box summary { display: flex; align-items: center; gap: .5rem; min-height: 2.75rem; list-style: none; }
+.prose-fp .fp-box summary::-webkit-details-marker { display: none; }
+.prose-fp .fp-box a { overflow-wrap: anywhere; }

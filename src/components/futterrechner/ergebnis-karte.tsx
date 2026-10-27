@@ -6,7 +6,10 @@ import type { ReactNode } from "react";
 import { NOTEN } from "@/lib/futterrechner/fediaf";
 import type { Ergebnis, ErgebnisOk, Grund, Note } from "@/lib/futterrechner/types";
 import { ERGAENZUNG_TEXT, GUTE_WERTE, NICHT_GEZEIGT_VORN, NUR_NAEHRWERTE, n0, n1, n2 } from "@/lib/futterrechner/texte";
+import { MAX_OFFEN } from "@/lib/futterrechner/risiken";
+import { FazitBox } from "./fazit-box";
 import { Gauge, useZaehler } from "./gauge";
+import { MengenBox, RisikoBox, RisikoPflichtzeile } from "./risiko-box";
 
 export const NOTE_STIL: Record<Note, { klasse: string; icon: typeof CheckCircle2 }> = {
   "sehr gut": { klasse: "bg-good-soft text-good", icon: CheckCircle2 },
@@ -71,12 +74,16 @@ function RechenwegZeilen({ r }: { r: ErgebnisOk }) {
   );
 }
 
-export function ErgebnisKarte({ ergebnis, nochFehlt, fehlerText, onTeilen, geteilt, ctas, titel }: {
+export function ErgebnisKarte({ ergebnis: roh, nochFehlt, fehlerText, onTeilen, geteilt, ctas, titel, analysiert, bereit, art }: {
   ergebnis: Ergebnis | null; nochFehlt: string[]; fehlerText?: string; onTeilen: () => void; geteilt: string; ctas?: ReactNode; titel: string;
+  /** Ergebnis erst nach Klick auf „Jetzt Futter analysieren“ */
+  analysiert: boolean; bereit: boolean; art: "hund" | "katze";
 }) {
+  const ergebnis = analysiert ? roh : null;
   const score = ergebnis?.status === "ok" ? ergebnis.score : 0;
   const zahl = useZaehler(score);
   const ok = ergebnis?.status === "ok" ? ergebnis : null;
+  const offenZaehler = { n: 0 };
 
   return (
     <section id="ergebnis" aria-labelledby="ergebnis-h" className="scroll-mt-24 rounded-3xl border border-border bg-surface p-5 shadow-card">
@@ -90,7 +97,7 @@ export function ErgebnisKarte({ ergebnis, nochFehlt, fehlerText, onTeilen, getei
 
       {!ergebnis && (
         <div className="mt-4 rounded-2xl bg-bg-soft p-4 text-sm text-muted">
-          {fehlerText ? <p role="alert" className="font-semibold text-bad">{fehlerText}</p> : <p><strong className="text-fg">{nochFehlt.length > 0 ? `Noch ${nochFehlt.length} ${nochFehlt.length === 1 ? "Wert" : "Werte"}, dann sehen Sie das Ergebnis.` : "Noch keine Eingabe."}</strong>{nochFehlt.length > 0 && <> Es fehlt: {nochFehlt.join(", ")}.</>}</p>}
+          {fehlerText ? <p role="alert" className="font-semibold text-bad">{fehlerText}</p> : <p><strong className="text-fg">{nochFehlt.length > 0 ? `Noch ${nochFehlt.length} ${nochFehlt.length === 1 ? "Wert" : "Werte"}, dann können Sie analysieren.` : bereit ? "Alle Pflichtangaben sind da." : "Noch keine Eingabe."}</strong>{nochFehlt.length > 0 && <> Es fehlt: {nochFehlt.join(", ")}.</>}{(nochFehlt.length > 0 || bereit) && <> Tippen Sie dann auf „Jetzt Futter analysieren“.</>}</p>}
         </div>
       )}
 
@@ -108,6 +115,8 @@ export function ErgebnisKarte({ ergebnis, nochFehlt, fehlerText, onTeilen, getei
             {ergebnis.kcalStueck != null && (<><dt>Energie je Stück</dt><dd className="text-right font-bold">{n1(ergebnis.kcalStueck)} kcal</dd></>)}
           </dl>
           <p className="rounded-xl bg-surface p-3 font-semibold">Leckerli-Budget: bis {n0(ergebnis.budgetKcal)} kcal, das sind etwa {n0(ergebnis.budgetGramm)} g pro Tag. Höchstens 10 % des Tagesbedarfs.</p>
+          <RisikoPflichtzeile />
+          <MengenBox id={ergebnis.leckerliRisiko} />
           {ergebnis.hinweise.map((h) => <p key={h.id} className="text-xs text-muted">{h.text}</p>)}
         </div>
       )}
@@ -130,6 +139,12 @@ export function ErgebnisKarte({ ergebnis, nochFehlt, fehlerText, onTeilen, getei
             ) : (
               <p className="text-sm font-semibold">Ohne erwartetes Endgewicht gibt es keine Tagesmenge. · {n0(ok.me)} kcal/100 g</p>
             )}
+            {ok.mengeRisiko && (
+              <>
+                <RisikoPflichtzeile />
+                <MengenBox id={ok.mengeRisiko} />
+              </>
+            )}
           </div>
 
           <div className="mt-5 border-t border-border pt-4">
@@ -137,6 +152,7 @@ export function ErgebnisKarte({ ergebnis, nochFehlt, fehlerText, onTeilen, getei
             <ul className="mt-3 space-y-3">
               {ok.gruende.map((g) => {
                 const { icon: Icon, farbe } = GRUND_STIL[g.art];
+                const offenFlags = (g.risiken ?? []).map((_, i) => (g.risikoStufen?.[i] === "bad" ? offenZaehler.n++ < MAX_OFFEN : false));
                 return (
                   <li key={g.id} className="flex gap-2.5 text-sm leading-relaxed">
                     <Icon aria-hidden className={`mt-0.5 size-5 shrink-0 ${farbe}`} />
@@ -144,6 +160,7 @@ export function ErgebnisKarte({ ergebnis, nochFehlt, fehlerText, onTeilen, getei
                       <span className="sr-only">{g.titel}: </span>
                       {g.text}
                       {g.verhaeltnis != null && <Balken verhaeltnis={g.verhaeltnis} />}
+                      {g.risiken?.map((rid, i) => <RisikoBox key={rid} id={rid} stufe={g.risikoStufen?.[i] ?? "warn"} offen={offenFlags[i] ?? false} />)}
                     </span>
                   </li>
                 );
@@ -154,6 +171,7 @@ export function ErgebnisKarte({ ergebnis, nochFehlt, fehlerText, onTeilen, getei
           <div className="mt-4 space-y-1.5 text-sm text-muted">
             {ok.hinweise.map((h) => <p key={h.id}>{h.text}</p>)}
           </div>
+          <FazitBox art={art} score={ok.score} />
 
           <details className="group mt-4 rounded-2xl border border-border bg-bg-soft p-3">
             <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-2 text-sm font-bold">
