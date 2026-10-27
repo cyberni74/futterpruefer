@@ -1,6 +1,7 @@
 "use client";
 
 import { Bone, Cat, Dog, Footprints, House, Mountain, Sofa, Trash2, Trees, Zap } from "lucide-react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { BEREICHE, hundKgAusPos, hundPosAusKg, hundGewichtPos } from "@/lib/futterrechner/bereiche";
@@ -8,7 +9,7 @@ import { berechne } from "@/lib/futterrechner";
 import { decodeHash, encodeHash } from "@/lib/futterrechner/hash";
 import {
   ALTER_MAX, alterAusPosition, alterText, lebensphase, positionAusAlter, startState,
-  type FormState, type FutterartWahl, type Lebensphase, type Werte,
+  type FormState, type Lebensphase, type Werte,
 } from "@/lib/futterrechner/state";
 import { parseZahl, pruefe } from "@/lib/futterrechner/validierung";
 import type { Art, ErgebnisOk } from "@/lib/futterrechner/types";
@@ -282,7 +283,7 @@ export function Rechner({ art, ctas }: { art: Art; ctas?: RechnerCtas }) {
             <details className="group mt-3 rounded-2xl bg-bg-soft p-3">
               <summary className="min-h-11 cursor-pointer list-none text-sm font-bold leading-[2.75rem]">Wo steht das? So lesen Sie das Etikett</summary>
               <div className="mt-2"><Infografik1 /></div>
-              <p className="mt-2 text-sm">Mehr dazu: <a href="/blog/futterdeklaration-richtig-lesen" className="font-semibold text-brand underline underline-offset-4">Futterdeklaration richtig lesen</a>.</p>
+              <p className="mt-2 text-sm">Mehr dazu: <Link href="/blog/futterdeklaration-richtig-lesen" className="font-semibold text-brand underline underline-offset-4">Futterdeklaration richtig lesen</Link>.</p>
             </details>
             <p className="mt-3 text-sm text-muted">Alle Werte in %, so wie auf der Packung („wie gefüttert“).</p>
             <div className="mt-2 divide-y divide-border">
@@ -381,6 +382,8 @@ function Kopf({ nr, id, titel }: { nr: number; id: string; titel: string }) {
 
 function EnergieFeld({ w, onChange, fehler }: { w: Werte; onChange: (p: Partial<Werte>) => void; fehler?: string }) {
   const [t, setT] = useState(w.me == null ? "" : String(w.me).replace(".", ","));
+  // Feld an Wert von außen angleichen (Zurücksetzen, Teilen-Link); Tippen setzt w.me selbst
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => { setT(w.me == null ? "" : String(w.me).replace(".", ",")); }, [w.me]);
   return (
     <div className="py-2">

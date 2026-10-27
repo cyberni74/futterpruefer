@@ -29,7 +29,7 @@ export function useZaehler(ziel: number) {
   const [wert, setWert] = useState(ziel);
   const von = useRef(ziel);
   useEffect(() => {
-    if (reduziert) { setWert(ziel); von.current = ziel; return; }
+    if (reduziert) { von.current = ziel; return; }
     const start = von.current;
     const t0 = performance.now();
     let raf = 0;
@@ -43,7 +43,7 @@ export function useZaehler(ziel: number) {
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
   }, [ziel, reduziert]);
-  return Math.round(wert);
+  return reduziert ? ziel : Math.round(wert);
 }
 
 export function Gauge({ score, klein = false, titel }: { score: number; klein?: boolean; titel: string }) {
