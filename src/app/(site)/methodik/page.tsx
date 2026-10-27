@@ -52,7 +52,7 @@ const DETAIL: Record<CriterionKey, { fragen: string; punkte: string; abzug: stri
     abzug: ["Fehlende oder unrealistische Fütterungsempfehlung", "Ergänzungsfutter, das wie ein Alleinfutter beworben wird", "Rezeptur und Zielgruppe passen nicht zusammen, z. B. Senioren-Futter mit auffälligem Phosphorgehalt"],
   },
   scoreValue: {
-    fragen: "Steht der Preis in einem angemessenen Verhältnis zu dem, was das Futter bietet? Wir vergleichen Kilopreis und Preis pro Tagesration mit der Qualität der Rezeptur.",
+    fragen: "Steht der Preis in einem angemessenen Verhältnis zu dem, was das Futter bietet? Wir vergleichen Kilopreis und Preis pro Tagesration mit der Qualität der Rezeptur. Preis-Leistung vergleichen wir je Tierart: Hundefutter mit Hundefutter, Katzenfutter mit Katzenfutter, jeweils bezogen auf die Kosten je 1.000 kcal.",
     punkte: "Dieses Kriterium hat bewusst nur wenig Gewicht: Ein günstiges Futter wird dadurch nicht gut, ein teures nicht automatisch schlecht.",
     abzug: ["Hoher Preis bei durchschnittlicher oder schwacher Rezeptur", "Unverhältnismäßig kleine Packungsgrößen oder Tagesrationen"],
   },
@@ -106,9 +106,12 @@ export default function MethodikPage() {
             </tbody>
           </table>
         </div>
-        <p className="mt-3 text-sm text-muted">Stand {METHODOLOGY_STAND}. {METHODOLOGY_CHANGELOG_ERGAENZUNG}</p>
+        {METHODOLOGY_CHANGELOG.slice(0, -1).map((entry, index) => (
+          <p key={entry} className={`${index === 0 ? "mt-3" : "mt-2"} text-sm text-muted`}>{entry}</p>
+        ))}
+        <p className="mt-2 text-sm text-muted">Stand {METHODOLOGY_STAND}. {METHODOLOGY_CHANGELOG_ERGAENZUNG}</p>
         <p className="mt-2 text-sm text-muted">{METHODOLOGY_CHANGELOG_ABGRENZUNG}</p>
-        <p className="mt-2 text-sm text-muted">{METHODOLOGY_CHANGELOG}</p>
+        <p className="mt-2 text-sm text-muted">{METHODOLOGY_CHANGELOG[METHODOLOGY_CHANGELOG.length - 1]}</p>
 
         <div className="mt-8 space-y-5">
           {PUBLISHED_CRITERIA.filter((c): c is typeof c & { key: CriterionKey } => c.key in DETAIL).map((c, i) => {

@@ -25,8 +25,12 @@ export const METHODOLOGY_CHANGELOG_ERGAENZUNG =
 export const METHODOLOGY_CHANGELOG_ABGRENZUNG =
   "27.10.2026: Abgrenzung Unbelegt/Fragwürdig ergänzt; entspricht unserer bisherigen Bewertungspraxis, keine Punktzahl geändert.";
 
-export const METHODOLOGY_CHANGELOG =
-  "26.10.2026 – Korrektur: Vom 16.10. bis 26.10.2026 nannten diese Seite und einige andere Seiten von Futterprüfer für Alleinfutter sieben Kriterien, darunter „Transparenz / Herstellerunterlagen“ (10 Punkte), und eine auf 90 Punkte verkleinerte Gewichtung der übrigen sechs. Angewandt haben wir diese Gewichtung in keinem Test. Alle veröffentlichten Alleinfutter-Tests sind nach den sechs Kriterien in der Tabelle bewertet, auch die seit dem 16.10.2026 erschienenen. Durch diese Korrektur hat sich keine Punktzahl geändert.";
+export const METHODOLOGY_CHANGELOG = [
+  "27.10.2026 – Werbeaussagen-Check: zwei weitere Stufen. ‚Plausibel‘ heißt: Es gibt nachvollziehbare Gründe für die Aussage, ein vollständiger Beleg fehlt. ‚Unbelegt‘ heißt: eine allgemeine Anpreisung ohne prüfbaren Inhalt oder ein vom Hersteller erklärter, aber nicht belegter Begriff; wir können die Aussage weder bestätigen noch widerlegen. Beide Stufen gelten nicht als ‚ohne Einwand‘. Zusätzlich beziehen wir die Angaben im Amazon-Listing ein und kennzeichnen sie als ‚Amazon-Listing (Urheber unbekannt)‘.",
+  "27.10.2026 – Neu bewertet: MjAMjAM Saftiges Huhn an leckeren Möhrchen. Nach unserer aktuellen Futter-Methodik nachgeprüft, einschließlich der Angaben im Amazon-Listing. Neu gewertet sind der Jodzusatz, die Fütterungsempfehlung sowie Werbeangaben zu Allergien, Rohfütterung, Vitaminversorgung und Qualität. Ergebnis: 75 statt 87 Punkte, Ampel Gelb statt Grün.",
+  "27.10.2026 – Preis-Leistung: klargestellt, dass wir Preise je Tierart vergleichen. Bestehende Wertungen ändern sich dadurch nicht.",
+  "26.10.2026 – Korrektur: Vom 16.10. bis 26.10.2026 nannten diese Seite und einige andere Seiten von Futterprüfer für Alleinfutter sieben Kriterien, darunter „Transparenz / Herstellerunterlagen“ (10 Punkte), und eine auf 90 Punkte verkleinerte Gewichtung der übrigen sechs. Angewandt haben wir diese Gewichtung in keinem Test. Alle veröffentlichten Alleinfutter-Tests sind nach den sechs Kriterien in der Tabelle bewertet, auch die seit dem 16.10.2026 erschienenen. Durch diese Korrektur hat sich keine Punktzahl geändert.",
+] as const;
 
 export const PUBLISHED_CRITERIA = [
   { key: "scoreRaw", label: "Rohstoffqualität", description: "Sinnhaftigkeit und Qualität der Rohstoffe", max: 30 },
