@@ -3,15 +3,41 @@ import { isAllowedImageUrl } from "./image-hosts";
 import { slugify } from "./slug";
 
 // ---------- Werbeaussagen ----------
-export const CLAIM_RATINGS = ["ZULAESSIG", "FRAGWUERDIG", "UNZULAESSIG"] as const;
+export const CLAIM_RATINGS = ["ZULAESSIG", "PLAUSIBEL", "UNBELEGT", "FRAGWUERDIG", "UNZULAESSIG"] as const;
 export type ClaimRating = (typeof CLAIM_RATINGS)[number];
 export type Claim = { claim: string; rating: ClaimRating; reason: string; legal: string; imageUrl: string };
 
 export const CLAIM_LABEL: Record<ClaimRating, string> = {
   ZULAESSIG: "Ohne Einwand",
+  PLAUSIBEL: "Plausibel",
+  UNBELEGT: "Unbelegt",
   FRAGWUERDIG: "Fragwürdig",
   UNZULAESSIG: "Halten wir für irreführend",
 };
+
+/** Badge-Farben. Unbelegt ist grau, Plausibel ist Türkis und damit nicht das Grün von „Ohne Einwand“. */
+export const CLAIM_BADGE_CLASS: Record<ClaimRating, string> = {
+  ZULAESSIG: "bg-good-soft text-good",
+  PLAUSIBEL: "bg-brand-soft text-brand",
+  UNBELEGT: "bg-bg-soft text-muted",
+  FRAGWUERDIG: "bg-mid-soft text-mid",
+  UNZULAESSIG: "bg-bad-soft text-bad",
+};
+
+const STUFEN_ZAEHLER: Array<{ rating: ClaimRating; wort: string }> = [
+  { rating: "ZULAESSIG", wort: "ohne Einwand" },
+  { rating: "PLAUSIBEL", wort: "plausibel" },
+  { rating: "UNBELEGT", wort: "unbelegt" },
+  { rating: "FRAGWUERDIG", wort: "fragwürdig" },
+  { rating: "UNZULAESSIG", wort: "irreführend" },
+];
+
+/** Jede Stufe für sich. Unbelegt und Plausibel zählen nicht als „ohne Einwand“. */
+export function claimStageSummary(claims: Claim[]): string {
+  const n = Object.fromEntries(CLAIM_RATINGS.map((r) => [r, 0])) as Record<ClaimRating, number>;
+  for (const c of claims) n[c.rating] += 1;
+  return STUFEN_ZAEHLER.filter((s) => n[s.rating] > 0).map((s) => `${n[s.rating]} ${s.wort}`).join(", ");
+}
 
 const str = (v: unknown, max = 1000) => (typeof v === "string" ? v.trim().slice(0, max) : "");
 
@@ -36,6 +62,9 @@ export function parseClaims(json: unknown): Claim[] {
 }
 
 export const misleadingClaims = (claims: Claim[]) => claims.filter((c) => c.rating === "UNZULAESSIG");
+
+/** Fragwürdig oder irreführend. Unbelegt und Plausibel sind keine Beanstandung. */
+export const objectedClaims = (claims: Claim[]) => claims.filter((c) => c.rating === "FRAGWUERDIG" || c.rating === "UNZULAESSIG");
 
 /** Vorschlag für den Abzug bei „Deklaration & Transparenz“: 3 Punkte je unzulässiger, 1 je fragwürdiger Aussage, max. 15. */
 export function suggestedDeclarationDeduction(claims: Claim[]): number {
@@ -77,16 +106,27 @@ export function dryMatter(rows: AnalysisRow[]): AnalysisRow[] | null {
 }
 
 // ---------- Zusammensetzung ----------
-/** Teilt die Zusammensetzung an Kommas/Semikolons außerhalb von Klammern. */
+/** Komma oder Semikolon zwischen zwei Ziffern (auch „2, 5“) ist ein Dezimalkomma, kein Listentrenner. */
+function betweenDigits(text: string, index: number): boolean {
+  const prev = text[index - 1];
+  let nextIndex = index + 1;
+  while (text[nextIndex] === " ") nextIndex++;
+  const next = text[nextIndex];
+  return prev != null && next != null && /\d/.test(prev) && /\d/.test(next);
+}
+
+/** Teilt Zutaten- und Zusatzstofflisten an Kommas/Semikolons außerhalb von Klammern. */
 export function splitComposition(text: string | null | undefined): string[] {
   if (!text) return [];
+  const normalized = text.replace(/\s+/g, " ");
   const out: string[] = [];
   let depth = 0;
   let cur = "";
-  for (const ch of text.replace(/\s+/g, " ")) {
+  for (let i = 0; i < normalized.length; i++) {
+    const ch = normalized[i];
     if (ch === "(" || ch === "[") depth++;
     if ((ch === ")" || ch === "]") && depth > 0) depth--;
-    if ((ch === "," || ch === ";") && depth === 0) {
+    if (depth === 0 && (ch === "," || ch === ";") && !betweenDigits(normalized, i)) {
       out.push(cur);
       cur = "";
     } else cur += ch;

@@ -116,7 +116,7 @@ model Review {
   pricePerDay Decimal?  @db.Decimal(8, 2)
   priceDate   DateTime?
   testedAt    DateTime?
-  /// [{ "claim", "rating": ZULAESSIG|FRAGWUERDIG|UNZULAESSIG, "reason", "legal", "imageUrl" }]
+  /// [{ "claim", "rating": ZULAESSIG|PLAUSIBEL|UNBELEGT|FRAGWUERDIG|UNZULAESSIG, "reason", "legal", "imageUrl" }]
   claims      Json      @default("[]")
 
   // Bewertung (Maxima siehe src/lib/scoring.ts)

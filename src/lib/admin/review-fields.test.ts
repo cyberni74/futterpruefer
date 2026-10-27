@@ -44,6 +44,19 @@ describe("Testartikel-Formular", () => {
   it("rote/gelbe Werbeaussagen brauchen eine Begründung", () => {
     expect(paths(form({ claims: JSON.stringify([{ claim: "heilt alles", rating: "UNZULAESSIG", reason: "" }]) }))).toContain("claims");
   });
+  it("Unbelegt und Plausibel sind setzbar und brauchen eine Begründung, Ohne Einwand nicht", () => {
+    expect(paths(form({ claims: JSON.stringify([{ claim: "Premium", rating: "UNBELEGT", reason: "" }]) }))).toContain("claims");
+    expect(paths(form({ claims: JSON.stringify([{ claim: "regional", rating: "PLAUSIBEL", reason: "zu kurz" }]) }))).toContain("claims");
+    const ok = form({
+      claims: JSON.stringify([
+        { claim: "Premium", rating: "UNBELEGT", reason: "Allgemeine Anpreisung ohne prüfbaren Inhalt." },
+        { claim: "regional", rating: "PLAUSIBEL", reason: "Die Herkunft ist genannt, ein Beleg fehlt." },
+        { claim: "getreidefrei", rating: "ZULAESSIG", reason: "" },
+      ]),
+    });
+    expect(ok.success).toBe(true);
+    if (ok.success) expect(ok.data.claims.map((c) => c.rating)).toEqual(["UNBELEGT", "PLAUSIBEL", "ZULAESSIG"]);
+  });
   it("ungültige Werte werden abgelehnt", () => {
     expect(paths(form({ price: "abc" }))).toContain("price");
     expect(paths(form({ priceDate: "01.10.2026" }))).toContain("priceDate");

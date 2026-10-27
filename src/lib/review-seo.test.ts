@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { directAnswer, keywordName, kurzGesagt, renameBodyFazit, reviewFaq, seoFazitHeading, withoutLeadingScore } from "./review-seo";
+import { amazonPriceUrl, directAnswer, keywordName, kurzGesagt, priceCite, priceSourceFromArticle, renameBodyFazit, reviewFaq, seoFazitHeading, withoutLeadingScore } from "./review-seo";
 import { comparisonForPost, comparisonForReview, isInComparison } from "./comparison-links";
 import { faqPageJsonLd } from "./faq-schema";
 
@@ -15,7 +15,8 @@ describe("review-seo", () => {
     expect(keywordName("", null, "Produkt X")).toBe("Produkt X");
   });
   it("erster Satz beantwortet die Frage mit Punkten und Ampel", () => {
-    expect(directAnswer(base)).toContain("45 von 100 Punkten, Ampel Rot");
+    expect(directAnswer(base)).toBe("Wie schneidet Testfutter Rind im Test ab? Nach unserem Bewertungsschema: nicht empfehlenswert. Testfutter Rind erreicht im Test vom 23.10.2026 45 von 100 Punkten, Ampel Rot.");
+    expect(directAnswer(base)).not.toContain("Lohnt sich");
   });
   it("Kurz gesagt nennt Ampel, Plus, Minus, Irreführung, Preis", () => {
     const k = kurzGesagt(base).join(" ");
@@ -72,6 +73,46 @@ describe("review-seo", () => {
     const faq = reviewFaq({ ...base, totalScore: 22, verdict: "22 von 100 Punkten, Rot (nicht empfehlenswert). Pluspunkt: Prozente." });
     expect(faq[0].answer.match(/22 von 100 Punkten/g)).toHaveLength(1);
     expect(faq[0].answer).toContain("Pluspunkt: Prozente.");
+  });
+  it("nennt die Preisquelle nur mit Datum", () => {
+    expect(priceCite("Amazon", "23.10.2026")).toBe("Preis bei Amazon, Stand 23.10.2026");
+    expect(priceCite("Hersteller-Shop", "16.10.2026")).toBe("Preis im Hersteller-Shop, Stand 16.10.2026");
+    expect(priceCite("Amazon", "")).toBe("");
+    expect(priceCite("Hersteller-Shop", "")).toBe("");
+    expect(priceCite("", "23.10.2026")).toBe("Stand 23.10.2026");
+    expect(priceCite("", "")).toBe("");
+    const withAmazon = kurzGesagt({ ...base, priceSource: "Amazon" }).join(" ");
+    expect(withAmazon).toContain("Preis bei Amazon, Stand 23.10.2026");
+    expect(withAmazon).toContain("Preise können sich seitdem geändert haben.");
+    expect(kurzGesagt(base).join(" ")).toContain("(Stand 23.10.2026)");
+    expect(kurzGesagt(base).join(" ")).not.toContain("Preis bei");
+    const faq = reviewFaq({ ...base, priceSource: "Hersteller-Shop" }).find((f) => f.question.startsWith("Was kostet"));
+    expect(faq?.answer).toContain("Preis im Hersteller-Shop, Stand 23.10.2026");
+    expect(faq?.answer).toContain("Preise können je nach Händler abweichen.");
+    const amazonFaq = reviewFaq({ ...base, priceSource: "Amazon" }).find((f) => f.question.startsWith("Was kostet"));
+    expect(amazonFaq?.answer).toContain("Preise können sich seitdem geändert haben.");
+    const undatiert = { ...base, priceDate: null };
+    expect(kurzGesagt(undatiert).join(" ")).not.toMatch(/€|Preis:/);
+    expect(reviewFaq(undatiert).some((f) => f.question.startsWith("Was kostet"))).toBe(false);
+  });
+  it("baut den Amazon-Link nur aus ASIN oder Produktlink", () => {
+    expect(amazonPriceUrl({ asin: "b000000000" })).toBe("https://www.amazon.de/dp/B000000000?tag=cyberni7400-21");
+    expect(amazonPriceUrl({ html: '<a href="https://www.amazon.de/dp/B001J4G1LI">amazon.de</a>' })).toBe("https://www.amazon.de/dp/B001J4G1LI?tag=cyberni7400-21");
+    expect(amazonPriceUrl({ kaufUrl: "https://www.amazon.de/dp/B07KCS7YX1?tag=anderer" })).toBe("https://www.amazon.de/dp/B07KCS7YX1?tag=cyberni7400-21");
+    expect(amazonPriceUrl({ html: '<a href="https://www.leonardo-catfood.de/leonardo">Shop</a>' })).toBeNull();
+    expect(amazonPriceUrl({})).toBeNull();
+  });
+  it("liest die Preisquelle nur aus einer ausdrücklichen Preisangabe", () => {
+    expect(priceSourceFromArticle("<p>Im Hersteller-Shop kostet die 300-g-Packung 5,19 €.</p>")).toBe("Hersteller-Shop");
+    expect(priceSourceFromArticle("<p>Bei Fressnapf kostet der Sack 67,49 €.</p>")).toBe("Fressnapf");
+    expect(priceSourceFromArticle("<p>Bei zooplus kostet die Dose 1,69 €.</p>")).toBe("zooplus");
+    expect(priceSourceFromArticle("<p>Auf happydog.at kostet die Packung 2,63 €.</p>")).toBe("happydog.at");
+    expect(priceSourceFromArticle("<p>Amazon nannte am 17.10.2026 14,75 Euro für 4 kg.</p>")).toBe("Amazon");
+    expect(priceSourceFromArticle("<li>Amazon-Preis am 17.10.2026: 14,75 Euro für 4 kg.</li>")).toBe("Amazon");
+    expect(priceSourceFromArticle('<p><a href="https://www.amazon.de/dp/B000">bei Amazon ansehen</a></p>')).toBeNull();
+    expect(priceSourceFromArticle("<p>Die Packung kostet laut Shop 2,79 €.</p>")).toBeNull();
+    expect(priceSourceFromArticle("<p>Amazon zeigte kein Angebot.</p>")).toBeNull();
+    expect(priceSourceFromArticle(null)).toBeNull();
   });
   it("ordnet Vergleichstests zu", () => {
     expect(comparisonForReview({ title: "Premium Lachsöl", categorySlug: "ergaenzungsfuttermittel-hund" })?.slug).toBe("lachsoel-test-hund-oktober-2026");

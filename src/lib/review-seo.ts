@@ -59,28 +59,87 @@ export type ReviewSeoInput = {
   pricePerKg?: unknown;
   pricePerDay?: unknown;
   priceDate?: Date | null;
+  /** Shop oder Seite, von der der Preis stammt. Leer = keine Quelle nennen. */
+  priceSource?: string | null;
   composition?: string | null;
   ergaenzung: boolean;
 };
 
 const lowerFirst = (s: string) => s.charAt(0).toLocaleLowerCase("de") + s.slice(1);
 
-/** Erster Satz: beantwortet „Lohnt sich …?“ direkt mit Punkten und Ampel. */
+/** Erster Satz: beantwortet „Wie schneidet … im Test ab?“ direkt mit Punkten und Ampel. */
 export function directAnswer(r: ReviewSeoInput): string {
   const rating = ratingFor(r.totalScore);
   const d = dayDate(r.testedAt);
-  return `Lohnt sich ${r.name}? Nach unserem Bewertungsschema: ${lowerFirst(RATING_LABEL[rating])}. ${r.name} erreicht im Test${d ? ` vom ${d}` : ""} ${r.totalScore} von 100 Punkten, Ampel ${AMPEL_WORD[rating]}.`;
+  return `Wie schneidet ${r.name} im Test ab? Nach unserem Bewertungsschema: ${lowerFirst(RATING_LABEL[rating])}. ${r.name} erreicht im Test${d ? ` vom ${d}` : ""} ${r.totalScore} von 100 Punkten, Ampel ${AMPEL_WORD[rating]}.`;
+}
+
+/** TT.MM.JJJJ in Europe/Berlin. Leer, wenn kein Datum vorliegt. */
+export function priceStandDate(d: Date | null | undefined): string {
+  return dayDate(d);
+}
+
+/**
+ * Preis nur mit Datum. Hersteller-Shop mit „im“, sonst „bei“.
+ * „Preis bei Amazon, Stand 23.10.2026“, „Preis im Hersteller-Shop, Stand 16.10.2026“, ohne Quelle „Stand 23.10.2026“.
+ * Ohne Datum leer: dann darf kein Preis erscheinen.
+ */
+export function priceCite(source: string | null | undefined, date: string | null | undefined): string {
+  const src = source?.trim() ?? "";
+  const d = date?.trim() ?? "";
+  if (!d) return "";
+  if (!src) return `Stand ${d}`;
+  const prep = src === "Hersteller-Shop" ? "im" : "bei";
+  return `Preis ${prep} ${src}, Stand ${d}`;
+}
+
+/** Schlusstext einer datierten Preisangabe. Bei Amazon der Änderungshinweis. */
+export function priceNotice(source: string | null | undefined): string {
+  return source?.trim() === "Amazon" ? "Preise können sich seitdem geändert haben." : "Preise können je nach Händler abweichen.";
+}
+
+/**
+ * Liest eine ausdrücklich genannte Preisquelle aus dem Testtext.
+ * Affiliate-Buttons und bloße Amazon-Erwähnungen zählen nicht.
+ */
+export function priceSourceFromArticle(html: string | null | undefined): string | null {
+  const text = (html ?? "").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ");
+  const bisPreis = "(?:(?!\\.\\s)[\\s\\S]){0,180}?(?:€|Euro)";
+  const match = new RegExp(`Im Hersteller-Shop kostet|Bei ([A-Za-zÄÖÜäöüß][\\p{L}\\d.&-]{1,40}) kostet|Auf ([a-z0-9][a-z0-9.-]*\\.[a-z]{2,}) kostet|Amazon nannte\\b${bisPreis}|Amazon-Preis\\b${bisPreis}`, "iu").exec(text);
+  if (!match) return null;
+  if (match[1]) return match[1];
+  if (match[2]) return match[2];
+  if (/^Im Hersteller-Shop/i.test(match[0])) return "Hersteller-Shop";
+  return "Amazon";
 }
 
 function priceText(r: ReviewSeoInput): string {
+  const stand = priceStandDate(r.priceDate);
+  if (!stand) return "";
   const p = num(r.price), kg = num(r.pricePerKg), day = num(r.pricePerDay);
   const parts: string[] = [];
   if (p != null) parts.push(`${eur(p)}${r.packageSize ? ` für ${r.packageSize}` : ""}`);
   if (kg != null) parts.push(`${eur(kg)} pro Kilogramm`);
   if (day != null) parts.push(`${eur(day)} pro Tagesration`);
   if (!parts.length) return "";
-  const d = dayDate(r.priceDate);
-  return `${parts.join(", ")}${d ? ` (Preisstand ${d})` : ""}`;
+  const cite = priceCite(r.priceSource, stand);
+  return `${parts.join(", ")}${cite ? ` (${cite})` : ""}`;
+}
+
+const AMAZON_TAG = "cyberni7400-21";
+
+/** ASIN oder Amazon-Produktlink aus den Daten, immer mit Partner-Tag. Sonst null. */
+export function amazonPriceUrl(input: { html?: string | null; asin?: string | null; kaufUrl?: string | null }): string | null {
+  const asin = (input.asin ?? "").trim().toUpperCase();
+  if (/^[A-Z0-9]{10}$/.test(asin)) return `https://www.amazon.de/dp/${asin}?tag=${AMAZON_TAG}`;
+  const html = input.html ?? "";
+  const hrefs = [input.kaufUrl ?? "", ...[...html.matchAll(/href="([^"]+)"/gi)].map((m) => m[1].replace(/&amp;/g, "&"))];
+  for (const href of hrefs) {
+    if (!/amazon\./i.test(href)) continue;
+    const code = href.match(/\/(?:dp|gp\/product)\/([A-Z0-9]{10})/i)?.[1];
+    if (code) return `https://www.amazon.de/dp/${code.toUpperCase()}?tag=${AMAZON_TAG}`;
+  }
+  return null;
 }
 
 export function kurzGesagt(r: ReviewSeoInput): string[] {
@@ -93,7 +152,7 @@ export function kurzGesagt(r: ReviewSeoInput): string[] {
   const mis = misleadingClaims(r.claims).length;
   if (mis) items.push(mis === 1 ? "Eine Werbeaussage halten wir für irreführend." : `${mis} Werbeaussagen halten wir für irreführend.`);
   const price = priceText(r);
-  if (price) items.push(`Preis: ${price}.`);
+  if (price) items.push(`Preis: ${price}.${r.priceSource?.trim() === "Amazon" ? ` ${priceNotice(r.priceSource)}` : ""}`);
   return items;
 }
 
@@ -121,7 +180,7 @@ export function reviewFaq(r: ReviewSeoInput, comparison?: { title: string } | nu
     });
   }
   const price = priceText(r);
-  if (price) out.push({ question: `Was kostet ${r.name}?`, answer: `${price}. Preise können je nach Händler abweichen.` });
+  if (price) out.push({ question: `Was kostet ${r.name}?`, answer: `${price}. ${priceNotice(r.priceSource)}` });
   const parts = splitComposition(r.composition);
   if (parts.length) {
     const first = parts.slice(0, 5).join(", ");
