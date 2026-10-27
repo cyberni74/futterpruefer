@@ -29,4 +29,25 @@ describe("sitemapEntries", () => {
     expect(byPath["/methodik/ergaenzungsfutter"]).toBe("2026-10-17T00:00:00.000Z");
     expect(byPath["/leer"]).toBeUndefined();
   });
+
+  it("enthält jeden veröffentlichten Test, Beitrag und Lexikon-Eintrag sowie die Futterrechner-Seiten", () => {
+    const reviews = ["a", "b", "c"].map((slug, i) => ({ slug, updatedAt: at(`2026-10-0${i + 1}T10:00:00.000Z`), categorySlug: i < 2 ? "alleinfuttermittel-hund" : "alleinfuttermittel-katze" }));
+    const posts = ["p1", "p2"].map((slug) => ({ slug, updatedAt: at("2026-10-04T10:00:00.000Z") }));
+    const lexikon = ["l1", "l2"].map((slug) => ({ slug, updatedAt: at("2026-09-01T10:00:00.000Z") }));
+    const paths = sitemapEntries({
+      categories: [{ slug: "alleinfuttermittel-hund" }, { slug: "alleinfuttermittel-katze" }],
+      reviews, posts, lexikon, glossary: [], brands: [{ slug: "marke-x", updatedAt: at("2026-10-01T10:00:00.000Z") }],
+    }).map((e) => e.path);
+    for (const r of reviews) expect(paths).toContain(`/${r.categorySlug}/${r.slug}`);
+    for (const p of posts) expect(paths).toContain(`/blog/${p.slug}`);
+    for (const l of lexikon) expect(paths).toContain(`/lexikon/${l.slug}`);
+    expect(paths).toContain("/marken/marke-x");
+    for (const fixed of ["/futterrechner", "/futterrechner/hund", "/futterrechner/katze", "/methodik", "/methodik/ergaenzungsfutter", "/faq"]) expect(paths).toContain(fixed);
+    expect(new Set(paths).size).toBe(paths.length);
+  });
+
+  it("ohne Datenbank bleiben die statischen Seiten inklusive Futterrechner erhalten", () => {
+    const paths = sitemapEntries({ categories: [], reviews: [], posts: [], lexikon: [], glossary: [] }).map((e) => e.path);
+    expect(paths).toEqual(expect.arrayContaining(["/futterrechner", "/futterrechner/hund", "/futterrechner/katze"]));
+  });
 });

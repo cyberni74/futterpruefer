@@ -92,6 +92,16 @@ export function Rechner({ art, ctas }: { art: Art; ctas?: RechnerCtas }) {
     return () => clearTimeout(t);
   }, [text]);
 
+  // Die Leiste darf die Ergebnis-Karte nie verdecken: Sie erscheint nur, solange die Karte nicht im Bild ist
+  const [karteImBild, setKarteImBild] = useState(false);
+  useEffect(() => {
+    const el = document.getElementById("ergebnis");
+    if (!el || typeof IntersectionObserver === "undefined") return;
+    const io = new IntersectionObserver(([e]) => setKarteImBild(e.isIntersecting), { threshold: 0 });
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
   const set = useCallback((patch: Partial<FormState>) => setS((x) => ({ ...x, ...patch })), []);
   const setWert = useCallback(
     (patch: Partial<Werte>) => setS((x) => ({ ...x, werte: { ...x.werte, [x.futterart]: { ...x.werte[x.futterart], ...patch } } })),
@@ -344,7 +354,7 @@ export function Rechner({ art, ctas }: { art: Art; ctas?: RechnerCtas }) {
         </div>
       </div>
 
-      <ErgebnisLeiste ergebnis={analysiert && !pr.fehler.summe ? ergebnis : null} nochFehlt={fehlt} bereit={kannAnalysieren} sichtbar={fehlt < 5 || analysiert} />
+      <ErgebnisLeiste ergebnis={analysiert && !pr.fehler.summe ? ergebnis : null} nochFehlt={fehlt} bereit={kannAnalysieren} sichtbar={(fehlt < 5 || analysiert) && !karteImBild} />
 
       {undo && (
         <div role="status" className="fixed inset-x-3 bottom-[calc(7.5rem+env(safe-area-inset-bottom))] z-40 mx-auto flex max-w-sm items-center justify-between gap-3 rounded-2xl bg-fg px-4 py-3 text-sm font-semibold text-bg shadow-lift md:bottom-20">

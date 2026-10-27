@@ -34,9 +34,16 @@ export function ValueSlider({
   const [aktiv, setAktiv] = useState(false);
   const [ungueltig, setUngueltig] = useState(false);
   const fokus = useRef(false);
+  /** Die letzte Wertänderung kam aus dem Zahlenfeld (dann nicht überschreiben, sonst springt der Cursor) */
+  const tippt = useRef(false);
 
+  // Feld folgt dem Wert, auch wenn es noch den Fokus hat (Regler auf dem Handy bewegen blendet die Tastatur nicht immer aus)
   useEffect(() => {
-    if (!fokus.current) setText(value == null ? "" : fmt(value, step));
+    if (tippt.current) {
+      tippt.current = false;
+      return;
+    }
+    setText(value == null ? "" : fmt(value, step));
   }, [value, step]);
 
   const anzeige = value ?? platzhalter;
@@ -52,7 +59,7 @@ export function ValueSlider({
   const beschr = [hilfe, ausserhalb ? "Außerhalb des üblichen Bereichs." : null, fehler, warnung, fehlt].filter(Boolean).length ? descId : undefined;
 
   return (
-    <div id={`${id}-feld`} className={`py-1 ${fehlt ? "-mx-2 rounded-2xl px-2 ring-2 ring-accent" : ""}`}>
+    <div id={`${id}-feld`} className={`scroll-mt-28 py-1 ${fehlt ? "-mx-2 rounded-2xl px-2 ring-2 ring-accent" : ""}`}>
       <div className="flex items-center justify-between gap-3">
         <label id={labelId} htmlFor={`${id}-r`} className="text-sm font-bold">{label}</label>
         {textAnzeige ? (
@@ -63,12 +70,12 @@ export function ValueSlider({
             type="text" inputMode="decimal" autoComplete="off" aria-labelledby={labelId} aria-invalid={fehler || ungueltig || fehlt ? true : undefined}
             aria-describedby={beschr} placeholder={`typ. ${fmt(platzhalter, step)}`} value={text}
             onFocus={() => (fokus.current = true)}
-            onBlur={() => { fokus.current = false; setText(value == null ? "" : fmt(value, step)); setUngueltig(false); }}
+            onBlur={() => { fokus.current = false; tippt.current = false; setText(value == null ? "" : fmt(value, step)); setUngueltig(false); }}
             onChange={(e) => {
               setText(e.target.value);
               const n = parseZahl(e.target.value);
               if (Number.isNaN(n)) setUngueltig(true);
-              else { setUngueltig(false); onChange(n); }
+              else { setUngueltig(false); tippt.current = n !== value; onChange(n); }
             }}
             className="font-display h-11 w-[5.5rem] rounded-xl border border-border bg-bg-soft px-2 text-right text-xl font-bold tabular-nums placeholder:text-sm placeholder:font-normal placeholder:text-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2"
           />
