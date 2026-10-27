@@ -77,7 +77,7 @@ export function ratingFor(total: number | null | undefined): Rating {
 export const RATING_LABEL: Record<Rating, string> = {
   gut: "Empfehlenswert",
   mittel: "Mit Abstrichen",
-  schlecht: "Nicht empfehlenswert",
+  schlecht: "Rot – keine Empfehlung",
 };
 
 export function ratioRating(value: number, max: number): Rating {

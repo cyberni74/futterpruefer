@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { clampScore, CRITERIA, harmfulFailed, MAX_TOTAL, METHODOLOGY_STAND, PUBLISHED_CRITERIA, PUBLISHED_MAX_TOTAL, ratingFor, totalScore } from "./scoring";
+import { clampScore, CRITERIA, harmfulFailed, MAX_TOTAL, METHODOLOGY_STAND, PUBLISHED_CRITERIA, PUBLISHED_MAX_TOTAL, RATING_LABEL, ratingFor, totalScore } from "./scoring";
 import { slugify } from "./slug";
 import { sanitize, stripHtml } from "./sanitize";
 import { formatDate } from "./site";
@@ -33,6 +33,9 @@ describe("scoring", () => {
     expect(ratingFor(59)).toBe("schlecht");
     expect(ratingFor(0)).toBe("schlecht");
     expect(ratingFor(null)).toBe("schlecht");
+    expect(RATING_LABEL.schlecht).toBe("Rot – keine Empfehlung");
+    expect(RATING_LABEL.gut).toBe("Empfehlenswert");
+    expect(RATING_LABEL.mittel).toBe("Mit Abstrichen");
   });
   it("Schadstoff-Warnsignal unter 50 %", () => {
     expect(harmfulFailed(9)).toBe(true);

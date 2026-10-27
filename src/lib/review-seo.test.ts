@@ -15,12 +15,12 @@ describe("review-seo", () => {
     expect(keywordName("", null, "Produkt X")).toBe("Produkt X");
   });
   it("erster Satz beantwortet die Frage mit Punkten und Ampel", () => {
-    expect(directAnswer(base)).toBe("Wie schneidet Testfutter Rind im Test ab? Nach unserem Bewertungsschema: nicht empfehlenswert. Testfutter Rind erreicht im Test vom 23.10.2026 45 von 100 Punkten, Ampel Rot.");
+    expect(directAnswer(base)).toBe("Wie schneidet Testfutter Rind im Test ab? Nach unserem Bewertungsschema: Rot – keine Empfehlung. Testfutter Rind erreicht im Test vom 23.10.2026 45 von 100 Punkten, Ampel Rot.");
     expect(directAnswer(base)).not.toContain("Lohnt sich");
   });
   it("Kurz gesagt nennt Ampel, Plus, Minus, Irreführung, Preis", () => {
     const k = kurzGesagt(base).join(" ");
-    expect(k).toContain("Ampel Rot");
+    expect(k).toContain("Ampel Rot: Rot – keine Empfehlung.");
     expect(k).toContain("Eine Werbeaussage halten wir für irreführend.");
     expect(k).toMatch(/12,50\s€ pro Kilogramm/);
   });
@@ -34,7 +34,7 @@ describe("review-seo", () => {
   });
   it("Urteil: nur erster Buchstabe klein", () => {
     expect(directAnswer({ ...base, totalScore: 70 })).toContain("Nach unserem Bewertungsschema: mit Abstrichen.");
-    expect(directAnswer(base)).toContain("Nach unserem Bewertungsschema: nicht empfehlenswert.");
+    expect(directAnswer(base)).toContain("Nach unserem Bewertungsschema: Rot – keine Empfehlung.");
   });
   it("Singular bei genau einer irreführenden Aussage, Plural ab zwei", () => {
     expect(reviewFaq(base).map((f) => f.question)).toContain("Welche Werbeaussage zu Testfutter Rind halten wir für irreführend?");
@@ -72,6 +72,7 @@ describe("review-seo", () => {
     expect(withoutLeadingScore("Kauartikel mit 60/100 Fleisch.", 60)).toBe("Kauartikel mit 60/100 Fleisch.");
     const faq = reviewFaq({ ...base, totalScore: 22, verdict: "22 von 100 Punkten, Rot (nicht empfehlenswert). Pluspunkt: Prozente." });
     expect(faq[0].answer.match(/22 von 100 Punkten/g)).toHaveLength(1);
+    expect(faq[0].answer).toContain("Ampel Rot (Rot – keine Empfehlung).");
     expect(faq[0].answer).toContain("Pluspunkt: Prozente.");
   });
   it("nennt die Preisquelle nur mit Datum", () => {

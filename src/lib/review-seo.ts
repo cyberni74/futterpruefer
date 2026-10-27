@@ -71,7 +71,10 @@ const lowerFirst = (s: string) => s.charAt(0).toLocaleLowerCase("de") + s.slice(
 export function directAnswer(r: ReviewSeoInput): string {
   const rating = ratingFor(r.totalScore);
   const d = dayDate(r.testedAt);
-  return `Wie schneidet ${r.name} im Test ab? Nach unserem Bewertungsschema: ${lowerFirst(RATING_LABEL[rating])}. ${r.name} erreicht im Test${d ? ` vom ${d}` : ""} ${r.totalScore} von 100 Punkten, Ampel ${AMPEL_WORD[rating]}.`;
+  const label = RATING_LABEL[rating];
+  // „Rot – …“ ist der Name der roten Ampel und bleibt groß. Die anderen Notenwörter stehen im Satz klein.
+  const wort = label.startsWith("Rot") ? label : lowerFirst(label);
+  return `Wie schneidet ${r.name} im Test ab? Nach unserem Bewertungsschema: ${wort}. ${r.name} erreicht im Test${d ? ` vom ${d}` : ""} ${r.totalScore} von 100 Punkten, Ampel ${AMPEL_WORD[rating]}.`;
 }
 
 /** TT.MM.JJJJ in Europe/Berlin. Leer, wenn kein Datum vorliegt. */
