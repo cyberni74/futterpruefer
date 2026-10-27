@@ -20,7 +20,7 @@ export default function FutterrechnerHub() {
       <header className="mt-4">
         <p className="inline-flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wide text-brand"><Calculator aria-hidden className="size-4" /> Futterrechner</p>
         <h1 className="mt-2 text-3xl font-extrabold md:text-5xl">{META.hub.h1}</h1>
-        <p className="mt-4 max-w-2xl text-lg text-muted">Analysewerte vom Etikett eintippen, Nährwert-Check nach FEDIAF und Tagesmenge sofort sehen. Kostenlos, ohne Anmeldung, nichts gespeichert.</p>
+        <p className="mt-4 max-w-2xl text-lg text-muted">Zu wenig Eiweiß oder zu viel Calcium sieht man auf dem Etikett nicht auf den ersten Blick. Tippen Sie die Analysewerte ein: Der Nährwert-Check zeigt nach den FEDIAF-Richtwerten, ob sie passen, und nennt die Tagesmenge als Startwert. Kostenlos, ohne Anmeldung, nichts gespeichert.</p>
       </header>
 
       <div className="mt-8 grid gap-4 sm:grid-cols-2">
