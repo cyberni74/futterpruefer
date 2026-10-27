@@ -2,13 +2,16 @@ import { describe, expect, it } from "vitest";
 import { renderToStaticMarkup } from "react-dom/server";
 import MethodikPage from "./page";
 import ManufacturerPage from "../fuer-hersteller/page";
-import { METHODOLOGY_CHANGELOG } from "@/lib/scoring";
+import { METHODOLOGY_CHANGELOG, METHODOLOGY_CHANGELOG_ERGAENZUNG } from "@/lib/scoring";
 
 describe("Methodik Transparenz", () => {
   const html = renderToStaticMarkup(<MethodikPage />);
 
   it("zeigt die neue Gewichtung, den Stand und die Changelog-Zeile", () => {
-    expect(html).toContain("Stand 26.10.2026");
+    expect(html).toContain("Stand 27.10.2026");
+    expect(html).toContain(METHODOLOGY_CHANGELOG_ERGAENZUNG);
+    expect(html).toContain("Seit dem 27.10.2026 gilt: Ergänzungsfutter, die ein Futter im Alltagssinn sind und keinen benannten Wirkstoff haben");
+    expect(html).toContain('href="/methodik/ergaenzungsfutter#geltungsbereich"');
     expect(html).toContain(METHODOLOGY_CHANGELOG);
     expect(html).toContain("sechs Kriterien");
     expect(html).not.toMatch(/Die sieben Kriterien|mit sieben Kriterien und maximal|Punkte der sieben/);
