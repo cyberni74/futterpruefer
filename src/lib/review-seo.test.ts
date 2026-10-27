@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { directAnswer, keywordName, kurzGesagt, priceCite, priceSourceFromArticle, renameBodyFazit, reviewFaq, seoFazitHeading, withoutLeadingScore } from "./review-seo";
+import { amazonPriceUrl, directAnswer, keywordName, kurzGesagt, priceCite, priceSourceFromArticle, renameBodyFazit, reviewFaq, seoFazitHeading, withoutLeadingScore } from "./review-seo";
 import { comparisonForPost, comparisonForReview, isInComparison } from "./comparison-links";
 import { faqPageJsonLd } from "./faq-schema";
 
@@ -74,18 +74,33 @@ describe("review-seo", () => {
     expect(faq[0].answer.match(/22 von 100 Punkten/g)).toHaveLength(1);
     expect(faq[0].answer).toContain("Pluspunkt: Prozente.");
   });
-  it("nennt die Preisquelle nur, wenn sie vorliegt", () => {
+  it("nennt die Preisquelle nur mit Datum", () => {
     expect(priceCite("Amazon", "23.10.2026")).toBe("Preis bei Amazon, Stand 23.10.2026");
-    expect(priceCite("Amazon", "")).toBe("Preis bei Amazon");
-    expect(priceCite("", "23.10.2026")).toBe("Preisstand 23.10.2026");
+    expect(priceCite("Hersteller-Shop", "16.10.2026")).toBe("Preis im Hersteller-Shop, Stand 16.10.2026");
+    expect(priceCite("Amazon", "")).toBe("");
+    expect(priceCite("Hersteller-Shop", "")).toBe("");
+    expect(priceCite("", "23.10.2026")).toBe("Stand 23.10.2026");
     expect(priceCite("", "")).toBe("");
-    const withSource = kurzGesagt({ ...base, priceSource: "Amazon" }).join(" ");
-    expect(withSource).toContain("Preis bei Amazon, Stand 23.10.2026");
-    expect(kurzGesagt(base).join(" ")).toContain("(Preisstand 23.10.2026)");
+    const withAmazon = kurzGesagt({ ...base, priceSource: "Amazon" }).join(" ");
+    expect(withAmazon).toContain("Preis bei Amazon, Stand 23.10.2026");
+    expect(withAmazon).toContain("Preise können sich seitdem geändert haben.");
+    expect(kurzGesagt(base).join(" ")).toContain("(Stand 23.10.2026)");
     expect(kurzGesagt(base).join(" ")).not.toContain("Preis bei");
     const faq = reviewFaq({ ...base, priceSource: "Hersteller-Shop" }).find((f) => f.question.startsWith("Was kostet"));
-    expect(faq?.answer).toContain("Preis bei Hersteller-Shop, Stand 23.10.2026");
+    expect(faq?.answer).toContain("Preis im Hersteller-Shop, Stand 23.10.2026");
     expect(faq?.answer).toContain("Preise können je nach Händler abweichen.");
+    const amazonFaq = reviewFaq({ ...base, priceSource: "Amazon" }).find((f) => f.question.startsWith("Was kostet"));
+    expect(amazonFaq?.answer).toContain("Preise können sich seitdem geändert haben.");
+    const undatiert = { ...base, priceDate: null };
+    expect(kurzGesagt(undatiert).join(" ")).not.toMatch(/€|Preis:/);
+    expect(reviewFaq(undatiert).some((f) => f.question.startsWith("Was kostet"))).toBe(false);
+  });
+  it("baut den Amazon-Link nur aus ASIN oder Produktlink", () => {
+    expect(amazonPriceUrl({ asin: "b000000000" })).toBe("https://www.amazon.de/dp/B000000000?tag=cyberni7400-21");
+    expect(amazonPriceUrl({ html: '<a href="https://www.amazon.de/dp/B001J4G1LI">amazon.de</a>' })).toBe("https://www.amazon.de/dp/B001J4G1LI?tag=cyberni7400-21");
+    expect(amazonPriceUrl({ kaufUrl: "https://www.amazon.de/dp/B07KCS7YX1?tag=anderer" })).toBe("https://www.amazon.de/dp/B07KCS7YX1?tag=cyberni7400-21");
+    expect(amazonPriceUrl({ html: '<a href="https://www.leonardo-catfood.de/leonardo">Shop</a>' })).toBeNull();
+    expect(amazonPriceUrl({})).toBeNull();
   });
   it("liest die Preisquelle nur aus einer ausdrücklichen Preisangabe", () => {
     expect(priceSourceFromArticle("<p>Im Hersteller-Shop kostet die 300-g-Packung 5,19 €.</p>")).toBe("Hersteller-Shop");

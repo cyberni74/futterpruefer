@@ -22,7 +22,7 @@ import { MisleadingClaimsBanner, WarningBanner } from "@/components/warning-bann
 import { TableOfContents } from "@/components/table-of-contents";
 import { IngredientList } from "@/components/ingredient-list";
 import { AnalysisTable } from "@/components/analysis-table";
-import { PriceBlock } from "@/components/price-block";
+import { AmazonPriceCta, PriceBlock } from "@/components/price-block";
 import { ClaimsCheck } from "@/components/claims-check";
 import { FpImage } from "@/components/fp-image";
 import { ReadAloud } from "@/components/read-aloud";
@@ -35,7 +35,7 @@ import { NewsletterBox } from "@/components/newsletter-box";
 import { WishBox } from "@/components/wish-box";
 import { Disclosure } from "@/components/disclosure";
 import { JsonLd } from "@/components/json-ld";
-import { directAnswer, keywordName, kurzGesagt, priceSourceFromArticle, renameBodyFazit, reviewFaq, seoFazitHeading, type ReviewSeoInput } from "@/lib/review-seo";
+import { amazonPriceUrl, directAnswer, keywordName, kurzGesagt, priceSourceFromArticle, priceStandDate, renameBodyFazit, reviewFaq, seoFazitHeading, type ReviewSeoInput } from "@/lib/review-seo";
 import { comparisonForReview, isInComparison } from "@/lib/comparison-links";
 import { reviewH1 } from "@/lib/review-extra-faq";
 import { faqPageJsonLd } from "@/lib/faq-schema";
@@ -160,7 +160,15 @@ export default async function ReviewPage({ params }: PageProps<"/[kategorie]/[sl
       })
     : linked;
   const { html: body, toc } = enhanceArticle(renameBodyFazit(articleSource), efResult ? undefined : scores);
-  const hasProductData = Boolean(r.composition?.trim() || analysis.length || r.price != null || r.pricePerKg != null || r.pricePerDay != null);
+  const layoutPrice = r.layoutData && typeof r.layoutData === "object" ? r.layoutData as { asin?: unknown; kaufUrl?: unknown } : {};
+  const amazonUrl = amazonPriceUrl({
+    html: r.bodyHtml,
+    asin: typeof layoutPrice.asin === "string" ? layoutPrice.asin : null,
+    kaufUrl: typeof layoutPrice.kaufUrl === "string" ? layoutPrice.kaufUrl : null,
+  });
+  const priceDated = Boolean(priceStandDate(r.priceDate));
+  const showPrice = priceDated ? r.price != null || r.pricePerKg != null || r.pricePerDay != null : Boolean(amazonUrl);
+  const hasProductData = Boolean(r.composition?.trim() || analysis.length || showPrice);
   const hasConclusion = Boolean(conclusion.trim());
   const tocItems = [...toc, { id: "fazit-test", text: "Fazit" }, { id: "faq-test", text: "Häufige Fragen" }, ...(hasProductData ? [{ id: "produktdaten", text: "Produktdaten" }] : []), ...(claims.length ? [{ id: "werbeaussagen-h", text: "Werbeversprechen im Faktencheck" }] : [])];
   const url = absoluteUrl(reviewPath(r));
@@ -312,6 +320,7 @@ export default async function ReviewPage({ params }: PageProps<"/[kategorie]/[sl
               <div className="fp-box fp-kurz space-y-3 rounded-3xl border-2 border-brand bg-brand-soft p-5">
                 <p className="font-extrabold">📌 Kurz gesagt</p>
                 <ul>{kurzGesagt(seoInput).map((t) => <li key={t}>{t}</li>)}</ul>
+                {!priceDated && amazonUrl ? <AmazonPriceCta url={amazonUrl} /> : null}
               </div>
               {hasConclusion ? <div dangerouslySetInnerHTML={{ __html: conclusion }} /> : r.verdict?.trim() ? <p>{r.verdict.trim()}</p> : null}
             </div>
@@ -331,6 +340,9 @@ export default async function ReviewPage({ params }: PageProps<"/[kategorie]/[sl
                 {faq.map((f) => (
                   <details key={f.question} className="vt-acc vt-faq-item"><summary>{f.question}</summary><p>{f.answer}</p></details>
                 ))}
+                {!priceDated && amazonUrl ? (
+                  <details className="vt-acc vt-faq-item"><summary>Was kostet {seoInput.name}?</summary><AmazonPriceCta url={amazonUrl} /></details>
+                ) : null}
               </div>
             </div>
             {faqLd && <JsonLd data={faqLd} />}
@@ -351,9 +363,9 @@ export default async function ReviewPage({ params }: PageProps<"/[kategorie]/[sl
                   <AnalysisTable rows={analysis} />
                 </Section>
               )}
-              {(r.price != null || r.pricePerKg != null || r.pricePerDay != null) && (
+              {showPrice && (
                 <Section id="preis" title={`Preis${r.priceClass ? ` · Preisklasse ${PRICE_CLASS_LABEL[r.priceClass]}` : ""}`}>
-                  <PriceBlock price={r.price} packageSize={r.packageSize} pricePerKg={r.pricePerKg} pricePerDay={r.pricePerDay} priceDate={r.priceDate} priceSource={seoInput.priceSource} />
+                  <PriceBlock price={r.price} packageSize={r.packageSize} pricePerKg={r.pricePerKg} pricePerDay={r.pricePerDay} priceDate={r.priceDate} priceSource={seoInput.priceSource} amazonUrl={amazonUrl} />
                 </Section>
               )}
             </section>

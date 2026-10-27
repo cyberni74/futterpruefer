@@ -1,24 +1,34 @@
-import { priceCite } from "@/lib/review-seo";
-import { formatDate } from "@/lib/site";
+import { AFFILIATE_HINWEIS } from "@/components/testvorlage-v2/Sources";
+import { priceCite, priceNotice, priceStandDate } from "@/lib/review-seo";
 
 const eur = (n: number) => n.toLocaleString("de-DE", { style: "currency", currency: "EUR" });
 const num = (v: unknown) => (v == null || v === "" ? null : Number.isFinite(Number(v)) ? Number(v) : null);
 
-/** Mit Quelle der neue Satz, ohne Quelle der bisherige Preisstand. Nichts dazuerfinden. */
-function priceLine(source: string | null | undefined, priceDate: Date | null | undefined): string {
-  const stand = priceDate ? formatDate(priceDate) : "";
-  if (source?.trim()) return `${priceCite(source, stand)}.`;
-  if (stand) return `Preisstand: ${stand}.`;
-  return "";
+export const AMAZON_PRICE_CTA = "Aktuellen Preis bei Amazon ansehen*";
+
+/** Gleicher Amazon-Button wie in den Testtexten: Partner-Tag, rel=sponsored, Affiliate-Hinweis. */
+export function AmazonPriceCta({ url }: { url: string }) {
+  return (
+    <div className="prose-fp">
+      <div className="cta-amazon">
+        <p>
+          <a className="cta-amazon-btn" href={url} target="_blank" rel="sponsored nofollow noopener">{AMAZON_PRICE_CTA}</a>
+        </p>
+        <p className="cta-hinweis">{AFFILIATE_HINWEIS}</p>
+      </div>
+    </div>
+  );
 }
 
-/** Preis pro kg bzw. Tagesration mit Stand-Datum. Blendet sich aus, wenn keine Preisangaben vorliegen. */
-export function PriceBlock({ price, packageSize, pricePerKg, pricePerDay, priceDate, priceSource }: { price: unknown; packageSize?: string | null; pricePerKg: unknown; pricePerDay: unknown; priceDate: Date | null | undefined; priceSource?: string | null }) {
+/** Datierte Preise mit Quelle. Ohne Datum kein Betrag, nur der Amazon-Button, wenn ein Link vorliegt. */
+export function PriceBlock({ price, packageSize, pricePerKg, pricePerDay, priceDate, priceSource, amazonUrl }: { price: unknown; packageSize?: string | null; pricePerKg: unknown; pricePerDay: unknown; priceDate: Date | null | undefined; priceSource?: string | null; amazonUrl?: string | null }) {
+  const stand = priceStandDate(priceDate);
+  if (!stand) return amazonUrl ? <AmazonPriceCta url={amazonUrl} /> : null;
   const p = num(price);
   const kg = num(pricePerKg);
   const day = num(pricePerDay);
   if (p == null && kg == null && day == null) return null;
-  const line = priceLine(priceSource, priceDate);
+  const cite = priceCite(priceSource, stand);
   return (
     <div>
       <dl className="grid grid-cols-2 gap-3 sm:grid-cols-3">
@@ -32,7 +42,7 @@ export function PriceBlock({ price, packageSize, pricePerKg, pricePerDay, priceD
           <div className="rounded-2xl bg-bg-soft p-4"><dt className="text-xs font-bold uppercase tracking-wide text-muted">Pro Tagesration</dt><dd className="mt-1 text-xl font-extrabold tabular-nums">{eur(day)}</dd></div>
         )}
       </dl>
-      {line && <p className="mt-2 text-xs text-muted">{line} Preise können je nach Händler abweichen.</p>}
+      {cite && <p className="mt-2 text-xs text-muted">{cite}. {priceNotice(priceSource)}</p>}
     </div>
   );
 }
