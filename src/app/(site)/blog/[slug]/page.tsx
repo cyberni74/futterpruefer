@@ -38,6 +38,7 @@ const BODY_JSON_LD_SLUGS = new Set(["nassfutter-test-rind-hund-oktober-2026", "g
 /** Beiträge, bei denen der sichtbare Abschnitt „Häufige Fragen“ als FAQPage-JSON-LD ausgegeben wird (Text kommt aus dem Beitrag selbst). */
 const BODY_FAQ_SLUGS = new Set([
   "fischmehl-ueberfischung-tierfutter",
+  "palmoel-tierfutter",
   "pfotenbalsam-selber-machen-hund",
   "nasenbalsam-hund-selber-machen",
   "hund-po-wund-pflegebalsam-selber-machen",
