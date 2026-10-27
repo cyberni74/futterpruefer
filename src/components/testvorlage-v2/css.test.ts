@@ -45,4 +45,10 @@ describe("testvorlage-v2.css", () => {
   it("kein stroke-dasharray, keine fremden Globals (html, body, *)", () => {
     expect(css).not.toContain("stroke-dasharray");
   });
+  it("unter 768 px werden Tabellen ab drei Spalten zu Karten mit Spaltenname", () => {
+    expect(css).toContain("@media(max-width:767px)");
+    expect(css).toContain(".tv2 table:has(td[data-label]):has(tr > :nth-child(3)):not(:has(tr > :nth-child(5)))");
+    expect(css).toContain("content:attr(data-label)");
+    expect(css).toContain(".tv2 table.data:not(:has(tr > :nth-child(3))){display:table");
+  });
 });

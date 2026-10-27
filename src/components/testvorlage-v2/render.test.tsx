@@ -83,13 +83,39 @@ describe("TestvorlageV2: Server-Rendering", () => {
     const nurUrl = html({ ...data, asin: undefined, kaufUrl: "https://www.amazon.de/dp/B000000000?tag=cyberni7400-21" }, totalScore);
     expect(nurUrl.match(/Jetzt bei Amazon entdecken\*/g)).toHaveLength(1);
   });
-  it("bei Ampel Rot steht der Hinweis an jedem Amazon-Button, ab Gelb nicht", () => {
+  it("bei Ampel Rot steht der Preis-Hinweis an jedem Amazon-Button, ab Gelb der Entdecken-Text", () => {
     const { data } = ok(5);
     const rot = html(data, 59);
-    expect(rot.match(/Unsere Bewertung: Rot; der Link ist keine Kaufempfehlung\./g)).toHaveLength(2);
-    expect(html(data, 60)).not.toContain("keine Kaufempfehlung");
-    expect(html(data, 80)).not.toContain("keine Kaufempfehlung");
+    expect(rot.match(/Aktuellen Preis bei Amazon ansehen\*/g)).toHaveLength(2);
+    expect(rot).not.toContain("Jetzt bei Amazon entdecken*");
+    expect(rot.match(/Unsere Bewertung für dieses Produkt ist Rot; der Link ist keine Kaufempfehlung\./g)).toHaveLength(2);
+    const gelb = html(data, 60);
+    const gruen = html(data, 80);
+    for (const h of [gelb, gruen]) {
+      expect(h.match(/Jetzt bei Amazon entdecken\*/g)).toHaveLength(2);
+      expect(h).not.toContain("Aktuellen Preis bei Amazon ansehen*");
+      expect(h).not.toContain("keine Kaufempfehlung");
+    }
     expect(html({ ...data, asin: undefined }, 40)).not.toContain("keine Kaufempfehlung");
+  });
+  it("HTML-Tabellen im Kapitel behalten Spaltennamen für die Mobilkarten", () => {
+    const h = html({
+      kapitel: [{
+        titel: "Werbeaussagen im Check",
+        html: "<table><thead><tr><th>Aussage</th><th>Quelle</th><th>Einstufung</th><th>Begründung</th></tr></thead><tbody><tr><td>Beispielaussage</td><td>Beispielquelle</td><td>Beispiel</td><td>Beispielbegründung</td></tr></tbody></table>",
+      }],
+    }, 50);
+    expect(h).toContain('data-label="Aussage"');
+    expect(h).toContain('data-label="Quelle"');
+    expect(h).toContain('data-label="Einstufung"');
+    expect(h).toContain('data-label="Begründung"');
+  });
+  it("Produktbilder der V2-Seite sind keine Amazon-Links", () => {
+    const src = readFileSync(resolve(__dirname, "../../app/(site)/[kategorie]/v2-article.tsx"), "utf8");
+    const medien = src.slice(src.indexOf("medien={"), src.indexOf("</TestvorlageV2>"));
+    expect(medien).toContain("<figure>");
+    expect(medien).not.toMatch(/<a\b[^>]*amazon/i);
+    expect(medien).not.toContain("Werbung");
   });
   it("externe Quellen: nofollow noopener noreferrer, DOI-Link", () => {
     const h = html(ok(5).data, 87);

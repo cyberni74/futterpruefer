@@ -324,10 +324,10 @@ button, [role="button"], summary { cursor: pointer; }
   .prose-fp :is(.cta-amazon a.cta-amazon-btn, .fp-cta a[href*="amazon.de"]:not(:has(img)):not(table a), .cta-box a[href*="amazon.de"]:not(:has(img)):not(table a)) { width: auto; min-width: 20rem; max-width: 100%; }
 }
 
-/* Tabellen am Handy (< 40rem) als Karten: Zelle 1 + 2 fett nebeneinander, weitere Zellen in voller Breite.
+/* Tabellen unter md (768 px) als Karten: Zelle 1 + 2 fett nebeneinander, weitere Zellen in voller Breite.
    Kopfzeile bleibt als kleine Legende im gleichen Raster. Sehr breite Tabellen (ab 5 Spalten) scrollen weiter seitlich.
    Desktop unverändert. */
-@media (max-width: 39.99rem) {
+@media (max-width: 767px) {
   .prose-fp table:not(:has(tr > :nth-child(5))) { display: block; overflow: visible; border: 0; font-size: .95rem; }
   .prose-fp table:not(:has(tr > :nth-child(5))) :is(thead, tbody, tfoot) { display: block; }
   .prose-fp table:not(:has(tr > :nth-child(5))) tr {
@@ -355,8 +355,18 @@ button, [role="button"], summary { cursor: pointer; }
   .prose-fp table:has(tr > :nth-child(4)):not(:has(tr > :nth-child(5))) tr:has(> td) > :nth-child(2) { font-weight: 400; font-size: .85rem; color: var(--fg-muted); }
   .prose-fp table:has(tr > :nth-child(4)):not(:has(tr > :nth-child(5))) tr:has(> td) > :nth-child(3) { font-weight: 700; }
   .prose-fp table:has(tr > :nth-child(4)):not(:has(tr > :nth-child(5))) tr:not(:has(> td)) { display: none; }
+  /* 3–4 Spalten (Werbeaussagen, Nährwerte, Preise): alles untereinander, nicht als schmale Tabellenzeile.
+     display:block statt Grid, sonst wird die Zeile so hoch wie die längste Spalte und der Rest steht in der Lücke. */
+  .prose-fp table:has(tr > :nth-child(3)):not(:has(tr > :nth-child(5))):not(.vt-table):not(:has(tr.vt-row)) { display: block; width: 100%; max-width: 100%; height: auto; overflow: visible; }
+  .prose-fp table:has(tr > :nth-child(3)):not(:has(tr > :nth-child(5))):not(.vt-table):not(:has(tr.vt-row)) thead { display: none; }
+  .prose-fp table:has(tr > :nth-child(3)):not(:has(tr > :nth-child(5))):not(.vt-table):not(:has(tr.vt-row)) tbody { display: block; height: auto; }
+  .prose-fp table:has(tr > :nth-child(3)):not(:has(tr > :nth-child(5))):not(.vt-table):not(:has(tr.vt-row)) tfoot { display: block; height: auto; }
+  .prose-fp table:has(tr > :nth-child(3)):not(:has(tr > :nth-child(5))):not(.vt-table):not(:has(tr.vt-row)) tr { display: block; height: auto; min-height: 0; grid-template-columns: none; }
+  .prose-fp table:has(tr > :nth-child(3)):not(:has(tr > :nth-child(5))):not(.vt-table):not(:has(tr.vt-row)) tr:not(:has(> td)) { display: none; }
+  .prose-fp table:has(tr > :nth-child(3)):not(:has(tr > :nth-child(5))):not(.vt-table):not(:has(tr.vt-row)) :is(th, td) { display: block; width: auto; max-width: none; height: auto; min-width: 0; min-height: 0; text-align: left; white-space: normal; overflow-wrap: anywhere; }
+  .prose-fp .overflow-x-auto:has(> table:not(.vt-table)):not(:has(> table tr > :nth-child(5))) { overflow-x: visible; overflow-y: visible; max-width: 100%; }
   /* breite Tabellen: seitlich scrollen, keine Silbentrennung */
-  .prose-fp table:has(tr > :nth-child(5)) :is(th, td) { hyphens: manual; -webkit-hyphens: manual; }
+  .prose-fp table:has(tr > :nth-child(5)) :is(th, td) { hyphens: manual; -webkit-hyphens: manual; min-width: 9rem; }
 }
 
 /* Handy-Feinschliff (< 40rem), Desktop unverändert */
@@ -456,7 +466,7 @@ html, body { overflow-x: clip; }
    Tabellen mit data-label (z. B. Testauswahl in CTA-Boxen) am Handy: eine Karte pro Zeile,
    Spaltenname als kleine Beschriftung über dem Wert. Vergleichstest-Tabellen (tr.vt-row) bleiben unberührt.
 --------------------------------------------------------------------------- */
-@media (max-width: 39.99rem) {
+@media (max-width: 767px) {
   .prose-fp table:has(td[data-label]):not(:has(tr.vt-row)) { display: block; overflow: visible; border: 0; }
   .prose-fp table:has(td[data-label]):not(:has(tr.vt-row)) :is(thead) { display: none; }
   .prose-fp table:has(td[data-label]):not(:has(tr.vt-row)) tbody { display: block; }
@@ -476,6 +486,9 @@ html, body { overflow-x: clip; }
   .prose-fp table:has(td[data-label]):not(:has(tr.vt-row)) td:first-child::before { display: none; }
   .prose-fp table:has(td[data-label]):not(:has(tr.vt-row)) td:last-child:has(a[href*="amazon.de"]) { padding-top: .65rem; }
   .prose-fp table:has(td[data-label]):not(:has(tr.vt-row)) td:last-child:has(a[href*="amazon.de"])::before { display: none; }
+  /* Ab drei Spalten jede Spalte mit Beschriftung (Aussage, Quelle, Einstufung, …), nicht nur ab der zweiten. */
+  .prose-fp table:has(td[data-label]):has(tr > :nth-child(3)):not(:has(tr > :nth-child(5))):not(:has(tr.vt-row)) td:first-child { padding-top: 0; font-size: 1rem; font-weight: 700; line-height: 1.45; }
+  .prose-fp table:has(td[data-label]):has(tr > :nth-child(3)):not(:has(tr > :nth-child(5))):not(:has(tr.vt-row)) td:first-child::before { display: block; }
 }
 
 /* Breite Tabellen ohne data-label (≥ 5 Spalten) scrollen seitlich; Schattenkanten zeigen, dass es weitergeht */
