@@ -22,6 +22,9 @@ export const METHODOLOGY_STAND = "27.10.2026";
 export const METHODOLOGY_CHANGELOG_ERGAENZUNG =
   "27.10.2026 – Ergänzung: Ergänzungsfutter, die ein Futter im Alltagssinn sind und keinen benannten Wirkstoff haben, etwa Nassfutter-Filets und Snacks, bewerten wir nach den sechs Kriterien dieser Seite. So bleiben sie mit unseren bisherigen Tests solcher Produkte vergleichbar. Die fünf Kriterien der Ergänzungsfutter-Methodik gelten für funktionelle Ergänzungsfutter mit Wirkstoff oder Wirkversprechen, etwa Tropfen, Pulver, Öle und Tabletten. Durch diese Festlegung hat sich keine Punktzahl geändert. Ältere Tests funktioneller Produkte mit sechs Teilnoten bleiben nach den sechs Kriterien bewertet.";
 
+export const METHODOLOGY_CHANGELOG_ABGRENZUNG =
+  "27.10.2026: Abgrenzung Unbelegt/Fragwürdig ergänzt; entspricht unserer bisherigen Bewertungspraxis, keine Punktzahl geändert.";
+
 export const METHODOLOGY_CHANGELOG =
   "26.10.2026 – Korrektur: Vom 16.10. bis 26.10.2026 nannten diese Seite und einige andere Seiten von Futterprüfer für Alleinfutter sieben Kriterien, darunter „Transparenz / Herstellerunterlagen“ (10 Punkte), und eine auf 90 Punkte verkleinerte Gewichtung der übrigen sechs. Angewandt haben wir diese Gewichtung in keinem Test. Alle veröffentlichten Alleinfutter-Tests sind nach den sechs Kriterien in der Tabelle bewertet, auch die seit dem 16.10.2026 erschienenen. Durch diese Korrektur hat sich keine Punktzahl geändert.";
 

@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { renderToStaticMarkup } from "react-dom/server";
 import MethodikPage from "./page";
 import ManufacturerPage from "../fuer-hersteller/page";
-import { METHODOLOGY_CHANGELOG, METHODOLOGY_CHANGELOG_ERGAENZUNG } from "@/lib/scoring";
+import { METHODOLOGY_CHANGELOG, METHODOLOGY_CHANGELOG_ABGRENZUNG, METHODOLOGY_CHANGELOG_ERGAENZUNG } from "@/lib/scoring";
 
 describe("Methodik Transparenz", () => {
   const html = renderToStaticMarkup(<MethodikPage />);
@@ -14,6 +14,9 @@ describe("Methodik Transparenz", () => {
     expect(html).toContain("Seit dem 27.10.2026 gilt: Ergänzungsfutter, die ein Futter im Alltagssinn sind und keinen benannten Wirkstoff haben");
     expect(html).toContain('href="/methodik/ergaenzungsfutter#geltungsbereich"');
     expect(html).toContain(METHODOLOGY_CHANGELOG);
+    expect(html).toContain(METHODOLOGY_CHANGELOG_ABGRENZUNG);
+    expect(METHODOLOGY_CHANGELOG_ABGRENZUNG).toBe("27.10.2026: Abgrenzung Unbelegt/Fragwürdig ergänzt; entspricht unserer bisherigen Bewertungspraxis, keine Punktzahl geändert.");
+    expect(html).toContain("Allgemeine Anpreisungen ohne prüfbaren Inhalt, etwa ‚Premium‘ oder ‚Beste Qualität‘, stufen wir als ‚Unbelegt‘ ein. Begriffe mit einem prüfbaren Gehalt, die der Hersteller weder erklärt noch belegt, etwa ‚Lebensmittelqualität‘ oder ‚nachhaltige Verpackung‘, stufen wir als ‚Fragwürdig‘ ein. Erklärt der Hersteller einen solchen Begriff nachvollziehbar, bleibt es bei ‚Unbelegt‘; ist er belegt, werten wir ‚Ohne Einwand‘.");
     expect(html).toContain("sechs Kriterien");
     expect(html).not.toMatch(/Die sieben Kriterien|mit sieben Kriterien und maximal|Punkte der sieben/);
     expect(html).not.toContain("10 (neu)");
