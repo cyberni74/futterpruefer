@@ -10,6 +10,7 @@ describe("Methodik Transparenz", () => {
   it("zeigt die neue Gewichtung, den Stand und die Changelog-Zeile", () => {
     expect(html).toContain("Stand 27.10.2026");
     expect(html).toContain(METHODOLOGY_CHANGELOG_ERGAENZUNG);
+    expect(METHODOLOGY_CHANGELOG_ERGAENZUNG).toContain("Durch diese Festlegung hat sich keine Punktzahl geändert. Ältere Tests funktioneller Produkte mit sechs Teilnoten bleiben nach den sechs Kriterien bewertet.");
     expect(html).toContain("Seit dem 27.10.2026 gilt: Ergänzungsfutter, die ein Futter im Alltagssinn sind und keinen benannten Wirkstoff haben");
     expect(html).toContain('href="/methodik/ergaenzungsfutter#geltungsbereich"');
     expect(html).toContain(METHODOLOGY_CHANGELOG);

@@ -16,6 +16,11 @@ describe("Methodik Ergänzungsfutter", () => {
     expect(html).toContain("<strong>27.10.2026:</strong> Geltungsbereich festgelegt (Abschnitt 1");
     expect(html).toContain("id=\"geltungsbereich\"");
     expect(html).toContain("Festgelegt am 27.10.2026.");
+    expect(html).toContain("Sie werden als Beigabe gefüttert, nicht wegen eines benannten Wirkstoffs, dessen Menge man prüfen könnte.");
+    expect(html).not.toContain("Sie liefern keinen bestimmten Stoff, den man dosieren könnte.");
+    expect(html).toContain("Weil sie allein den Bedarf nicht decken, verlieren sie dabei meist Punkte bei Nährstoffprofil und Bedarfsdeckung. Punktzahlen nach den sechs Kriterien und nach den fünf Kriterien dieser Seite lassen sich nicht direkt vergleichen; die Ampel ist dieselbe.");
+    expect(html).toContain("Tests von Snacks, Kauartikeln und funktionellen Ergänzungsfuttern, die vor dem 17.10.2026 erschienen sind, haben wir nach den sechs Kriterien bewertet, auch wenn das Produkt mit einer Wirkung wirbt. Sie zeigen sechs Teilnoten im Testergebnis. Ihre Punktzahlen bleiben, bis wir das Produkt neu testen.");
+    expect(html).toContain("Wirkversprechen. Durch diese Festlegung hat sich keine Punktzahl geändert. Ältere Tests funktioneller Produkte mit sechs Teilnoten bleiben nach den sechs Kriterien bewertet.</li>");
     expect(html).toContain("17.10.2026 – Erstveröffentlichung");
     expect(html).toContain("höchstens 59 Punkte (Rot)");
     expect(html).toContain("höchstens 39 Punkte");
