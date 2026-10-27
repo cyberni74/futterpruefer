@@ -120,7 +120,7 @@ export function TestvorlageEditor({ draft, onChange, bewertungsart, errors }: { 
         <Txt label="Untertitel" value={draft.hero.untertitel} onChange={(v) => set("hero", { ...draft.hero, untertitel: v })} rows={2} max={2000} />
         <Lines label="Tags" items={draft.hero.tags} onChange={(v) => set("hero", { ...draft.hero, tags: v })} min={0} max={12} />
         <Txt label="Gesamturteil-Text" value={draft.hero.gesamturteil} onChange={(v) => set("hero", { ...draft.hero, gesamturteil: v })} rows={3} max={2000} hint="Erscheint unter dem Haupttacho und als Kurzfazit im Schema." />
-        <Txt label="Notenwort (optional)" value={draft.hero.notenwort} onChange={(v) => set("hero", { ...draft.hero, notenwort: v })} hint="Leer = Empfehlenswert / Mit Abstrichen / Nicht empfehlenswert nach Ampel." />
+        <Txt label="Notenwort (optional)" value={draft.hero.notenwort} onChange={(v) => set("hero", { ...draft.hero, notenwort: v })} hint="Leer = Empfehlenswert / Mit Abstrichen / Rot – keine Empfehlung nach Ampel." />
         <div className="flex items-center justify-between rounded-xl bg-brand-soft px-4 py-3" aria-live="polite">
           <span className="font-semibold">Gesamtpunktzahl (berechnet)</span>
           <span className="font-display text-2xl font-extrabold tabular-nums text-brand">{total}</span>

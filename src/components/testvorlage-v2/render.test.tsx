@@ -184,6 +184,15 @@ describe("Hero nach Designsystem", () => {
     expect(hero.indexOf("hero-lead")).toBeLessThan(hero.indexOf("score-card"));
     expect((h.match(/<h1/g) ?? []).length).toBe(1);
   });
+  it("Rot-Label steht unter dem Haupttacho, ein Notenwort hat Vorrang", () => {
+    const { data, totalScore } = ok(5);
+    const rot = renderToStaticMarkup(<TestvorlageV2 data={data} totalScore={totalScore} ampelLabel="Rot – keine Empfehlung" />);
+    const card = rot.slice(rot.indexOf('class="score-card"'), rot.indexOf('class="stripe"'));
+    expect(card).toContain('class="grade">Rot – keine Empfehlung<');
+    const eigen = renderToStaticMarkup(<TestvorlageV2 data={{ ...data, hero: { ...data.hero, notenwort: "Eigenes Wort" } }} totalScore={totalScore} ampelLabel="Rot – keine Empfehlung" />);
+    expect(eigen).toContain('class="grade">Eigenes Wort<');
+    expect(eigen).not.toContain("Rot – keine Empfehlung");
+  });
   it("Kennzahlen: höchstens vier Karten, nichts wird erfunden", () => {
     expect(parseLayoutData({ kennzahlen: [1, 2, 3, 4, 5].map((n) => ({ wert: String(n), label: "L" })) }).ok).toBe(false);
     const h = html({ kennzahlen: [{ wert: "3", label: "A" }, { wert: "4", label: "B" }, { wert: "5", label: "C" }] }, 50);

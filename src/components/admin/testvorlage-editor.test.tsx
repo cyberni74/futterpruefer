@@ -43,6 +43,7 @@ describe("Admin-Maske der Testvorlage", () => {
     for (const t of ["Hero", "Kennzahl-Kacheln", "Kriterien", "Kapitel", "Zutaten", "Nährwerte und Dosierung", "Evidenz-Karten", "Herstellerangaben mit Balken", "Preisrechner", "Sicherheit, Vor- und Nachteile", "Fazit (Pollmer-Stil)", "FAQ", "Quellen", "Kauflink, Bildnachweis, ähnliche Tests", "Prüfung vor dem Veröffentlichen", "Testvorlage V2: Import und Export"]) {
       expect(h.textContent).toContain(t);
     }
+    expect(h.textContent).toContain("Rot – keine Empfehlung");
   });
   it("Vorauswahl Ergänzungsfutter legt 5 Kriterien mit den Maxima 20/30/20/15/15 an", () => {
     const h = mount(emptyDraft());

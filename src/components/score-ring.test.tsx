@@ -10,4 +10,10 @@ describe("ScoreRing SSR", () => {
     expect(html).toContain("von 100 Punkten");
     expect(html).not.toMatch(/>0<\/span>/);
   });
+
+  it("nennt bei Rot das Label in der Pille und im ARIA-Text", () => {
+    const html = renderToStaticMarkup(<ScoreRing score={45} />);
+    expect(html).toContain(">Rot – keine Empfehlung</span>");
+    expect(html).toContain('aria-label="Gesamtwertung: 45 von 100 Punkten – Rot – keine Empfehlung"');
+  });
 });
