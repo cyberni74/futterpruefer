@@ -64,7 +64,7 @@ describe("TestvorlageV2: Server-Rendering", () => {
     expect(h).not.toContain("style=\"color");
     expect(h).toContain("Text");
   });
-  it("Kauflink nur mit ASIN: tag, sponsored, target und Affiliate-Hinweis, oben nach der Gesamtwertung und unten bei den Quellen", () => {
+  it("Kauflink nur mit ASIN: tag, sponsored, target und Affiliate-Hinweis, oben direkt nach dem Fazit und unten bei den Quellen", () => {
     const { data, totalScore } = ok(5);
     const mit = html(data, totalScore);
     expect(mit).toContain("https://www.amazon.de/dp/B000000000?tag=cyberni7400-21");
@@ -72,16 +72,60 @@ describe("TestvorlageV2: Server-Rendering", () => {
     expect(mit).toContain('target="_blank"');
     expect(mit.match(/Jetzt bei Amazon entdecken\*/g)).toHaveLength(2);
     expect(mit.match(/\*Affiliate-Link: Wir erhalten bei einem Kauf eine Provision, der Preis ändert sich für Sie nicht\. Die Provision hat keinen Einfluss auf unsere Bewertung\./g)).toHaveLength(2);
-    const heroEnde = mit.indexOf('class="stripe"');
-    const oben = mit.slice(0, heroEnde);
-    expect(oben).toContain("Jetzt bei Amazon entdecken*");
-    expect(oben.indexOf('class="hero"')).toBeLessThan(oben.indexOf("Jetzt bei Amazon entdecken*"));
+    expect(mit.match(/class="kauf kauf-top"/g)).toHaveLength(1);
+    expect(mit.match(/class="kauf"/g)).toHaveLength(1);
+    const fazitStart = mit.indexOf('<section class="section final" id="fazit"');
+    const fazitEnde = mit.indexOf("</section>", fazitStart) + "</section>".length;
+    const oben = mit.indexOf('class="kauf kauf-top"');
+    const faq = mit.indexOf('id="haeufige-fragen"');
+    expect(fazitStart).toBeGreaterThan(0);
+    expect(mit.slice(fazitEnde, oben)).toBe("<div ");
+    expect(oben).toBeLessThan(faq);
+    expect(mit.slice(0, mit.indexOf('class="stripe"'))).not.toContain("Jetzt bei Amazon entdecken*");
+    const quellen = mit.indexOf('<section class="section" id="quellen"');
+    const unten = mit.indexOf('class="kauf"', quellen);
+    expect(unten).toBeGreaterThan(quellen);
+    expect(mit.indexOf("</section>", unten)).toBeGreaterThan(unten);
     const ohne = html({ ...data, asin: undefined }, totalScore);
     expect(ohne).not.toContain("amazon.de");
     expect(ohne).not.toContain("Affiliate-Link");
     expect(ohne).not.toContain("Jetzt bei Amazon entdecken*");
     const nurUrl = html({ ...data, asin: undefined, kaufUrl: "https://www.amazon.de/dp/B000000000?tag=cyberni7400-21" }, totalScore);
     expect(nurUrl.match(/Jetzt bei Amazon entdecken\*/g)).toHaveLength(1);
+    expect(nurUrl).not.toContain("kauf-top");
+    const nurUrlQuellen = nurUrl.indexOf('<section class="section" id="quellen"');
+    expect(nurUrl.indexOf('class="kauf"', nurUrlQuellen)).toBeGreaterThan(nurUrlQuellen);
+  });
+  it("ohne Fazit steht der obere Amazon-Button nach der Gesamtwertung", () => {
+    const { data, totalScore } = ok(5);
+    const h = html({ ...data, fazit: undefined }, totalScore);
+    expect(h).not.toContain('id="fazit"');
+    const bisStripe = h.slice(0, h.indexOf('class="stripe"'));
+    expect(bisStripe).toContain('class="kauf kauf-top"');
+    expect(bisStripe.indexOf('class="hero"')).toBeLessThan(bisStripe.indexOf('class="kauf kauf-top"'));
+    expect(h.match(/Jetzt bei Amazon entdecken\*/g)).toHaveLength(2);
+    const quellen = h.indexOf('<section class="section" id="quellen"');
+    expect(h.indexOf('class="kauf"', quellen)).toBeGreaterThan(quellen);
+    const leer = html({ ...data, fazit: { html: "   " } }, totalScore);
+    expect(leer).not.toContain('id="fazit"');
+    expect(leer.slice(0, leer.indexOf('class="stripe"'))).toContain('class="kauf kauf-top"');
+  });
+  it("Kaufkasten im Fazit bleibt im Abschnitt, der Vorlagen-Button folgt direkt danach", () => {
+    const { data, totalScore } = ok(5);
+    const kasten = '<div class="fp-box fp-cta cta-amazon cta-box"><p><strong>Aus unseren Tests</strong></p><p><a class="cta-amazon-btn" href="https://www.amazon.de/dp/B001J4G1LI?tag=cyberni7400-21">Aktuellen Preis bei Amazon ansehen*</a></p></div>';
+    const h = html({ ...data, fazit: { html: `<p>Beispieltext für das Fazit.</p>${kasten}<div class="final-foot"><strong>Futterprüfer-Urteil:</strong> Beispiel.</div>` } }, totalScore);
+    const fazitStart = h.indexOf('<section class="section final" id="fazit"');
+    const fazitEnde = h.indexOf("</section>", fazitStart) + "</section>".length;
+    const abschnitt = h.slice(fazitStart, fazitEnde);
+    expect(abschnitt).toContain("Beispieltext für das Fazit.");
+    expect(abschnitt).toContain("cta-amazon cta-box");
+    expect(abschnitt).toContain("cta-amazon-btn");
+    expect(abschnitt).toContain("Futterprüfer-Urteil:");
+    expect(abschnitt).not.toContain('class="kauf kauf-top"');
+    expect(abschnitt).not.toContain("Jetzt bei Amazon entdecken*");
+    expect(h.slice(fazitEnde, h.indexOf('class="kauf kauf-top"'))).toBe("<div ");
+    expect(h.match(/Jetzt bei Amazon entdecken\*/g)).toHaveLength(2);
+    expect(h.match(/Aktuellen Preis bei Amazon ansehen\*/g)).toHaveLength(1);
   });
   it("bei Ampel Rot steht der Preis-Hinweis an jedem Amazon-Button, ab Gelb der Entdecken-Text", () => {
     const { data } = ok(5);

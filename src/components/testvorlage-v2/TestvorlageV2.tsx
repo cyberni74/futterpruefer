@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import { Fragment, type ReactNode } from "react";
 import { isRotScore } from "@/lib/rot-guard";
 import { AnalyticalValues } from "./AnalyticalValues";
 import { ArticleNavigation } from "./ArticleNavigation";
@@ -44,10 +44,13 @@ export function TestvorlageV2({ data, totalScore, ampelLabel, kopf, medien }: { 
   const kauf = kaufLink(data);
   const asinKauf = data.asin ? kaufLink({ asin: data.asin }) : null;
   const rot = isRotScore(totalScore);
+  const hatFazit = abschnitte.some((a) => a.art === "fazit");
+  // Oberer Button aus der ASIN: direkt nach dem Fazit. Ohne Fazit-Abschnitt nach der Gesamtwertung.
+  const kaufOben = asinKauf ? <AmazonKauf url={asinKauf} rot={rot} className="kauf kauf-top" /> : null;
   return (
     <div className="tv2" data-layout="TESTVORLAGE_V2">
       <ProductTestHero hero={data.hero} totalScore={totalScore} ampelLabel={ampelLabel} kopf={kopf} />
-      {asinKauf && <AmazonKauf url={asinKauf} rot={rot} className="kauf kauf-top" />}
+      {!hatFazit && kaufOben}
       <ProductFacts kennzahlen={data.kennzahlen} />
       {medien}
       <ArticleNavigation abschnitte={abschnitte} variante="mobil" />
@@ -71,7 +74,12 @@ export function TestvorlageV2({ data, totalScore, ampelLabel, kopf, medien }: { 
               case "block":
                 return <TvSection key={a.id} id={a.id} nummer={a.nummer} label={label} titel={a.titel}><Block typ={a.block} data={data} /></TvSection>;
               case "fazit":
-                return <TvSection key={a.id} id={a.id} nummer={a.nummer} label={label} titel={a.titel} final><EditorialConclusion fazit={data.fazit} /></TvSection>;
+                return (
+                  <Fragment key={a.id}>
+                    <TvSection id={a.id} nummer={a.nummer} label={label} titel={a.titel} final><EditorialConclusion fazit={data.fazit} /></TvSection>
+                    {kaufOben}
+                  </Fragment>
+                );
               case "faq":
                 return <TvSection key={a.id} id={a.id} nummer={a.nummer} label={label} titel={a.titel}><ProductFAQ faq={data.faq} /></TvSection>;
               case "quellen":
