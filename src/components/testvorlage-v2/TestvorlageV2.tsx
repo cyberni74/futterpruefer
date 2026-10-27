@@ -35,16 +35,17 @@ const LABEL: Record<string, string> = { urteil: "URTEIL", kapitel: "KAPITEL", bl
 
 /**
  * Feste Testvorlage V2. Rendert nur die Bausteine, die in layoutData stehen (Daten und Darstellung sind getrennt).
- * Die Seite liefert H1, Breadcrumbs, Bilder und Metazeile; hier gibt es keine zweite H1.
+ * Die Seite liefert H1, Badges und Metazeile über `kopf` (sie stehen in der Hero-Fläche) und die Produktbilder über `medien`; hier gibt es keine zweite H1.
  * Der Haupttacho zeigt immer die Gesamtwertung. Der Hauptinhalt wird serverseitig gerendert, nur der Kostenrechner ist ein Client-Baustein.
  */
-export function TestvorlageV2({ data, totalScore, ampelLabel }: { data: LayoutData; totalScore: number; ampelLabel: string }) {
+export function TestvorlageV2({ data, totalScore, ampelLabel, kopf, medien }: { data: LayoutData; totalScore: number; ampelLabel: string; kopf?: ReactNode; medien?: ReactNode }) {
   const abschnitte = baueAbschnitte(data);
   const kauf = kaufLink(data);
   return (
     <div className="tv2" data-layout="TESTVORLAGE_V2">
-      <ProductTestHero hero={data.hero} totalScore={totalScore} ampelLabel={ampelLabel} />
+      <ProductTestHero hero={data.hero} totalScore={totalScore} ampelLabel={ampelLabel} kopf={kopf} />
       <ProductFacts kennzahlen={data.kennzahlen} />
+      {medien}
       <ArticleNavigation abschnitte={abschnitte} variante="mobil" />
       <div className="layout">
         <ArticleNavigation abschnitte={abschnitte} variante="sidebar" />

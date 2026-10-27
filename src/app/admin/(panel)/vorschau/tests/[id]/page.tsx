@@ -29,8 +29,7 @@ export default async function ReviewPreviewPage({ params }: { params: Promise<{ 
     return (
       <article className="mx-auto max-w-6xl">
         <PreviewBanner editHref={`/admin/tests/${r.id}`} note={`Testvorlage V2 · Status: ${STATUS_LABEL[k]}${k === "geplant" ? ` (${formatDateTime(r.publishedAt)})` : ""}`} />
-        <h1 className="mb-6 text-3xl font-extrabold leading-tight md:text-5xl">{r.title}</h1>
-        <TestvorlageV2 data={vorlage} totalScore={r.totalScore} ampelLabel={RATING_LABEL[ratingFor(r.totalScore)]} />
+        <TestvorlageV2 data={vorlage} totalScore={r.totalScore} ampelLabel={RATING_LABEL[ratingFor(r.totalScore)]} kopf={<h1>{r.title}</h1>} />
       </article>
     );
   }

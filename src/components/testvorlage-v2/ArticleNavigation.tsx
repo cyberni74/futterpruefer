@@ -1,5 +1,6 @@
 import type { Abschnitt } from "./schema";
 import { nn } from "./Section";
+import { TocSpy } from "./TocSpy";
 
 /** Inhaltsverzeichnis: Desktop als sticky Sidebar, mobil einklappbar (natives details, ohne JavaScript). */
 export function ArticleNavigation({ abschnitte, variante }: { abschnitte: Abschnitt[]; variante: "sidebar" | "mobil" }) {
@@ -14,8 +15,9 @@ export function ArticleNavigation({ abschnitte, variante }: { abschnitte: Abschn
   }
   return (
     <nav aria-label="Inhaltsverzeichnis" className="sidebar">
-      <div className="side-title">Inhalt</div>
+      <div className="side-title">In diesem Test</div>
       {abschnitte.map((a) => <a key={a.id} href={`#${a.id}`}>{nn(a.nummer)} · {a.titel}</a>)}
+      <TocSpy ids={abschnitte.map((a) => a.id)} />
     </nav>
   );
 }

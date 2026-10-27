@@ -9,13 +9,18 @@ describe("Tacho-Geometrie (berechnete Bögen, kein stroke-dasharray)", () => {
     const e = tachoEndpunkt(1);
     expect(e.x).toBeCloseTo(178, 6);
     expect(e.y).toBeCloseTo(104, 6);
-    expect(tachoPfad(100, 100)).toBe("M 22 104 A 78 78 0 0 1 178 104");
+    expect(tachoPfad(100, 100)).toBe("M 22 104 A 78 78 0 0 1 178.000 104.000");
     expect(TACHO_HINTERGRUND).toBe("M 22 104 A 78 78 0 0 1 178 104");
   });
   it("50 %: Endpunkt oben in der Mitte", () => {
     const e = tachoEndpunkt(0.5);
     expect(e.x).toBeCloseTo(100, 6);
     expect(e.y).toBeCloseTo(26, 6);
+  });
+  it("entspricht der Referenz gaugeArc: Bogen auf drei Nachkommastellen, 12 von 15 Punkten sind 80 %", () => {
+    expect(tachoAnteil(12, 15)).toBeCloseTo(0.8, 12);
+    expect(tachoPfad(12, 15)).toBe("M 22 104 A 78 78 0 0 1 163.103 58.153");
+    expect(tachoPfad(50, 100)).toBe("M 22 104 A 78 78 0 0 1 100.000 26.000");
   });
   it("entspricht der Vorlage: 92 von 100 endet bei (175.549, 84.602)", () => {
     expect(tachoPfad(92, 100)).toBe("M 22 104 A 78 78 0 0 1 175.549 84.602");

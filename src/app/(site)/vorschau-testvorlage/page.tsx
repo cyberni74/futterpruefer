@@ -13,9 +13,8 @@ export default async function VorschauTestvorlage({ searchParams }: { searchPara
   const { k } = await searchParams;
   const { data, totalScore } = beispielDaten(k === "6" ? 6 : 5);
   return (
-    <div className="mx-auto max-w-6xl px-4 pt-6 pb-12">
-      <h1 className="text-3xl font-extrabold md:text-5xl">Beispielprodukt A im Test</h1>
-      <div className="mt-8"><TestvorlageV2 data={data} totalScore={totalScore} ampelLabel={RATING_LABEL[ratingFor(totalScore)]} /></div>
+    <div className="pt-6 pb-12">
+      <TestvorlageV2 data={data} totalScore={totalScore} ampelLabel={RATING_LABEL[ratingFor(totalScore)]} kopf={<h1>Beispielprodukt A im Test</h1>} />
     </div>
   );
 }

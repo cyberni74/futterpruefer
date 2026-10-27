@@ -84,6 +84,28 @@ describe("TestvorlageV2: Server-Rendering", () => {
   });
 });
 
+describe("Hero nach Designsystem", () => {
+  it("Branding, Kopf-Slot (H1, Badges) und Bewertungskarte stehen in der Hero-Fläche; genau eine H1", () => {
+    const { data, totalScore } = ok(5);
+    const h = renderToStaticMarkup(<TestvorlageV2 data={data} totalScore={totalScore} ampelLabel="Empfehlenswert" kopf={<><div className="hero-badges">Badge</div><h1>Titel</h1></>} />);
+    const hero = h.slice(h.indexOf('class="hero"'), h.indexOf('class="stripe"'));
+    expect(hero).toContain("Futterprüfer");
+    expect(hero).toContain("<h1>Titel</h1>");
+    expect(hero.indexOf("Futterprüfer")).toBeLessThan(hero.indexOf("<h1>"));
+    expect(hero.indexOf("<h1>")).toBeLessThan(hero.indexOf("hero-lead"));
+    expect(hero.indexOf("hero-lead")).toBeLessThan(hero.indexOf("score-card"));
+    expect((h.match(/<h1/g) ?? []).length).toBe(1);
+  });
+  it("Kennzahlen: höchstens vier Karten, nichts wird erfunden", () => {
+    expect(parseLayoutData({ kennzahlen: [1, 2, 3, 4, 5].map((n) => ({ wert: String(n), label: "L" })) }).ok).toBe(false);
+    const h = html({ kennzahlen: [{ wert: "3", label: "A" }, { wert: "4", label: "B" }, { wert: "5", label: "C" }] }, 50);
+    expect((h.match(/class="small-stat"/g) ?? []).length).toBe(3);
+  });
+  it("Inhaltsverzeichnis heißt „In diesem Test“", () => {
+    expect(html(ok(5).data, 87)).toContain("In diesem Test");
+  });
+});
+
 describe("FAQ und Schema", () => {
   it("sichtbare Fragen entsprechen 1:1 dem FAQPage-JSON-LD, genau ein Objekt", () => {
     const { data, totalScore } = ok(5);

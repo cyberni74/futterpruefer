@@ -66,7 +66,8 @@ export async function ReviewV2Article({ r, data, draftPreview }: { r: Review; da
   const ampelLabel = RATING_LABEL[ratingFor(r.totalScore)];
 
   return (
-    <div className="mx-auto max-w-6xl px-4">
+    <div>
+      <div className="mx-auto max-w-6xl px-4">
       {draftPreview && (
         <p role="status" className="mt-4 rounded-2xl border-2 border-bad bg-bad-soft p-5 text-lg font-extrabold text-bad">
           Entwurf – nicht veröffentlicht, Rechtsprüfung ausstehend
@@ -99,62 +100,72 @@ export async function ReviewV2Article({ r, data, draftPreview }: { r: Review; da
         ]}
       />
       <Breadcrumbs items={[{ label: r.category.name, href: `/${r.category.slug}` }, { label: name, href: reviewPath(r) }]} />
-
-      <header className="mt-4">
-        <div className="flex flex-wrap gap-2">
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-brand-soft px-3 py-1 text-xs font-bold text-brand-strong"><PawPrint className="size-3.5" aria-hidden />{ANIMAL_LABEL[r.category.animal]}</span>
-          <Link href={`/${r.category.slug}`} className="inline-flex items-center rounded-full border border-border px-3 py-1 text-xs font-bold hover:bg-bg-soft">{r.category.name}</Link>
-          {r.brand && <Link href={brandPath(r.brand)} className="inline-flex items-center rounded-full border border-border px-3 py-1 text-xs font-bold hover:bg-bg-soft">Marke: {r.brand}</Link>}
-          {pom && (
-            <Link href="/produkt-des-monats" className="inline-flex items-center gap-1.5 rounded-full bg-accent px-3 py-1 text-xs font-bold text-white dark:text-black hover:bg-accent-strong"><Award className="size-3.5" aria-hidden />Produkt des Monats {MONTHS[pom.month - 1]} {pom.year}</Link>
-          )}
-        </div>
-        <h1 className="mt-3 text-3xl font-extrabold leading-tight md:text-5xl">{reviewH1(r.slug, name)}</h1>
-        <ul className="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-sm text-muted">
-          <li className="flex items-center gap-1.5"><UserRound className="size-4" aria-hidden />Von <AuthorCredit slug={r.authorSlug} /></li>
-          {testedAt && <li className="flex items-center gap-1.5"><CalendarCheck className="size-4" aria-hidden />Getestet am <time dateTime={testedAt.toISOString()}>{formatDate(testedAt)}</time></li>}
-          <li className="flex items-center gap-1.5"><RefreshCw className="size-4" aria-hidden />Zuletzt aktualisiert <time dateTime={r.updatedAt.toISOString()}>{formatDate(r.updatedAt)}</time></li>
-          <li className="flex items-center gap-1.5"><Clock className="size-4" aria-hidden />{minutes} Min. Lesezeit</li>
-        </ul>
-        {(r.imageUrl || r.contentImageUrl) && (
-          <div className={`mt-6 grid gap-3 ${r.imageUrl && r.contentImageUrl ? "sm:grid-cols-2" : ""}`}>
-            {r.imageUrl && (
-              <figure>
-                <div className="relative aspect-[4/3] overflow-hidden rounded-3xl bg-bg-soft">
-                  <FpImage src={r.imageUrl} alt={r.imageAlt.trim() || `Verpackung von ${name}`} blur={r.imageBlur} sizes={r.contentImageUrl ? "(min-width:1024px) 380px, (min-width:640px) 50vw, 100vw" : "(min-width:1024px) 760px, 100vw"} priority />
-                </div>
-                <figcaption className="mt-1.5 text-sm text-muted">Verpackung</figcaption>
-              </figure>
-            )}
-            {r.contentImageUrl && (
-              <figure>
-                <div className="relative aspect-[4/3] overflow-hidden rounded-3xl bg-bg-soft">
-                  <FpImage src={r.contentImageUrl} alt={r.contentImageAlt.trim() || `Inhalt von ${name} ohne Verpackung`} blur={r.contentImageBlur} sizes={r.imageUrl ? "(min-width:1024px) 380px, (min-width:640px) 50vw, 100vw" : "(min-width:1024px) 760px, 100vw"} priority={!r.imageUrl} />
-                </div>
-                <figcaption className="mt-1.5 text-sm text-muted">Das Futter selbst</figcaption>
-              </figure>
-            )}
-          </div>
-        )}
-        {data.bildnachweis && <p className="mt-2 text-xs text-muted">Bildnachweis: {data.bildnachweis}</p>}
-        {gallery.length > 0 && (
-          <ul className="mt-3 flex gap-3 overflow-x-auto pb-1" aria-label="Weitere Produktbilder">
-            {gallery.map((src, i) => (
-              <li key={src} className="relative aspect-square w-24 shrink-0 overflow-hidden rounded-xl bg-bg-soft">
-                <FpImage src={src} alt={`${name} – weiteres Bild ${i + 1}`} sizes="96px" />
-              </li>
-            ))}
-          </ul>
-        )}
-        <div className="mt-5"><ReadAloud targetId="testbericht" /></div>
-      </header>
-
-      {misleading.length > 0 && <div className="mt-6"><MisleadingClaimsBanner count={misleading.length} /></div>}
-
-      <div id="testbericht" className="mt-8">
-        <TestvorlageV2 data={data} totalScore={r.totalScore} ampelLabel={ampelLabel} />
+      {misleading.length > 0 && <div className="mt-4"><MisleadingClaimsBanner count={misleading.length} /></div>}
       </div>
 
+      <div id="testbericht" className="mt-4">
+        <TestvorlageV2
+          data={data}
+          totalScore={r.totalScore}
+          ampelLabel={ampelLabel}
+          kopf={
+            <>
+              <div className="hero-badges">
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-white/70 px-3 py-1 text-xs font-bold text-brand-strong"><PawPrint className="size-3.5" aria-hidden />{ANIMAL_LABEL[r.category.animal]}</span>
+                <Link href={`/${r.category.slug}`} className="inline-flex items-center rounded-full bg-white/70 px-3 py-1 text-xs font-bold text-brand-strong hover:bg-white">{r.category.name}</Link>
+                {r.brand && <Link href={brandPath(r.brand)} className="inline-flex items-center rounded-full bg-white/70 px-3 py-1 text-xs font-bold text-brand-strong hover:bg-white">Marke: {r.brand}</Link>}
+                {pom && (
+                  <Link href="/produkt-des-monats" className="inline-flex items-center gap-1.5 rounded-full bg-accent px-3 py-1 text-xs font-bold text-white dark:text-black hover:bg-accent-strong"><Award className="size-3.5" aria-hidden />Produkt des Monats {MONTHS[pom.month - 1]} {pom.year}</Link>
+                )}
+              </div>
+              <h1>{reviewH1(r.slug, name)}</h1>
+              <ul className="hero-meta">
+                <li><UserRound className="size-4" aria-hidden />Von <AuthorCredit slug={r.authorSlug} className="font-semibold underline underline-offset-2" /></li>
+                {testedAt && <li><CalendarCheck className="size-4" aria-hidden />Getestet am <time dateTime={testedAt.toISOString()}>{formatDate(testedAt)}</time></li>}
+                <li><RefreshCw className="size-4" aria-hidden />Aktualisiert <time dateTime={r.updatedAt.toISOString()}>{formatDate(r.updatedAt)}</time></li>
+                <li><Clock className="size-4" aria-hidden />{minutes} Min. Lesezeit</li>
+              </ul>
+              <div className="mt-3"><ReadAloud targetId="testbericht" /></div>
+            </>
+          }
+          medien={
+            r.imageUrl || r.contentImageUrl || gallery.length ? (
+              <div className="mt-5">
+                <div className={`medien ${r.imageUrl && r.contentImageUrl ? "zwei" : ""}`}>
+                  {r.imageUrl && (
+                    <figure>
+                      <div className="relative aspect-[4/3] overflow-hidden rounded-3xl bg-bg-soft">
+                        <FpImage src={r.imageUrl} alt={r.imageAlt.trim() || `Verpackung von ${name}`} blur={r.imageBlur} sizes={r.contentImageUrl ? "(min-width:1024px) 600px, (min-width:640px) 50vw, 100vw" : "(min-width:1024px) 1000px, 100vw"} priority />
+                      </div>
+                      <figcaption>Verpackung</figcaption>
+                    </figure>
+                  )}
+                  {r.contentImageUrl && (
+                    <figure>
+                      <div className="relative aspect-[4/3] overflow-hidden rounded-3xl bg-bg-soft">
+                        <FpImage src={r.contentImageUrl} alt={r.contentImageAlt.trim() || `Inhalt von ${name} ohne Verpackung`} blur={r.contentImageBlur} sizes={r.imageUrl ? "(min-width:1024px) 600px, (min-width:640px) 50vw, 100vw" : "(min-width:1024px) 1000px, 100vw"} priority={!r.imageUrl} />
+                      </div>
+                      <figcaption>Das Futter selbst</figcaption>
+                    </figure>
+                  )}
+                </div>
+                {data.bildnachweis && <p className="mt-2 text-xs" style={{ color: "var(--fp-text-muted)" }}>Bildnachweis: {data.bildnachweis}</p>}
+                {gallery.length > 0 && (
+                  <ul className="mt-3 flex gap-3 overflow-x-auto pb-1" aria-label="Weitere Produktbilder">
+                    {gallery.map((src, i) => (
+                      <li key={src} className="relative aspect-square w-24 shrink-0 overflow-hidden rounded-xl bg-bg-soft">
+                        <FpImage src={src} alt={`${name} – weiteres Bild ${i + 1}`} sizes="96px" />
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            ) : null
+          }
+        />
+      </div>
+
+      <div className="mx-auto max-w-6xl px-4">
       {comparison && (
         <p className="mt-6 rounded-2xl border border-border bg-surface p-4 text-sm">
           <strong>Zum Vergleichstest:</strong>{" "}
@@ -194,6 +205,7 @@ export async function ReviewV2Article({ r, data, draftPreview }: { r: Review; da
       <div className="mt-16"><WishBox /></div>
       <div className="mt-16"><NewsletterBox /></div>
       <div className="mt-8 mb-12"><Disclosure /></div>
+      </div>
     </div>
   );
 }

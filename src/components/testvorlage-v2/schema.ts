@@ -40,7 +40,8 @@ export const layoutDataSchema = z.object({
       notenwort: kurz.optional(),
     })
     .optional(),
-  kennzahlen: z.array(z.object({ wert: kurz.min(1), label: kurz, sub: kurz.optional() })).max(8).optional(),
+  /** drei oder vier kompakte Karten; fehlende Werte werden nicht erfunden, die Karte entfällt */
+  kennzahlen: z.array(z.object({ wert: kurz.min(1), label: kurz, sub: kurz.optional() })).max(4).optional(),
   urteil: z.object({ titel: kurz.optional(), intro: z.string().max(4000).optional(), hervorhebung: kurz.optional() }).optional(),
   kriterien: z.array(kriterium).max(12).optional(),
   kapitel: z

@@ -3,7 +3,7 @@ const CX = 100;
 const CY = 104;
 const R = 78;
 
-const f3 = (x: number) => String(Math.round(x * 1000) / 1000);
+const f3 = (x: number) => x.toFixed(3);
 
 export function tachoAnteil(punkte: number, max: number): number {
   if (!(max > 0) || !Number.isFinite(punkte)) return 0;
@@ -18,7 +18,7 @@ export function tachoEndpunkt(anteil: number): { x: number; y: number } {
 
 export const TACHO_HINTERGRUND = `M ${CX - R} ${CY} A ${R} ${R} 0 0 1 ${CX + R} ${CY}`;
 
-/** Pfad des gefüllten Bogens, bei 0 Punkten null. */
+/** Pfad des gefüllten Bogens (Referenz gaugeArc des Designsystems: Radius 78, Mitte 100/104, Start 22/104, 3 Nachkommastellen). Bei 0 Punkten null. */
 export function tachoPfad(punkte: number, max: number): string | null {
   const a = tachoAnteil(punkte, max);
   if (a <= 0) return null;

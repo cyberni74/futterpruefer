@@ -22,13 +22,12 @@ export function TestvorlageVorschau() {
     return () => window.removeEventListener("message", onMessage);
   }, []);
   return (
-    <div className="mx-auto max-w-6xl px-4 py-4">
-      {!state && <p className="text-sm text-muted">Vorschau wird geladen …</p>}
-      {state && "fehler" in state && <p role="alert" className="rounded-xl border border-bad/40 bg-bad-soft p-3 text-sm font-semibold text-bad">Die Eingaben sind noch nicht gültig: {state.fehler}</p>}
+    <div className="py-4">
+      {!state && <p className="mx-4 text-sm text-muted">Vorschau wird geladen …</p>}
+      {state && "fehler" in state && <p role="alert" className="mx-4 rounded-xl border border-bad/40 bg-bad-soft p-3 text-sm font-semibold text-bad">Die Eingaben sind noch nicht gültig: {state.fehler}</p>}
       {state && "data" in state && (
         <>
-          <h1 className="mb-6 text-3xl font-extrabold leading-tight md:text-5xl">{state.titel || "Titel des Tests"}</h1>
-          <TestvorlageV2 data={state.data} totalScore={state.totalScore} ampelLabel={RATING_LABEL[ratingFor(state.totalScore)]} />
+          <TestvorlageV2 data={state.data} totalScore={state.totalScore} ampelLabel={RATING_LABEL[ratingFor(state.totalScore)]} kopf={<h1>{state.titel || "Titel des Tests"}</h1>} />
         </>
       )}
     </div>

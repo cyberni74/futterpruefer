@@ -70,3 +70,12 @@ Prüfung beim Speichern als „Veröffentlicht“: Pflichtfelder, Kriterienzahl 
 ## Vorschau und Tests
 
 `/vorschau-testvorlage?k=5` bzw. `?k=6` zeigt die Vorlage mit neutralen Beispieldaten (nur lokal und auf Vercel-Previews, Produktion 404). Die Beispieldaten liegen in `src/components/testvorlage-v2/fixtures.ts`.
+
+## Layout-Designsystem (verbindlich, Nachtrag 3)
+
+Tokens `--fp-*` (Farben, Radien, Inhaltsbreite 1250 px) stehen scoped unter `.tv2`; die Vorlagen-Variablen sind darauf abgebildet. Schrift Inter (Fallback System), H1 28,8 bis 46 px (Hero), H2 22 bis 30 px, H3 18 bis 22 px, Fließtext 16 bis 17 px bei Zeilenhöhe 1,7, tabellarische Ziffern bei Zahlen.
+
+- Raster: Sidebar 235 px, Abstand 28 px, ab 1024 px zweispaltig (Sidebar sticky unter dem festen Header, aktiver Abschnitt über `aria-current`). Darunter einspaltig mit einklappbarem Inhaltsverzeichnis. Inhaltsrand mobil 16 px.
+- Hero (mintgrüne Fläche): Branding „Futterprüfer“, Kategorie-Badges, H1, Metazeile, Unterüberschrift (`hero.titel`), Einleitung (`hero.untertitel`), weiße Bewertungskarte mit Gesamttacho. Darunter drei oder vier Kennzahl-Karten (`kennzahlen`, höchstens 4; fehlende Werte erscheinen nicht).
+- Tacho: groß höchstens 300 px, klein höchstens 160 px (alle gleich groß), Geometrie nach `gaugeArc` (Radius 78, Mitte 100/104, drei Nachkommastellen). Kriterien-Grid: mobil 2 Spalten (unter 360 px eine), ab 900 px 3 Spalten, letzte Reihe zentriert.
+- Geprüft bei 320, 375, 390, 430, 768, 1024 und 1440 px (keine horizontale Scrollleiste, Tachos in ihren Karten, genau eine H1).
