@@ -48,6 +48,8 @@ export type CaRegel = { caMin: number; caMax: number | null; pMin: number; pMax:
 export type Energie = { nfe: number; ge: number; dig: number; de: number; me: number };
 export type Bedarf = { kcal: number; lo: number; hi: number; faktor: number | null; formel: string };
 
+import type { RisikoId } from "./risiken-daten";
+
 export type Grund = {
   id: string;
   art: "ok" | "warn" | "bad" | "info";
@@ -55,6 +57,9 @@ export type Grund = {
   text: string;
   /** Ist-Wert im Verhältnis zum Minimum (1 = FEDIAF-Minimum), für die Balken */
   verhaeltnis?: number;
+  /** Risikotexte „Mögliche Folgen“ zu diesem Kriterium (nur bei art warn/bad); Stufe je Eintrag */
+  risiken?: RisikoId[];
+  risikoStufen?: Array<"warn" | "bad">;
 };
 
 export type Hinweis = { id: string; text: string };
@@ -112,6 +117,8 @@ export type ErgebnisOk = {
   mengeHi: number | null;
   gruende: Grund[];
   hinweise: Hinweis[];
+  /** Info-Box „Gut zu wissen“ unter der Tagesmenge */
+  mengeRisiko: RisikoId | null;
 };
 
 export type ErgebnisFehler = { status: "fehlt" | "unplausibel"; msg: string };
@@ -126,6 +133,7 @@ export type ErgebnisErgaenzung = {
   budgetKcal: number;
   budgetGramm: number;
   kcalStueck: number | null;
+  leckerliRisiko: RisikoId;
   hinweise: Hinweis[];
 };
 

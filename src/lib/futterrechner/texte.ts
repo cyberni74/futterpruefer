@@ -52,6 +52,16 @@ export const caPDaneben = (ratio: number, max: number, zielgruppeText: string) =
 export const caZuHoch =
   "Calcium liegt über dem FEDIAF-Höchstwert für wachsende Tiere. Gerade im Wachstum zählt das Gleichgewicht. Deshalb höchstens „mangelhaft“.";
 export const caZuHochAdult = "Calcium liegt über dem FEDIAF-Höchstwert für erwachsene Hunde. Deshalb höchstens „ausreichend“.";
+export const caZuNiedrig = (caTs: number, min: number) =>
+  `Calcium: ${n2(caTs)} % der Trockenmasse, FEDIAF nennt mindestens ${n2(min)} %.`;
+export const caPZuNiedrig = (ratio: number, min: number, zielgruppeText: string) =>
+  `Calcium zu Phosphor ${n2(ratio)} : 1. FEDIAF nennt für ${zielgruppeText} mindestens ${n1(min)} : 1.`;
+export const phosphorAusserhalb = (pTs: number, min: number, max: number | null) =>
+  max !== null && pTs > max
+    ? `Phosphor: ${n2(pTs)} % der Trockenmasse, FEDIAF nennt höchstens ${n2(max)} %.`
+    : `Phosphor: ${n2(pTs)} % der Trockenmasse, FEDIAF nennt mindestens ${n2(min)} %.`;
+export const ascheNiedrig = (aTs: number) =>
+  `Rohasche: ${n1(aTs)} % der Trockenmasse, unter dem Band von 3 bis 12 %, das wir als unauffällig ansehen. Das kann ein Tippfehler sein oder auf wenig Mineralstoffe hindeuten. Was genau drin ist, sagt die Summe nicht.`;
 export const caPFehlt =
   "Calcium und Phosphor stehen nicht auf dem Etikett. Viele Hersteller nennen sie auf Nachfrage. Ohne diese Werte vergeben wir höchstens „gut“.";
 export const feuchteGeschaetzt = "Keine Feuchte angegeben. Wir rechnen mit 10 %, wie bei Trockenfutter üblich.";

@@ -7,12 +7,12 @@ export type ChipOption<T extends string> = { value: T; label: string; icon?: Rea
 
 /** Native Radio-Gruppe, optisch als Chips (6.4). `tile`: Icon-Kachel für Aktivität. */
 export function ChipGroup<T extends string>({
-  legend, options, value, onChange, cols = 2, tile = false, hideLegend = false,
-}: { legend: string; options: ChipOption<T>[]; value: T | null; onChange: (v: T) => void; cols?: 1 | 2 | 3 | 4; tile?: boolean; hideLegend?: boolean }) {
+  legend, options, value, onChange, cols = 2, tile = false, hideLegend = false, id, fehlt = false,
+}: { legend: string; options: ChipOption<T>[]; value: T | null; onChange: (v: T) => void; cols?: 1 | 2 | 3 | 4; tile?: boolean; hideLegend?: boolean; id?: string; fehlt?: boolean }) {
   const name = useId();
   const grid = { 1: "grid-cols-1", 2: "grid-cols-2", 3: "grid-cols-3", 4: "grid-cols-2 min-[400px]:grid-cols-4" }[cols];
   return (
-    <fieldset className="min-w-0">
+    <fieldset id={id} aria-invalid={fehlt ? true : undefined} aria-describedby={fehlt && id ? `${id}-hinweis` : undefined} className={`min-w-0 ${fehlt ? "rounded-2xl p-2 ring-2 ring-accent" : ""}`}>
       <legend className={hideLegend ? "sr-only" : "mb-2 text-sm font-bold"}>{legend}</legend>
       <div className={`grid gap-2 ${grid}`}>
         {options.map((o) => {
@@ -33,6 +33,7 @@ export function ChipGroup<T extends string>({
           );
         })}
       </div>
+      {fehlt && <p id={id ? `${id}-hinweis` : undefined} className="mt-2 text-sm font-bold text-accent">Hier fehlt noch Ihre Angabe</p>}
     </fieldset>
   );
 }

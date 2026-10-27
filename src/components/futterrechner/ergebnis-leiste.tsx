@@ -6,12 +6,12 @@ import { NoteBadge } from "./ergebnis-karte";
 import { Gauge } from "./gauge";
 
 /** Sticky Leiste (mobil), über der Bottom-Bar. Tipp scrollt zur Ergebnis-Karte. */
-export function ErgebnisLeiste({ ergebnis, nochFehlt, sichtbar }: { ergebnis: Ergebnis | null; nochFehlt: number; sichtbar: boolean }) {
+export function ErgebnisLeiste({ ergebnis, nochFehlt, sichtbar, bereit }: { ergebnis: Ergebnis | null; nochFehlt: number; sichtbar: boolean; bereit: boolean }) {
   if (!sichtbar) return null;
   const ok = ergebnis?.status === "ok" ? ergebnis : null;
   return (
     <a
-      href="#ergebnis"
+      href={ergebnis ? "#ergebnis" : "#analysieren"}
       className="fixed inset-x-3 bottom-[calc(3.5rem+env(safe-area-inset-bottom)+0.5rem)] z-30 flex min-h-16 items-center gap-3 rounded-2xl border border-border bg-surface/90 px-3 shadow-lift backdrop-blur-md md:bottom-3 lg:hidden"
     >
       {ok ? (
@@ -23,7 +23,7 @@ export function ErgebnisLeiste({ ergebnis, nochFehlt, sichtbar }: { ergebnis: Er
       ) : ergebnis?.status === "ergaenzung" ? (
         <span className="text-sm font-bold">Leckerli-Budget: {n0(ergebnis.budgetGramm)} g/Tag</span>
       ) : (
-        <span className="text-sm font-bold">{nochFehlt > 0 ? `Noch ${nochFehlt} ${nochFehlt === 1 ? "Wert" : "Werte"}, dann sehen Sie die Note` : "Bitte Eingabe prüfen"}</span>
+        <span className="text-sm font-bold">{nochFehlt > 0 ? `Noch ${nochFehlt} ${nochFehlt === 1 ? "Wert" : "Werte"}, dann können Sie analysieren` : bereit ? "Alles da: Jetzt Futter analysieren" : "Bitte Eingabe prüfen"}</span>
       )}
     </a>
   );

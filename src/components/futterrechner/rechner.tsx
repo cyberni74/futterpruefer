@@ -50,12 +50,18 @@ export function Rechner({ art, ctas }: { art: Art; ctas?: RechnerCtas }) {
   const [geteilt, setGeteilt] = useState("");
   const [undo, setUndo] = useState<FormState | null>(null);
   const [vorlesen, setVorlesen] = useState("");
+  /** Ergebnis erst nach Klick auf „Jetzt Futter analysieren“ (Zusatz Manni 27.10.) */
+  const [analysiert, setAnalysiert] = useState(false);
+  const [versucht, setVersucht] = useState(false);
 
   // Fragment lesen (Teilen-Link, Zurück-Taste, Deep-Link der Startseite)
   useEffect(() => {
     const lies = () => {
       const d = decodeHash(window.location.hash, art);
-      if (d && d.art === art) setS(d);
+      if (d && d.art === art) {
+        setS(d);
+        if (pruefe(d).eingabe) setAnalysiert(true); // geteilter Link mit vollständigen Werten zeigt das Ergebnis
+      }
     };
     lies();
     bereit.current = true;
@@ -131,6 +137,8 @@ export function Rechner({ art, ctas }: { art: Art; ctas?: RechnerCtas }) {
 
   const zuruecksetzen = () => {
     setUndo(s);
+    setAnalysiert(false);
+    setVersucht(false);
     setS(startState(s.art, s.futterart));
     setTimeout(() => setUndo(null), 5000);
   };
@@ -142,6 +150,26 @@ export function Rechner({ art, ctas }: { art: Art; ctas?: RechnerCtas }) {
   };
 
   const fehlt = pr.fehlend.length;
+  const kannAnalysieren = pr.eingabe != null && !pr.fehler.summe;
+  const zeigeFehlt = (label: string) => versucht && !analysiert && pr.fehlend.includes(label);
+  const analysieren = () => {
+    if (kannAnalysieren) {
+      setAnalysiert(true);
+      setVersucht(false);
+      document.getElementById("ergebnis")?.scrollIntoView({ behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start" });
+      return;
+    }
+    setVersucht(true);
+    // erstes fehlendes Feld in der Reihenfolge des Formulars
+    const reihenfolge = ["Gewicht", "Alter", "Endgewicht", "Aktivität", "Rohprotein", "Rohfett", "Rohfaser", "Rohasche", "Feuchte"];
+    const ids: Record<string, string> = { Gewicht: "fld-gewicht", Alter: "fld-alter", Endgewicht: "fld-endgewicht", Aktivität: "fld-aktivitaet", Rohprotein: "fld-p", Rohfett: "fld-f", Rohfaser: "fld-fa", Rohasche: "fld-a", Feuchte: "fld-m" };
+    const erstes = reihenfolge.find((l) => pr.fehlend.includes(l));
+    setTimeout(() => {
+      const ziel = erstes ? (erstes === "Aktivität" ? document.querySelector<HTMLElement>(`#${ids[erstes]} input`) : document.getElementById(`${ids[erstes]}-r`)) : document.querySelector<HTMLElement>("[aria-invalid=true]");
+      ziel?.focus({ preventScroll: true });
+      ziel?.scrollIntoView({ behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "center" });
+    }, 0);
+  };
   const tierName = s.art === "hund" ? "Hund" : "Katze";
   const gewichtSkala = s.art === "hund" ? { max: hundGewichtPos.max, zuPos: hundPosAusKg, vonPos: hundKgAusPos } : undefined;
   const ctaNode = ergebnis?.status === "ok" && s.futterart !== "snack" ? ctas?.[s.futterart] : null;
@@ -149,7 +177,7 @@ export function Rechner({ art, ctas }: { art: Art; ctas?: RechnerCtas }) {
 
   const feld = (k: "p" | "f" | "fa" | "a" | "m" | "ca" | "ph", label: string, hilfe?: string) => (
     <ValueSlider
-      key={`${s.futterart}-${k}`} label={label} einheit="%" value={wertErsatz(k)} onChange={(v) => setWert({ [k]: v })}
+      key={`${s.futterart}-${k}`} id={`fld-${k}`} fehlt={zeigeFehlt(label)} label={label} einheit="%" value={wertErsatz(k)} onChange={(v) => setWert({ [k]: v })}
       min={B[k].min} max={B[k].max} step={B[k].step} platzhalter={B[k].platzhalter}
       marker={k === "p" ? marker?.p : k === "f" ? marker?.f : null}
       fehler={pr.fehler[k]} warnung={pr.warnungen[k]} hilfe={hilfe}
@@ -170,14 +198,14 @@ export function Rechner({ art, ctas }: { art: Art; ctas?: RechnerCtas }) {
                 options={[{ value: "hund", label: "Hund", icon: <Dog /> }, { value: "katze", label: "Katze", icon: <Cat /> }]}
               />
               <ValueSlider
-                label="Gewicht" einheit="kg" value={s.gewicht} onChange={(v) => set({ gewicht: v })}
+                id="fld-gewicht" fehlt={zeigeFehlt("Gewicht")} label="Gewicht" einheit="kg" value={s.gewicht} onChange={(v) => set({ gewicht: v })}
                 min={s.art === "hund" ? 0.5 : 1} max={s.art === "hund" ? 80 : 10} step={s.art === "hund" ? 0.5 : 0.1}
                 platzhalter={s.art === "hund" ? 15 : 4.5} skala={gewichtSkala}
                 fehler={pr.fehler.gewicht} hilfe="Aktuelles Gewicht. Bei Übergewicht: Idealgewicht nehmen."
                 valueText={(v) => `${v} Kilogramm`}
               />
               <ValueSlider
-                label="Alter" einheit="" value={s.alterPos} onChange={(v) => set({ alterPos: v == null ? null : Math.round(v) })}
+                id="fld-alter" fehlt={zeigeFehlt("Alter")} label="Alter" einheit="" value={s.alterPos} onChange={(v) => set({ alterPos: v == null ? null : Math.round(v) })}
                 min={0} max={ALTER_MAX[s.art]} step={1} platzhalter={s.art === "hund" ? 49 : 13}
                 textAnzeige={(p) => alterText(alterAusPosition(s.art, p))} valueText={(p) => alterText(alterAusPosition(s.art, p))}
               />
@@ -190,7 +218,7 @@ export function Rechner({ art, ctas }: { art: Art; ctas?: RechnerCtas }) {
               )}
               {phase === "welpe" && (
                 <ValueSlider
-                  label="Erwartetes Endgewicht" einheit="kg" value={s.endgewicht} onChange={(v) => set({ endgewicht: v })}
+                  id="fld-endgewicht" fehlt={zeigeFehlt("Endgewicht")} label="Erwartetes Endgewicht" einheit="kg" value={s.endgewicht} onChange={(v) => set({ endgewicht: v })}
                   min={2} max={90} step={0.5} platzhalter={25} skala={{ max: hundGewichtPos.max, zuPos: hundPosAusKg, vonPos: hundKgAusPos }}
                   fehler={pr.fehler.endgewicht} hilfe="Rassestandard oder Schätzung der Tierarztpraxis."
                   valueText={(v) => `${v} Kilogramm Endgewicht`}
@@ -200,7 +228,7 @@ export function Rechner({ art, ctas }: { art: Art; ctas?: RechnerCtas }) {
                 <>
                   {s.art === "hund" ? (
                     <ChipGroup
-                      legend="Aktivität" tile cols={4} value={s.hundAktiv} onChange={(v) => set({ hundAktiv: v })}
+                      legend="Aktivität" id="fld-aktivitaet" fehlt={zeigeFehlt("Aktivität")} tile cols={4} value={s.hundAktiv} onChange={(v) => set({ hundAktiv: v })}
                       options={[
                         { value: "wenig", label: "Wenig", icon: <Sofa />, hilfe: "unter 1 Std./Tag" },
                         { value: "normal", label: "Normal", icon: <Footprints />, hilfe: "1–2 Std./Tag" },
@@ -210,7 +238,7 @@ export function Rechner({ art, ctas }: { art: Art; ctas?: RechnerCtas }) {
                     />
                   ) : (
                     <ChipGroup
-                      legend="Aktivität" tile cols={2} value={s.katzeAktiv} onChange={(v) => set({ katzeAktiv: v })}
+                      legend="Aktivität" id="fld-aktivitaet" fehlt={zeigeFehlt("Aktivität")} tile cols={2} value={s.katzeAktiv} onChange={(v) => set({ katzeAktiv: v })}
                       options={[{ value: "wohnung", label: "Wohnung", icon: <House />, hilfe: "kein Freigang" }, { value: "freigang", label: "Freigang", icon: <Trees />, hilfe: "regelmäßig draußen" }]}
                     />
                   )}
@@ -286,6 +314,17 @@ export function Rechner({ art, ctas }: { art: Art; ctas?: RechnerCtas }) {
               </div>
             </details>
             {pr.fehler.summe && <p role="alert" className="mt-3 rounded-xl bg-bad-soft p-3 text-sm font-semibold text-bad">{pr.fehler.summe}</p>}
+            <div className="mt-5">
+              <button
+                id="analysieren" type="button" onClick={analysieren}
+                className="inline-flex min-h-14 w-full items-center justify-center rounded-full bg-accent px-6 text-lg font-extrabold text-white shadow-lift hover:bg-accent-strong focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 dark:text-black"
+              >
+                Jetzt Futter analysieren
+              </button>
+              <p role="status" className="mt-2 text-center text-sm font-bold text-accent">
+                {versucht && !analysiert && fehlt > 0 ? `Bitte noch ${fehlt} ${fehlt === 1 ? "Angabe" : "Angaben"} ergänzen` : ""}
+              </p>
+            </div>
             <p className="mt-4 text-xs text-muted">Ihre Eingaben bleiben auf Ihrem Gerät. Wir speichern nichts.</p>
             <button type="button" onClick={zuruecksetzen} className="mt-2 inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold text-muted underline underline-offset-4 hover:text-fg">
               <Trash2 aria-hidden className="size-4" /> Alle Werte löschen
@@ -297,12 +336,13 @@ export function Rechner({ art, ctas }: { art: Art; ctas?: RechnerCtas }) {
           <ErgebnisKarte
             titel={`Nährwert-Check ${tierName}`}
             ergebnis={pr.fehler.summe ? null : ergebnis} nochFehlt={pr.fehlend} fehlerText={pr.fehler.summe}
+            analysiert={analysiert} bereit={kannAnalysieren} art={s.art}
             onTeilen={teilen} geteilt={geteilt || vorlesen} ctas={ctaNode}
           />
         </div>
       </div>
 
-      <ErgebnisLeiste ergebnis={pr.fehler.summe ? null : ergebnis} nochFehlt={fehlt} sichtbar={fehlt < 5 || ergebnis != null} />
+      <ErgebnisLeiste ergebnis={analysiert && !pr.fehler.summe ? ergebnis : null} nochFehlt={fehlt} bereit={kannAnalysieren} sichtbar={fehlt < 5 || analysiert} />
 
       {undo && (
         <div role="status" className="fixed inset-x-3 bottom-[calc(7.5rem+env(safe-area-inset-bottom))] z-40 mx-auto flex max-w-sm items-center justify-between gap-3 rounded-2xl bg-fg px-4 py-3 text-sm font-semibold text-bg shadow-lift md:bottom-20">
