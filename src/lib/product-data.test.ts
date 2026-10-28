@@ -46,6 +46,9 @@ describe("Werbeaussagen", () => {
     expect(suggestedDeclarationDeduction(parseClaims(Array(9).fill({ claim: "a", rating: "UNZULAESSIG" })))).toBe(15);
     expect(consWithClaims(["Teuer"], c)).toEqual(["Teuer", "Halten wir für irreführend: „stärkt das Immunsystem“"]);
     expect(consWithClaims(null, [])).toEqual([]);
+    expect(consWithClaims([], [claim("Datenfeld „Diättyp des Tierfutters: Roh“", "UNZULAESSIG")])).toEqual([
+      "Halten wir für irreführend: „Datenfeld ‚Diättyp des Tierfutters: Roh‘“",
+    ]);
   });
   it("Unbelegt und Plausibel sind eigene Stufen und zählen nicht als ohne Einwand", () => {
     const c = parseClaims([

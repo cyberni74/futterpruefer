@@ -1,6 +1,7 @@
 import { isAuthorSlug } from "@/lib/authors";
 import { isAllowedImageUrl } from "@/lib/image-hosts";
 import { CLAIM_RATINGS, parseAnalysis, parseClaims, type ClaimRating } from "@/lib/product-data";
+import { frameQuote } from "@/lib/quotes";
 import { z } from "zod";
 import { CRITERIA, type CriterionKey } from "@/lib/scoring";
 import { parseKeywords } from "./seo";
@@ -204,11 +205,11 @@ export const reviewSchema = z
     v.claims.forEach((c, i) => {
       const rating = claimRatingSchema.safeParse(c.rating);
       if (!rating.success) {
-        ctx.addIssue({ code: "custom", path: ["claims"], message: `Werbeaussage ${i + 1} („${c.claim}“): unbekannte Stufe.` });
+        ctx.addIssue({ code: "custom", path: ["claims"], message: `Werbeaussage ${i + 1} (${frameQuote(c.claim)}): unbekannte Stufe.` });
         return;
       }
       if (needsClaimReason(rating.data) && c.reason.length < 10)
-        ctx.addIssue({ code: "custom", path: ["claims"], message: `Werbeaussage ${i + 1} („${c.claim}“): bitte die Einschätzung begründen.` });
+        ctx.addIssue({ code: "custom", path: ["claims"], message: `Werbeaussage ${i + 1} (${frameQuote(c.claim)}): bitte die Einschätzung begründen.` });
     });
   });
 

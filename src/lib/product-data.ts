@@ -1,5 +1,6 @@
 /** Produktdaten eines Tests: Zusammensetzung, Analyse, Werbeaussagen, Lesezeit – alles null-sicher. */
 import { isAllowedImageUrl } from "./image-hosts";
+import { frameQuote } from "./quotes";
 import { slugify } from "./slug";
 
 // ---------- Werbeaussagen ----------
@@ -75,7 +76,7 @@ export function suggestedDeclarationDeduction(claims: Claim[]): number {
 /** Contra-Liste inkl. unzulässiger Werbeaussagen (ohne Dubletten). */
 export function consWithClaims(cons: string[] | null | undefined, claims: Claim[]): string[] {
   const base = (cons ?? []).filter(Boolean);
-  const extra = misleadingClaims(claims).map((c) => `Halten wir für irreführend: „${c.claim}“`);
+  const extra = misleadingClaims(claims).map((c) => `Halten wir für irreführend: ${frameQuote(c.claim)}`);
   return [...base, ...extra.filter((e) => !base.includes(e))];
 }
 

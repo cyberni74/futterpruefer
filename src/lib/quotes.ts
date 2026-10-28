@@ -1,0 +1,48 @@
+/** Deutsche Anführungszeichen: „…“ außen, ‚…‘ im Zitat. */
+const OPEN = "\u201E";
+const CLOSE = "\u201C";
+const NESTED_OPEN = "\u201A";
+const NESTED_CLOSE = "\u2018";
+
+/**
+ * Der ganze Text ist genau ein äußeres „…“: er beginnt mit „, endet mit “,
+ * und dieses öffnende Zeichen schließt erst am letzten Zeichen wieder.
+ */
+function isExactOuterQuote(text: string): boolean {
+  if (text.length < 2 || text[0] !== OPEN || text[text.length - 1] !== CLOSE) return false;
+  let depth = 0;
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
+    if (ch === OPEN) depth += 1;
+    else if (ch === CLOSE) {
+      depth -= 1;
+      if (depth < 0 || (depth === 0 && i !== text.length - 1)) return false;
+    }
+  }
+  return depth === 0;
+}
+
+/** Innere „…“ und gerade "…" werden zu ‚…‘. Vorhandene ‚…‘ bleiben. */
+function nestInnerQuotes(text: string): string {
+  let straightOpen = false;
+  let out = "";
+  for (const ch of text) {
+    if (ch === OPEN) out += NESTED_OPEN;
+    else if (ch === CLOSE) out += NESTED_CLOSE;
+    else if (ch === '"') {
+      out += straightOpen ? NESTED_CLOSE : NESTED_OPEN;
+      straightOpen = !straightOpen;
+    } else out += ch;
+  }
+  return out;
+}
+
+/**
+ * Rahmt einen claim-Text mit „…“.
+ * Innere deutsche und gerade Anführungszeichen werden zu halben ‚…‘ (Zitat im Zitat).
+ * Ist der Text bereits genau ein äußeres Zitat, kommt kein zweiter Rahmen dazu.
+ */
+export function frameQuote(text: string): string {
+  const body = isExactOuterQuote(text) ? text.slice(1, -1) : text;
+  return `${OPEN}${nestInnerQuotes(body)}${CLOSE}`;
+}

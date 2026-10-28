@@ -5,6 +5,7 @@ import { publishedWhere } from "@/lib/queries";
 import { reviewPath } from "@/lib/urls";
 import { trimMetaDescription } from "@/lib/seo";
 import { objectedClaims, parseClaims } from "@/lib/product-data";
+import { frameQuote } from "@/lib/quotes";
 import { PageShell } from "@/components/page-shell";
 
 export const revalidate = 3600;
@@ -87,7 +88,7 @@ export default async function WerbeaussagenPage() {
                     <ul className="mt-2 space-y-2 text-sm">
                       {r.examples.map((e) => (
                         <li key={e.claim} className="rounded-xl bg-bg-soft p-3">
-                          <p className="font-semibold">„{e.claim}“</p>
+                          <p className="font-semibold">{frameQuote(e.claim)}</p>
                           <p className="mt-1 text-muted">{e.reason}</p>
                         </li>
                       ))}
