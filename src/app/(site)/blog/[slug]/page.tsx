@@ -37,6 +37,12 @@ const BODY_FAQ_SLUGS = new Set([
   "nasenbalsam-hund-selber-machen",
   "hund-po-wund-pflegebalsam-selber-machen",
   "bestes-hundefutter-zusammensetzung",
+  "monoprotein-futter",
+  "rohasche-im-futter",
+  "duerfen-katzen-milch-trinken",
+  "was-duerfen-hunde-nicht-essen",
+  "futterumstellung-hund",
+  "futtermenge-hund-berechnen",
 ]);
 
 export async function generateStaticParams() {
