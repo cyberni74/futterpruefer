@@ -43,6 +43,7 @@ const BODY_FAQ_SLUGS = new Set([
   "was-duerfen-hunde-nicht-essen",
   "futterumstellung-hund",
   "futtermenge-hund-berechnen",
+  "hund-katze-vegan-ernaehren",
 ]);
 
 export async function generateStaticParams() {
