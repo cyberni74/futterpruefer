@@ -3,6 +3,7 @@ import { prisma } from "@/lib/db";
 import { canonicalBrand } from "@/lib/brand-alias";
 import { publishedWhere, reviewCardSelect } from "@/lib/queries";
 import { orderByFor, PRICE_CLASSES, SORTS, type ReviewFilters } from "@/lib/filters";
+import { priceClassCandidateWhere, REVIEW_LIST_CAP, reviewsMatchingPriceFilter } from "@/lib/price-source";
 import { PRICE_CLASS_LABEL } from "@/lib/site";
 import { ReviewCard } from "./review-card";
 import { CompareProvider, CompareToggle } from "./compare";
@@ -17,19 +18,27 @@ export async function ReviewListing({ basePath, filters, categoryId, showAnimal 
   const rawBrands = brandRows.map((b) => b.brand).filter(Boolean);
   const brands = [...new Set(rawBrands.map(canonicalBrand))].sort((a, b) => a.localeCompare(b, "de", { sensitivity: "base" }));
   const markeVariants = filters.marke ? rawBrands.filter((b) => canonicalBrand(b).toLowerCase() === filters.marke!.toLowerCase()) : [];
-  const reviews = await prisma.review.findMany({
-    where: {
-      ...publishedWhere(),
-      ...(categoryId ? { categoryId } : {}),
-      ...(filters.marke ? { brand: { in: markeVariants.length ? markeVariants : [filters.marke] } } : {}),
-      ...(filters.preis ? { priceClass: filters.preis } : {}),
-      ...(filters.tier ? { category: { animal: filters.tier } } : {}),
-      ...(filters.min > 0 ? { totalScore: { gte: filters.min } } : {}),
-    },
-    orderBy: orderByFor(filters.sort),
-    select: reviewCardSelect,
-    take: 120,
-  });
+  const listWhere = {
+    ...publishedWhere(),
+    ...(categoryId ? { categoryId } : {}),
+    ...(filters.marke ? { brand: { in: markeVariants.length ? markeVariants : [filters.marke] } } : {}),
+    ...(filters.tier ? { category: { animal: filters.tier } } : {}),
+    ...(filters.min > 0 ? { totalScore: { gte: filters.min } } : {}),
+  };
+  // Mit Preisklasse: Kandidaten per Prisma, exakte Quellenprüfung und Limit danach,
+  // damit Tests ohne Preisquelle keine der ersten Plätze belegen.
+  const reviews = filters.preis
+    ? reviewsMatchingPriceFilter(await prisma.review.findMany({
+        where: { AND: [listWhere, priceClassCandidateWhere(filters.preis)] },
+        orderBy: orderByFor(filters.sort),
+        select: { ...reviewCardSelect, pricePerKg: true, layoutData: true },
+      }))
+    : await prisma.review.findMany({
+        where: listWhere,
+        orderBy: orderByFor(filters.sort),
+        select: reviewCardSelect,
+        take: REVIEW_LIST_CAP,
+      });
 
   const field = "min-h-11 rounded-xl border border-border bg-surface px-3 text-sm font-medium";
   return (
