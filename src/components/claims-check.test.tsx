@@ -38,6 +38,23 @@ describe("ClaimsCheck Stufen-Badges", () => {
     expect(html).not.toContain("3 ohne Einwand");
   });
 
+  it("rahmt Aussagen mit inneren Anführungszeichen als Zitat im Zitat", () => {
+    const text = "Datenfeld „Diättyp des Tierfutters: Roh“";
+    const framed = "„Datenfeld ‚Diättyp des Tierfutters: Roh‘“";
+    const html = renderToStaticMarkup(
+      <ClaimsCheck
+        claims={[{ ...claim(text, "UNBELEGT"), imageUrl: "/uploads/aussage.webp" }]}
+        brand="Beispielmarke"
+      />,
+    );
+    expect(html).toContain(`<p class="font-bold">${framed}</p>`);
+    expect(html).toContain(`<th scope="row" class="p-3 font-bold">${framed}`);
+    expect(html).toContain(`alt="Verpackungsfoto mit der Aussage ${framed}"`);
+    expect(html.split(framed).length - 1).toBe(4);
+    expect(html).not.toContain("„„");
+    expect(html).not.toContain("““");
+  });
+
   it("nennt Verpackung, Hersteller und Amazon-Listing für jede Marke", () => {
     expect(html).toContain("Geprüft haben wir Aussagen zu Beispielmarke auf der Verpackung, beim Hersteller und im Amazon-Listing. Wer die Angaben im Amazon-Listing eingetragen hat, ist uns nicht bekannt.");
     expect(html).not.toContain("auf der Verpackung und im Shop geprüft");

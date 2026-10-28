@@ -1,5 +1,6 @@
 import { ratingFor, RATING_LABEL } from "./scoring";
 import { misleadingClaims, splitComposition, type Claim } from "./product-data";
+import { frameQuote } from "./quotes";
 import { REVIEW_EXTRA_FAQ } from "./review-extra-faq";
 
 /**
@@ -186,7 +187,7 @@ export function reviewFaq(r: ReviewSeoInput, comparison?: { title: string } | nu
   if (mis.length) {
     out.push({
       question: mis.length === 1 ? `Welche Werbeaussage zu ${r.name} halten wir für irreführend?` : `Welche Werbeaussagen zu ${r.name} halten wir für irreführend?`,
-      answer: mis.map((c) => `„${clean(c.claim)}“${clean(c.reason) ? `: ${sentence(clean(c.reason))}` : "."}`).join(" "),
+      answer: mis.map((c) => `${frameQuote(clean(c.claim))}${clean(c.reason) ? `: ${sentence(clean(c.reason))}` : "."}`).join(" "),
     });
   }
   const stand = priceStandDate(r.priceDate);

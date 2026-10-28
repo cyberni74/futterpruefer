@@ -1,12 +1,13 @@
 import { CheckCircle2, AlertTriangle, XCircle, Scale, CircleDashed, CircleDot } from "lucide-react";
 import { CLAIM_BADGE_CLASS, CLAIM_LABEL, claimStageSummary, type Claim, type ClaimRating } from "@/lib/product-data";
+import { frameQuote } from "@/lib/quotes";
 import { FpImage } from "./fp-image";
 
 function ClaimPhoto({ src, claim }: { src: string; claim: string }) {
   return (
     <a href={src} target="_blank" rel="noopener" className="mt-2 inline-flex items-center gap-2 text-sm font-semibold text-brand underline-offset-2 hover:underline">
       <span className="relative block size-16 shrink-0 overflow-hidden rounded-lg border border-border bg-bg-soft">
-        <FpImage src={src} alt={`Verpackungsfoto mit der Aussage „${claim}“`} sizes="64px" />
+        <FpImage src={src} alt={`Verpackungsfoto mit der Aussage ${frameQuote(claim)}`} sizes="64px" />
       </span>
       Foto vergrößern<span className="sr-only"> (öffnet in neuem Tab)</span>
     </a>
@@ -43,7 +44,7 @@ export function ClaimsCheck({ claims, brand, sourceLabel }: { claims: Claim[]; b
       <ul className="mt-5 space-y-3 md:hidden">
         {claims.map((c, i) => (
           <li key={`${c.claim}-${i}`} className="rounded-2xl border border-border bg-surface p-4 shadow-card">
-            <p className="font-bold">„{c.claim}“</p>
+            <p className="font-bold">{frameQuote(c.claim)}</p>
             <div className="mt-2"><Badge rating={c.rating} /></div>
             {c.reason && <p className="mt-2 text-sm"><span className="font-semibold">Unsere Einschätzung:</span> {c.reason}</p>}
             {c.legal && <p className="mt-2 flex items-start gap-1.5 text-xs text-muted"><Scale className="mt-0.5 size-3.5 shrink-0" aria-hidden />{c.legal}</p>}
@@ -61,7 +62,7 @@ export function ClaimsCheck({ claims, brand, sourceLabel }: { claims: Claim[]; b
           <tbody>
             {claims.map((c, i) => (
               <tr key={`${c.claim}-${i}`} className="border-t border-border align-top">
-                <th scope="row" className="p-3 font-bold">„{c.claim}“{c.imageUrl && <div className="font-normal"><ClaimPhoto src={c.imageUrl} claim={c.claim} /></div>}</th>
+                <th scope="row" className="p-3 font-bold">{frameQuote(c.claim)}{c.imageUrl && <div className="font-normal"><ClaimPhoto src={c.imageUrl} claim={c.claim} /></div>}</th>
                 <td className="p-3"><Badge rating={c.rating} /></td>
                 <td className="p-3">
                   {c.reason && <p>Unsere Einschätzung: {c.reason}</p>}

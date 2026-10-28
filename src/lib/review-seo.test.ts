@@ -36,6 +36,16 @@ describe("review-seo", () => {
     expect(directAnswer({ ...base, totalScore: 70 })).toContain("Nach unserem Bewertungsschema: mit Abstrichen.");
     expect(directAnswer(base)).toContain("Nach unserem Bewertungsschema: Rot – keine Empfehlung.");
   });
+  it("FAQ rahmt eine Aussage mit inneren Anführungszeichen nur einmal", () => {
+    const faq = reviewFaq({
+      ...base,
+      claims: [{ claim: "Datenfeld „Diättyp des Tierfutters: Roh“", rating: "UNZULAESSIG", reason: "Steht so im Listing.", legal: "", imageUrl: "" }],
+    });
+    const answer = faq.find((f) => f.question.includes("irreführend"))!.answer;
+    expect(answer.startsWith("„Datenfeld ‚Diättyp des Tierfutters: Roh‘“: Steht so im Listing.")).toBe(true);
+    expect(answer).not.toContain("„„");
+    expect(answer).not.toContain("““");
+  });
   it("Singular bei genau einer irreführenden Aussage, Plural ab zwei", () => {
     expect(reviewFaq(base).map((f) => f.question)).toContain("Welche Werbeaussage zu Testfutter Rind halten wir für irreführend?");
     const two = { ...base, claims: [...base.claims, { ...base.claims[0], claim: "macht jung" }] };
