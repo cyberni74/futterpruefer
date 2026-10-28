@@ -22,14 +22,12 @@ function isExactOuterQuote(text: string): boolean {
   return depth === 0;
 }
 
-/** Innere „…“ und gerade "…" werden zu ‚…‘. Vorhandene ‚…‘ bleiben. */
-function nestInnerQuotes(text: string): string {
+/** Gerade "…" werden zu ‚…‘. Deutsche „ “ und vorhandene ‚ ‘ bleiben. */
+function convertStraightQuotes(text: string): string {
   let straightOpen = false;
   let out = "";
   for (const ch of text) {
-    if (ch === OPEN) out += NESTED_OPEN;
-    else if (ch === CLOSE) out += NESTED_CLOSE;
-    else if (ch === '"') {
+    if (ch === '"') {
       out += straightOpen ? NESTED_CLOSE : NESTED_OPEN;
       straightOpen = !straightOpen;
     } else out += ch;
@@ -37,12 +35,44 @@ function nestInnerQuotes(text: string): string {
   return out;
 }
 
+/** Innere „…“ und gerade "…" werden zu ‚…‘. Vorhandene ‚…‘ bleiben. */
+function nestInnerQuotes(text: string): string {
+  let out = "";
+  for (const ch of text) {
+    if (ch === OPEN) out += NESTED_OPEN;
+    else if (ch === CLOSE) out += NESTED_CLOSE;
+    else out += ch;
+  }
+  return convertStraightQuotes(out);
+}
+
+/**
+ * „ und “ wechseln ab: öffnen, schließen, öffnen, schließen …
+ * Beginn mit öffnen, Ende mit schließen, nie zwei gleiche hintereinander.
+ */
+function germanQuotesAlternate(text: string): boolean {
+  let expect: typeof OPEN | typeof CLOSE = OPEN;
+  let count = 0;
+  for (const ch of text) {
+    if (ch !== OPEN && ch !== CLOSE) continue;
+    if (ch !== expect) return false;
+    expect = ch === OPEN ? CLOSE : OPEN;
+    count += 1;
+  }
+  // Nach einem schließenden “ ist das nächste wieder ein „. Mindestens ein Paar.
+  return count > 0 && expect === OPEN;
+}
+
 /**
  * Rahmt einen claim-Text mit „…“.
- * Innere deutsche und gerade Anführungszeichen werden zu halben ‚…‘ (Zitat im Zitat).
+ * Wechselt die Folge „ “ nach diesem Rahmen sauber ab, bleiben diese Zeichen stehen.
+ * Gerade "…" werden dabei wie bisher zu ‚…‘.
+ * Sonst werden innere „…“ und gerade "…" zu ‚…‘ (Zitat im Zitat).
  * Ist der Text bereits genau ein äußeres Zitat, kommt kein zweiter Rahmen dazu.
  */
 export function frameQuote(text: string): string {
+  const trial = `${OPEN}${text}${CLOSE}`;
+  if (germanQuotesAlternate(trial)) return convertStraightQuotes(trial);
   const body = isExactOuterQuote(text) ? text.slice(1, -1) : text;
   return `${OPEN}${nestInnerQuotes(body)}${CLOSE}`;
 }
