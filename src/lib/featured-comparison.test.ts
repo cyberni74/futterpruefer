@@ -1,13 +1,28 @@
 import { describe, expect, it } from "vitest";
-import { FEATURED_COMPARISON, FEATURED_COMPARISONS, comparisonPath } from "./featured-comparison";
+import { FEATURED_COMPARISON, FEATURED_COMPARISONS, comparisonPath, showsWinnerSeal } from "./featured-comparison";
 
 describe("Startseiten-Kästen Testsieger", () => {
-  it("zeigt Gelenk-Test (neuester) vor Nassfutter-Test", () => {
+  it("zeigt die Vergleiche neuester zuerst", () => {
     expect(FEATURED_COMPARISONS.map((c) => c.slug)).toEqual([
+      "veganes-katzenfutter-test-oktober-2026",
+      "veganes-hundefutter-test-oktober-2026",
       "gelenk-test-hund-oktober-2026",
       "nassfutter-test-rind-hund-oktober-2026",
     ]);
-    expect(FEATURED_COMPARISON?.slug).toBe("gelenk-test-hund-oktober-2026");
+    expect(FEATURED_COMPARISON?.slug).toBe("veganes-katzenfutter-test-oktober-2026");
+  });
+
+  it("gibt VUTTER Gelb einen Pokal und Rot keinen", () => {
+    const katze = FEATURED_COMPARISONS.find((c) => c.slug === "veganes-katzenfutter-test-oktober-2026");
+    const hund = FEATURED_COMPARISONS.find((c) => c.slug === "veganes-hundefutter-test-oktober-2026");
+    expect(katze?.winner).toBeUndefined();
+    expect(katze?.score).toBeUndefined();
+    expect(katze?.imageAltFallback).not.toMatch(/pokal/i);
+    expect(showsWinnerSeal(katze!)).toBe(false);
+    expect(showsWinnerSeal({ winner: "AMI Cat", score: 59 })).toBe(false);
+    expect(hund?.winner).toBe("VUTTER Nassfutter Wie Ente");
+    expect(hund?.score).toBe(75);
+    expect(showsWinnerSeal(hund!)).toBe(true);
   });
 
   it("verlinkt auf unseren Vergleichstest, nicht auf Amazon", () => {
@@ -33,8 +48,13 @@ describe("Startseiten-Kästen Testsieger", () => {
 
   it("hat gültige Punkte und Monat", () => {
     for (const c of FEATURED_COMPARISONS) {
-      expect(c.score).toBeGreaterThanOrEqual(0);
-      expect(c.score).toBeLessThanOrEqual(100);
+      if (c.score != null) {
+        expect(c.score).toBeGreaterThanOrEqual(0);
+        expect(c.score).toBeLessThanOrEqual(100);
+        expect(c.winner).toBeTruthy();
+      } else {
+        expect(c.winner).toBeUndefined();
+      }
       expect(c.month).toBeGreaterThanOrEqual(1);
       expect(c.month).toBeLessThanOrEqual(12);
     }

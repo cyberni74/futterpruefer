@@ -32,6 +32,7 @@ export const revalidate = 3600;
 const BODY_FAQ_SLUGS = new Set([
   "fischmehl-ueberfischung-tierfutter",
   "palmoel-tierfutter",
+  "soja-tierfutter-regenwald",
   "pfotenbalsam-selber-machen-hund",
   "nasenbalsam-hund-selber-machen",
   "hund-po-wund-pflegebalsam-selber-machen",

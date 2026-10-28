@@ -33,7 +33,7 @@ export type FeatureHeroProps = {
   score: number | null | undefined;
   text: string;
   image: { src: string | null | undefined; alt: string; blur?: string | null };
-  seal: React.ReactNode;
+  seal?: React.ReactNode;
   primary: { href: string; label: string };
   secondary?: { href: string; label: string };
 };
@@ -53,7 +53,7 @@ export function FeatureHero({ headingId, kicker, srPrefix, title, score, text, i
             <h2 id={headingId} className="flex-1 text-2xl font-extrabold leading-tight md:text-3xl dark:text-fg">
               <span className="sr-only">{srPrefix}</span>{title}
             </h2>
-            <ScoreBadge score={score} size="md" />
+            {score != null && <ScoreBadge score={score} size="md" />}
           </div>
           <p className="line-clamp-4 leading-relaxed text-white/90 dark:text-fg/90">{text}</p>
           <div className="flex flex-wrap gap-3 pt-1">

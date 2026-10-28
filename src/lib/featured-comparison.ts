@@ -1,11 +1,14 @@
 /**
- * Startseiten-Kästen „Testsieger“ für die großen Vergleichstests („Der große …-Test“).
+ * Startseiten-Kästen für die großen Vergleichstests.
  * Für einen neuen Vergleichstest einen Eintrag OBEN in FEATURED_COMPARISONS einfügen (neuester zuerst);
  * alle Einträge erscheinen untereinander über „Produkt des Monats“. Bild und Alt-Text kommen aus dem
  * Blogbeitrag (slug); ist der Beitrag nicht veröffentlicht, erscheint sein Kasten nicht.
  * Kein Amazon-Link: Die Kästen verlinken nur auf unseren Vergleichstest.
  * Neutral formulieren: Platz, Punkte, Ampel – keine Wirkversprechen, keine Heilaussagen.
+ * Pokal nur mit Testsieger ab Gelb (60 Punkte). Alle Rot: winner und score weglassen, kein Pokal.
  */
+import { RATING_THRESHOLDS } from "@/lib/scoring";
+
 export type FeaturedComparison = {
   /** Slug des Blogbeitrags unter /blog/… */
   slug: string;
@@ -13,18 +16,43 @@ export type FeaturedComparison = {
   testName: string;
   month: number;
   year: number;
-  /** Produktname des Testsiegers. */
-  winner: string;
-  /** Punkte des Testsiegers (0–100). */
-  score: number;
+  /** Produktname des Testsiegers. Fehlt, wenn kein Produkt Testsieger ist (alle Rot). */
+  winner?: string;
+  /** Punkte des Testsiegers (0–100). Fehlt ohne Testsieger. */
+  score?: number;
   /** Kurztext unter der Überschrift (max. vier Zeilen). */
   summary: string;
   /** Ersatz, falls der Blogbeitrag keinen Alt-Text hat. */
   imageAltFallback: string;
 };
 
+/** Pokal nur bei benanntem Testsieger ab Gelb. Rot bleibt ohne Siegel. */
+export function showsWinnerSeal(c: Pick<FeaturedComparison, "winner" | "score">): boolean {
+  return c.winner != null && c.winner !== "" && c.score != null && c.score >= RATING_THRESHOLDS.mittel;
+}
+
 /** Neuester Vergleichstest zuerst. */
 export const FEATURED_COMPARISONS: FeaturedComparison[] = [
+  {
+    slug: "veganes-katzenfutter-test-oktober-2026",
+    testName: "Veganes Katzenfutter im Test, Oktober 2026",
+    month: 10,
+    year: 2026,
+    summary:
+      "Drei vegane Alleinfutter für Katzen im Vergleich. AMI Cat (59), Benevo Original (50) und Benevo Duo (36) liegen unter 60 Punkten, alle Rot. Einen Testsieger gibt es nicht.",
+    imageAltFallback: "Veganes Katzenfutter im Test, Oktober 2026: drei Alleinfutter, alle Rot, kein Testsieger",
+  },
+  {
+    slug: "veganes-hundefutter-test-oktober-2026",
+    testName: "Veganes Hundefutter im Test, Oktober 2026",
+    month: 10,
+    year: 2026,
+    winner: "VUTTER Nassfutter Wie Ente",
+    score: 75,
+    summary:
+      "Drei vegane Alleinfutter für Hunde im Vergleich. VUTTER Nassfutter Wie Ente liegt mit 75 von 100 Punkten (Gelb) vorn, vor VEGDOG Green Crunch (71, Gelb) und VEGDOG Farmer's Crunch (69, Gelb).",
+    imageAltFallback: "Pokal Testsieger Veganes Hundefutter im Test, Oktober 2026: VUTTER Nassfutter Wie Ente, 75 von 100 Punkten, Gelb",
+  },
   {
     slug: "gelenk-test-hund-oktober-2026",
     testName: "Der große Gelenk-Test Oktober 2026",
