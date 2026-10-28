@@ -12,7 +12,8 @@ import { capNote, efBars, prepareErgaenzungArticle, renderStudienListe, scoreErg
 import { productReviewJsonLd, reviewHeadline } from "@/lib/review-schema";
 import { productLabel, seoTitle, trimMetaDescription } from "@/lib/seo";
 import { brandPath, reviewPath } from "@/lib/urls";
-import { absoluteUrl, ANIMAL_LABEL, formatDate, MONTHS, PRICE_CLASS_LABEL, SITE } from "@/lib/site";
+import { priceSectionTitle } from "@/lib/price-source";
+import { absoluteUrl, ANIMAL_LABEL, formatDate, MONTHS, SITE } from "@/lib/site";
 import { contentAuthor } from "@/lib/attribution";
 import { resolveAuthor } from "@/lib/authors";
 import { Breadcrumbs } from "@/components/breadcrumbs";
@@ -364,7 +365,7 @@ export default async function ReviewPage({ params }: PageProps<"/[kategorie]/[sl
                 </Section>
               )}
               {showPrice && (
-                <Section id="preis" title={`Preis${r.priceClass ? ` · Preisklasse ${PRICE_CLASS_LABEL[r.priceClass]}` : ""}`}>
+                <Section id="preis" title={priceSectionTitle(r)}>
                   <PriceBlock price={r.price} packageSize={r.packageSize} pricePerKg={r.pricePerKg} pricePerDay={r.pricePerDay} priceDate={r.priceDate} priceSource={seoInput.priceSource} amazonUrl={amazonUrl} />
                 </Section>
               )}

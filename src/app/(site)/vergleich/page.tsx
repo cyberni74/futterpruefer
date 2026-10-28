@@ -5,7 +5,7 @@ import { prisma } from "@/lib/db";
 import { publishedWhere } from "@/lib/queries";
 import { parseCompareIds } from "@/lib/filters";
 import { CRITERIA, harmfulFailed, ratioRating } from "@/lib/scoring";
-import { PRICE_CLASS_LABEL } from "@/lib/site";
+import { priceClassCell } from "@/lib/price-source";
 import { hyphenateCategory, reviewPath } from "@/lib/urls";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { ScoreBadge } from "@/components/score-badge";
@@ -70,7 +70,7 @@ export default async function ComparePage({ searchParams }: PageProps<"/vergleic
               ))}
               <tr>
                 <th scope="row" className="border-b border-border p-3 text-left font-semibold">Preisklasse</th>
-                {items.map((i) => <td key={i.id} className="border-b border-border p-3">{PRICE_CLASS_LABEL[i.priceClass]}{i.pricePerKg != null && ` · ${Number(i.pricePerKg).toLocaleString("de-DE", { style: "currency", currency: "EUR" })}/kg`}</td>)}
+                {items.map((i) => <td key={i.id} className="border-b border-border p-3">{priceClassCell(i)}</td>)}
               </tr>
               <tr>
                 <th scope="row" className="p-3 text-left align-top font-semibold">Fazit</th>
