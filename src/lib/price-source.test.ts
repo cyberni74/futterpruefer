@@ -143,10 +143,12 @@ describe("Preisklassen-Filter", () => {
 
   it("ist auf Vergleich, Liste und klassischer Testseite verdrahtet", () => {
     const vergleich = readFileSync(new URL("../app/(site)/vergleich/page.tsx", import.meta.url), "utf8");
+    const tabelle = readFileSync(new URL("../components/compare-results.tsx", import.meta.url), "utf8");
     const liste = readFileSync(new URL("../components/review-listing.tsx", import.meta.url), "utf8");
     const testseite = readFileSync(new URL("../app/(site)/[kategorie]/[slug]/page.tsx", import.meta.url), "utf8");
-    expect(vergleich).toContain("priceClassCell(i)");
-    expect(vergleich).not.toContain("PRICE_CLASS_LABEL[i.priceClass]");
+    expect(vergleich).toContain("CompareResults");
+    expect(tabelle).toContain("priceClassCell(i)");
+    expect(tabelle).not.toContain("PRICE_CLASS_LABEL[i.priceClass]");
     expect(liste).toContain("priceClassCandidateWhere(filters.preis)");
     expect(liste).toContain("reviewsMatchingPriceFilter");
     expect(testseite).toContain("title={priceSectionTitle(r)}");

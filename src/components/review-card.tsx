@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { AlertTriangle } from "lucide-react";
 import type { ReviewCardData } from "@/lib/queries";
-import { harmfulFailed } from "@/lib/scoring";
+import { showsBedenklichBadge } from "@/lib/bedenklich-badge";
 import { productLabel } from "@/lib/seo";
 import { hyphenateCategory, reviewPath } from "@/lib/urls";
 import { FpImage } from "./fp-image";
@@ -9,7 +9,7 @@ import { ScoreBadge } from "./score-badge";
 
 /** variant „tile“: schmale, leicht hochkant stehende Kachel für dreispaltige Raster (Startseite). */
 export function ReviewCard({ review, priority = false, eager = false, imageSizes, variant = "card" }: { review: ReviewCardData; priority?: boolean; eager?: boolean; imageSizes?: string; variant?: "card" | "tile" }) {
-  const failed = harmfulFailed(review.scoreHarmful);
+  const failed = showsBedenklichBadge(review);
   if (variant === "tile") {
     return (
       <article className="group relative flex h-full flex-col overflow-hidden rounded-xl border border-border bg-surface shadow-card transition duration-300 hover:-translate-y-1 hover:shadow-lift motion-reduce:hover:translate-y-0 sm:rounded-2xl">
