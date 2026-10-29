@@ -44,6 +44,7 @@ const BODY_FAQ_SLUGS = new Set([
   "futterumstellung-hund",
   "futtermenge-hund-berechnen",
   "hund-katze-vegan-ernaehren",
+  "tierfutter-verpackung-muell-recycling",
 ]);
 
 export async function generateStaticParams() {
