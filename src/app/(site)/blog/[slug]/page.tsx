@@ -45,6 +45,7 @@ const BODY_FAQ_SLUGS = new Set([
   "futtermenge-hund-berechnen",
   "hund-katze-vegan-ernaehren",
   "tierfutter-verpackung-muell-recycling",
+  "insektenarten-hundefutter-vergleich",
 ]);
 
 export async function generateStaticParams() {

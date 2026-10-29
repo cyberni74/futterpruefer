@@ -37,4 +37,10 @@ describe("BODY_JSON_LD_SLUGS", () => {
     expect(faqBlock).not.toContain(slug);
     expect(faqBlock).toContain("monoprotein-futter");
   });
+
+  it("gibt FAQ aus dem Beitragskörper für insektenarten-hundefutter-vergleich aus", () => {
+    const page = readFileSync(new URL("../app/(site)/blog/[slug]/page.tsx", import.meta.url), "utf8");
+    const faqBlock = page.slice(page.indexOf("const BODY_FAQ_SLUGS"), page.indexOf("export async function generateStaticParams"));
+    expect(faqBlock).toContain('"insektenarten-hundefutter-vergleich"');
+  });
 });
