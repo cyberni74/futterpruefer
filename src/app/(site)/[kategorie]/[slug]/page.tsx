@@ -41,7 +41,8 @@ import { comparisonForReview, isInComparison } from "@/lib/comparison-links";
 import { reviewH1 } from "@/lib/review-extra-faq";
 import { faqPageJsonLd } from "@/lib/faq-schema";
 import "@/styles/vergleichstest.css";
-import { resolveLayout } from "@/components/testvorlage-v2/schema";
+import { TESTVORLAGE_V2, resolveLayout } from "@/components/testvorlage-v2/schema";
+import { contentImageCaption } from "@/lib/content-caption";
 
 export const revalidate = 3600;
 /** Draft-Slugs stehen nicht in generateStaticParams und rendern auf der Preview on-demand. */
@@ -177,6 +178,7 @@ export default async function ReviewPage({ params }: PageProps<"/[kategorie]/[sl
   const minutes = readingMinutes(r.bodyHtml, r.verdict);
   const images = [r.imageUrl, r.contentImageUrl, ...(r.gallery ?? [])].filter((x): x is string => Boolean(x));
   const name = productLabel(r.brand, r.productName);
+  const inhaltCaption = r.layout === TESTVORLAGE_V2 ? contentImageCaption(r.contentImageAlt) : "Das Futter selbst";
   const gallery = (r.gallery ?? []).filter(Boolean);
   const seoInput: ReviewSeoInput = {
     slug: r.slug, name: keywordName(r.keyword, r.brand, name), totalScore: r.totalScore, testedAt, verdict: r.verdict, pros: r.pros, cons: consWithClaims(r.cons, claims), claims,
@@ -267,7 +269,7 @@ export default async function ReviewPage({ params }: PageProps<"/[kategorie]/[sl
                     <div className="relative aspect-[4/3] overflow-hidden rounded-3xl bg-bg-soft">
                       <FpImage src={r.contentImageUrl} alt={r.contentImageAlt.trim() || `Inhalt von ${name} ohne Verpackung`} blur={r.contentImageBlur} sizes={r.imageUrl ? "(min-width:1024px) 380px, (min-width:640px) 50vw, 100vw" : "(min-width:1024px) 760px, 100vw"} priority={!r.imageUrl} />
                     </div>
-                    <figcaption className="mt-1.5 text-sm text-muted">Das Futter selbst</figcaption>
+                    {inhaltCaption ? <figcaption className="mt-1.5 text-sm text-muted">{inhaltCaption}</figcaption> : null}
                   </figure>
                 )}
               </div>

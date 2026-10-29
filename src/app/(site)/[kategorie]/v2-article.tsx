@@ -30,6 +30,7 @@ import { Disclosure } from "@/components/disclosure";
 import { JsonLd } from "@/components/json-ld";
 import { TestvorlageV2, faqItems, type LayoutData } from "@/components/testvorlage-v2";
 import { readingMinutes } from "@/lib/product-data";
+import { contentImageCaption } from "@/lib/content-caption";
 import type { getReviewBySlug } from "@/lib/queries";
 
 type Review = NonNullable<Awaited<ReturnType<typeof getReviewBySlug>>>;
@@ -47,6 +48,7 @@ export async function ReviewV2Article({ r, data, draftPreview }: { r: Review; da
   const testedAt = r.testedAt ?? r.publishedAt;
   const images = [r.imageUrl, r.contentImageUrl, ...(r.gallery ?? [])].filter((x): x is string => Boolean(x));
   const gallery = (r.gallery ?? []).filter(Boolean);
+  const inhaltCaption = contentImageCaption(r.contentImageAlt);
   const abs = (u: string) => (u.startsWith("http") ? u : absoluteUrl(u));
   const description = trimMetaDescription(r.metaDescription?.trim() || data.hero?.gesamturteil?.trim() || `${r.title} im Fachtest: ${r.totalScore}/100 Punkte.`);
   const minutes = readingMinutes(JSON.stringify(data), r.verdict);
@@ -144,7 +146,7 @@ export async function ReviewV2Article({ r, data, draftPreview }: { r: Review; da
                       <div className="relative aspect-[4/3] overflow-hidden rounded-3xl bg-bg-soft">
                         <FpImage src={r.contentImageUrl} alt={r.contentImageAlt.trim() || `Inhalt von ${name} ohne Verpackung`} blur={r.contentImageBlur} sizes={r.imageUrl ? "(min-width:1024px) 600px, (min-width:640px) 50vw, 100vw" : "(min-width:1024px) 1000px, 100vw"} priority={!r.imageUrl} />
                       </div>
-                      <figcaption>Das Futter selbst</figcaption>
+                      {inhaltCaption ? <figcaption>{inhaltCaption}</figcaption> : null}
                     </figure>
                   )}
                 </div>
