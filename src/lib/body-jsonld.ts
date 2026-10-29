@@ -12,6 +12,7 @@ export const BODY_JSON_LD_SLUGS = new Set([
   "algenoel-test-hund-oktober-2026",
   "veganes-hundefutter-test-oktober-2026",
   "veganes-katzenfutter-test-oktober-2026",
+  "monoprotein-katzenfutter-test-2026",
 ]);
 
 export function bodyJsonLd(slug: string, html: string | null | undefined): Record<string, unknown> | null {

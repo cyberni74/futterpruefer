@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { amazonPriceUrl, directAnswer, keywordName, kurzGesagt, priceCite, priceSourceFromArticle, renameBodyFazit, reviewFaq, seoFazitHeading, withoutLeadingScore } from "./review-seo";
-import { comparisonForPost, comparisonForReview, isInComparison } from "./comparison-links";
+import { comparisonForPost, comparisonForReview, comparisonsForPost, isInComparison } from "./comparison-links";
 import { faqPageJsonLd } from "./faq-schema";
 
 const base = { name: "Testfutter Rind", totalScore: 45, testedAt: new Date("2026-10-23T10:00:00Z"), verdict: "Viel Werbung, wenig Angaben", pros: ["Rind an erster Stelle"], cons: ["Calcium fehlt"], claims: [{ claim: "heilt alles", rating: "UNZULAESSIG" as const, reason: "Krankheitsbezug", legal: "", imageUrl: "" }], price: 10, packageSize: "800 g", pricePerKg: 12.5, priceDate: new Date("2026-10-23T10:00:00Z"), composition: "Rind 60 %, Brühe, Mineralstoffe", ergaenzung: false };
@@ -134,6 +134,17 @@ describe("review-seo", () => {
     expect(comparisonForReview({ title: "Gelenk-Pulver", categorySlug: "ergaenzungsfuttermittel-hund" })?.slug).toBe("gelenk-test-hund-oktober-2026");
     expect(comparisonForReview({ title: "Rinti Kennerfleisch Rind", categorySlug: "alleinfuttermittel-hund" })?.slug).toBe("nassfutter-test-rind-hund-oktober-2026");
     expect(comparisonForReview({ title: "Lachsöl", categorySlug: "ergaenzungsfuttermittel-katze" })).toBeNull();
+    expect(comparisonForReview({ title: "Royal Canin Indoor 27", categorySlug: "alleinfuttermittel-katze" })).toBeNull();
+    const katze = comparisonForReview({ title: "GranataPet DeliCatessen Huhn PUR Nassfutter", productName: "Huhn PUR", categorySlug: "alleinfuttermittel-katze" });
+    expect(katze?.slug).toBe("monoprotein-katzenfutter-test-2026");
+    expect(isInComparison(katze, "granatapet-delicatessen-huhn-pur-katze-test")).toBe(true);
+    expect(isInComparison(katze, "mjamjam-purer-fleischgenuss-delikates-kaenguru-pur-test")).toBe(true);
+    expect(isInComparison(katze, "leonardo-finest-selection-rind-pur-test")).toBe(true);
+    expect(isInComparison(katze, "anderes-nassfutter")).toBe(false);
     expect(comparisonForPost("lachsoel-hunde")?.slug).toBe("lachsoel-test-hund-oktober-2026");
+    expect(comparisonsForPost("monoprotein-futter").map((c) => c.slug)).toEqual([
+      "monoprotein-katzenfutter-test-2026",
+      "nassfutter-test-rind-hund-oktober-2026",
+    ]);
   });
 });

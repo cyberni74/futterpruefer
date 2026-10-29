@@ -21,7 +21,7 @@ import { NewsletterBox } from "@/components/newsletter-box";
 import { WishBox } from "@/components/wish-box";
 import { BodyGauges } from "@/components/body-gauges";
 import "@/styles/vergleichstest.css";
-import { comparisonForPost } from "@/lib/comparison-links";
+import { comparisonsForPost } from "@/lib/comparison-links";
 import { bodyJsonLd } from "@/lib/body-jsonld";
 import { extractFaq } from "@/lib/faq-extract";
 import { faqPageJsonLd } from "@/lib/faq-schema";
@@ -100,6 +100,7 @@ export default async function PostPage({ params }: PageProps<"/blog/[slug]">) {
   const url = absoluteUrl(`/blog/${p.slug}`);
   const extraLd = bodyJsonLd(p.slug, p.bodyHtml);
   const faqLd = BODY_FAQ_SLUGS.has(p.slug) ? faqPageJsonLd(extractFaq(p.bodyHtml)) : null;
+  const vergleiche = comparisonsForPost(p.slug);
   return (
     <article className="mx-auto max-w-3xl px-4">
       <JsonLd
@@ -141,10 +142,18 @@ export default async function PostPage({ params }: PageProps<"/blog/[slug]">) {
         <div dangerouslySetInnerHTML={{ __html: body }} />
       </div>
       <BodyGauges />
-      {comparisonForPost(p.slug) && (
+      {vergleiche.length === 1 && (
         <p className="mt-8 rounded-2xl border border-border bg-surface p-4 text-sm">
           <strong>Zum Vergleichstest:</strong>{" "}
-          <a href={comparisonForPost(p.slug)!.href} className="font-semibold text-brand underline">{comparisonForPost(p.slug)!.title}</a>
+          <a href={vergleiche[0].href} className="font-semibold text-brand underline">{vergleiche[0].title}</a>
+        </p>
+      )}
+      {vergleiche.length > 1 && (
+        <p className="mt-8 rounded-2xl border border-border bg-surface p-4 text-sm">
+          <strong>Zum Vergleichstest:</strong>{" "}
+          {vergleiche.map((c, i) => (
+            <span key={c.href}>{i > 0 ? " · " : null}<a href={c.href} className="font-semibold text-brand underline">{c.title}</a></span>
+          ))}
         </p>
       )}
       {reviews.length > 0 && (

@@ -85,6 +85,29 @@ describe("sanitize", () => {
     const storage = sanitize('<a href="https://s3.amazonaws.com/bucket/bild.webp">Bild</a>');
     expect(storage).not.toContain("sponsored");
   });
+  it("Quellenliste: Amazon-Suche ohne Partner-Tag bleibt ohne sponsored", () => {
+    const html = [
+      '<div class="fp-box fp-quellen vt-sources"><ol><li>Q1: <a href="https://www.amazon.de/s?k=monoprotein+katzenfutter" rel="nofollow noopener">amazon.de/…</a></li>',
+      '<li><a href="https://www.amazon.de/dp/B0TEST?tag=cyberni7400-21" rel="nofollow noopener">Werbelink</a></li>',
+      '<li><a href="https://example.org/studie" rel="sponsored nofollow noopener">Studie</a></li></ol></div>',
+      '<p><a class="cta-amazon-btn" href="https://www.amazon.de/dp/B07D4T5XVT?tag=cyberni7400-21" rel="sponsored nofollow noopener">Jetzt bei Amazon entdecken*</a></p>',
+      '<p><a class="amz-bild" href="https://www.amazon.de/dp/B07Q1W6WR3?tag=cyberni7400-21" rel="sponsored nofollow noopener">Bild</a></p>',
+    ].join("");
+    const out = sanitize(html);
+    const q1 = out.match(/<a[^>]*href="https:\/\/www\.amazon\.de\/s\?k=monoprotein\+katzenfutter"[^>]*>/)?.[0] ?? "";
+    expect(q1).toContain("nofollow");
+    expect(q1).not.toContain("sponsored");
+    const tagged = out.match(/<a[^>]*href="https:\/\/www\.amazon\.de\/dp\/B0TEST\?tag=cyberni7400-21"[^>]*>/)?.[0] ?? "";
+    expect(tagged).toContain("sponsored");
+    const marked = out.match(/<a[^>]*href="https:\/\/example\.org\/studie"[^>]*>/)?.[0] ?? "";
+    expect(marked).toContain("sponsored");
+    const button = out.match(/<a[^>]*class="cta-amazon-btn"[^>]*>/)?.[0] ?? "";
+    expect(button).toContain("sponsored");
+    expect(button).toContain("tag=cyberni7400-21");
+    const image = out.match(/<a[^>]*class="amz-bild"[^>]*>/)?.[0] ?? "";
+    expect(image).toContain("sponsored");
+    expect(image).toContain("tag=cyberni7400-21");
+  });
   it("behält cta-box und Button-Klassen, entfernt Inline-Styles", () => {
     const out = sanitize('<div class="cta-box" style="border:1px solid red"><span class="werbung">Werbung</span><a class="button" href="https://www.amazon.de/dp/B07D4T5XVT?tag=cyberni7400-21" rel="sponsored nofollow">Zu Amazon</a></div>');
     expect(out).toContain('class="cta-box"');

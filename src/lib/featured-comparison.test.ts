@@ -4,12 +4,13 @@ import { FEATURED_COMPARISON, FEATURED_COMPARISONS, comparisonPath, showsWinnerS
 describe("Startseiten-Kästen Testsieger", () => {
   it("zeigt die Vergleiche neuester zuerst", () => {
     expect(FEATURED_COMPARISONS.map((c) => c.slug)).toEqual([
+      "monoprotein-katzenfutter-test-2026",
       "veganes-katzenfutter-test-oktober-2026",
       "veganes-hundefutter-test-oktober-2026",
       "gelenk-test-hund-oktober-2026",
       "nassfutter-test-rind-hund-oktober-2026",
     ]);
-    expect(FEATURED_COMPARISON?.slug).toBe("veganes-katzenfutter-test-oktober-2026");
+    expect(FEATURED_COMPARISON?.slug).toBe("monoprotein-katzenfutter-test-2026");
   });
 
   it("gibt VUTTER Gelb einen Pokal und Rot keinen", () => {
@@ -20,6 +21,13 @@ describe("Startseiten-Kästen Testsieger", () => {
     expect(katze?.imageAltFallback).not.toMatch(/pokal/i);
     expect(showsWinnerSeal(katze!)).toBe(false);
     expect(showsWinnerSeal({ winner: "AMI Cat", score: 59 })).toBe(false);
+    const mono = FEATURED_COMPARISONS.find((c) => c.slug === "monoprotein-katzenfutter-test-2026");
+    expect(mono?.winner).toBe("GranataPet DeliCatessen Huhn PUR");
+    expect(mono?.score).toBe(74);
+    expect(mono?.month).toBe(10);
+    expect(mono?.year).toBe(2026);
+    expect(mono?.imageAltFallback).toMatch(/Pokal Testsieger/);
+    expect(showsWinnerSeal(mono!)).toBe(true);
     expect(hund?.winner).toBe("VUTTER Nassfutter Wie Ente");
     expect(hund?.score).toBe(75);
     expect(showsWinnerSeal(hund!)).toBe(true);

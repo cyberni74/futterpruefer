@@ -33,7 +33,7 @@ describe("Vergleich Preisklasse", () => {
     expect(html).toContain("keine Angabe");
     const mittel = html.split("Mittel").length - 1;
     expect(mittel).toBe(1);
-    expect(html).toContain("Testsieger");
+    expect(html).not.toContain("Testsieger");
     expect(html).toContain("22/30");
     expect(html).not.toContain("durchgefallen");
   });
@@ -72,6 +72,16 @@ describe("Vergleich Preisklasse", () => {
     expect(html).not.toContain("0/30");
     expect(html).not.toContain("durchgefallen");
     expect(html.split("Dieses Kriterium gilt für diesen Test nicht").length - 1).toBe(12);
+  });
+
+  it("vergibt bei Gleichstand keinem Produkt den Testsieger", async () => {
+    const a = item("11111111", "Futter A", 4, null, { totalScore: 74 });
+    const b = item("22222222", "Futter B", 5, null, { totalScore: 74 });
+    findMany.mockResolvedValue([a, b]);
+    const html = renderToStaticMarkup(await ComparePage({ params: Promise.resolve({}), searchParams: Promise.resolve({ ids: "11111111,22222222" }) }));
+    expect(html).toContain("Futter A");
+    expect(html).toContain("Futter B");
+    expect(html).not.toContain("Testsieger");
   });
 
   it("zeigt das Schadstoff-Warnzeichen nur bei klassischen Tests unter 10 Punkten", async () => {
