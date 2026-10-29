@@ -7,7 +7,7 @@ describe("Bedenklich-Badge", () => {
   it("klassisch mit gesetzten Teilnoten: unter 10 Punkten, auch bei echter 0", () => {
     expect(showsBedenklichBadge({ layout: "", ...filled, scoreHarmful: 9 })).toBe(true);
     expect(showsBedenklichBadge({ layout: "", ...filled, scoreHarmful: 0 })).toBe(true);
-    expect(showsBedenklichBadge({ ...filled, scoreHarmful: null })).toBe(true);
+    expect(showsBedenklichBadge({ ...filled })).toBe(true);
     expect(showsBedenklichBadge({ layout: "", ...filled, scoreHarmful: 10 })).toBe(false);
     expect(showsBedenklichBadge({ layout: "", ...filled, scoreHarmful: 19 })).toBe(false);
   });
