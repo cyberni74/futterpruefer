@@ -1,9 +1,9 @@
 import { TESTVORLAGE_V2 } from "@/components/testvorlage-v2/schema";
 import { hasFilledClassicScores, harmfulFailed, ratingFor, RATING_THRESHOLDS, type CriterionKey, type Scores } from "@/lib/scoring";
 
-/** Vergleich: Testsieger nur ab Gelb (60 Punkte) und nie bei Rot. */
-export function showsComparisonWinner(score: number, best: number): boolean {
-  return score === best && score >= RATING_THRESHOLDS.mittel && ratingFor(score) !== "schlecht";
+/** Vergleich: Testsieger nur bei einem eindeutigen Bestwert ab Gelb (60 Punkte), nie bei Rot und nie bei Gleichstand. */
+export function showsComparisonWinner(score: number, best: number, leaderCount = 1): boolean {
+  return leaderCount === 1 && score === best && score >= RATING_THRESHOLDS.mittel && ratingFor(score) !== "schlecht";
 }
 
 type ClassicScoreReview = Partial<Scores> & { layout?: string | null };

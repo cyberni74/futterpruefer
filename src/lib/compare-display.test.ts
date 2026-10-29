@@ -7,6 +7,8 @@ describe("Vergleich Testsieger", () => {
     expect(showsComparisonWinner(59, 59)).toBe(false);
     expect(showsComparisonWinner(60, 60)).toBe(true);
     expect(showsComparisonWinner(82, 82)).toBe(true);
+    expect(showsComparisonWinner(74, 74, 2)).toBe(false);
+    expect(showsComparisonWinner(74, 74, 1)).toBe(true);
     expect(showsComparisonWinner(27, 82)).toBe(false);
     expect(showsComparisonWinner(82, 82)).toBe(true);
     expect(showsComparisonWinner(70, 82)).toBe(false);

@@ -34,6 +34,17 @@ export function showsWinnerSeal(c: Pick<FeaturedComparison, "winner" | "score">)
 /** Neuester Vergleichstest zuerst. */
 export const FEATURED_COMPARISONS: FeaturedComparison[] = [
   {
+    slug: "monoprotein-katzenfutter-test-2026",
+    testName: "Monoprotein-Katzenfutter im Test, Oktober 2026",
+    month: 10,
+    year: 2026,
+    winner: "GranataPet DeliCatessen Huhn PUR",
+    score: 74,
+    summary:
+      "Drei Monoprotein-Nassfutter für Katzen im Vergleich. GranataPet DeliCatessen Huhn PUR liegt mit 74 von 100 Punkten (Gelb) vorn, vor MjAMjAM Känguru pur (72, Gelb) und LEONARDO Rind pur (67, Gelb).",
+    imageAltFallback: "Pokal Testsieger Monoprotein-Katzenfutter im Test, Oktober 2026: GranataPet DeliCatessen Huhn PUR, 74 von 100 Punkten, Gelb",
+  },
+  {
     slug: "veganes-katzenfutter-test-oktober-2026",
     testName: "Veganes Katzenfutter im Test, Oktober 2026",
     month: 10,

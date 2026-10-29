@@ -29,6 +29,7 @@ export type CompareRow = {
 /** Tabelle der Vergleichsseite. Gesetzte Alleinfutter-Teilnoten bleiben bei x/max; sonst „–“ ohne Warn-Icon. */
 export function CompareResults({ items }: { items: CompareRow[] }) {
   const best = Math.max(0, ...items.map((i) => i.totalScore));
+  const leaderCount = items.filter((i) => i.totalScore === best).length;
   return (
     <div className="mt-8 overflow-x-auto">
       <table className={`w-full table-fixed border-separate border-spacing-0 text-sm ${items.length > 2 ? "min-w-[34rem]" : ""}`}>
@@ -49,7 +50,7 @@ export function CompareResults({ items }: { items: CompareRow[] }) {
           <tr className="bg-bg-soft">
             <th scope="row" className="p-3 text-left font-bold">Gesamt</th>
             {items.map((i) => (
-              <td key={i.id} className="p-3"><div className="flex flex-wrap items-center gap-2"><ScoreBadge score={i.totalScore} size="sm" />{showsComparisonWinner(i.totalScore, best) && <span className="rounded-full bg-good-soft px-2 py-0.5 text-xs font-bold text-good">Testsieger</span>}</div></td>
+              <td key={i.id} className="p-3"><div className="flex flex-wrap items-center gap-2"><ScoreBadge score={i.totalScore} size="sm" />{showsComparisonWinner(i.totalScore, best, leaderCount) && <span className="rounded-full bg-good-soft px-2 py-0.5 text-xs font-bold text-good">Testsieger</span>}</div></td>
             ))}
           </tr>
           {CRITERIA.map((c) => (
