@@ -1,4 +1,4 @@
-import { isSponsoredHref } from "@/lib/sanitize";
+import { isSponsoredHref, sourceLinkRel } from "@/lib/sanitize";
 import type { LayoutData } from "./schema";
 
 export const AFFILIATE_HINWEIS =
@@ -32,7 +32,7 @@ export function Sources({ quellen, pruefstand, methodikHinweis, kaufUrl, rot = f
         <ol className="source-list">
           {quellen.map((q) => (
             <li key={`${q.titel}-${q.doi ?? q.url ?? ""}`}>
-              {q.url ? <a href={q.url} target="_blank" rel="nofollow noopener noreferrer">{q.titel}</a> : <span>{q.titel}</span>}
+              {q.url ? <a href={q.url} target="_blank" rel={sourceLinkRel(q.url)}>{q.titel}</a> : <span>{q.titel}</span>}
               {q.doi && <span className="hinweis">DOI: <a href={`https://doi.org/${q.doi}`} target="_blank" rel="nofollow noopener noreferrer">{q.doi}</a></span>}
               {q.hinweis && <span className="hinweis">{q.hinweis}</span>}
             </li>
