@@ -26,7 +26,7 @@ export type CompareRow = {
   category: { slug: string; shortName: string };
 } & Record<CriterionKey, number>;
 
-/** Tabelle der Vergleichsseite. Klassische Tests bleiben bei x/max; V2 zeigt „–“ ohne Warn-Icon. */
+/** Tabelle der Vergleichsseite. Gesetzte Alleinfutter-Teilnoten bleiben bei x/max; sonst „–“ ohne Warn-Icon. */
 export function CompareResults({ items }: { items: CompareRow[] }) {
   const best = Math.max(0, ...items.map((i) => i.totalScore));
   return (
@@ -56,7 +56,7 @@ export function CompareResults({ items }: { items: CompareRow[] }) {
             <tr key={c.key}>
               <th scope="row" className="border-b border-border p-2 text-left font-semibold hyphens-auto break-words sm:p-3"><span className="sm:hidden">{c.short}</span><span className="hidden sm:inline">{c.label}</span><span className="block text-xs font-normal text-muted">max. {c.max}</span></th>
               {items.map((i) => {
-                if (!classicCriteriaApply(i.layout)) {
+                if (!classicCriteriaApply(i)) {
                   return (
                     <td key={i.id} className="border-b border-border p-3">
                       <span className="font-bold tabular-nums" aria-label="Dieses Kriterium gilt für diesen Test nicht">–</span>
@@ -64,7 +64,7 @@ export function CompareResults({ items }: { items: CompareRow[] }) {
                   );
                 }
                 const v = i[c.key];
-                const failed = criterionFailed(i.layout, c.key, v);
+                    const failed = criterionFailed(i, c.key, v);
                 return (
                   <td key={i.id} className="border-b border-border p-3">
                     <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-2">

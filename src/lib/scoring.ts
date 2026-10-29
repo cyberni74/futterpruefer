@@ -62,6 +62,12 @@ export function harmfulFailed(scoreHarmful: number | null | undefined): boolean 
   return (scoreHarmful ?? 0) < 20 * HARMFUL_FAIL_RATIO;
 }
 
+/** Die sechs Alleinfutter-Teilnoten sind gesetzt, sobald eine davon nicht 0 ist. Alles 0 ist der Datenbank-Standard und keine Bewertung. */
+export function hasFilledClassicScores(scores: Partial<Scores> | null | undefined): boolean {
+  if (!scores) return false;
+  return CRITERIA.some((c) => (scores[c.key] ?? 0) > 0);
+}
+
 export type Rating = "gut" | "mittel" | "schlecht";
 
 /** Ampel-Schwellen der Gesamtwertung: ≥ 80 Grün, 60–79 Gelb, < 60 Rot. */

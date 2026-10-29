@@ -56,6 +56,24 @@ describe("Vergleich Preisklasse", () => {
     expect(html).not.toContain("durchgefallen");
   });
 
+  it("zeigt bei leeren Teilnoten Gedankenstriche statt 0/x, auch ohne V2-Layout", async () => {
+    const bach = item("eeeeeeee", "Bach Rescura", 11, null, {
+      totalScore: 27, layout: "", scoreRaw: 0, scoreHarmful: 0, scoreNutrients: 0, scoreDeclaration: 0, scoreNeeds: 0, scoreValue: 0,
+    });
+    const aniforte = item("ffffffff", "AniForte Bierhefe", 4, null, {
+      totalScore: 23, layout: "", scoreRaw: 0, scoreHarmful: 0, scoreNutrients: 0, scoreDeclaration: 0, scoreNeeds: 0, scoreValue: 0,
+    });
+    findMany.mockResolvedValue([bach, aniforte]);
+    const html = renderToStaticMarkup(await ComparePage({ params: Promise.resolve({}), searchParams: Promise.resolve({ ids: "eeeeeeee,ffffffff" }) }));
+    expect(html).toContain("Bach Rescura");
+    expect(html).toContain("AniForte Bierhefe");
+    expect(html).not.toContain("Testsieger");
+    expect(html).not.toContain("0/20");
+    expect(html).not.toContain("0/30");
+    expect(html).not.toContain("durchgefallen");
+    expect(html.split("Dieses Kriterium gilt für diesen Test nicht").length - 1).toBe(12);
+  });
+
   it("zeigt das Schadstoff-Warnzeichen nur bei klassischen Tests unter 10 Punkten", async () => {
     const schlecht = item("eeeeeeee", "Klassisch bedenklich", 3, null, { totalScore: 40, scoreHarmful: 4 });
     const besser = item("ffffffff", "Klassisch in Ordnung", 3, null, { totalScore: 55, scoreHarmful: 16 });
