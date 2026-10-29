@@ -13,18 +13,26 @@ describe("Vergleich Testsieger", () => {
   });
 });
 
+const filled = { layout: "", scoreRaw: 10, scoreNutrients: 11, scoreDeclaration: 6, scoreNeeds: 7, scoreValue: 2 };
+const leer = { layout: "", scoreRaw: 0, scoreHarmful: 0, scoreNutrients: 0, scoreDeclaration: 0, scoreNeeds: 0, scoreValue: 0 };
+
 describe("Vergleich Kriterien", () => {
   it("V2: Alleinfutter-Kriterien gelten nicht und ohne Warn-Icon", () => {
-    expect(classicCriteriaApply("TESTVORLAGE_V2")).toBe(false);
-    expect(criterionFailed("TESTVORLAGE_V2", "scoreHarmful", 0)).toBe(false);
+    expect(classicCriteriaApply({ ...filled, layout: "TESTVORLAGE_V2", scoreHarmful: 4 })).toBe(false);
+    expect(criterionFailed({ layout: "TESTVORLAGE_V2", scoreHarmful: 0 }, "scoreHarmful", 0)).toBe(false);
   });
 
-  it("klassisch bleibt: 0/20 ist durchgefallen, 16/20 nicht", () => {
-    expect(classicCriteriaApply("")).toBe(true);
-    expect(classicCriteriaApply(null)).toBe(true);
-    expect(criterionFailed("", "scoreHarmful", 0)).toBe(true);
-    expect(criterionFailed("", "scoreHarmful", 9)).toBe(true);
-    expect(criterionFailed("", "scoreHarmful", 16)).toBe(false);
-    expect(criterionFailed("", "scoreRaw", 0)).toBe(false);
+  it("ohne gesetzte Teilnoten: kein 0/x und kein Warn-Icon", () => {
+    expect(classicCriteriaApply(leer)).toBe(false);
+    expect(classicCriteriaApply({ layout: null, scoreHarmful: 0 })).toBe(false);
+    expect(criterionFailed(leer, "scoreHarmful", 0)).toBe(false);
+  });
+
+  it("klassisch mit Teilnoten: 0/20 und 9/20 sind durchgefallen, 16/20 nicht", () => {
+    expect(classicCriteriaApply({ ...filled, scoreHarmful: 9 })).toBe(true);
+    expect(criterionFailed({ ...filled, scoreHarmful: 0 }, "scoreHarmful", 0)).toBe(true);
+    expect(criterionFailed({ ...filled, scoreHarmful: 9 }, "scoreHarmful", 9)).toBe(true);
+    expect(criterionFailed({ ...filled, scoreHarmful: 16 }, "scoreHarmful", 16)).toBe(false);
+    expect(criterionFailed({ ...filled, scoreHarmful: 9 }, "scoreRaw", 0)).toBe(false);
   });
 });
