@@ -72,7 +72,7 @@ export const FEATURED_COMPARISONS: FeaturedComparison[] = [
     winner: "Cadoc Grünlippmuschel Pulver",
     score: 64,
     summary:
-      "Fünf Gelenk-Ergänzungsfutter für Hunde im Vergleich. Cadoc liegt mit 64 von 100 Punkten (Gelb) vorn, die vier anderen Produkte sind Rot.",
+      "Vier Gelenk-Ergänzungsfutter für Hunde im Vergleich. Cadoc liegt mit 64 von 100 Punkten (Gelb) vorn, die drei anderen Produkte sind Rot.",
     imageAltFallback: "Pokal Testsieger im großen Gelenk-Test Oktober 2026: Cadoc Grünlippmuschel Pulver, 64 von 100 Punkten, Gelb",
   },
   {

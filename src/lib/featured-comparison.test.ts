@@ -11,6 +11,10 @@ describe("Startseiten-Kästen Testsieger", () => {
       "nassfutter-test-rind-hund-oktober-2026",
     ]);
     expect(FEATURED_COMPARISON?.slug).toBe("monoprotein-katzenfutter-test-2026");
+    const gelenk = FEATURED_COMPARISONS.find((c) => c.slug === "gelenk-test-hund-oktober-2026");
+    expect(gelenk?.summary).toBe(
+      "Vier Gelenk-Ergänzungsfutter für Hunde im Vergleich. Cadoc liegt mit 64 von 100 Punkten (Gelb) vorn, die drei anderen Produkte sind Rot.",
+    );
   });
 
   it("gibt VUTTER Gelb einen Pokal und Rot keinen", () => {

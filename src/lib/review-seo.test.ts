@@ -60,7 +60,7 @@ describe("review-seo", () => {
     const nf = comparisonForReview({ title: "Rinti Kennerfleisch Rind", categorySlug: "alleinfuttermittel-hund" });
     expect(isInComparison(nf, "rinti-kennerfleisch-rind-400g-test")).toBe(true);
     expect(isInComparison(nf, "tierliebhaber-nassfutter-huhn-mit-gemuese")).toBe(false);
-    expect(comparisonForReview({ title: "Gelenk-Pulver", categorySlug: "ergaenzungsfuttermittel-hund" })?.title).toBe("Gelenktabletten und Gelenkpulver für Hunde im Test 2026: 5 Gelenkmittel im Vergleich");
+    expect(comparisonForReview({ title: "Gelenk-Pulver", categorySlug: "ergaenzungsfuttermittel-hund" })?.title).toBe("Gelenktabletten und Gelenkpulver für Hunde im Test 2026: 4 Gelenkmittel im Vergleich");
   });
   it("benennt jede Body-H2 um, die mit Fazit beginnt (SEO-004)", () => {
     expect(renameBodyFazit('<h2 id="a">Fazit</h2>')).toBe('<h2 id="a">Unser Urteil im Detail</h2>');
