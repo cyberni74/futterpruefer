@@ -3,7 +3,7 @@ import { act } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { renderToStaticMarkup } from "react-dom/server";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import { CONSENT_KEY, VISITOR_KEY } from "@/lib/consent";
+import { CONSENT_AT_KEY, CONSENT_KEY, VISITOR_KEY, consentScript, heuteEntschieden } from "@/lib/consent";
 import { ConsentSettingsLink } from "./consent-settings-link";
 import { CookieBanner } from "./cookie-banner";
 import { SiteFooter } from "./site-footer";
@@ -51,6 +51,34 @@ describe("Datenschutzhinweis", () => {
     act(() => knopf(h, "Nur notwendige").click());
     expect(localStorage.getItem(VISITOR_KEY)).toBeNull();
     expect(localStorage.getItem(CONSENT_KEY)).toBe("essential");
+  });
+});
+
+describe("Hinweis einmal pro Tag", () => {
+  const lauf = () => { document.documentElement.className = ""; new Function(consentScript)(); return document.documentElement.classList.contains("fp-consent"); };
+  it("heute entschieden: Hinweis bleibt ausgeblendet", () => {
+    localStorage.setItem(CONSENT_KEY, "all");
+    localStorage.setItem(CONSENT_AT_KEY, String(Date.now()));
+    expect(lauf()).toBe(true);
+    expect(heuteEntschieden()).toBe(true);
+  });
+  it("gestern entschieden: Hinweis erscheint wieder, die bisherige Entscheidung bleibt in Kraft", () => {
+    localStorage.setItem(CONSENT_KEY, "all");
+    localStorage.setItem(CONSENT_AT_KEY, String(Date.now() - 36 * 3600_000));
+    expect(lauf()).toBe(false);
+    expect(heuteEntschieden()).toBe(false);
+    expect(localStorage.getItem(CONSENT_KEY)).toBe("all");
+  });
+  it("ohne Zeitpunkt (nie entschieden) erscheint der Hinweis", () => {
+    localStorage.setItem(CONSENT_KEY, "essential");
+    expect(lauf()).toBe(false);
+    expect(heuteEntschieden()).toBe(false);
+  });
+  it("jede neue Wahl setzt den Zeitpunkt auf jetzt", () => {
+    const h = mount(<CookieBanner />);
+    act(() => knopf(h, "Nur notwendige").click());
+    expect(Date.now() - Number(localStorage.getItem(CONSENT_AT_KEY))).toBeLessThan(5000);
+    expect(heuteEntschieden()).toBe(true);
   });
 });
 
