@@ -70,3 +70,16 @@ describe("V2 (D1–D3)", () => {
     expect(v2(85)).not.toContain("data-amazon-top");
   });
 });
+
+describe("AmazonTopCta ohne oben (nach Fazit, ganz unten)", () => {
+  it("alter Hinweis, keine Top-Markierung, Punkte-Regel gleich", () => {
+    const g = renderToStaticMarkup(<AmazonTopCta url={URL_OK} rot={false} oben={false} />);
+    expect(g).toContain(AFFILIATE_HINWEIS);
+    expect(g).not.toContain(AFFILIATE_HINWEIS_OBEN);
+    expect(g).not.toContain("data-amazon-top");
+    expect(g).toContain("Jetzt bei Amazon entdecken*");
+    const r = renderToStaticMarkup(<AmazonTopCta url={URL_OK} rot oben={false} />);
+    expect(r).toContain("Aktuellen Preis bei Amazon ansehen*");
+    expect(r).toContain("keine Kaufempfehlung");
+  });
+});
