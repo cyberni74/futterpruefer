@@ -23,7 +23,7 @@ import { MisleadingClaimsBanner, WarningBanner } from "@/components/warning-bann
 import { TableOfContents } from "@/components/table-of-contents";
 import { IngredientList } from "@/components/ingredient-list";
 import { AnalysisTable } from "@/components/analysis-table";
-import { AmazonPriceCta, PriceBlock } from "@/components/price-block";
+import { AmazonPriceCta, AmazonTopCta, PriceBlock } from "@/components/price-block";
 import { ClaimsCheck } from "@/components/claims-check";
 import { FpImage } from "@/components/fp-image";
 import { ReadAloud } from "@/components/read-aloud";
@@ -36,6 +36,8 @@ import { NewsletterBox } from "@/components/newsletter-box";
 import { WishBox } from "@/components/wish-box";
 import { Disclosure } from "@/components/disclosure";
 import { JsonLd } from "@/components/json-ld";
+import { topAmazonUrl } from "@/lib/amazon-asin";
+import { isRotScore } from "@/lib/rot-guard";
 import { amazonPriceUrl, directAnswer, keywordName, kurzGesagt, priceSourceFromArticle, priceStandDate, renameBodyFazit, reviewFaq, seoFazitHeading, type ReviewSeoInput } from "@/lib/review-seo";
 import { comparisonForReview, isInComparison } from "@/lib/comparison-links";
 import { reviewH1 } from "@/lib/review-extra-faq";
@@ -167,6 +169,11 @@ export default async function ReviewPage({ params }: PageProps<"/[kategorie]/[sl
     html: r.bodyHtml,
     asin: typeof layoutPrice.asin === "string" ? layoutPrice.asin : null,
     kaufUrl: typeof layoutPrice.kaufUrl === "string" ? layoutPrice.kaufUrl : null,
+  });
+  const topAmazon = topAmazonUrl({
+    asin: typeof layoutPrice.asin === "string" ? layoutPrice.asin : null,
+    kaufUrl: typeof layoutPrice.kaufUrl === "string" ? layoutPrice.kaufUrl : null,
+    html: r.bodyHtml,
   });
   const priceDated = Boolean(priceStandDate(r.priceDate));
   const showPrice = priceDated ? r.price != null || r.pricePerKg != null || r.pricePerDay != null : Boolean(amazonUrl);
@@ -306,6 +313,7 @@ export default async function ReviewPage({ params }: PageProps<"/[kategorie]/[sl
               capNote={efResult ? capNote(efResult) || undefined : undefined}
             />
           </div>
+          {topAmazon ? <div className="mt-4"><AmazonTopCta url={topAmazon} rot={isRotScore(r.totalScore)} /></div> : null}
 
           {/* 5. Inhaltsverzeichnis (mobil) */}
           <div className="mt-8"><TableOfContents items={tocItems} variant="mobile" /></div>

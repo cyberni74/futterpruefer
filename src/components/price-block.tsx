@@ -1,4 +1,6 @@
 import { AFFILIATE_HINWEIS } from "@/components/testvorlage-v2/Sources";
+import { AFFILIATE_HINWEIS_OBEN, AMAZON_TOP_CTA, AMAZON_TOP_CTA_ROT } from "@/lib/amazon-asin";
+import { ROT_KEINE_KAUFEMPFEHLUNG } from "@/components/testvorlage-v2/Sources";
 import { priceCite, priceNotice, priceStandDate } from "@/lib/review-seo";
 
 const eur = (n: number) => n.toLocaleString("de-DE", { style: "currency", currency: "EUR" });
@@ -15,6 +17,21 @@ export function AmazonPriceCta({ url }: { url: string }) {
           <a className="cta-amazon-btn" href={url} target="_blank" rel="sponsored nofollow noopener">{AMAZON_PRICE_CTA}</a>
         </p>
         <p className="cta-hinweis">{AFFILIATE_HINWEIS}</p>
+      </div>
+    </div>
+  );
+}
+
+/** Oberer Amazon-Button direkt unter der Bewertungsbox. Unter 60 Punkten neutraler Text mit Rot-Satz, sonst Standardtext. */
+export function AmazonTopCta({ url, rot }: { url: string; rot: boolean }) {
+  return (
+    <div className="prose-fp" data-amazon-top>
+      <div className="cta-amazon">
+        <p>
+          <a className="cta-amazon-btn" href={url} target="_blank" rel="sponsored nofollow noopener">{rot ? AMAZON_TOP_CTA_ROT : AMAZON_TOP_CTA}</a>
+        </p>
+        {rot ? <p className="cta-hinweis">{ROT_KEINE_KAUFEMPFEHLUNG}</p> : null}
+        <p className="cta-hinweis">{AFFILIATE_HINWEIS_OBEN}</p>
       </div>
     </div>
   );

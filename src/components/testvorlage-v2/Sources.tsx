@@ -1,4 +1,5 @@
 import { isSponsoredHref, sourceLinkRel } from "@/lib/sanitize";
+import { AFFILIATE_HINWEIS_OBEN } from "@/lib/amazon-asin";
 import type { LayoutData } from "./schema";
 
 export const AFFILIATE_HINWEIS =
@@ -13,13 +14,13 @@ export const AMAZON_CTA_ROT = "Aktuellen Preis bei Amazon ansehen*";
 export const ROT_KEINE_KAUFEMPFEHLUNG = "Unsere Bewertung für dieses Produkt ist Rot; der Link ist keine Kaufempfehlung.";
 
 /** Kauf-Button mit Affiliate-Hinweis. Bei Rot andere Beschriftung und der Hinweis, dass der Link keine Kaufempfehlung ist. */
-export function AmazonKauf({ url, rot, className = "kauf" }: { url: string; rot: boolean; className?: string }) {
+export function AmazonKauf({ url, rot, className = "kauf", oben = false }: { url: string; rot: boolean; className?: string; oben?: boolean }) {
   const rel = isSponsoredHref(url) ? "sponsored nofollow noopener" : "nofollow noopener noreferrer";
   return (
-    <div className={className}>
+    <div className={className} data-amazon-top={oben ? "" : undefined}>
       <a className="btn" href={url} target="_blank" rel={rel}>{rot ? AMAZON_CTA_ROT : AMAZON_CTA}</a>
       {rot ? <p className="rot-hinweis">{ROT_KEINE_KAUFEMPFEHLUNG}</p> : null}
-      <p className="affiliate-note">{AFFILIATE_HINWEIS}</p>
+      <p className="affiliate-note">{oben ? AFFILIATE_HINWEIS_OBEN : AFFILIATE_HINWEIS}</p>
     </div>
   );
 }

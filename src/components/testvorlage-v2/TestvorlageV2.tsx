@@ -17,6 +17,7 @@ import { ScientificEvidence } from "./ScientificEvidence";
 import { ScoreBreakdown } from "./ScoreBreakdown";
 import { TvSection } from "./Section";
 import { AmazonKauf, Sources } from "./Sources";
+import { topAmazonUrl } from "@/lib/amazon-asin";
 import { baueAbschnitte, kaufLink, type BlockTyp, type LayoutData } from "./schema";
 import "@/styles/testvorlage-v2.css";
 
@@ -44,13 +45,14 @@ export function TestvorlageV2({ data, totalScore, ampelLabel, kopf, medien }: { 
   const kauf = kaufLink(data);
   const asinKauf = data.asin ? kaufLink({ asin: data.asin }) : null;
   const rot = isRotScore(totalScore);
-  const hatFazit = abschnitte.some((a) => a.art === "fazit");
-  // Oberer Button aus der ASIN: direkt nach dem Fazit. Ohne Fazit-Abschnitt nach der Gesamtwertung.
+  // Button nach dem Fazit (aus der ASIN).
   const kaufOben = asinKauf ? <AmazonKauf url={asinKauf} rot={rot} className="kauf kauf-top" /> : null;
+  // Oberer Button direkt unter dem Hero (dort stehen Gesamtwertung und Ampel). Nur mit eindeutiger ASIN.
+  const heroUrl = topAmazonUrl({ asin: data.asin, kaufUrl: data.kaufUrl });
   return (
     <div className="tv2" data-layout="TESTVORLAGE_V2">
       <ProductTestHero hero={data.hero} totalScore={totalScore} ampelLabel={ampelLabel} kopf={kopf} />
-      {!hatFazit && kaufOben}
+      {heroUrl ? <AmazonKauf url={heroUrl} rot={rot} className="kauf kauf-hero" oben /> : null}
       <ProductFacts kennzahlen={data.kennzahlen} />
       {medien}
       <ArticleNavigation abschnitte={abschnitte} variante="mobil" />
