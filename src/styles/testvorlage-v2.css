@@ -234,7 +234,7 @@
 .tv2 .source-list li{margin-bottom:13px}
 .tv2 .source-list .hinweis{display:block;color:var(--muted);font-size:.85rem}
 .tv2 .kauf{margin-top:20px}
-.tv2 .kauf-top{background:#fff;border:1px solid #DCE8DE;border-radius:18px;padding:22px}
+.tv2 .kauf-top,.tv2 .kauf-hero{background:#fff;border:1px solid #DCE8DE;border-radius:18px;padding:22px}
 .tv2 .affiliate-note,.tv2 .rot-hinweis{margin:10px 0 0;font-size:.8rem;color:#173C2D}
 .tv2 .rot-hinweis{font-weight:700;font-size:.9rem}
 .tv2 .btn{min-height:3.25rem}

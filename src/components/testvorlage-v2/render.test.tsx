@@ -70,7 +70,7 @@ describe("TestvorlageV2: Server-Rendering", () => {
     expect(mit).toContain("https://www.amazon.de/dp/B000000000?tag=cyberni7400-21");
     expect(mit).toContain('rel="sponsored nofollow noopener"');
     expect(mit).toContain('target="_blank"');
-    expect(mit.match(/Jetzt bei Amazon entdecken\*/g)).toHaveLength(2);
+    expect(mit.match(/Jetzt bei Amazon entdecken\*/g)).toHaveLength(3);
     expect(mit.match(/\*Affiliate-Link: Wir erhalten bei einem Kauf eine Provision, der Preis ändert sich für Sie nicht\. Die Provision hat keinen Einfluss auf unsere Bewertung\./g)).toHaveLength(2);
     expect(mit.match(/class="kauf kauf-top"/g)).toHaveLength(1);
     expect(mit.match(/class="kauf"/g)).toHaveLength(1);
@@ -81,7 +81,7 @@ describe("TestvorlageV2: Server-Rendering", () => {
     expect(fazitStart).toBeGreaterThan(0);
     expect(mit.slice(fazitEnde, oben)).toBe("<div ");
     expect(oben).toBeLessThan(faq);
-    expect(mit.slice(0, mit.indexOf('class="stripe"'))).not.toContain("Jetzt bei Amazon entdecken*");
+    expect(mit.slice(0, mit.indexOf('class="stripe"'))).not.toContain('class="kauf kauf-top"');
     const quellen = mit.indexOf('<section class="section" id="quellen"');
     const unten = mit.indexOf('class="kauf"', quellen);
     expect(unten).toBeGreaterThan(quellen);
@@ -91,7 +91,7 @@ describe("TestvorlageV2: Server-Rendering", () => {
     expect(ohne).not.toContain("Affiliate-Link");
     expect(ohne).not.toContain("Jetzt bei Amazon entdecken*");
     const nurUrl = html({ ...data, asin: undefined, kaufUrl: "https://www.amazon.de/dp/B000000000?tag=cyberni7400-21" }, totalScore);
-    expect(nurUrl.match(/Jetzt bei Amazon entdecken\*/g)).toHaveLength(1);
+    expect(nurUrl.match(/Jetzt bei Amazon entdecken\*/g)).toHaveLength(2);
     expect(nurUrl).not.toContain("kauf-top");
     const nurUrlQuellen = nurUrl.indexOf('<section class="section" id="quellen"');
     expect(nurUrl.indexOf('class="kauf"', nurUrlQuellen)).toBeGreaterThan(nurUrlQuellen);
@@ -101,14 +101,15 @@ describe("TestvorlageV2: Server-Rendering", () => {
     const h = html({ ...data, fazit: undefined }, totalScore);
     expect(h).not.toContain('id="fazit"');
     const bisStripe = h.slice(0, h.indexOf('class="stripe"'));
-    expect(bisStripe).toContain('class="kauf kauf-top"');
-    expect(bisStripe.indexOf('class="hero"')).toBeLessThan(bisStripe.indexOf('class="kauf kauf-top"'));
+    expect(bisStripe).toContain('class="kauf kauf-hero"');
+    expect(bisStripe).not.toContain('class="kauf kauf-top"');
+    expect(bisStripe.indexOf('class="hero"')).toBeLessThan(bisStripe.indexOf('class="kauf kauf-hero"'));
     expect(h.match(/Jetzt bei Amazon entdecken\*/g)).toHaveLength(2);
     const quellen = h.indexOf('<section class="section" id="quellen"');
     expect(h.indexOf('class="kauf"', quellen)).toBeGreaterThan(quellen);
     const leer = html({ ...data, fazit: { html: "   " } }, totalScore);
     expect(leer).not.toContain('id="fazit"');
-    expect(leer.slice(0, leer.indexOf('class="stripe"'))).toContain('class="kauf kauf-top"');
+    expect(leer.slice(0, leer.indexOf('class="stripe"'))).toContain('class="kauf kauf-hero"');
   });
   it("Kaufkasten im Fazit bleibt im Abschnitt, der Vorlagen-Button folgt direkt danach", () => {
     const { data, totalScore } = ok(5);
@@ -124,19 +125,19 @@ describe("TestvorlageV2: Server-Rendering", () => {
     expect(abschnitt).not.toContain('class="kauf kauf-top"');
     expect(abschnitt).not.toContain("Jetzt bei Amazon entdecken*");
     expect(h.slice(fazitEnde, h.indexOf('class="kauf kauf-top"'))).toBe("<div ");
-    expect(h.match(/Jetzt bei Amazon entdecken\*/g)).toHaveLength(2);
+    expect(h.match(/Jetzt bei Amazon entdecken\*/g)).toHaveLength(3);
     expect(h.match(/Aktuellen Preis bei Amazon ansehen\*/g)).toHaveLength(1);
   });
   it("bei Ampel Rot steht der Preis-Hinweis an jedem Amazon-Button, ab Gelb der Entdecken-Text", () => {
     const { data } = ok(5);
     const rot = html(data, 59);
-    expect(rot.match(/Aktuellen Preis bei Amazon ansehen\*/g)).toHaveLength(2);
+    expect(rot.match(/Aktuellen Preis bei Amazon ansehen\*/g)).toHaveLength(3);
     expect(rot).not.toContain("Jetzt bei Amazon entdecken*");
-    expect(rot.match(/Unsere Bewertung für dieses Produkt ist Rot; der Link ist keine Kaufempfehlung\./g)).toHaveLength(2);
+    expect(rot.match(/Unsere Bewertung für dieses Produkt ist Rot; der Link ist keine Kaufempfehlung\./g)).toHaveLength(3);
     const gelb = html(data, 60);
     const gruen = html(data, 80);
     for (const h of [gelb, gruen]) {
-      expect(h.match(/Jetzt bei Amazon entdecken\*/g)).toHaveLength(2);
+      expect(h.match(/Jetzt bei Amazon entdecken\*/g)).toHaveLength(3);
       expect(h).not.toContain("Aktuellen Preis bei Amazon ansehen*");
       expect(h).not.toContain("keine Kaufempfehlung");
     }
