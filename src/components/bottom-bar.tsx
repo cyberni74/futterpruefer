@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Home, LayoutGrid, Newspaper, Search } from "lucide-react";
+import { OnlineCounter } from "./online-counter";
 
 const ITEMS = [
   { href: "/", label: "Start", icon: Home },
@@ -36,6 +37,7 @@ export function BottomBar() {
           </button>
         </li>
       </ul>
+      <OnlineCounter variant="leiste" />
     </nav>
   );
 }

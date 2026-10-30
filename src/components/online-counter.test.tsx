@@ -4,6 +4,10 @@ import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { CONSENT_KEY, VISITOR_KEY, writeConsent } from "@/lib/consent";
 import { GAESTE_TOOLTIP, OnlineCounter } from "./online-counter";
+import { BottomBar } from "./bottom-bar";
+
+vi.mock("next/navigation", () => ({ usePathname: () => "/" }));
+vi.mock("next/link", () => ({ default: ({ href, children, ...r }: { href: string; children: React.ReactNode }) => <a href={href} {...r}>{children}</a> }));
 
 let root: Root | null = null;
 let host: HTMLDivElement | null = null;
@@ -102,5 +106,31 @@ describe("OnlineCounter mit Einwilligung", () => {
     expect(fetchMock).toHaveBeenCalledTimes(1);
     await act(async () => { await vi.advanceTimersByTimeAsync(30_000); });
     expect(fetchMock).toHaveBeenCalledTimes(2);
+  });
+
+  it("Menü unten und Footer zeigen dieselbe Zahl, aber es gibt nur eine Meldeschleife", async () => {
+    localStorage.setItem(CONSENT_KEY, "all");
+    const fetchMock = vi.fn<(url: string, init?: RequestInit) => Promise<Response>>(() => json(12));
+    vi.stubGlobal("fetch", fetchMock);
+    host = document.createElement("div");
+    document.body.appendChild(host);
+    root = createRoot(host);
+    await act(async () => { root!.render(<><BottomBar /><OnlineCounter /></>); await Promise.resolve(); });
+    await act(async () => { await Promise.resolve(); });
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    const leiste = host.querySelector("nav [data-online='leiste']");
+    expect(leiste?.textContent).toContain("12 Gäste online");
+    expect(host.querySelector("[data-online='footer']")?.textContent).toContain("12 Gäste online");
+    expect(leiste?.className).toContain("md:hidden");
+  });
+  it("ohne Zustimmung zeigt das Menü unten nichts und lässt keinen Leerraum", async () => {
+    const fetchMock = vi.fn<(url: string, init?: RequestInit) => Promise<Response>>(() => json(12));
+    vi.stubGlobal("fetch", fetchMock);
+    host = document.createElement("div");
+    document.body.appendChild(host);
+    root = createRoot(host);
+    await act(async () => { root!.render(<BottomBar />); await Promise.resolve(); });
+    expect(host.querySelector("[data-online]")).toBeNull();
+    expect(fetchMock).not.toHaveBeenCalled();
   });
 });
