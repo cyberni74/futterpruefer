@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { AMAZON_PARTNER_NOTICE, FOOTER_CLAIM } from "@/lib/site";
 import { Logo } from "./logo";
+import { ConsentSettingsLink } from "./consent-settings-link";
+import { OnlineCounter } from "./online-counter";
 
 const COLS = [
   { title: "Tests", links: [["Alleinfuttermittel Hund", "/alleinfuttermittel-hund"], ["Alleinfuttermittel Katze", "/alleinfuttermittel-katze"], ["Ergänzungsfuttermittel Hund", "/ergaenzungsfuttermittel-hund"], ["Ergänzungsfuttermittel Katze", "/ergaenzungsfuttermittel-katze"], ["Alle Marken", "/marken"], ["Produkt des Monats", "/produkt-des-monats"]] },
@@ -10,7 +12,7 @@ const COLS = [
 
 export function SiteFooter() {
   return (
-    <footer className="mt-20 border-t border-border bg-bg-soft pb-24 md:pb-0">
+    <footer className="mt-20 border-t border-border bg-bg-soft pb-28 md:pb-0">
       <div className="mx-auto grid max-w-6xl gap-10 px-4 py-12 sm:grid-cols-2 lg:grid-cols-4">
         <div>
           <Logo />
@@ -23,14 +25,18 @@ export function SiteFooter() {
               {col.links.map(([label, href]) => (
                 <li key={href}><Link href={href} className="inline-flex min-h-9 items-center text-sm text-muted hover:text-fg hover:underline">{label}</Link></li>
               ))}
+              {col.title === "Kontakt" && <li><ConsentSettingsLink /></li>}
             </ul>
           </nav>
         ))}
       </div>
-      <p className="border-t border-border px-4 py-5 text-center text-xs text-muted">
-        © {new Date().getFullYear()} Futterprüfer.de · Alle Bewertungen nach offengelegter Methodik
-        <span className="mt-1 block">{AMAZON_PARTNER_NOTICE}</span>
-      </p>
+      <div className="border-t border-border px-4 py-5 text-center text-xs text-muted">
+        <p>
+          © {new Date().getFullYear()} Futterprüfer.de · Alle Bewertungen nach offengelegter Methodik
+          <span className="mt-1 block">{AMAZON_PARTNER_NOTICE}</span>
+        </p>
+        <OnlineCounter />
+      </div>
     </footer>
   );
 }

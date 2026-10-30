@@ -522,3 +522,8 @@ html, body { overflow-x: clip; }
 .fp-score-gelb { background: var(--mid-soft); color: var(--mid); }
 .fp-score-rot { background: var(--bad-soft); color: var(--bad); }
 .prose-fp a:has(> .fp-score) { text-decoration: none; }
+
+/* Leuchtender grüner Punkt für den Online-Zähler im Footer */
+.online-dot { width: .5rem; height: .5rem; border-radius: 9999px; background: var(--good); box-shadow: 0 0 0 0 color-mix(in srgb, var(--good) 60%, transparent), 0 0 8px 2px color-mix(in srgb, var(--good) 55%, transparent); animation: online-puls 2s ease-out infinite; }
+@keyframes online-puls { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--good) 55%, transparent), 0 0 8px 2px color-mix(in srgb, var(--good) 55%, transparent); } 70% { box-shadow: 0 0 0 7px transparent, 0 0 8px 2px color-mix(in srgb, var(--good) 55%, transparent); } 100% { box-shadow: 0 0 0 0 transparent, 0 0 8px 2px color-mix(in srgb, var(--good) 55%, transparent); } }
+@media (prefers-reduced-motion: reduce) { .online-dot { animation: none; } }

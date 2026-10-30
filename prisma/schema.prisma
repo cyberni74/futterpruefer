@@ -369,3 +369,11 @@ model GlossaryTerm {
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 }
+
+/// Pseudonymer Zähler „Gäste online“ (nur nach Einwilligung): zufällige Kennung je Browser und Zeitpunkt der letzten Meldung, keine IP, kein Cookie. Einträge werden nach spätestens zehn Minuten gelöscht.
+model LiveVisitor {
+  id     String   @id
+  seenAt DateTime @default(now())
+
+  @@index([seenAt])
+}
