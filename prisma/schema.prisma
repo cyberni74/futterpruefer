@@ -370,7 +370,7 @@ model GlossaryTerm {
   updatedAt  DateTime @updatedAt
 }
 
-/// Anonymer Zähler „gerade online“: zufällige ID je Seitenaufruf, nur Zeitstempel, keine IP, kein Cookie. Einträge verfallen nach Minuten.
+/// Pseudonymer Zähler „Gäste online“ (nur nach Einwilligung): zufällige Kennung je Browser und Zeitpunkt der letzten Meldung, keine IP, kein Cookie. Einträge werden nach spätestens zehn Minuten gelöscht.
 model LiveVisitor {
   id     String   @id
   seenAt DateTime @default(now())

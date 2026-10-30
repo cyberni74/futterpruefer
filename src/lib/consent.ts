@@ -1,7 +1,8 @@
 /** Entscheidung im Datenschutzhinweis: "all" = Zustimmen (inkl. Gäste-Anzeige), "essential" = Nur notwendige. */
 export const CONSENT_KEY = "fp-consent-v2";
-/** Zeitpunkt der Entscheidung (ms). Der Hinweis erscheint einmal pro Kalendertag erneut; die bisherige Entscheidung gilt bis zur neuen Wahl. */
+/** Zeitpunkt der Entscheidung (ms). Der Hinweis erscheint nach 182 Tagen (sechs Monaten) erneut, für „Zustimmen“ und „Nur notwendige“ gleich; die bisherige Entscheidung gilt bis zur neuen Wahl. */
 export const CONSENT_AT_KEY = "fp-consent-v2-at";
+export const CONSENT_GUELTIG_TAGE = 182;
 /** Früherer Hinweis („Verstanden“) war keine Einwilligung; der Schlüssel wird nicht mehr gelesen und beim Entscheiden entfernt. */
 export const LEGACY_CONSENT_KEY = "fp-consent-v1";
 /** Zufällige Besucher-Kennung für die Gäste-Anzeige, nur nach Zustimmung angelegt, bei Widerruf gelöscht. */
@@ -11,14 +12,14 @@ export const CONSENT_OPEN_EVENT = "fp-consent-open";
 
 export type Consent = "all" | "essential" | null;
 
-/** Inline vor dem ersten Paint: blendet den Hinweis aus, wenn heute schon entschieden wurde (kein Flackern, kein LCP-Versatz). Ab dem nächsten Tag erscheint er wieder. */
-export const consentScript = `try{var a=+localStorage.getItem("${CONSENT_AT_KEY}");if(localStorage.getItem("${CONSENT_KEY}")&&a&&new Date(a).toDateString()===new Date().toDateString())document.documentElement.classList.add("fp-consent")}catch(e){}`;
+/** Inline vor dem ersten Paint: blendet den Hinweis aus, solange die Entscheidung jünger als 182 Tage ist (kein Flackern, kein LCP-Versatz). */
+export const consentScript = `try{var a=+localStorage.getItem("${CONSENT_AT_KEY}");if(localStorage.getItem("${CONSENT_KEY}")&&a&&a<=Date.now()&&Date.now()-a<${CONSENT_GUELTIG_TAGE}*864e5)document.documentElement.classList.add("fp-consent")}catch(e){}`;
 
-/** Wurde heute schon im Datenschutzhinweis entschieden? */
-export function heuteEntschieden(jetzt = new Date()): boolean {
+/** Liegt die Entscheidung im Datenschutzhinweis weniger als 182 Tage zurück? */
+export function entscheidungAktuell(jetzt = Date.now()): boolean {
   try {
     const at = Number(localStorage.getItem(CONSENT_AT_KEY));
-    return readConsent() !== null && at > 0 && new Date(at).toDateString() === jetzt.toDateString();
+    return readConsent() !== null && at > 0 && at <= jetzt && jetzt - at < CONSENT_GUELTIG_TAGE * 864e5;
   } catch {
     return false;
   }

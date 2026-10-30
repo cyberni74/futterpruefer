@@ -12,7 +12,7 @@ export const GAESTE_TOOLTIP = "gezählt: Gäste der letzten 90 Sekunden, die der
 export function OnlineCounter({ variant = "footer" }: { variant?: "footer" | "leiste" }) {
   const count = useOnlineCount();
   if (count == null) return null;
-  const rahmen = variant === "leiste" ? "flex border-t border-border/60 py-1 text-[11px] md:hidden" : "mt-2 hidden text-xs md:flex";
+  const rahmen = variant === "leiste" ? "flex border-t border-border/60 py-1 text-xs md:hidden" : "mt-2 hidden text-xs md:flex";
   return (
     <div className={`${rahmen} items-center justify-center gap-2 text-muted`} aria-live="off" title={GAESTE_TOOLTIP} data-online={variant}>
       <span aria-hidden className="online-dot" />
