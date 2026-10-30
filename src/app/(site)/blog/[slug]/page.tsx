@@ -46,6 +46,8 @@ const BODY_FAQ_SLUGS = new Set([
   "hund-katze-vegan-ernaehren",
   "tierfutter-verpackung-muell-recycling",
   "insektenarten-hundefutter-vergleich",
+  "warum-fressen-hunde-gras-kot",
+  "krill-tierfutter-antarktis",
 ]);
 
 export async function generateStaticParams() {
