@@ -1,7 +1,10 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { renderToStaticMarkup } from "react-dom/server";
 import type { ReviewCardData } from "@/lib/queries";
+import { BLOG_CARD_NEUTRAL_IMAGE, RELATED_REVIEW_EXCLUDE } from "@/lib/content";
 import { ReviewCard } from "./review-card";
+
+vi.mock("@/lib/db", () => ({ prisma: {} }));
 
 function card(over: Partial<ReviewCardData>): ReviewCardData {
   return {
@@ -73,5 +76,50 @@ describe("ReviewCard Bedenklich", () => {
   it("zeigt das Badge bei V2, wenn ein Warnsignal gesetzt ist", () => {
     const html = renderToStaticMarkup(<ReviewCard review={card({ layout: "TESTVORLAGE_V2", scoreHarmful: 0, efSicherheit: "SCHWER", totalScore: 39 })} />);
     expect(html).toContain("Bedenklich");
+  });
+});
+
+describe("ReviewCard Bildquelle und neutrale Fläche", () => {
+  const withImage = card({ imageUrl: "https://example.com/pack.jpg", imageAlt: "Packung" });
+  it("zeigt die Bildquelle unter dem Bild, wenn sie übergeben wird", () => {
+    const h = renderToStaticMarkup(<ReviewCard review={withImage} imageCredit="Bild: Hersteller" />);
+    expect(h).toContain("Bild: Hersteller");
+    expect(h.indexOf("Bild: Hersteller")).toBeGreaterThan(h.indexOf("<img"));
+  });
+  it("ohne imageCredit keine Bildquelle", () => {
+    expect(renderToStaticMarkup(<ReviewCard review={withImage} />)).not.toContain("Bild: Hersteller");
+  });
+  it("neutralImage: kein Packungsbild, keine Bildquelle", () => {
+    const h = renderToStaticMarkup(<ReviewCard review={withImage} imageCredit="Bild: Hersteller" neutralImage />);
+    expect(h).not.toContain("pack.jpg");
+    expect(h).not.toContain("Bild: Hersteller");
+    expect(h).toContain("Produkttitel");
+  });
+});
+
+describe("Bildquelle in Blog-Karten (Regel der Seite)", () => {
+  const credit = (r: Pick<ReviewCardData, "imageUrl" | "imageAlt">) => (r.imageUrl && !/symbolbild|ki-generiert/i.test(r.imageAlt ?? "") ? "Bild: Hersteller" : undefined);
+  it("KI-Bild ohne Credit", () => {
+    const ki = card({ imageUrl: "https://example.com/ki.jpg", imageAlt: "Trockenfutter, KI-generiertes Symbolbild" });
+    expect(credit(ki)).toBeUndefined();
+    expect(renderToStaticMarkup(<ReviewCard review={ki} imageCredit={credit(ki)} />)).not.toContain("Bild: Hersteller");
+    const foto = card({ imageUrl: "https://example.com/pack.jpg", imageAlt: "Packung" });
+    expect(renderToStaticMarkup(<ReviewCard review={foto} imageCredit={credit(foto)} />)).toContain("Bild: Hersteller");
+  });
+  it("ohne Bild keine Bildquelle", () => {
+    expect(credit(card({ imageUrl: null }))).toBeUndefined();
+  });
+});
+
+describe("Blog-Karten: Steuerlisten", () => {
+  it("Gras-/Kotfresser-Packungsbilder werden in Blog-Karten neutral dargestellt", () => {
+    expect(BLOG_CARD_NEUTRAL_IMAGE.has("tierliebhaber-gras-kotfresser-drops-test")).toBe(true);
+    expect(BLOG_CARD_NEUTRAL_IMAGE.has("aniforte-gras-kotfresser-snack-hund-test")).toBe(true);
+  });
+  it("Krill-Beitrag zeigt keine Gras-/Kotfresser-Tests", () => {
+    expect(RELATED_REVIEW_EXCLUDE["krill-tierfutter-antarktis"]).toEqual(expect.arrayContaining(["tierliebhaber-gras-kotfresser-drops-test", "aniforte-gras-kotfresser-snack-hund-test"]));
+  });
+  it("Medidog erscheint nicht unter „Was dürfen Hunde nicht essen“", () => {
+    expect(RELATED_REVIEW_EXCLUDE["was-duerfen-hunde-nicht-essen"]).toEqual(["medidog-ulmenrinden-paste"]);
   });
 });
