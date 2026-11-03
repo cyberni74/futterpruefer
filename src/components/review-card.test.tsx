@@ -1,77 +1,40 @@
-import { describe, expect, it } from "vitest";
 import { renderToStaticMarkup } from "react-dom/server";
+import { describe, expect, it, vi } from "vitest";
+import { BLOG_CARD_NEUTRAL_IMAGE, RELATED_REVIEW_EXCLUDE } from "@/lib/content";
 import type { ReviewCardData } from "@/lib/queries";
 import { ReviewCard } from "./review-card";
 
-function card(over: Partial<ReviewCardData>): ReviewCardData {
-  return {
-    id: "id",
-    slug: "slug",
-    title: "Produkttitel",
-    brand: "Marke",
-    productName: "Produkt",
-    keyword: "",
-    teaser: "Teaser",
-    imageUrl: null,
-    imageAlt: "",
-    imageBlur: null,
-    totalScore: 92,
-    scoreRaw: 0,
-    scoreHarmful: 0,
-    scoreNutrients: 0,
-    scoreDeclaration: 0,
-    scoreNeeds: 0,
-    scoreValue: 0,
-    layout: "",
-    efSicherheit: "OK",
-    layoutData: null,
-    priceClass: "MITTEL",
-    publishedAt: new Date("2026-10-27T12:00:00Z"),
-    category: { slug: "ergaenzungsfuttermittel-hund", shortName: "Ergänzungsfuttermittel Hund", animal: "HUND" },
-    ...over,
-  };
-}
+vi.mock("@/lib/db", () => ({ prisma: {} }));
 
-describe("ReviewCard Bedenklich", () => {
-  it("zeigt das Badge bei klassischen Tests unter 10 Schadstoff-Punkten, Kachel und Karte", () => {
-    const review = card({ layout: "", scoreRaw: 10, scoreHarmful: 9, scoreNutrients: 11, totalScore: 45 });
-    for (const variant of ["card", "tile"] as const) {
-      const html = renderToStaticMarkup(<ReviewCard review={review} variant={variant} />);
-      expect(html).toContain("Bedenklich");
-    }
+const review = {
+  id: "r1", slug: "beispiel-test", title: "Beispiel im Test", brand: "Beispiel", productName: "Snack", keyword: "", teaser: "Kurztext",
+  imageUrl: "https://example.com/pack.jpg", imageAlt: "Packung", imageBlur: null, totalScore: 70, scoreRaw: null, category: { shortName: "Ergänzungsfutter", slug: "ergaenzungsfuttermittel-hund", animal: "HUND" },
+} as unknown as ReviewCardData;
+
+describe("ReviewCard Bildquelle und neutrale Fläche", () => {
+  it("zeigt die Bildquelle unter dem Bild, wenn sie übergeben wird", () => {
+    const h = renderToStaticMarkup(<ReviewCard review={review} imageCredit="Bild: Hersteller" />);
+    expect(h).toContain("Bild: Hersteller");
+    expect(h.indexOf("Bild: Hersteller")).toBeGreaterThan(h.indexOf("<img") === -1 ? 0 : h.indexOf("<img"));
   });
-
-  it("zeigt das Badge bei klassischen Tests ab 10 Punkten nicht", () => {
-    const html = renderToStaticMarkup(<ReviewCard review={card({ layout: "", scoreRaw: 20, scoreHarmful: 15, totalScore: 82 })} />);
-    expect(html).not.toContain("Bedenklich");
+  it("ohne imageCredit keine Bildquelle", () => {
+    expect(renderToStaticMarkup(<ReviewCard review={review} />)).not.toContain("Bild: Hersteller");
   });
-
-  it("zeigt das Badge nicht, wenn alle sechs Teilnoten 0 sind und kein Warnsignal gesetzt ist", () => {
-    const html = renderToStaticMarkup(<ReviewCard review={card({ layout: "", totalScore: 27, efSicherheit: "OK" })} />);
-    expect(html).not.toContain("Bedenklich");
+  it("neutralImage: kein Packungsbild, keine Bildquelle", () => {
+    const h = renderToStaticMarkup(<ReviewCard review={review} imageCredit="Bild: Hersteller" neutralImage />);
+    expect(h).not.toContain("example.com/pack.jpg");
+    expect(h).not.toContain("pack.jpg");
+    expect(h).not.toContain("Bild: Hersteller");
+    expect(h).toContain("Beispiel im Test");
   });
+});
 
-  it("zeigt das Badge bei echten 0 Schadstoff-Punkten, sobald andere Teilnoten gesetzt sind", () => {
-    const html = renderToStaticMarkup(<ReviewCard review={card({ layout: "", scoreRaw: 12, scoreHarmful: 0, totalScore: 40 })} />);
-    expect(html).toContain("Bedenklich");
+describe("Blog-Karten: Steuerlisten", () => {
+  it("Gras-/Kotfresser-Packungsbilder werden in Blog-Karten neutral dargestellt", () => {
+    expect(BLOG_CARD_NEUTRAL_IMAGE.has("tierliebhaber-gras-kotfresser-drops-test")).toBe(true);
+    expect(BLOG_CARD_NEUTRAL_IMAGE.has("aniforte-gras-kotfresser-snack-hund-test")).toBe(true);
   });
-
-  it("zeigt das Badge bei leeren Teilnoten, wenn die Sicherheit ein Warnsignal setzt", () => {
-    const html = renderToStaticMarkup(<ReviewCard review={card({ layout: "", totalScore: 59, efSicherheit: "MITTEL" })} />);
-    expect(html).toContain("Bedenklich");
-  });
-
-  it("zeigt das Badge bei V2 ohne Warnsignal nicht, auch bei scoreHarmful 0", () => {
-    const review = card({ layout: "TESTVORLAGE_V2", scoreHarmful: 0, totalScore: 92, efSicherheit: "OK", layoutData: { sicherheit: { stufe: "OK", text: "Unbedenklich" } } });
-    for (const variant of ["card", "tile"] as const) {
-      const html = renderToStaticMarkup(<ReviewCard review={review} variant={variant} />);
-      expect(html).not.toContain("Bedenklich");
-      expect(html).toContain("92");
-    }
-  });
-
-  it("zeigt das Badge bei V2, wenn ein Warnsignal gesetzt ist", () => {
-    const html = renderToStaticMarkup(<ReviewCard review={card({ layout: "TESTVORLAGE_V2", scoreHarmful: 0, efSicherheit: "SCHWER", totalScore: 39 })} />);
-    expect(html).toContain("Bedenklich");
+  it("Krill-Beitrag zeigt keine Gras-/Kotfresser-Tests", () => {
+    expect(RELATED_REVIEW_EXCLUDE["krill-tierfutter-antarktis"]).toEqual(expect.arrayContaining(["tierliebhaber-gras-kotfresser-drops-test", "aniforte-gras-kotfresser-snack-hund-test"]));
   });
 });

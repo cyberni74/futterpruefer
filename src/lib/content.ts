@@ -84,7 +84,15 @@ export async function getPostsForReview(r: { brand: string; keyword: string; key
  */
 export const RELATED_REVIEW_EXCLUDE: Record<string, string[]> = {
   "hunde-nahrungsergaenzung": ["medidog-ulmenrinden-paste"],
+  // Krill-Beitrag: die Gras-/Kotfresser-Produkte passen nicht zum Thema
+  "krill-tierfutter-antarktis": ["tierliebhaber-gras-kotfresser-drops-test", "aniforte-gras-kotfresser-snack-hund-test"],
 };
+
+/**
+ * Tests, deren Packungsbild Wirkversprechen trägt („bei Sodbrennen“, „unterstützt die Magenbalance“ …).
+ * In den Karten „Passende Tests“ der Blogbeiträge erscheint dafür eine neutrale Fläche statt des Packungsbilds.
+ */
+export const BLOG_CARD_NEUTRAL_IMAGE = new Set(["tierliebhaber-gras-kotfresser-drops-test", "aniforte-gras-kotfresser-snack-hund-test"]);
 
 export async function getReviewsForPost(p: { slug?: string; title: string; keywords: string[]; excerpt?: string; bodyHtml: string }, take = 3) {
   const animal = subjectAnimal(p.title, p.excerpt, p.keywords);
