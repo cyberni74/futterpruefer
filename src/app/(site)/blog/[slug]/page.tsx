@@ -162,7 +162,7 @@ export default async function PostPage({ params }: PageProps<"/blog/[slug]">) {
       {reviews.length > 0 && (
         <section aria-labelledby="passende-tests" className="mt-16">
           <h2 id="passende-tests" className="mb-6 text-2xl font-extrabold">Passende Tests</h2>
-          <ul className="grid gap-x-5 gap-y-8 sm:grid-cols-2 lg:grid-cols-3">{reviews.map((r) => <li key={r.id}><ReviewCard review={r} imageCredit="Bild: Hersteller" neutralImage={BLOG_CARD_NEUTRAL_IMAGE.has(r.slug)} /></li>)}</ul>
+          <ul className="grid gap-x-5 gap-y-8 sm:grid-cols-2 lg:grid-cols-3">{reviews.map((r) => <li key={r.id}><ReviewCard review={r} imageCredit={r.imageUrl && !/symbolbild|ki-generiert/i.test(r.imageAlt ?? "") ? "Bild: Hersteller" : undefined} neutralImage={BLOG_CARD_NEUTRAL_IMAGE.has(r.slug)} /></li>)}</ul>
           <AllLink href="/tests" title="Ihr Futter ist nicht dabei?" text="Jeder Test zeigt die Punktewertung, die Zusammensetzung im Klartext und den Werbeaussagen-Check. Stöbern Sie in allen Tests und finden Sie das passende Futter für Ihr Tier.">Alle Futtertests ansehen</AllLink>
         </section>
       )}

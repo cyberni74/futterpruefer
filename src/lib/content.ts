@@ -84,6 +84,7 @@ export async function getPostsForReview(r: { brand: string; keyword: string; key
  */
 export const RELATED_REVIEW_EXCLUDE: Record<string, string[]> = {
   "hunde-nahrungsergaenzung": ["medidog-ulmenrinden-paste"],
+  "was-duerfen-hunde-nicht-essen": ["medidog-ulmenrinden-paste"],
   // Krill-Beitrag: die Gras-/Kotfresser-Produkte passen nicht zum Thema
   "krill-tierfutter-antarktis": ["tierliebhaber-gras-kotfresser-drops-test", "aniforte-gras-kotfresser-snack-hund-test"],
 };
