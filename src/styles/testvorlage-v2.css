@@ -292,6 +292,7 @@
 .tv2 .medien{display:grid;gap:12px;margin-top:22px}
 @media(min-width:640px){.tv2 .medien.zwei{grid-template-columns:1fr 1fr}}
 .tv2 .medien figure{margin:0}
+.tv2 .medien .adlabel{display:block;margin:0 0 4px;font-size:.7rem;font-weight:600;line-height:1.3;letter-spacing:.02em;color:var(--fp-text-muted)}
 .tv2 .medien figcaption{margin-top:6px;font-size:.8125rem;color:var(--fp-text-muted)}
 
 /* Handy (unter md): HTML-Tabellen mit mindestens drei Spalten – Werbeaussagen, Nährwerte, Preise –

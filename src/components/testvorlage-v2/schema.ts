@@ -89,6 +89,10 @@ export const layoutDataSchema = z.object({
   kaufUrl: httpUrl.optional(),
   kaufLabel: kurz.optional(),
   bildnachweis: z.string().max(500).optional(),
+  /** Unterschrift unter Produktbild 1 (z. B. „Bild: Hersteller · Werbung“). Leer: „Verpackung“ */
+  bildunterschriftHaupt: z.string().trim().max(500).optional(),
+  /** Unterschrift unter Produktbild 2. Leer: der Alt-Text des Bildes wie bisher */
+  bildunterschriftInhalt: z.string().trim().max(500).optional(),
   /** Slugs veröffentlichter Tests für „Ähnliche Tests“ */
   aehnlicheTests: z.array(z.string().trim().regex(/^[a-z0-9][a-z0-9-]*$/)).max(6).optional(),
   /** Eigene Abschnittsüberschriften je Block */

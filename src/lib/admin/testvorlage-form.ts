@@ -29,6 +29,8 @@ export type Draft = {
   methodikHinweis: string;
   asin: string;
   bildnachweis: string;
+  bildunterschriftHaupt: string;
+  bildunterschriftInhalt: string;
   aehnlicheTests: string[];
   /** Felder ohne eigenes Formularfeld bleiben beim Import/Export erhalten */
   extra: Pick<LayoutData, "kaufUrl" | "kaufLabel" | "abschnittTitel">;
@@ -61,6 +63,8 @@ export function emptyDraft(): Draft {
     methodikHinweis: "",
     asin: "",
     bildnachweis: "",
+    bildunterschriftHaupt: "",
+    bildunterschriftInhalt: "",
     aehnlicheTests: [],
     extra: {},
   };
@@ -126,6 +130,8 @@ export function draftToLayoutData(d: Draft): LayoutInput {
     methodikHinweis: txt(d.methodikHinweis),
     asin: txt(d.asin),
     bildnachweis: txt(d.bildnachweis),
+    bildunterschriftHaupt: txt(d.bildunterschriftHaupt),
+    bildunterschriftInhalt: txt(d.bildunterschriftInhalt),
     aehnlicheTests: some(list(d.aehnlicheTests)),
     ...d.extra,
   };
@@ -157,6 +163,8 @@ export function layoutDataToDraft(data: LayoutData): Draft {
   d.methodikHinweis = data.methodikHinweis ?? "";
   d.asin = data.asin ?? "";
   d.bildnachweis = data.bildnachweis ?? "";
+  d.bildunterschriftHaupt = data.bildunterschriftHaupt ?? "";
+  d.bildunterschriftInhalt = data.bildunterschriftInhalt ?? "";
   d.aehnlicheTests = data.aehnlicheTests ?? [];
   d.extra = { ...(data.kaufUrl ? { kaufUrl: data.kaufUrl } : {}), ...(data.kaufLabel ? { kaufLabel: data.kaufLabel } : {}), ...(data.abschnittTitel ? { abschnittTitel: data.abschnittTitel } : {}) };
   return d;

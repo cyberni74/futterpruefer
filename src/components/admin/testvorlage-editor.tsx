@@ -272,6 +272,8 @@ export function TestvorlageEditor({ draft, onChange, bewertungsart, errors }: { 
       <Section title="Kauflink, Bildnachweis, ähnliche Tests" id="sec-v2-links">
         <Txt label="Amazon-ASIN" value={draft.asin} onChange={(v) => set("asin", v.toUpperCase())} max={10} mono hint={`Daraus entsteht der Button mit tag=${AMAZON_TAG} und dem Affiliate-Hinweis. Ohne ASIN kein Button.`} />
         <Txt label="Bildnachweis" value={draft.bildnachweis} onChange={(v) => set("bildnachweis", v)} max={500} hint="Erscheint unter den Produktbildern. Die Bilder selbst laden Sie oben bei „Produktbilder“ hoch." />
+        <Txt label="Bildunterschrift Bild 1" value={draft.bildunterschriftHaupt} onChange={(v) => set("bildunterschriftHaupt", v)} max={500} hint="Leer: „Verpackung“. Hier steht z. B. die Bildquelle und die Kennzeichnung Werbung." />
+        <Txt label="Bildunterschrift Bild 2" value={draft.bildunterschriftInhalt} onChange={(v) => set("bildunterschriftInhalt", v)} max={500} hint="Leer: der Alt-Text des zweiten Bildes." />
         <Lines label="Ähnliche Tests (Slug des Tests)" items={draft.aehnlicheTests} onChange={(v) => set("aehnlicheTests", v)} min={0} max={6} />
         <p className="text-xs text-muted">Leer = automatische Auswahl aus derselben Kategorie.</p>
       </Section>
