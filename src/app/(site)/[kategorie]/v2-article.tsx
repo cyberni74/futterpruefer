@@ -138,7 +138,7 @@ export async function ReviewV2Article({ r, data, draftPreview }: { r: Review; da
                       <div className="relative aspect-[4/3] overflow-hidden rounded-3xl bg-bg-soft">
                         <FpImage src={r.imageUrl} alt={r.imageAlt.trim() || `Verpackung von ${name}`} blur={r.imageBlur} sizes={r.contentImageUrl ? "(min-width:1024px) 600px, (min-width:640px) 50vw, 100vw" : "(min-width:1024px) 1000px, 100vw"} priority />
                       </div>
-                      <figcaption>Verpackung</figcaption>
+                      <figcaption>{data.bildunterschriftHaupt?.trim() || "Verpackung"}</figcaption>
                     </figure>
                   )}
                   {r.contentImageUrl && (
@@ -146,7 +146,7 @@ export async function ReviewV2Article({ r, data, draftPreview }: { r: Review; da
                       <div className="relative aspect-[4/3] overflow-hidden rounded-3xl bg-bg-soft">
                         <FpImage src={r.contentImageUrl} alt={r.contentImageAlt.trim() || `Inhalt von ${name} ohne Verpackung`} blur={r.contentImageBlur} sizes={r.imageUrl ? "(min-width:1024px) 600px, (min-width:640px) 50vw, 100vw" : "(min-width:1024px) 1000px, 100vw"} priority={!r.imageUrl} />
                       </div>
-                      {inhaltCaption ? <figcaption>{inhaltCaption}</figcaption> : null}
+                      {(data.bildunterschriftInhalt?.trim() || inhaltCaption) ? <figcaption>{data.bildunterschriftInhalt?.trim() || inhaltCaption}</figcaption> : null}
                     </figure>
                   )}
                 </div>

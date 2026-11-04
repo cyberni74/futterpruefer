@@ -70,4 +70,14 @@ describe("Admin-Formular der Testvorlage", () => {
     expect(p.ok).toBe(true);
     if (p.ok) expect(pruefeVorVeroeffentlichung(p.data, { bewertungsart: "ERGAENZUNGSFUTTER", totalScore: draftTotal(beispielDraft(5)) })).toEqual([]);
   });
+  it("Bildunterschriften bleiben beim Bearbeiten erhalten und leere Felder entfallen", () => {
+    const d = beispielDraft(5);
+    d.bildunterschriftHaupt = "Bild: Hersteller · Werbung";
+    d.bildunterschriftInhalt = "";
+    const out = draftToLayoutData(d);
+    expect(out.bildunterschriftHaupt).toBe("Bild: Hersteller · Werbung");
+    expect(out.bildunterschriftInhalt).toBeUndefined();
+    const back = layoutDataToDraft(parseLayoutData(out).ok ? (parseLayoutData(out) as { ok: true; data: Parameters<typeof layoutDataToDraft>[0] }).data : {});
+    expect(back.bildunterschriftHaupt).toBe("Bild: Hersteller · Werbung");
+  });
 });

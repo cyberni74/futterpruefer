@@ -140,3 +140,14 @@ describe("Prüfung vor dem Veröffentlichen", () => {
     expect(issues.map((i) => i.path)).toEqual(expect.arrayContaining(["layoutData.fazit.html", "layoutData.faq[0].frage"]));
   });
 });
+
+describe("Bildunterschriften (bildunterschriftHaupt, bildunterschriftInhalt)", () => {
+  it("sind optional, werden getrimmt und auf 500 Zeichen begrenzt", () => {
+    expect(parseLayoutData({}).ok).toBe(true);
+    const ok = parseLayoutData({ bildunterschriftHaupt: "  Bild: Hersteller · Werbung  ", bildunterschriftInhalt: "Inhalt" });
+    expect(ok.ok && ok.data.bildunterschriftHaupt).toBe("Bild: Hersteller · Werbung");
+    expect(parseLayoutData({ bildunterschriftHaupt: "a".repeat(500) }).ok).toBe(true);
+    expect(parseLayoutData({ bildunterschriftHaupt: "a".repeat(501) }).ok).toBe(false);
+    expect(parseLayoutData({ bildunterschriftInhalt: "a".repeat(501) }).ok).toBe(false);
+  });
+});
