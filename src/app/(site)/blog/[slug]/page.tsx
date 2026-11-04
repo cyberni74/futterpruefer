@@ -49,6 +49,7 @@ const BODY_FAQ_SLUGS = new Set([
   "warum-fressen-hunde-gras-kot",
   "krill-tierfutter-antarktis",
   "klimabilanz-hundefutter-co2",
+  "fleischherkunft-tierhaltung-tierfutter",
 ]);
 
 export async function generateStaticParams() {
