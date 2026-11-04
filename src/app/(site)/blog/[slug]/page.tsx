@@ -48,6 +48,7 @@ const BODY_FAQ_SLUGS = new Set([
   "insektenarten-hundefutter-vergleich",
   "warum-fressen-hunde-gras-kot",
   "krill-tierfutter-antarktis",
+  "klimabilanz-hundefutter-co2",
 ]);
 
 export async function generateStaticParams() {
