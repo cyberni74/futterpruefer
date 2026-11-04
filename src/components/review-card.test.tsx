@@ -119,6 +119,9 @@ describe("Blog-Karten: Steuerlisten", () => {
   it("Krill-Beitrag zeigt keine Gras-/Kotfresser-Tests", () => {
     expect(RELATED_REVIEW_EXCLUDE["krill-tierfutter-antarktis"]).toEqual(expect.arrayContaining(["tierliebhaber-gras-kotfresser-drops-test", "aniforte-gras-kotfresser-snack-hund-test"]));
   });
+  it("Medidog erscheint nicht unter „Fleischherkunft und Tierhaltung“", () => {
+    expect(RELATED_REVIEW_EXCLUDE["fleischherkunft-tierhaltung-tierfutter"]).toEqual(["medidog-ulmenrinden-paste"]);
+  });
   it("Medidog erscheint nicht unter „Was dürfen Hunde nicht essen“", () => {
     expect(RELATED_REVIEW_EXCLUDE["was-duerfen-hunde-nicht-essen"]).toEqual(["medidog-ulmenrinden-paste"]);
   });
