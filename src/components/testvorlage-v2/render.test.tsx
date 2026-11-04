@@ -154,12 +154,13 @@ describe("TestvorlageV2: Server-Rendering", () => {
     expect(h).toContain('data-label="Einstufung"');
     expect(h).toContain('data-label="Begründung"');
   });
-  it("Produktbilder der V2-Seite sind keine Amazon-Links", () => {
+  it("Produktbilder der V2-Seite sind nur mit ASIN Amazon-Links (über MedienFigure, kein fester Link im Code)", () => {
     const src = readFileSync(resolve(__dirname, "../../app/(site)/[kategorie]/v2-article.tsx"), "utf8");
     const medien = src.slice(src.indexOf("medien={"), src.indexOf("</TestvorlageV2>"));
-    expect(medien).toContain("<figure>");
+    expect(medien).toContain("<MedienFigure");
     expect(medien).not.toMatch(/<a\b[^>]*amazon/i);
-    expect(medien).not.toContain("Werbung");
+    expect(src).toContain("const medienKaufUrl = data.asin ? kaufLink({ asin: data.asin }) : null;");
+    expect((medien.match(/kaufUrl=\{medienKaufUrl\}/g) ?? []).length).toBe(2);
   });
   it("externe Quellen: nofollow noopener noreferrer, DOI-Link", () => {
     const h = html(ok(5).data, 87);

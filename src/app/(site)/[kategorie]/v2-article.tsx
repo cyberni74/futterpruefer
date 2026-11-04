@@ -28,7 +28,7 @@ import { NewsletterBox } from "@/components/newsletter-box";
 import { WishBox } from "@/components/wish-box";
 import { Disclosure } from "@/components/disclosure";
 import { JsonLd } from "@/components/json-ld";
-import { TestvorlageV2, faqItems, type LayoutData } from "@/components/testvorlage-v2";
+import { MedienFigure, TestvorlageV2, faqItems, kaufLink, type LayoutData } from "@/components/testvorlage-v2";
 import { readingMinutes } from "@/lib/product-data";
 import { contentImageCaption } from "@/lib/content-caption";
 import type { getReviewBySlug } from "@/lib/queries";
@@ -49,6 +49,8 @@ export async function ReviewV2Article({ r, data, draftPreview }: { r: Review; da
   const images = [r.imageUrl, r.contentImageUrl, ...(r.gallery ?? [])].filter((x): x is string => Boolean(x));
   const gallery = (r.gallery ?? []).filter(Boolean);
   const inhaltCaption = contentImageCaption(r.contentImageAlt);
+  // Nur mit ASIN: beide Produktbilder sind Partnerlinks und tragen das Label „Werbung“
+  const medienKaufUrl = data.asin ? kaufLink({ asin: data.asin }) : null;
   const abs = (u: string) => (u.startsWith("http") ? u : absoluteUrl(u));
   const description = trimMetaDescription(r.metaDescription?.trim() || data.hero?.gesamturteil?.trim() || `${r.title} im Fachtest: ${r.totalScore}/100 Punkte.`);
   const minutes = readingMinutes(JSON.stringify(data), r.verdict);
@@ -134,20 +136,14 @@ export async function ReviewV2Article({ r, data, draftPreview }: { r: Review; da
               <div className="mt-5">
                 <div className={`medien ${r.imageUrl && r.contentImageUrl ? "zwei" : ""}`}>
                   {r.imageUrl && (
-                    <figure>
-                      <div className="relative aspect-[4/3] overflow-hidden rounded-3xl bg-bg-soft">
-                        <FpImage src={r.imageUrl} alt={r.imageAlt.trim() || `Verpackung von ${name}`} blur={r.imageBlur} sizes={r.contentImageUrl ? "(min-width:1024px) 600px, (min-width:640px) 50vw, 100vw" : "(min-width:1024px) 1000px, 100vw"} priority />
-                      </div>
-                      <figcaption>{data.bildunterschriftHaupt?.trim() || "Verpackung"}</figcaption>
-                    </figure>
+                    <MedienFigure kaufUrl={medienKaufUrl} label={name} caption={data.bildunterschriftHaupt?.trim() || "Verpackung"}>
+                      <FpImage src={r.imageUrl} alt={r.imageAlt.trim() || `Verpackung von ${name}`} blur={r.imageBlur} sizes={r.contentImageUrl ? "(min-width:1024px) 600px, (min-width:640px) 50vw, 100vw" : "(min-width:1024px) 1000px, 100vw"} priority />
+                    </MedienFigure>
                   )}
                   {r.contentImageUrl && (
-                    <figure>
-                      <div className="relative aspect-[4/3] overflow-hidden rounded-3xl bg-bg-soft">
-                        <FpImage src={r.contentImageUrl} alt={r.contentImageAlt.trim() || `Inhalt von ${name} ohne Verpackung`} blur={r.contentImageBlur} sizes={r.imageUrl ? "(min-width:1024px) 600px, (min-width:640px) 50vw, 100vw" : "(min-width:1024px) 1000px, 100vw"} priority={!r.imageUrl} />
-                      </div>
-                      {(data.bildunterschriftInhalt?.trim() || inhaltCaption) ? <figcaption>{data.bildunterschriftInhalt?.trim() || inhaltCaption}</figcaption> : null}
-                    </figure>
+                    <MedienFigure kaufUrl={medienKaufUrl} label={name} caption={data.bildunterschriftInhalt?.trim() || inhaltCaption}>
+                      <FpImage src={r.contentImageUrl} alt={r.contentImageAlt.trim() || `Inhalt von ${name} ohne Verpackung`} blur={r.contentImageBlur} sizes={r.imageUrl ? "(min-width:1024px) 600px, (min-width:640px) 50vw, 100vw" : "(min-width:1024px) 1000px, 100vw"} priority={!r.imageUrl} />
+                    </MedienFigure>
                   )}
                 </div>
                 {data.bildnachweis && <p className="mt-2 text-xs" style={{ color: "var(--fp-text-muted)" }}>Bildnachweis: {data.bildnachweis}</p>}

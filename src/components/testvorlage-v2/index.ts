@@ -6,6 +6,7 @@ export { EditorialConclusion } from "./EditorialConclusion";
 export { FeedingTable } from "./FeedingTable";
 export { IngredientAccordion } from "./IngredientAccordion";
 export { ManufacturerClaims } from "./ManufacturerClaims";
+export { MedienFigure } from "./MedienFigure";
 export { OverallScoreGauge } from "./OverallScoreGauge";
 export { ProductFAQ } from "./ProductFAQ";
 export { ProductFacts } from "./ProductFacts";
