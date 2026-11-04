@@ -28,7 +28,7 @@ import { NewsletterBox } from "@/components/newsletter-box";
 import { WishBox } from "@/components/wish-box";
 import { Disclosure } from "@/components/disclosure";
 import { JsonLd } from "@/components/json-ld";
-import { MedienFigure, TestvorlageV2, faqItems, kaufLink, type LayoutData } from "@/components/testvorlage-v2";
+import { MedienFigure, TestvorlageV2, faqItems, istHerstellerBild, kaufLink, medienCaption, type LayoutData } from "@/components/testvorlage-v2";
 import { readingMinutes } from "@/lib/product-data";
 import { contentImageCaption } from "@/lib/content-caption";
 import type { getReviewBySlug } from "@/lib/queries";
@@ -136,12 +136,12 @@ export async function ReviewV2Article({ r, data, draftPreview }: { r: Review; da
               <div className="mt-5">
                 <div className={`medien ${r.imageUrl && r.contentImageUrl ? "zwei" : ""}`}>
                   {r.imageUrl && (
-                    <MedienFigure kaufUrl={medienKaufUrl} label={name} caption={data.bildunterschriftHaupt?.trim() || "Verpackung"}>
+                    <MedienFigure kaufUrl={medienKaufUrl} label={name} caption={medienCaption(data.bildunterschriftHaupt, "Verpackung", istHerstellerBild(r.imageAlt))}>
                       <FpImage src={r.imageUrl} alt={r.imageAlt.trim() || `Verpackung von ${name}`} blur={r.imageBlur} sizes={r.contentImageUrl ? "(min-width:1024px) 600px, (min-width:640px) 50vw, 100vw" : "(min-width:1024px) 1000px, 100vw"} priority />
                     </MedienFigure>
                   )}
                   {r.contentImageUrl && (
-                    <MedienFigure kaufUrl={medienKaufUrl} label={name} caption={data.bildunterschriftInhalt?.trim() || inhaltCaption}>
+                    <MedienFigure kaufUrl={medienKaufUrl} label={name} caption={medienCaption(data.bildunterschriftInhalt, inhaltCaption, istHerstellerBild(r.contentImageAlt))}>
                       <FpImage src={r.contentImageUrl} alt={r.contentImageAlt.trim() || `Inhalt von ${name} ohne Verpackung`} blur={r.contentImageBlur} sizes={r.imageUrl ? "(min-width:1024px) 600px, (min-width:640px) 50vw, 100vw" : "(min-width:1024px) 1000px, 100vw"} priority={!r.imageUrl} />
                     </MedienFigure>
                   )}

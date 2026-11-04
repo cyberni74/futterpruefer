@@ -17,3 +17,20 @@ export function MedienFigure({ kaufUrl, caption, label, children }: { kaufUrl?: 
     </figure>
   );
 }
+
+export const BILDQUELLE_HERSTELLER = "Bild: Hersteller";
+
+/**
+ * Unterschrift eines Produktbilds. Ein eigener Text (bildunterschriftHaupt/-Inhalt) gilt unverändert.
+ * Sonst steht der Standardtext, ergänzt um „Bild: Hersteller“ (nicht bei Symbol- oder KI-Bildern: `herstellerBild` false).
+ */
+export function medienCaption(eigen: string | null | undefined, standard: string | null | undefined, herstellerBild = true): string | null {
+  const text = eigen?.trim();
+  if (text) return text;
+  const basis = standard?.trim();
+  if (!herstellerBild) return basis || null;
+  return basis ? `${basis} · ${BILDQUELLE_HERSTELLER}` : BILDQUELLE_HERSTELLER;
+}
+
+/** Symbol- und KI-Bilder stammen nicht vom Hersteller. */
+export const istHerstellerBild = (alt: string | null | undefined) => !/symbolbild|ki-generiert/i.test(alt ?? "");

@@ -1,6 +1,6 @@
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
-import { MedienFigure } from "./MedienFigure";
+import { MedienFigure, istHerstellerBild, medienCaption } from "./MedienFigure";
 import { kaufLink } from "./schema";
 
 const img = <span data-bild="1" />;
@@ -25,5 +25,27 @@ describe("MedienFigure", () => {
   });
   it("ohne Unterschrift keine figcaption", () => {
     expect(renderToStaticMarkup(<MedienFigure label="x">{img}</MedienFigure>)).not.toContain("figcaption");
+  });
+});
+
+describe("medienCaption (Bildnachweis-Fallback)", () => {
+  it("leere Felder: Standardtext endet mit „Bild: Hersteller“", () => {
+    expect(medienCaption(undefined, "Verpackung")).toBe("Verpackung · Bild: Hersteller");
+    expect(medienCaption("  ", "Verpackung")).toBe("Verpackung · Bild: Hersteller");
+    expect(medienCaption("", "Inhalt der Dose ohne Verpackung")).toBe("Inhalt der Dose ohne Verpackung · Bild: Hersteller");
+  });
+  it("ohne Standardtext (kein Alt-Text bei Bild 2): nur „Bild: Hersteller“", () => {
+    expect(medienCaption(undefined, null)).toBe("Bild: Hersteller");
+  });
+  it("eigener Text gilt unverändert, ohne Anhang", () => {
+    expect(medienCaption("Bild: Hersteller · Werbung", "Verpackung")).toBe("Bild: Hersteller · Werbung");
+    expect(medienCaption("Eigener Text", "Verpackung")).toBe("Eigener Text");
+  });
+  it("Symbol- und KI-Bilder bekommen keinen Herstellernachweis", () => {
+    expect(istHerstellerBild("Packung der Dose")).toBe(true);
+    expect(istHerstellerBild("Kroketten im Napf – Symbolbild")).toBe(false);
+    expect(istHerstellerBild("KI-generiertes Bild")).toBe(false);
+    expect(medienCaption(undefined, "Verpackung", false)).toBe("Verpackung");
+    expect(medienCaption(undefined, null, false)).toBeNull();
   });
 });

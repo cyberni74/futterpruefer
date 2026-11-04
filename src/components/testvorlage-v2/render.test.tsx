@@ -161,6 +161,7 @@ describe("TestvorlageV2: Server-Rendering", () => {
     expect(medien).not.toMatch(/<a\b[^>]*amazon/i);
     expect(src).toContain("const medienKaufUrl = data.asin ? kaufLink({ asin: data.asin }) : null;");
     expect((medien.match(/kaufUrl=\{medienKaufUrl\}/g) ?? []).length).toBe(2);
+    expect((medien.match(/caption=\{medienCaption\(/g) ?? []).length).toBe(2);
   });
   it("externe Quellen: nofollow noopener noreferrer, DOI-Link", () => {
     const h = html(ok(5).data, 87);
