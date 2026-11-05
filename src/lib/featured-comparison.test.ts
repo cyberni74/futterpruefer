@@ -35,8 +35,12 @@ describe("Startseiten-Kästen Testsieger", () => {
     expect(showsWinnerSeal(mono!)).toBe(true);
     expect(hund?.winner).toBe("VEGDOG Green Crunch");
     expect(hund?.score).toBe(59);
-    expect(hund?.summary).toContain("VUTTER Nassfutter Wie Ente (59, Gelb)");
-    expect(hund?.summary).toContain("VEGDOG Farmer's Crunch (59, Gelb)");
+    expect(hund?.summary).toContain("Alle drei liegen bei 59 von 100 Punkten (Gelb).");
+    expect(hund?.summary).toContain("Beim Gleichstand entscheidet das Nährstoffprofil");
+    const farmer = hund?.summary.indexOf("VEGDOG Farmer's Crunch") ?? -1;
+    const vutter = hund?.summary.indexOf("VUTTER Nassfutter Wie Ente") ?? -1;
+    expect(farmer).toBeGreaterThan(-1);
+    expect(vutter).toBeGreaterThan(farmer);
     expect(showsWinnerSeal(hund!)).toBe(true);
   });
 

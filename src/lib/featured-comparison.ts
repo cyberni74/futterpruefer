@@ -61,7 +61,7 @@ export const FEATURED_COMPARISONS: FeaturedComparison[] = [
     winner: "VEGDOG Green Crunch",
     score: 59,
     summary:
-      "Drei vegane Alleinfutter für Hunde im Vergleich. VEGDOG Green Crunch liegt mit 59 von 100 Punkten (Gelb) vorn, vor VUTTER Nassfutter Wie Ente (59, Gelb) und VEGDOG Farmer's Crunch (59, Gelb).",
+      "Drei vegane Alleinfutter für Hunde im Vergleich. Alle drei liegen bei 59 von 100 Punkten (Gelb). Beim Gleichstand entscheidet das Nährstoffprofil: VEGDOG Green Crunch liegt vorn, vor VEGDOG Farmer's Crunch und VUTTER Nassfutter Wie Ente.",
     imageAltFallback: "Pokal Testsieger Veganes Hundefutter im Test, Oktober 2026: VEGDOG Green Crunch, 59 von 100 Punkten, Gelb",
   },
   {
