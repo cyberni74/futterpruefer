@@ -52,6 +52,7 @@ const BODY_FAQ_SLUGS = new Set([
   "fleischherkunft-tierhaltung-tierfutter",
   "katze-trinkt-zu-wenig-wasserbedarf",
   "josera-erfahrungen-hundefutter",
+  "happy-dog-erfahrungen-hundefutter",
 ]);
 
 export async function generateStaticParams() {
