@@ -1,18 +1,22 @@
-import { AFFILIATE_HINWEIS } from "@/components/testvorlage-v2/Sources";
+import { AFFILIATE_HINWEIS, AMAZON_CTA, AMAZON_CTA_ROT } from "@/components/testvorlage-v2/Sources";
 import { priceCite, priceNotice, priceStandDate } from "@/lib/review-seo";
 
 const eur = (n: number) => n.toLocaleString("de-DE", { style: "currency", currency: "EUR" });
 const num = (v: unknown) => (v == null || v === "" ? null : Number.isFinite(Number(v)) ? Number(v) : null);
 
-export const AMAZON_PRICE_CTA = "Aktuellen Preis bei Amazon ansehen*";
+/** @deprecated Alias für Rot-CTA; neue Stellen bitte AMAZON_CTA / AMAZON_CTA_ROT nutzen. */
+export const AMAZON_PRICE_CTA = AMAZON_CTA_ROT;
 
-/** Gleicher Amazon-Button wie in den Testtexten: Partner-Tag, rel=sponsored, Affiliate-Hinweis. */
-export function AmazonPriceCta({ url }: { url: string }) {
+/**
+ * Amazon-Button wie in den Testtexten: Partner-Tag, rel=sponsored, Affiliate-Hinweis.
+ * Ampel Gelb/Grün → „Jetzt bei Amazon entdecken*“; Ampel Rot → „Aktuellen Preis bei Amazon ansehen*“ (Methodik V2 / Auflage Hunger).
+ */
+export function AmazonPriceCta({ url, rot = false }: { url: string; rot?: boolean }) {
   return (
     <div className="prose-fp">
       <div className="cta-amazon">
         <p>
-          <a className="cta-amazon-btn" href={url} target="_blank" rel="sponsored nofollow noopener">{AMAZON_PRICE_CTA}</a>
+          <a className="cta-amazon-btn" href={url} target="_blank" rel="sponsored nofollow noopener">{rot ? AMAZON_CTA_ROT : AMAZON_CTA}</a>
         </p>
         <p className="cta-hinweis">{AFFILIATE_HINWEIS}</p>
       </div>
@@ -20,10 +24,10 @@ export function AmazonPriceCta({ url }: { url: string }) {
   );
 }
 
-/** Datierte Preise mit Quelle. Ohne Datum kein Betrag, nur der Amazon-Button, wenn ein Link vorliegt. */
-export function PriceBlock({ price, packageSize, pricePerKg, pricePerDay, priceDate, priceSource, amazonUrl }: { price: unknown; packageSize?: string | null; pricePerKg: unknown; pricePerDay: unknown; priceDate: Date | null | undefined; priceSource?: string | null; amazonUrl?: string | null }) {
+/** Datierte Preise mit Quelle. Ohne Datum kein Betrag, nur den Amazon-Button, wenn ein Link vorliegt. */
+export function PriceBlock({ price, packageSize, pricePerKg, pricePerDay, priceDate, priceSource, amazonUrl, rot = false }: { price: unknown; packageSize?: string | null; pricePerKg: unknown; pricePerDay: unknown; priceDate: Date | null | undefined; priceSource?: string | null; amazonUrl?: string | null; rot?: boolean }) {
   const stand = priceStandDate(priceDate);
-  if (!stand) return amazonUrl ? <AmazonPriceCta url={amazonUrl} /> : null;
+  if (!stand) return amazonUrl ? <AmazonPriceCta url={amazonUrl} rot={rot} /> : null;
   const p = num(price);
   const kg = num(pricePerKg);
   const day = num(pricePerDay);
