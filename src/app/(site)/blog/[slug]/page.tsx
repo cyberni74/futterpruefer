@@ -51,6 +51,7 @@ const BODY_FAQ_SLUGS = new Set([
   "klimabilanz-hundefutter-co2",
   "fleischherkunft-tierhaltung-tierfutter",
   "katze-trinkt-zu-wenig-wasserbedarf",
+  "josera-erfahrungen-hundefutter",
 ]);
 
 export async function generateStaticParams() {
