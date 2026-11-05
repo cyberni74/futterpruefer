@@ -8,7 +8,7 @@ describe("Methodik Transparenz", () => {
   const html = renderToStaticMarkup(<MethodikPage />);
 
   it("zeigt die neue Gewichtung, den Stand und die Changelog-Zeile", () => {
-    expect(html).toContain("Stand 27.10.2026");
+    expect(html).toContain("Stand 05.11.2026");
     expect(html).toContain(METHODOLOGY_CHANGELOG_ERGAENZUNG);
     expect(METHODOLOGY_CHANGELOG_ERGAENZUNG).toContain("Durch diese Festlegung hat sich keine Punktzahl geändert. Ältere Tests funktioneller Produkte mit sechs Teilnoten bleiben nach den sechs Kriterien bewertet.");
     expect(html).toContain("Seit dem 27.10.2026 gilt: Ergänzungsfutter, die ein Futter im Alltagssinn sind und keinen benannten Wirkstoff haben");
@@ -32,7 +32,10 @@ describe("Methodik Transparenz", () => {
     expect(METHODOLOGY_CHANGELOG[0].startsWith("05.11.2026 – Preis-Leistung bei veganem und vegetarischem Alleinfutter")).toBe(true);
     expect(html).toContain("Preis-Leistung bei veganem und vegetarischem Alleinfutter (seit 05.11.2026): eigene Vergleichsgruppe, Preis je 1.000 kcal.");
     expect(html).toContain("Trocken: unter 2,50 € = 5, bis 3,49 € = 4, bis 4,49 € = 3, bis 5,99 € = 2, ab 6,00 € = 1. Nass: unter 8,00 € = 5, bis 9,99 € = 4, bis 11,99 € = 3, bis 14,99 € = 2, ab 15,00 € = 1.");
+    expect(html).toContain("Grund: Pflanzliche Proteinkonzentrate und die nötigen Zusätze haben nach unserer Einschätzung eine andere Kostenstruktur als fleischhaltiges Futter, das deshalb hier kein Preismaßstab ist.");
+    expect(html).not.toContain("Fleischhaltiges Futter ist hier kein Preismaßstab");
     expect(html).toContain("Redaktionelle Methodenentscheidung.");
+    expect(METHODOLOGY_CHANGELOG[0].endsWith("Neu bewertet: VEGDOG Adult Nass 68 → 70, AMI Cat 59 → 60 (Rot → Gelb), Benevo Original 50 → 51, Happy Dog Sensible India 58 → 60 (Rot → Gelb), VUTTER Nassfutter Wie Ente 75 → 79; Benevo Duo unverändert 36.")).toBe(true);
     expect(METHODOLOGY_CHANGELOG_ABGRENZUNG).toBe("27.10.2026: Abgrenzung Unbelegt/Fragwürdig ergänzt; entspricht unserer bisherigen Bewertungspraxis, keine Punktzahl geändert.");
     expect(html).toContain("Allgemeine Anpreisungen ohne prüfbaren Inhalt, etwa ‚Premium‘ oder ‚Beste Qualität‘, stufen wir als ‚Unbelegt‘ ein. Begriffe mit einem prüfbaren Gehalt, die der Hersteller weder erklärt noch belegt, etwa ‚Lebensmittelqualität‘ oder ‚nachhaltige Verpackung‘, stufen wir als ‚Fragwürdig‘ ein. Erklärt der Hersteller einen solchen Begriff nachvollziehbar, bleibt es bei ‚Unbelegt‘; ist er belegt, werten wir ‚Ohne Einwand‘.");
     expect(html).toContain("Wir unterscheiden fünf Stufen:");

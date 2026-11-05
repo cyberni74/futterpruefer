@@ -17,7 +17,7 @@ export const MAX_TOTAL = CRITERIA.reduce((s, c) => s + c.max, 0);
  * Entspricht seit 26.10.2026 wieder exakt CRITERIA, also der Skala, nach der alle
  * gespeicherten Alleinfutter-Tests bewertet sind (Korrektur § 5 UWG, Rechtsprüfung 26.10.2026).
  */
-export const METHODOLOGY_STAND = "27.10.2026";
+export const METHODOLOGY_STAND = "05.11.2026";
 
 export const METHODOLOGY_CHANGELOG_ERGAENZUNG =
   "27.10.2026 – Ergänzung: Ergänzungsfutter, die ein Futter im Alltagssinn sind und keinen benannten Wirkstoff haben, etwa Nassfutter-Filets und Snacks, bewerten wir nach den sechs Kriterien dieser Seite. So bleiben sie mit unseren bisherigen Tests solcher Produkte vergleichbar. Die fünf Kriterien der Ergänzungsfutter-Methodik gelten für funktionelle Ergänzungsfutter mit Wirkstoff oder Wirkversprechen, etwa Tropfen, Pulver, Öle und Tabletten. Durch diese Festlegung hat sich keine Punktzahl geändert. Ältere Tests funktioneller Produkte mit sechs Teilnoten bleiben nach den sechs Kriterien bewertet.";
@@ -26,7 +26,7 @@ export const METHODOLOGY_CHANGELOG_ABGRENZUNG =
   "27.10.2026: Abgrenzung Unbelegt/Fragwürdig ergänzt; entspricht unserer bisherigen Bewertungspraxis, keine Punktzahl geändert.";
 
 export const METHODOLOGY_CHANGELOG = [
-  "05.11.2026 – Preis-Leistung bei veganem und vegetarischem Alleinfutter: eigene Vergleichsgruppe, Preis je 1.000 kcal. Trocken: unter 2,50 € = 5, bis 3,49 € = 4, bis 4,49 € = 3, bis 5,99 € = 2, ab 6,00 € = 1. Nass: unter 8,00 € = 5, bis 9,99 € = 4, bis 11,99 € = 3, bis 14,99 € = 2, ab 15,00 € = 1. Grund: Fleischhaltiges Futter ist hier kein Preismaßstab. Redaktionelle Methodenentscheidung.",
+  "05.11.2026 – Preis-Leistung bei veganem und vegetarischem Alleinfutter: eigene Vergleichsgruppe, Preis je 1.000 kcal. Trocken: unter 2,50 € = 5, bis 3,49 € = 4, bis 4,49 € = 3, bis 5,99 € = 2, ab 6,00 € = 1. Nass: unter 8,00 € = 5, bis 9,99 € = 4, bis 11,99 € = 3, bis 14,99 € = 2, ab 15,00 € = 1. Grund: Pflanzliche Proteinkonzentrate und die nötigen Zusätze haben nach unserer Einschätzung eine andere Kostenstruktur als fleischhaltiges Futter, das deshalb hier kein Preismaßstab ist. Redaktionelle Methodenentscheidung. Neu bewertet: VEGDOG Adult Nass 68 → 70, AMI Cat 59 → 60 (Rot → Gelb), Benevo Original 50 → 51, Happy Dog Sensible India 58 → 60 (Rot → Gelb), VUTTER Nassfutter Wie Ente 75 → 79; Benevo Duo unverändert 36.",
   "27.10.2026 – Werbeaussagen-Check: zwei weitere Stufen. ‚Plausibel‘ heißt: Es gibt nachvollziehbare Gründe für die Aussage, ein vollständiger Beleg fehlt. ‚Unbelegt‘ heißt: eine allgemeine Anpreisung ohne prüfbaren Inhalt oder ein vom Hersteller erklärter, aber nicht belegter Begriff; wir können die Aussage weder bestätigen noch widerlegen. Beide Stufen gelten nicht als ‚ohne Einwand‘. Zusätzlich beziehen wir die Angaben im Amazon-Listing ein und kennzeichnen sie als ‚Amazon-Listing (Urheber unbekannt)‘.",
   "27.10.2026 – Neu bewertet: MjAMjAM Saftiges Huhn an leckeren Möhrchen. Nach unserer aktuellen Futter-Methodik nachgeprüft, einschließlich der Angaben im Amazon-Listing. Neu gewertet sind der Jodzusatz, die Fütterungsempfehlung sowie Werbeangaben zu Allergien, Rohfütterung, Vitaminversorgung und Qualität. Ergebnis: 75 statt 87 Punkte, Ampel Gelb statt Grün.",
   "27.10.2026 – Preis-Leistung: klargestellt, dass wir Preise je Tierart vergleichen. Bestehende Wertungen ändern sich dadurch nicht.",
