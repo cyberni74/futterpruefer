@@ -317,6 +317,9 @@ button, [role="button"], summary { cursor: pointer; }
 .prose-fp .cta-amazon .cta-hinweis {
   font-size: 11px; line-height: 1.45; color: var(--fg-muted); font-weight: 400;
 }
+.prose-fp .cta-amazon .rot-hinweis {
+  font-size: .9rem; line-height: 1.45; color: var(--fg); font-weight: 700;
+}
 @media (max-width: 26rem) {
   .prose-fp :is(.cta-amazon a.cta-amazon-btn, .fp-cta a[href*="amazon.de"]:not(:has(img)):not(table a), .cta-box a[href*="amazon.de"]:not(:has(img)):not(table a)) { font-size: .95rem; padding-inline: 1rem; gap: .45rem; }
 }

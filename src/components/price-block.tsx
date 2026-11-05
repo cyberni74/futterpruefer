@@ -1,4 +1,4 @@
-import { AFFILIATE_HINWEIS, AMAZON_CTA, AMAZON_CTA_ROT } from "@/components/testvorlage-v2/Sources";
+import { AFFILIATE_HINWEIS, AMAZON_CTA, AMAZON_CTA_ROT, ROT_KEINE_KAUFEMPFEHLUNG } from "@/components/testvorlage-v2/Sources";
 import { priceCite, priceNotice, priceStandDate } from "@/lib/review-seo";
 
 const eur = (n: number) => n.toLocaleString("de-DE", { style: "currency", currency: "EUR" });
@@ -9,7 +9,8 @@ export const AMAZON_PRICE_CTA = AMAZON_CTA_ROT;
 
 /**
  * Amazon-Button wie in den Testtexten: Partner-Tag, rel=sponsored, Affiliate-Hinweis.
- * Ampel Gelb/Grün → „Jetzt bei Amazon entdecken*“; Ampel Rot → „Aktuellen Preis bei Amazon ansehen*“ (Methodik V2 / Auflage Hunger).
+ * Ampel Gelb/Grün → „Jetzt bei Amazon entdecken*“; Ampel Rot → „Aktuellen Preis bei Amazon ansehen*“
+ * plus derselbe Rot-Satz wie bei `AmazonKauf` (keine Kaufempfehlung).
  */
 export function AmazonPriceCta({ url, rot = false }: { url: string; rot?: boolean }) {
   return (
@@ -18,6 +19,7 @@ export function AmazonPriceCta({ url, rot = false }: { url: string; rot?: boolea
         <p>
           <a className="cta-amazon-btn" href={url} target="_blank" rel="sponsored nofollow noopener">{rot ? AMAZON_CTA_ROT : AMAZON_CTA}</a>
         </p>
+        {rot ? <p className="rot-hinweis">{ROT_KEINE_KAUFEMPFEHLUNG}</p> : null}
         <p className="cta-hinweis">{AFFILIATE_HINWEIS}</p>
       </div>
     </div>
