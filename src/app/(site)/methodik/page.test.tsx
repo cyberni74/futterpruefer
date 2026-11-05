@@ -100,6 +100,10 @@ describe("Methodik Transparenz", () => {
     expect(html).toContain("Alibi-Dosierung oder keine deklarierte Wirkstoffmenge ≤ <strong>50</strong>, Heilaussage ≤ <strong>67</strong>, Sicherheit mittel ≤ <strong>50</strong>, Sicherheit schwer ≤ <strong>33</strong>");
     expect(html).toContain("Das ist eine redaktionelle Entscheidung über die Einstufung, keine neue Prüfung der Produkte.");
     expect(html).toContain("Für Alleinfutter führen wir Obergrenzen neu ein:");
+    expect(html).toContain("Neuer Punktwert wegen Obergrenze: 24 Bewertungen");
+    expect(html).toContain("wo eine Obergrenze greift (24 Bewertungen)");
+    expect(html).toContain("Das betrifft 24 Bewertungen.");
+    expect(html).not.toContain("33 Bewertungen");
     expect(html).toContain("Heilaussage 79 → 67 (nie Grün)");
     expect(html).not.toContain("bisher höchstens 69");
   });

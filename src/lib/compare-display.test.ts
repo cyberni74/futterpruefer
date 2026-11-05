@@ -1,5 +1,16 @@
 import { describe, expect, it } from "vitest";
-import { classicCriteriaApply, criterionFailed, showsComparisonWinner } from "./compare-display";
+import { classicCriteriaApply, criterionFailed, pricePer1000kcalOf, showsComparisonWinner } from "./compare-display";
+
+describe("Preis je 1.000 kcal", () => {
+  it("nimmt das Feld am Eintrag und sonst layoutData", () => {
+    expect(pricePer1000kcalOf({ pricePer1000kcal: 4.5 })).toBe(4.5);
+    expect(pricePer1000kcalOf({ pricePer1000kcal: 4.5, layoutData: { pricePer1000kcal: 9 } })).toBe(4.5);
+    expect(pricePer1000kcalOf({ layoutData: { pricePer1000kcal: 3 } })).toBe(3);
+    expect(pricePer1000kcalOf({ layoutData: { kennzahlen: [{ wert: "4 €", label: "Preis" }] } })).toBeNull();
+    expect(pricePer1000kcalOf({})).toBeNull();
+    expect(pricePer1000kcalOf({ pricePer1000kcal: Number.NaN })).toBeNull();
+  });
+});
 
 describe("Vergleich Testsieger", () => {
   it("nur ab 51 Punkten und nie bei Rot", () => {

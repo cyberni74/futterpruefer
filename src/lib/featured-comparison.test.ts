@@ -13,11 +13,11 @@ describe("Startseiten-Kästen Testsieger", () => {
     expect(FEATURED_COMPARISON?.slug).toBe("monoprotein-katzenfutter-test-2026");
     const gelenk = FEATURED_COMPARISONS.find((c) => c.slug === "gelenk-test-hund-oktober-2026");
     expect(gelenk?.summary).toBe(
-      "Vier Gelenk-Ergänzungsfutter für Hunde im Vergleich. Cadoc liegt mit 64 von 100 Punkten (Gelb) vorn, die drei anderen Produkte sind Rot.",
+      "Vier Gelenk-Ergänzungsfutter für Hunde im Vergleich. Cadoc liegt mit 59 von 100 Punkten (Gelb) vorn, die drei anderen Produkte sind Rot.",
     );
   });
 
-  it("gibt VUTTER Gelb einen Pokal und Rot keinen", () => {
+  it("gibt Green Crunch Gelb einen Pokal und Rot keinen", () => {
     const katze = FEATURED_COMPARISONS.find((c) => c.slug === "veganes-katzenfutter-test-oktober-2026");
     const hund = FEATURED_COMPARISONS.find((c) => c.slug === "veganes-hundefutter-test-oktober-2026");
     expect(katze?.winner).toBeUndefined();
@@ -33,8 +33,10 @@ describe("Startseiten-Kästen Testsieger", () => {
     expect(mono?.year).toBe(2026);
     expect(mono?.imageAltFallback).toMatch(/Pokal Testsieger/);
     expect(showsWinnerSeal(mono!)).toBe(true);
-    expect(hund?.winner).toBe("VUTTER Nassfutter Wie Ente");
-    expect(hund?.score).toBe(79);
+    expect(hund?.winner).toBe("VEGDOG Green Crunch");
+    expect(hund?.score).toBe(59);
+    expect(hund?.summary).toContain("VUTTER Nassfutter Wie Ente (59, Gelb)");
+    expect(hund?.summary).toContain("VEGDOG Farmer's Crunch (59, Gelb)");
     expect(showsWinnerSeal(hund!)).toBe(true);
   });
 

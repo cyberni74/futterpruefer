@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { AlertTriangle } from "lucide-react";
-import { classicCriteriaApply, criterionFailed, pickWinner } from "@/lib/compare-display";
+import { classicCriteriaApply, criterionFailed, pickWinner, pricePer1000kcalOf } from "@/lib/compare-display";
 import { CRITERIA, ratioRating, type CriterionKey } from "@/lib/scoring";
 import { priceClassCell } from "@/lib/price-source";
 import { PRICE_CLASS_LABEL } from "@/lib/site";
@@ -22,6 +22,8 @@ export type CompareRow = {
   verdict: string;
   priceClass: keyof typeof PRICE_CLASS_LABEL;
   pricePerKg?: unknown;
+  /** Euro je 1.000 kcal, zweite Gleichstandsstufe. Sonst aus layoutData.pricePer1000kcal. */
+  pricePer1000kcal?: number | null;
   layoutData?: unknown;
   methodikVersion?: string | null;
   category: { slug: string; shortName: string };
@@ -29,7 +31,7 @@ export type CompareRow = {
 
 /** Tabelle der Vergleichsseite. Gesetzte Alleinfutter-Teilnoten bleiben bei x/max; sonst „–“ ohne Warn-Icon. */
 export function CompareResults({ items }: { items: CompareRow[] }) {
-  const winnerId = pickWinner(items.map((i) => ({ id: i.id, totalScore: i.totalScore, scoreNutrients: classicCriteriaApply(i) ? i.scoreNutrients : null, methodikVersion: i.methodikVersion })));
+  const winnerId = pickWinner(items.map((i) => ({ id: i.id, totalScore: i.totalScore, scoreNutrients: classicCriteriaApply(i) ? i.scoreNutrients : null, pricePer1000kcal: pricePer1000kcalOf(i), methodikVersion: i.methodikVersion })));
   return (
     <div className="mt-8 overflow-x-auto">
       <table className={`w-full table-fixed border-separate border-spacing-0 text-sm ${items.length > 2 ? "min-w-[34rem]" : ""}`}>

@@ -16,6 +16,7 @@ export function ProductTestHero({ hero, totalScore, ampelLabel, kopf, methodikVe
       <div className="score-card">
         <div className="eyebrow">Gesamtwertung</div>
         <OverallScoreGauge punkte={totalScore} methodikVersion={methodikVersion} />
+        {/* Notenwort aus dem DB-Patch. Ohne Patch bleibt das Ampel-Label; noteFuerPunkte rechnet die Note hier nicht. */}
         <div className="grade">{hero?.notenwort || ampelLabel}</div>
         {hero?.gesamturteil && <p className="score-sub">{hero.gesamturteil}</p>}
       </div>

@@ -12,11 +12,11 @@ function htmlFor(slug: string) {
 }
 
 describe("Startseiten-Kasten Vergleichstest", () => {
-  it("zeigt bei VUTTER Gelb den Pokal und die Punktzahl", () => {
+  it("zeigt bei Green Crunch Gelb den Pokal und die Punktzahl", () => {
     const html = htmlFor("veganes-hundefutter-test-oktober-2026");
     expect(html).toContain('aria-label="Testsieger Veganes Hundefutter im Test, Oktober 2026"');
-    expect(html).toContain("VUTTER Nassfutter Wie Ente");
-    expect(html).toContain('aria-label="79 von 100 Punkten"');
+    expect(html).toContain("VEGDOG Green Crunch");
+    expect(html).toContain('aria-label="59 von 100 Punkten"');
     expect(html).toContain('href="/blog/veganes-hundefutter-test-oktober-2026"');
   });
 

@@ -8,6 +8,19 @@ export function showsComparisonWinner(score: number, best: number, leaderCount =
 
 export type WinnerCandidate = { id: string; totalScore: number; scoreNutrients?: number | null; pricePer1000kcal?: number | null; methodikVersion?: string | null };
 
+/** Preis je 1.000 kcal vom Vergleichseintrag oder aus layoutData. Fehlt er, greift die zweite Gleichstandsstufe nicht. */
+export function pricePer1000kcalOf(item: { pricePer1000kcal?: unknown; layoutData?: unknown }): number | null {
+  const direct = finitePrice(item.pricePer1000kcal);
+  if (direct != null) return direct;
+  const data = item.layoutData;
+  if (!data || typeof data !== "object" || Array.isArray(data)) return null;
+  return finitePrice((data as { pricePer1000kcal?: unknown }).pricePer1000kcal);
+}
+
+function finitePrice(value: unknown): number | null {
+  return typeof value === "number" && Number.isFinite(value) ? value : null;
+}
+
 /**
  * Testsieger eines Vergleichs nach der veröffentlichten Regel: höchste Punktzahl; bei Punktgleichstand entscheidet das
  * Nährstoffprofil, dann der Preis je 1.000 kcal (niedriger gewinnt). Sieger nur ab Gelb, nie bei Rot. Ist auch danach nichts
