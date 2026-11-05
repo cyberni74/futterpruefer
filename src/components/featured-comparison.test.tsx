@@ -16,7 +16,7 @@ describe("Startseiten-Kasten Vergleichstest", () => {
     const html = htmlFor("veganes-hundefutter-test-oktober-2026");
     expect(html).toContain('aria-label="Testsieger Veganes Hundefutter im Test, Oktober 2026"');
     expect(html).toContain("VUTTER Nassfutter Wie Ente");
-    expect(html).toContain('aria-label="75 von 100 Punkten"');
+    expect(html).toContain('aria-label="79 von 100 Punkten"');
     expect(html).toContain('href="/blog/veganes-hundefutter-test-oktober-2026"');
   });
 
@@ -26,8 +26,8 @@ describe("Startseiten-Kasten Vergleichstest", () => {
     expect(html).toContain("Vergleichstest · Veganes Katzenfutter im Test, Oktober 2026");
     expect(html).not.toContain('role="img"');
     expect(html).not.toContain("von 100 Punkten");
-    expect(html).toContain("AMI Cat (59)");
-    expect(html).toContain("alle Rot");
+    expect(html).toContain("AMI Cat (60");
+    expect(html).toContain("Keine Empfehlung.");
     expect(html).toContain('href="/blog/veganes-katzenfutter-test-oktober-2026"');
   });
 });

@@ -14,18 +14,25 @@ describe("Methodik Transparenz", () => {
     expect(html).toContain("Seit dem 27.10.2026 gilt: Ergänzungsfutter, die ein Futter im Alltagssinn sind und keinen benannten Wirkstoff haben");
     expect(html).toContain('href="/methodik/ergaenzungsfutter#geltungsbereich"');
     for (const entry of METHODOLOGY_CHANGELOG) expect(html).toContain(entry);
-    const werbeaussagen = html.indexOf(METHODOLOGY_CHANGELOG[0]);
-    const neubewertung = html.indexOf(METHODOLOGY_CHANGELOG[1]);
-    const preisLeistung = html.indexOf(METHODOLOGY_CHANGELOG[2]);
-    const korrektur = html.indexOf(METHODOLOGY_CHANGELOG[3]);
+    const vegan = html.indexOf(METHODOLOGY_CHANGELOG[0]);
+    const werbeaussagen = html.indexOf(METHODOLOGY_CHANGELOG[1]);
+    const neubewertung = html.indexOf(METHODOLOGY_CHANGELOG[2]);
+    const preisLeistung = html.indexOf(METHODOLOGY_CHANGELOG[3]);
+    const korrektur = html.indexOf(METHODOLOGY_CHANGELOG[4]);
+    expect(vegan).toBeGreaterThan(-1);
+    expect(werbeaussagen).toBeGreaterThan(vegan);
     expect(werbeaussagen).toBeGreaterThan(-1);
     expect(neubewertung).toBeGreaterThan(werbeaussagen);
     expect(preisLeistung).toBeGreaterThan(neubewertung);
     expect(html.indexOf(METHODOLOGY_CHANGELOG_ERGAENZUNG)).toBeGreaterThan(preisLeistung);
     expect(korrektur).toBeGreaterThan(html.indexOf(METHODOLOGY_CHANGELOG_ABGRENZUNG));
-    expect(METHODOLOGY_CHANGELOG[2]).toBe("27.10.2026 – Preis-Leistung: klargestellt, dass wir Preise je Tierart vergleichen. Bestehende Wertungen ändern sich dadurch nicht.");
+    expect(METHODOLOGY_CHANGELOG[3]).toBe("27.10.2026 – Preis-Leistung: klargestellt, dass wir Preise je Tierart vergleichen. Bestehende Wertungen ändern sich dadurch nicht.");
     expect(html).toContain("Preis-Leistung vergleichen wir je Tierart: Hundefutter mit Hundefutter, Katzenfutter mit Katzenfutter, jeweils bezogen auf die Kosten je 1.000 kcal.");
     expect(html).toContain(METHODOLOGY_CHANGELOG_ABGRENZUNG);
+    expect(METHODOLOGY_CHANGELOG[0].startsWith("05.11.2026 – Preis-Leistung bei veganem und vegetarischem Alleinfutter")).toBe(true);
+    expect(html).toContain("Preis-Leistung bei veganem und vegetarischem Alleinfutter (seit 05.11.2026): eigene Vergleichsgruppe, Preis je 1.000 kcal.");
+    expect(html).toContain("Trocken: unter 2,50 € = 5, bis 3,49 € = 4, bis 4,49 € = 3, bis 5,99 € = 2, ab 6,00 € = 1. Nass: unter 8,00 € = 5, bis 9,99 € = 4, bis 11,99 € = 3, bis 14,99 € = 2, ab 15,00 € = 1.");
+    expect(html).toContain("Redaktionelle Methodenentscheidung.");
     expect(METHODOLOGY_CHANGELOG_ABGRENZUNG).toBe("27.10.2026: Abgrenzung Unbelegt/Fragwürdig ergänzt; entspricht unserer bisherigen Bewertungspraxis, keine Punktzahl geändert.");
     expect(html).toContain("Allgemeine Anpreisungen ohne prüfbaren Inhalt, etwa ‚Premium‘ oder ‚Beste Qualität‘, stufen wir als ‚Unbelegt‘ ein. Begriffe mit einem prüfbaren Gehalt, die der Hersteller weder erklärt noch belegt, etwa ‚Lebensmittelqualität‘ oder ‚nachhaltige Verpackung‘, stufen wir als ‚Fragwürdig‘ ein. Erklärt der Hersteller einen solchen Begriff nachvollziehbar, bleibt es bei ‚Unbelegt‘; ist er belegt, werten wir ‚Ohne Einwand‘.");
     expect(html).toContain("Wir unterscheiden fünf Stufen:");
@@ -47,8 +54,8 @@ describe("Methodik Transparenz", () => {
     expect(html).toContain("Bei Alleinfutter fließen Unterlagen des Herstellers");
     expect(html).toContain("Wir bewerten, was auf der Amazon-Produktseite, der Verpackung und der Herstellerseite steht.");
     expect(html).not.toContain("Die Seite beschreibt jetzt, was tatsächlich gilt");
-    expect(METHODOLOGY_CHANGELOG[3]).toContain("nannten diese Seite und einige andere Seiten von Futterprüfer für Alleinfutter sieben Kriterien");
-    expect(METHODOLOGY_CHANGELOG[3]).toContain("Durch diese Korrektur hat sich keine Punktzahl geändert.");
+    expect(METHODOLOGY_CHANGELOG[4]).toContain("nannten diese Seite und einige andere Seiten von Futterprüfer für Alleinfutter sieben Kriterien");
+    expect(METHODOLOGY_CHANGELOG[4]).toContain("Durch diese Korrektur hat sich keine Punktzahl geändert.");
   });
 
   it("verweist für Herstellerunterlagen auf die Ergänzungsfutter-Methodik", () => {
