@@ -9,6 +9,7 @@ import { PrismaClient } from "../src/generated/prisma/client";
 import { totalScore } from "../src/lib/scoring";
 import { slugify } from "../src/lib/slug";
 import { pgConfig } from "../src/lib/pg-config";
+import { nurAnlegen, seedBlockReason, type NurAnlegenStatistik } from "../src/lib/seed-guard";
 import { autolinkUrls } from "../src/lib/autolink";
 import { NISCHEN_POSTS } from "./blog-nischen";
 import { RECHERCHE_POSTS } from "./blog-recherche";
@@ -37,7 +38,16 @@ import { MAMMALY_BLOG_SECTIONS, MAMMALY_BLOGS_MARKER } from "./review-mammaly-bl
 
 const esc = (t: string) => t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
-const prisma = new PrismaClient({ adapter: new PrismaPg(pgConfig(process.env.DATABASE_URL!)) });
+// Seed-Sperre: ohne ausdrückliches ALLOW_SEED=1 (und lokale Datenbank) sofort beenden, auf Vercel nie.
+const sperre = seedBlockReason(process.env);
+if (sperre) {
+  console.log(`[seed] Übersprungen: ${sperre}. Lokal nur mit ALLOW_SEED=1 npm run db:seed.`);
+  process.exit(0);
+}
+
+// Der Seed legt nur an und überschreibt oder löscht nie vorhandene Datensätze.
+const seedStatistik: NurAnlegenStatistik = { uebersprungen: 0 };
+const prisma = nurAnlegen(new PrismaClient({ adapter: new PrismaPg(pgConfig(process.env.DATABASE_URL!)) }), seedStatistik);
 
 const DEMO_NOTE = "<p><em>Hinweis: Dies ist ein Demo-Beispieltest mit fiktiver Marke. Vor dem Livegang durch echte Tests ersetzen.</em></p>";
 
@@ -733,4 +743,4 @@ async function ensureHappyDogDrafts() {
   }
 }
 
-main().catch((e) => { console.error(e); process.exit(1); }).finally(() => prisma.$disconnect());
+main().then(() => console.log(`[seed] Fertig. Vorhandene Datensätze nicht überschrieben: ${seedStatistik.uebersprungen} Schreibvorgänge übersprungen.`)).catch((e) => { console.error(e); process.exit(1); }).finally(() => prisma.$disconnect());

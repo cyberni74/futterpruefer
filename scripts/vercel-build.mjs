@@ -1,5 +1,6 @@
 // Build-Ablauf mit Diagnose und automatischer Wahl des Supabase-Pooler-Hosts.
-// 1. Pflicht-Variablen prüfen  2. funktionierenden DB-Host ermitteln  3. migrate → seed → next build
+// 1. Pflicht-Variablen prüfen  2. funktionierenden DB-Host ermitteln  3. migrate → Bildvarianten → next build
+// Kein Seed im Build: Er darf nie Produktionsdaten schreiben (lokal nur mit ALLOW_SEED=1, siehe src/lib/seed-guard.ts).
 import "dotenv/config";
 import { spawnSync } from "node:child_process";
 import pg from "pg";
@@ -52,7 +53,6 @@ const env = {
 
 for (const [label, cmd, args] of [
   ["Migrationen", "npx", ["prisma", "migrate", "deploy"]],
-  ["Seed", "npx", ["tsx", "prisma/seed.ts"]],
   ["Bildvarianten", "node", ["scripts/image-variants.mjs"]],
   ["Next-Build", "npx", ["next", "build"]],
 ]) {

@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "db:seed": "tsx prisma/seed.ts",
+    "check:scores": "tsx scripts/check-score-sums.ts",
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
     "postinstall": "prisma generate && node scripts/trim-polyfills.mjs"

@@ -10,7 +10,7 @@ Bewertungsportal für Hunde- und Katzenfutter (Deutsch, Mobile First).
 cp .env.example .env          # Werte eintragen
 npm install                   # generiert auch den Prisma-Client
 npx prisma migrate deploy     # Schema + Volltextsuche (pg_trgm, deutsche FTS)
-npm run db:seed               # Kategorien, Admin-Konto, Demo-Inhalte
+ALLOW_SEED=1 npm run db:seed   # nur lokal: Kategorien, Admin-Konto, Demo-Inhalte (legt nur an, überschreibt nichts; auf Vercel gesperrt)
 npm run dev                   # http://localhost:3000, Admin: /admin
 ```
 
