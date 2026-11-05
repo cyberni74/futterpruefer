@@ -5,7 +5,7 @@
  * Blogbeitrag (slug); ist der Beitrag nicht veröffentlicht, erscheint sein Kasten nicht.
  * Kein Amazon-Link: Die Kästen verlinken nur auf unseren Vergleichstest.
  * Neutral formulieren: Platz, Punkte, Ampel – keine Wirkversprechen, keine Heilaussagen.
- * Pokal nur mit Testsieger ab Gelb (60 Punkte). Alle Rot: winner und score weglassen, kein Pokal.
+ * Pokal nur mit Testsieger ab Gelb (51 Punkte). Alle Rot: winner und score weglassen, kein Pokal.
  */
 import { RATING_THRESHOLDS } from "@/lib/scoring";
 
@@ -58,11 +58,11 @@ export const FEATURED_COMPARISONS: FeaturedComparison[] = [
     testName: "Veganes Hundefutter im Test, Oktober 2026",
     month: 10,
     year: 2026,
-    winner: "VUTTER Nassfutter Wie Ente",
-    score: 79,
+    winner: "VEGDOG Green Crunch",
+    score: 59,
     summary:
-      "Drei vegane Alleinfutter für Hunde im Vergleich. VUTTER Nassfutter Wie Ente liegt mit 79 von 100 Punkten (Gelb) vorn, vor VEGDOG Green Crunch (71, Gelb) und VEGDOG Farmer's Crunch (69, Gelb).",
-    imageAltFallback: "Pokal Testsieger Veganes Hundefutter im Test, Oktober 2026: VUTTER Nassfutter Wie Ente, 79 von 100 Punkten, Gelb",
+      "Drei vegane Alleinfutter für Hunde im Vergleich. Alle drei liegen bei 59 von 100 Punkten (Gelb). Beim Gleichstand entscheidet das Nährstoffprofil: VEGDOG Green Crunch liegt vorn, vor VEGDOG Farmer's Crunch und VUTTER Nassfutter Wie Ente.",
+    imageAltFallback: "Pokal Testsieger Veganes Hundefutter im Test, Oktober 2026: VEGDOG Green Crunch, 59 von 100 Punkten, Gelb",
   },
   {
     slug: "gelenk-test-hund-oktober-2026",
@@ -70,10 +70,10 @@ export const FEATURED_COMPARISONS: FeaturedComparison[] = [
     month: 10,
     year: 2026,
     winner: "Cadoc Grünlippmuschel Pulver",
-    score: 64,
+    score: 59,
     summary:
-      "Vier Gelenk-Ergänzungsfutter für Hunde im Vergleich. Cadoc liegt mit 64 von 100 Punkten (Gelb) vorn, die drei anderen Produkte sind Rot.",
-    imageAltFallback: "Pokal Testsieger im großen Gelenk-Test Oktober 2026: Cadoc Grünlippmuschel Pulver, 64 von 100 Punkten, Gelb",
+      "Vier Gelenk-Ergänzungsfutter für Hunde im Vergleich. Cadoc liegt mit 59 von 100 Punkten (Gelb) vorn, die drei anderen Produkte sind Rot.",
+    imageAltFallback: "Pokal Testsieger im großen Gelenk-Test Oktober 2026: Cadoc Grünlippmuschel Pulver, 59 von 100 Punkten, Gelb",
   },
   {
     slug: "nassfutter-test-rind-hund-oktober-2026",

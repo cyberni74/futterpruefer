@@ -1,11 +1,22 @@
 import { describe, expect, it } from "vitest";
-import { classicCriteriaApply, criterionFailed, showsComparisonWinner } from "./compare-display";
+import { classicCriteriaApply, criterionFailed, pricePer1000kcalOf, showsComparisonWinner } from "./compare-display";
+
+describe("Preis je 1.000 kcal", () => {
+  it("nimmt das Feld am Eintrag und sonst layoutData", () => {
+    expect(pricePer1000kcalOf({ pricePer1000kcal: 4.5 })).toBe(4.5);
+    expect(pricePer1000kcalOf({ pricePer1000kcal: 4.5, layoutData: { pricePer1000kcal: 9 } })).toBe(4.5);
+    expect(pricePer1000kcalOf({ layoutData: { pricePer1000kcal: 3 } })).toBe(3);
+    expect(pricePer1000kcalOf({ layoutData: { kennzahlen: [{ wert: "4 €", label: "Preis" }] } })).toBeNull();
+    expect(pricePer1000kcalOf({})).toBeNull();
+    expect(pricePer1000kcalOf({ pricePer1000kcal: Number.NaN })).toBeNull();
+  });
+});
 
 describe("Vergleich Testsieger", () => {
-  it("nur ab 60 Punkten und nie bei Rot", () => {
+  it("nur ab 51 Punkten und nie bei Rot", () => {
     expect(showsComparisonWinner(27, 27)).toBe(false);
-    expect(showsComparisonWinner(59, 59)).toBe(false);
-    expect(showsComparisonWinner(60, 60)).toBe(true);
+    expect(showsComparisonWinner(50, 50)).toBe(false);
+    expect(showsComparisonWinner(51, 51)).toBe(true);
     expect(showsComparisonWinner(82, 82)).toBe(true);
     expect(showsComparisonWinner(74, 74, 2)).toBe(false);
     expect(showsComparisonWinner(74, 74, 1)).toBe(true);

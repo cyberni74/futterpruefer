@@ -42,11 +42,15 @@ describe("Tacho-Geometrie (berechnete Bögen, kein stroke-dasharray)", () => {
     expect(tachoEndpunkt(tachoAnteil(15, 30)).x).toBeCloseTo(100, 6);
     expect(tachoEndpunkt(tachoAnteil(10, 20)).x).toBeCloseTo(100, 6);
   });
-  it("Ampel: ab 80 % grün, ab 60 % gelb, darunter rot", () => {
-    expect(ampelFuerAnteil(0.8)).toBe("gut");
-    expect(ampelFuerAnteil(0.79)).toBe("mittel");
-    expect(ampelFuerAnteil(0.6)).toBe("mittel");
-    expect(ampelFuerAnteil(0.59)).toBe("schlecht");
+  it("Ampel: ab 68 % grün, ab 51 % gelb, darunter rot (Version-1-Tests 80 % / 60 %)", () => {
+    expect(ampelFuerAnteil(0.68)).toBe("gut");
+    expect(ampelFuerAnteil(0.67)).toBe("mittel");
+    expect(ampelFuerAnteil(0.51)).toBe("mittel");
+    expect(ampelFuerAnteil(0.5)).toBe("schlecht");
+    expect(ampelFuerAnteil(0.8, "1")).toBe("gut");
+    expect(ampelFuerAnteil(0.79, "1")).toBe("mittel");
+    expect(ampelFuerAnteil(0.6, "1")).toBe("mittel");
+    expect(ampelFuerAnteil(0.59, "1")).toBe("schlecht");
   });
 });
 

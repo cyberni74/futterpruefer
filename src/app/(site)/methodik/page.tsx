@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { trimMetaDescription } from "@/lib/seo";
-import { HARMFUL_FAIL_RATIO, METHODOLOGY_CHANGELOG, METHODOLOGY_CHANGELOG_ABGRENZUNG, METHODOLOGY_CHANGELOG_ERGAENZUNG, METHODOLOGY_STAND, PUBLISHED_CRITERIA, PUBLISHED_MAX_TOTAL, RATING_THRESHOLDS, type CriterionKey } from "@/lib/scoring";
+import { EF_DECKEL } from "@/lib/ergaenzung";
+import { EMPFOHLEN_AB, HARMFUL_FAIL_RATIO, METHODOLOGY_CHANGELOG, METHODOLOGY_CHANGELOG_ABGRENZUNG, METHODOLOGY_CHANGELOG_ERGAENZUNG, METHODOLOGY_STAND, PUBLISHED_CRITERIA, PUBLISHED_MAX_TOTAL, RATING_THRESHOLDS, type CriterionKey } from "@/lib/scoring";
 import { PageShell } from "@/components/page-shell";
 
 export const metadata: Metadata = {
@@ -58,6 +59,16 @@ const DETAIL: Record<CriterionKey, { fragen: string; punkte: string; abzug: stri
   },
 };
 
+/** Tabelle Punkte → Note → Ampel (Notenschlüssel C, Version 2). */
+const NOTEN_TABELLE = [
+  { punkte: "72–100", note: "0,5–1,5 sehr gut", ampel: "Grün" },
+  { punkte: "68–71", note: "1,6–1,8 gut", ampel: "Grün" },
+  { punkte: "60–67", note: "1,9–2,5 gut", ampel: "Gelb" },
+  { punkte: "51–59", note: "2,6–3,5 befriedigend", ampel: "Gelb" },
+  { punkte: "33–50", note: "3,6–4,5 ausreichend", ampel: "Rot" },
+  { punkte: "0–32", note: "4,6–5,5 mangelhaft", ampel: "Rot" },
+];
+
 const SOURCES = [
   "Das Etikett und die Angaben des Herstellers (Zusammensetzung, analytische Bestandteile, Zusatzstoffe, Fütterungsempfehlung)",
   "Produktseiten des Herstellers und gängiger Händler, auch für Werbeaussagen",
@@ -86,7 +97,7 @@ export default function MethodikPage() {
         <p>Futter ist die wichtigste tägliche Entscheidung für die Gesundheit von Hund und Katze, und die Verpackung zeigt vor allem Werbung. Unsere Bewertung soll Ihnen helfen, hinter diese Werbung zu schauen. Dafür gelten drei Regeln:</p>
         <ul>
           <li><strong>Nachvollziehbar:</strong> Jedes Kriterium, jede Gewichtung und jede Punktzahl ist offengelegt. Auf jeder Testseite sehen Sie, wie die Note zustande kommt.</li>
-          <li><strong>Gleiche Maßstäbe:</strong> Alle Produkte einer Methodik-Version werden nach denselben Kriterien bewertet, getrennt nach Hunden und Katzen sowie nach Alleinfutter und <Link href="/methodik/ergaenzungsfutter">Ergänzungsfutter</Link>. Für Alleinfutter sind das die sechs Kriterien unten. Ältere Tests von Snacks, Kauartikeln und Ergänzungsfuttermitteln sind ebenfalls nach diesen sechs Kriterien bewertet, erkennbar an den sechs Teilnoten im Testergebnis. Seit dem 27.10.2026 gilt: Ergänzungsfutter, die ein Futter im Alltagssinn sind und keinen benannten Wirkstoff haben, etwa Nassfutter-Filets und Snacks, bewerten wir weiterhin nach diesen sechs Kriterien, damit sie vergleichbar bleiben. Funktionelle Ergänzungsfutter mit Wirkstoff oder Wirkversprechen, etwa Tropfen, Pulver, Öle und Tabletten, bewerten wir nach den fünf Kriterien der <Link href="/methodik/ergaenzungsfutter#geltungsbereich">Ergänzungsfutter-Methodik</Link>.</li>
+          <li><strong>Gleiche Maßstäbe:</strong> Alle Produkte einer Methodik-Version werden nach denselben Kriterien bewertet, mit Ausnahme der im Abschnitt „Ausnahmen“ und im Änderungsprotokoll vom 05.11.2026 genannten Bewertungen, getrennt nach Hunden und Katzen sowie nach Alleinfutter und <Link href="/methodik/ergaenzungsfutter">Ergänzungsfutter</Link>. Für Alleinfutter sind das die sechs Kriterien unten. Ältere Tests von Snacks, Kauartikeln und Ergänzungsfuttermitteln sind ebenfalls nach diesen sechs Kriterien bewertet, erkennbar an den sechs Teilnoten im Testergebnis. Seit dem 27.10.2026 gilt: Ergänzungsfutter, die ein Futter im Alltagssinn sind und keinen benannten Wirkstoff haben, etwa Nassfutter-Filets und Snacks, bewerten wir weiterhin nach diesen sechs Kriterien, damit sie vergleichbar bleiben. Funktionelle Ergänzungsfutter mit Wirkstoff oder Wirkversprechen, etwa Tropfen, Pulver, Öle und Tabletten, bewerten wir nach den fünf Kriterien der <Link href="/methodik/ergaenzungsfutter#geltungsbereich">Ergänzungsfutter-Methodik</Link>.</li>
           <li><strong>Begründet:</strong> Kritik wird immer erklärt und, wo möglich, mit einer Quelle belegt. Unsere Einstufungen sind begründete fachliche Einschätzungen.</li>
         </ul>
       </div>
@@ -146,12 +157,41 @@ export default function MethodikPage() {
 
       <div className="prose-fp mt-12">
         <h2 id="gesamtnote">Gesamtnote, Ampel und Warnsignal</h2>
-        <p>Die Punkte der sechs Kriterien werden zur Gesamtnote von maximal {PUBLISHED_MAX_TOTAL} Punkten addiert. Die Ampelfarbe zeigt auf einen Blick, wie das Produkt abschneidet:</p>
+        <p>Die Punkte der sechs Kriterien werden zur Gesamtnote von maximal {PUBLISHED_MAX_TOTAL} Punkten addiert.</p>
+        <h3 id="ampel-version-2">Ampel und Note – Version 2, gültig seit 05.11.2026</h3>
+        <p>Jedes Produkt erhält bis zu 100 Punkte. Daraus ergeben sich Ampel und Note:</p>
         <ul>
-          <li><strong className="text-good">Grün (ab {RATING_THRESHOLDS.gut} Punkten):</strong> empfehlenswert</li>
-          <li><strong className="text-mid">Gelb ({RATING_THRESHOLDS.mittel}–{RATING_THRESHOLDS.gut - 1} Punkte):</strong> mit Abstrichen</li>
-          <li><strong className="text-bad">Rot (unter {RATING_THRESHOLDS.mittel} Punkten):</strong> keine Empfehlung</li>
+          <li><strong className="text-good">Grün (ab {RATING_THRESHOLDS.gut} Punkten, Note 0,5–1,8):</strong> empfehlenswert</li>
+          <li><strong className="text-mid">Gelb ({RATING_THRESHOLDS.mittel}–{RATING_THRESHOLDS.gut - 1} Punkte, Note 1,9–3,5):</strong> mit Abstrichen</li>
+          <li><strong className="text-bad">Rot (bis {RATING_THRESHOLDS.mittel - 1} Punkte, Note 3,6–5,5):</strong> keine Empfehlung</li>
         </ul>
+        <p>Grün heißt empfehlenswert. Unser Siegel ‚Empfohlen‘ vergeben wir zusätzlich erst ab {EMPFOHLEN_AB} Punkten.</p>
+        <table>
+          <thead><tr><th scope="col">Punkte</th><th scope="col">Note</th><th scope="col">Ampel</th></tr></thead>
+          <tbody>
+            {NOTEN_TABELLE.map((z) => (<tr key={z.punkte}><td>{z.punkte}</td><td>{z.note}</td><td>{z.ampel}</td></tr>))}
+          </tbody>
+        </table>
+        <p>Feste Ankerpunkte: 100 Punkte = 0,5, 72 = 1,5, 60 = 2,5, 51 = 3,5, 34 = 4,5, 0 = 5,5. Dazwischen rechnen wir linear und runden kaufmännisch auf eine Nachkommastelle. Jede Ampelgrenze fällt auf eine Notengrenze: Grün ist immer mindestens „gut“, Rot immer „ausreichend“ oder „mangelhaft“. Die Gelb-Klemme für die Anzeige lautet 1,9–3,5; Grün 0,5–1,8; Rot 3,6–5,5.</p>
+        <p>Unsere Noten beziehen sich nur auf unsere 100-Punkte-Skala: ‚sehr gut‘ heißt bei uns mindestens 72 von 100 Punkten, ‚gut‘ mindestens 60. Sie sind mit Noten anderer Tests nicht vergleichbar.</p>
+        <p><strong>Obergrenzen:</strong></p>
+        <ul>
+          <li>Schadstoffe &amp; Bedenkliches unter 10 von 20 Punkten: höchstens <strong>50</strong> Punkte (ausreichend).</li>
+          <li>Bei Alleinfuttermitteln Nährstoffprofil unter 8 von 20 oder Bedarfsdeckung unter 4 von 10 Punkten: höchstens <strong>50</strong> Punkte (ausreichend).</li>
+          <li>Rohstoffqualität unter 12 von 30 oder Deklaration &amp; Transparenz unter 6 von 15 Punkten: höchstens <strong>59</strong> Punkte (befriedigend).</li>
+          <li>Funktionelle Ergänzungsfutter: Wirkstoffauswahl und Dosierung zusammen unter 20 von 50: höchstens <strong>50</strong>. Werbeaussagen unter 8 von 20, Trägerqualität unter 6 von 15 oder Transparenz unter 6 von 15: höchstens <strong>59</strong>. Alibi-Dosierung oder keine deklarierte Wirkstoffmenge ≤ <strong>{EF_DECKEL.alibi}</strong>, Heilaussage ≤ <strong>{EF_DECKEL.heilaussage}</strong>, Sicherheit mittel ≤ <strong>{EF_DECKEL.sicherheitMittel}</strong>, Sicherheit schwer ≤ <strong>{EF_DECKEL.sicherheitSchwer}</strong> (jeweils mit Warnsignal bei Sicherheit).</li>
+        </ul>
+        <p><strong>Warum sich die Grenzen geändert haben:</strong> Unsere Kriterien bleiben streng. Schon kleine Lücken bei Deklaration und Werbeangaben kosten Punkte. Mit den bisherigen Grenzen (Grün ab 80, Gelb ab 60) lag fast jedes Produkt im Gelb- oder Rotbereich. Gute und mittelmäßige Rezepturen waren an der Ampel kaum zu unterscheiden. Deshalb haben wir entschieden, alle Ampelgrenzen einheitlich um 15 % zu senken: Aus 80 wird 68, aus 60 wird 51. Das ist eine redaktionelle Entscheidung über die Einstufung, keine neue Prüfung der Produkte. Kriterien und Gewichtung bleiben gleich. Punkte ändern sich nur dort, wo eine Obergrenze greift (24 Bewertungen). Die Grenzen gelten für alle Kategorien gleich, also für Alleinfutter, Ergänzungsfutter und Snacks, für Hund und Katze, mit den Ausnahmen unten.</p>
+        <h3 id="ausnahmen">Ausnahmen</h3>
+        <p>Seit dem 05.11.2026 bewerten wir nach Version 2 mit denselben Grenzen und Regeln für alle Produkte – mit diesen Ausnahmen:</p>
+        <ul>
+          <li><strong>Tierliebhaber und Medidog:</strong> Die 43 Tests von Produkten der Marke Tierliebhaber und die zwei Tests von Medidog haben wir bei der Umstellung nicht angepasst. Das ist eine redaktionelle Entscheidung. Für diese Tests gelten weiter die Grenzen von Version 1 (Grün ab 80, Gelb ab 60, Rot unter 60 Punkten); die neuen Obergrenzen für Alleinfutter wenden wir auf sie nicht an. Maßgeblich ist der Bewertungsstand auf der jeweiligen Testseite.</li>
+          <li><strong>Was das bedeutet:</strong> Nach Version 2 hätten neun Tierliebhaber-Produkte wegen zu knapper Deklaration höchstens 59 statt 60 bis 65 Punkte (acht Nassfutter-Sorten und das Gelenk Pulver), und zehn Tierliebhaber-Produkte mit 51 bis 57 Punkten wären Gelb statt Rot. Diese Tests sind deshalb nicht direkt mit Tests nach Version 2 vergleichbar; in Ranglisten und Vergleichen führen wir sie nicht zusammen mit ihnen.</li>
+          <li><strong>Einzelbewertungen:</strong> Tierliebhaber Gras- &amp; Kotfresser Drops (92 Punkte) und Medidog Ulmenrinden Paste (82 Punkte) sind Einzelbewertungen außerhalb der aktuellen Methodik (Bewertungsstand 27.10.2026). Für ihre Produktart erarbeiten wir eine eigene Methodik, die wir hier veröffentlichen, bevor wir sie anwenden.</li>
+        </ul>
+        <h3 id="abwertungsregeln">Abwertungsregeln</h3>
+        <p>Ein Produkt mit einem deutlichen Mangel wird auch nach den neuen Grenzen nicht Grün. Für Alleinfutter führen wir Obergrenzen neu ein: Bei deutlicher Schwäche in Rohstoffen oder Deklaration gibt es höchstens 59 Punkte (höchstens befriedigend), bei schweren Mängeln höchstens 50 Punkte (Rot). Für Ergänzungsfutter sinken die bestehenden Obergrenzen im selben Verhältnis: Heilaussage 79 → {EF_DECKEL.heilaussage} (nie Grün), Alibi-Dosierung, fehlende Wirkstoffmenge und Sicherheit mittel 59 → {EF_DECKEL.alibi}, Sicherheit schwer 39 → {EF_DECKEL.sicherheitSchwer}.</p>
+        <p>Wo eine Obergrenze greift, kann der Punktwert deshalb sinken, auch ohne neue Prüfung des Produkts. Das betrifft 24 Bewertungen. Jede betroffene Seite nennt den alten und den neuen Wert.</p>
         <p>Erreicht ein Produkt im Kriterium „Schadstoffe & Bedenkliches“ weniger als {HARMFUL_FAIL_RATIO * 100} % der Punkte, erscheint unabhängig von der Gesamtnote ein rotes Warnsignal mit Begründung. Das sind unter 10 von 20 Punkten. Ein Futter kann also insgesamt gut abschneiden und trotzdem eine deutliche Warnung tragen, wenn einzelne Zusätze problematisch sind.</p>
         <p>Zu jeder Note gehören ein kurzes Fazit sowie eine Liste von Pro- und Contra-Punkten. Die Punktzahl ist ein Anhaltspunkt für den Vergleich, kein Urteil über das einzelne Tier.</p>
 

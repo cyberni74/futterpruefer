@@ -4,11 +4,14 @@ import { isRotScore, stripAffiliateForRot } from "./rot-guard";
 const CTA = '<div class="cta-amazon cta-box"><p class="cta-produkt">MjAMjAM</p><p><a class="cta-amazon-btn" href="https://www.amazon.de/dp/B07D4T5XVT?tag=cyberni7400-21" rel="sponsored nofollow noopener">Aktuellen Preis bei Amazon prüfen</a></p><p class="cta-hinweis">*Werbung/Affiliate-Link</p></div>';
 
 describe("Rot-Regel", () => {
-  it("gilt unter 60 Punkten", () => {
-    expect(isRotScore(59)).toBe(true);
+  it("gilt bis 50 Punkten (Version 2), für methodikVersion „1“ unter 60", () => {
+    expect(isRotScore(50)).toBe(true);
     expect(isRotScore(47)).toBe(true);
-    expect(isRotScore(60)).toBe(false);
+    expect(isRotScore(51)).toBe(false);
     expect(isRotScore(87)).toBe(false);
+    expect(isRotScore(59, "1")).toBe(true);
+    expect(isRotScore(60, "1")).toBe(false);
+    expect(isRotScore(59)).toBe(false);
   });
 
   it("entfernt die .cta-amazon-Box vollständig", () => {

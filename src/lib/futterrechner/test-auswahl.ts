@@ -1,3 +1,4 @@
+import { RATING_THRESHOLDS } from "@/lib/scoring";
 /** Auswahl passender Tests für die Ergebnis-Karte. Rein, ohne DB; Filter und Ausschlussliste im Code. */
 export const AUSGESCHLOSSEN = ["animagus", "tierliebhaber", "canina", "alfavet", "medidog"];
 
@@ -29,10 +30,10 @@ export const istAusgeschlossen = (r: Pick<TestKandidat, "brand" | "title" | "pro
   return AUSGESCHLOSSEN.some((x) => text.includes(x));
 };
 
-/** Gleiche Tierart und Futterart, nur Grün oder Gelb (ab 60 Punkten), höchste Punktzahl zuerst. */
+/** Gleiche Tierart und Futterart, nur Grün oder Gelb (ab RATING_THRESHOLDS.mittel), höchste Punktzahl zuerst. */
 export function passendeTests(list: TestKandidat[], art: "hund" | "katze", futterart: "trocken" | "nass", n = 3): TestKandidat[] {
   return list
-    .filter((r) => r.category.animal === (art === "hund" ? "HUND" : "KATZE") && r.totalScore >= 60 && !istAusgeschlossen(r) && futterartVon(r) === futterart)
+    .filter((r) => r.category.animal === (art === "hund" ? "HUND" : "KATZE") && r.totalScore >= RATING_THRESHOLDS.mittel && !istAusgeschlossen(r) && futterartVon(r) === futterart)
     .sort((a, b) => b.totalScore - a.totalScore)
     .slice(0, n);
 }

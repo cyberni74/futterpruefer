@@ -13,18 +13,19 @@ describe("Startseiten-Kästen Testsieger", () => {
     expect(FEATURED_COMPARISON?.slug).toBe("monoprotein-katzenfutter-test-2026");
     const gelenk = FEATURED_COMPARISONS.find((c) => c.slug === "gelenk-test-hund-oktober-2026");
     expect(gelenk?.summary).toBe(
-      "Vier Gelenk-Ergänzungsfutter für Hunde im Vergleich. Cadoc liegt mit 64 von 100 Punkten (Gelb) vorn, die drei anderen Produkte sind Rot.",
+      "Vier Gelenk-Ergänzungsfutter für Hunde im Vergleich. Cadoc liegt mit 59 von 100 Punkten (Gelb) vorn, die drei anderen Produkte sind Rot.",
     );
   });
 
-  it("gibt VUTTER Gelb einen Pokal und Rot keinen", () => {
+  it("gibt Green Crunch Gelb einen Pokal und Rot keinen", () => {
     const katze = FEATURED_COMPARISONS.find((c) => c.slug === "veganes-katzenfutter-test-oktober-2026");
     const hund = FEATURED_COMPARISONS.find((c) => c.slug === "veganes-hundefutter-test-oktober-2026");
     expect(katze?.winner).toBeUndefined();
     expect(katze?.score).toBeUndefined();
     expect(katze?.imageAltFallback).not.toMatch(/pokal/i);
     expect(showsWinnerSeal(katze!)).toBe(false);
-    expect(showsWinnerSeal({ winner: "AMI Cat", score: 59 })).toBe(false);
+    expect(showsWinnerSeal({ winner: "AMI Cat", score: 50 })).toBe(false)
+    expect(showsWinnerSeal({ winner: "AMI Cat", score: 51 })).toBe(true);
     const mono = FEATURED_COMPARISONS.find((c) => c.slug === "monoprotein-katzenfutter-test-2026");
     expect(mono?.winner).toBe("GranataPet DeliCatessen Huhn PUR");
     expect(mono?.score).toBe(74);
@@ -32,8 +33,14 @@ describe("Startseiten-Kästen Testsieger", () => {
     expect(mono?.year).toBe(2026);
     expect(mono?.imageAltFallback).toMatch(/Pokal Testsieger/);
     expect(showsWinnerSeal(mono!)).toBe(true);
-    expect(hund?.winner).toBe("VUTTER Nassfutter Wie Ente");
-    expect(hund?.score).toBe(79);
+    expect(hund?.winner).toBe("VEGDOG Green Crunch");
+    expect(hund?.score).toBe(59);
+    expect(hund?.summary).toContain("Alle drei liegen bei 59 von 100 Punkten (Gelb).");
+    expect(hund?.summary).toContain("Beim Gleichstand entscheidet das Nährstoffprofil");
+    const farmer = hund?.summary.indexOf("VEGDOG Farmer's Crunch") ?? -1;
+    const vutter = hund?.summary.indexOf("VUTTER Nassfutter Wie Ente") ?? -1;
+    expect(farmer).toBeGreaterThan(-1);
+    expect(vutter).toBeGreaterThan(farmer);
     expect(showsWinnerSeal(hund!)).toBe(true);
   });
 

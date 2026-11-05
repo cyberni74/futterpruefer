@@ -27,10 +27,16 @@ describe("scoring", () => {
   });
   it("Ampel-Schwellen", () => {
     expect(ratingFor(100)).toBe("gut");
-    expect(ratingFor(80)).toBe("gut");
-    expect(ratingFor(79)).toBe("mittel");
-    expect(ratingFor(60)).toBe("mittel");
-    expect(ratingFor(59)).toBe("schlecht");
+    expect(ratingFor(68)).toBe("gut");
+    expect(ratingFor(67)).toBe("mittel");
+    expect(ratingFor(51)).toBe("mittel");
+    expect(ratingFor(50)).toBe("schlecht");
+    // Tests auf Methodik Version 1 behalten die Grenzen 80/60
+    expect(ratingFor(80, "1")).toBe("gut");
+    expect(ratingFor(79, "1")).toBe("mittel");
+    expect(ratingFor(60, "1")).toBe("mittel");
+    expect(ratingFor(59, "1")).toBe("schlecht");
+    expect(ratingFor(70, "")).toBe("gut");
     expect(ratingFor(0)).toBe("schlecht");
     expect(ratingFor(null)).toBe("schlecht");
     expect(RATING_LABEL.schlecht).toBe("Rot – keine Empfehlung");

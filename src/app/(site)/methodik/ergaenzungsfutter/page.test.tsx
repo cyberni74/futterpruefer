@@ -23,8 +23,9 @@ describe("Methodik Ergänzungsfutter", () => {
     expect(html).toContain("Tests von Snacks, Kauartikeln und funktionellen Ergänzungsfuttern, die vor dem 17.10.2026 erschienen sind, haben wir nach den sechs Kriterien bewertet, auch wenn das Produkt mit einer Wirkung wirbt. Sie zeigen sechs Teilnoten im Testergebnis. Ihre Punktzahlen bleiben, bis wir das Produkt neu testen.");
     expect(html).toContain("Wirkversprechen. Durch diese Festlegung hat sich keine Punktzahl geändert. Ältere Tests funktioneller Produkte mit sechs Teilnoten bleiben nach den sechs Kriterien bewertet.</li>");
     expect(html).toContain("17.10.2026 – Erstveröffentlichung");
-    expect(html).toContain("höchstens 59 Punkte (Rot)");
-    expect(html).toContain("höchstens 39 Punkte");
+    expect(html).toContain("höchstens 50 Punkte (Rot)");
+    expect(html).toContain("Heilaussagen-Deckel:</strong> höchstens 67 Punkte (nie Grün)");
+    expect(html).toContain("Sicherheit schwer: max. 33 + Warnsignal");
     expect(html).toContain("310 mg × kg KG^0,75");
     expect(html).toContain("2,1 × 10⁹ KBE pro Tier und Tag");
     expect(html).toContain("href=\"/methodik\"");
@@ -34,10 +35,10 @@ describe("Methodik Ergänzungsfutter", () => {
   });
 
   it("nennt die rote Ampel „keine Empfehlung“ und behält die Punktspannen", () => {
-    expect(RATING_THRESHOLDS).toEqual({ gut: 80, mittel: 60 });
-    expect(html).toContain('<strong class="text-good">Grün</strong> ab 80 (empfehlenswert)');
-    expect(html).toContain('<strong class="text-mid">Gelb</strong> 60–79 (mit Abstrichen)');
-    expect(html).toContain('<strong class="text-bad">Rot</strong> unter 60 (keine Empfehlung)');
+    expect(RATING_THRESHOLDS).toEqual({ gut: 68, mittel: 51 });
+    expect(html).toContain('<strong class="text-good">Grün</strong> ab 68 (empfehlenswert)');
+    expect(html).toContain('<strong class="text-mid">Gelb</strong> 51–67 (mit Abstrichen)');
+    expect(html).toContain('<strong class="text-bad">Rot</strong> bis 50 (keine Empfehlung)');
     expect(html).not.toContain("nicht empfehlenswert");
     expect(html).toContain("Das ist die Studiendosis, keine Empfehlung für Ihren Hund.");
   });

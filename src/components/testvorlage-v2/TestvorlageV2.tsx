@@ -39,17 +39,20 @@ const LABEL: Record<string, string> = { urteil: "URTEIL", kapitel: "KAPITEL", bl
  * Die Seite liefert H1, Badges und Metazeile über `kopf` (sie stehen in der Hero-Fläche) und die Produktbilder über `medien`; hier gibt es keine zweite H1.
  * Der Haupttacho zeigt immer die Gesamtwertung. Der Hauptinhalt wird serverseitig gerendert, nur der Kostenrechner ist ein Client-Baustein.
  */
-export function TestvorlageV2({ data, totalScore, ampelLabel, kopf, medien }: { data: LayoutData; totalScore: number; ampelLabel: string; kopf?: ReactNode; medien?: ReactNode }) {
+export function TestvorlageV2({ data, totalScore, ampelLabel, kopf, medien, methodikVersion, kaufNeutral = false }: { data: LayoutData; totalScore: number; ampelLabel: string; kopf?: ReactNode; medien?: ReactNode; methodikVersion?: string | null; kaufNeutral?: boolean }) {
   const abschnitte = baueAbschnitte(data);
   const kauf = kaufLink(data);
   const asinKauf = data.asin ? kaufLink({ asin: data.asin }) : null;
-  const rot = isRotScore(totalScore);
+  const rot = isRotScore(totalScore, methodikVersion);
+  // Regel V12: neutraler Button unabhängig von der Ampel (Heilaussage am Test, beanstandete Krankheitswerbung, Ausschlussliste)
+  const neutral = kaufNeutral || data.kaufNeutral === true;
+  const zusatz = data.kaufHinweisZusatz;
   const hatFazit = abschnitte.some((a) => a.art === "fazit");
   // Oberer Button aus der ASIN: direkt nach dem Fazit. Ohne Fazit-Abschnitt nach der Gesamtwertung.
-  const kaufOben = asinKauf ? <AmazonKauf url={asinKauf} rot={rot} className="kauf kauf-top" /> : null;
+  const kaufOben = asinKauf ? <AmazonKauf url={asinKauf} rot={rot} neutral={neutral} zusatz={zusatz} className="kauf kauf-top" /> : null;
   return (
     <div className="tv2" data-layout="TESTVORLAGE_V2">
-      <ProductTestHero hero={data.hero} totalScore={totalScore} ampelLabel={ampelLabel} kopf={kopf} />
+      <ProductTestHero hero={data.hero} totalScore={totalScore} ampelLabel={ampelLabel} kopf={kopf} methodikVersion={methodikVersion} />
       {!hatFazit && kaufOben}
       <ProductFacts kennzahlen={data.kennzahlen} />
       {medien}
@@ -61,7 +64,7 @@ export function TestvorlageV2({ data, totalScore, ampelLabel, kopf, medien }: { 
             const label = LABEL[a.art];
             switch (a.art) {
               case "urteil":
-                return <TvSection key={a.id} id={a.id} nummer={a.nummer} label={label} titel={a.titel}><ScoreBreakdown kriterien={data.kriterien} urteil={data.urteil} /></TvSection>;
+                return <TvSection key={a.id} id={a.id} nummer={a.nummer} label={label} titel={a.titel}><ScoreBreakdown kriterien={data.kriterien} urteil={data.urteil} methodikVersion={methodikVersion} /></TvSection>;
               case "kapitel": {
                 const k = data.kapitel![a.index];
                 return (
@@ -85,7 +88,7 @@ export function TestvorlageV2({ data, totalScore, ampelLabel, kopf, medien }: { 
               case "quellen":
                 return (
                   <TvSection key={a.id} id={a.id} nummer={a.nummer} label={label} titel={a.titel}>
-                    <Sources quellen={data.quellen} pruefstand={data.pruefstand} methodikHinweis={data.methodikHinweis} kaufUrl={kauf} rot={rot} />
+                    <Sources quellen={data.quellen} pruefstand={data.pruefstand} methodikHinweis={data.methodikHinweis} kaufUrl={kauf} rot={rot} neutral={neutral} zusatz={zusatz} />
                   </TvSection>
                 );
             }

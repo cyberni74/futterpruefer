@@ -117,7 +117,7 @@ export function SearchDialog({ open, onClose }: { open: boolean; onClose: () => 
                       <span className="block truncate font-semibold">{h.title}</span>
                       <span className="block truncate text-sm text-muted">{h.subtitle}</span>
                     </span>
-                    {h.score !== null && <ScoreBadge score={h.score} size="sm" />}
+                    {h.score !== null && <ScoreBadge score={h.score} methodikVersion={h.methodikVersion} size="sm" />}
                   </Link>
                 </li>
               ))}

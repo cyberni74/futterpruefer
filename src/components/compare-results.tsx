@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { AlertTriangle } from "lucide-react";
-import { classicCriteriaApply, criterionFailed, showsComparisonWinner } from "@/lib/compare-display";
+import { classicCriteriaApply, criterionFailed, pickWinner, pricePer1000kcalOf } from "@/lib/compare-display";
 import { CRITERIA, ratioRating, type CriterionKey } from "@/lib/scoring";
 import { priceClassCell } from "@/lib/price-source";
 import { PRICE_CLASS_LABEL } from "@/lib/site";
@@ -22,14 +22,16 @@ export type CompareRow = {
   verdict: string;
   priceClass: keyof typeof PRICE_CLASS_LABEL;
   pricePerKg?: unknown;
+  /** Euro je 1.000 kcal, zweite Gleichstandsstufe. Sonst aus layoutData.pricePer1000kcal. */
+  pricePer1000kcal?: number | null;
   layoutData?: unknown;
+  methodikVersion?: string | null;
   category: { slug: string; shortName: string };
 } & Record<CriterionKey, number>;
 
 /** Tabelle der Vergleichsseite. Gesetzte Alleinfutter-Teilnoten bleiben bei x/max; sonst „–“ ohne Warn-Icon. */
 export function CompareResults({ items }: { items: CompareRow[] }) {
-  const best = Math.max(0, ...items.map((i) => i.totalScore));
-  const leaderCount = items.filter((i) => i.totalScore === best).length;
+  const winnerId = pickWinner(items.map((i) => ({ id: i.id, totalScore: i.totalScore, scoreNutrients: classicCriteriaApply(i) ? i.scoreNutrients : null, pricePer1000kcal: pricePer1000kcalOf(i), methodikVersion: i.methodikVersion })));
   return (
     <div className="mt-8 overflow-x-auto">
       <table className={`w-full table-fixed border-separate border-spacing-0 text-sm ${items.length > 2 ? "min-w-[34rem]" : ""}`}>
@@ -50,7 +52,7 @@ export function CompareResults({ items }: { items: CompareRow[] }) {
           <tr className="bg-bg-soft">
             <th scope="row" className="p-3 text-left font-bold">Gesamt</th>
             {items.map((i) => (
-              <td key={i.id} className="p-3"><div className="flex flex-wrap items-center gap-2"><ScoreBadge score={i.totalScore} size="sm" />{showsComparisonWinner(i.totalScore, best, leaderCount) && <span className="rounded-full bg-good-soft px-2 py-0.5 text-xs font-bold text-good">Testsieger</span>}</div></td>
+              <td key={i.id} className="p-3"><div className="flex flex-wrap items-center gap-2"><ScoreBadge score={i.totalScore} methodikVersion={i.methodikVersion} size="sm" />{i.id === winnerId && <span className="rounded-full bg-good-soft px-2 py-0.5 text-xs font-bold text-good">Testsieger</span>}</div></td>
             ))}
           </tr>
           {CRITERIA.map((c) => (
@@ -70,7 +72,7 @@ export function CompareResults({ items }: { items: CompareRow[] }) {
                   <td key={i.id} className="border-b border-border p-3">
                     <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-2">
                       <span className="w-11 shrink-0 font-bold tabular-nums">{v}/{c.max}</span>
-                      <span className="block h-2 w-full overflow-hidden rounded-full bg-border sm:flex-1"><span className={`block h-full rounded-full ${failed ? "bg-bad" : TONE[ratioRating(v, c.max)]}`} style={{ width: `${(v / c.max) * 100}%` }} /></span>
+                      <span className="block h-2 w-full overflow-hidden rounded-full bg-border sm:flex-1"><span className={`block h-full rounded-full ${failed ? "bg-bad" : TONE[ratioRating(v, c.max, i.methodikVersion)]}`} style={{ width: `${(v / c.max) * 100}%` }} /></span>
                       {failed && <AlertTriangle className="size-4 text-bad" aria-label="durchgefallen" />}
                     </div>
                   </td>

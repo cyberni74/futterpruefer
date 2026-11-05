@@ -74,6 +74,17 @@ describe("Vergleich Preisklasse", () => {
     expect(html.split("Dieses Kriterium gilt für diesen Test nicht").length - 1).toBe(12);
   });
 
+  it("entscheidet den Gleichstand über den Preis je 1.000 kcal, wenn er vorliegt", async () => {
+    const teuer = item("11111111", "Futter teuer", 6, null, { totalScore: 59, scoreNutrients: 16, pricePer1000kcal: 8 });
+    const guenstig = item("22222222", "Futter günstig", 5, { pricePer1000kcal: 4 }, { totalScore: 59, scoreNutrients: 16 });
+    findMany.mockResolvedValue([teuer, guenstig]);
+    const html = renderToStaticMarkup(await ComparePage({ params: Promise.resolve({}), searchParams: Promise.resolve({ ids: "11111111,22222222" }) }));
+    const gesamt = html.slice(html.indexOf(">Gesamt<")).split("<td");
+    expect(gesamt[1]).not.toContain("Testsieger");
+    expect(gesamt[2]).toContain(">Testsieger<");
+    expect(html.split(">Testsieger<").length - 1).toBe(1);
+  });
+
   it("vergibt bei Gleichstand keinem Produkt den Testsieger", async () => {
     const a = item("11111111", "Futter A", 4, null, { totalScore: 74 });
     const b = item("22222222", "Futter B", 5, null, { totalScore: 74 });
@@ -86,7 +97,7 @@ describe("Vergleich Preisklasse", () => {
 
   it("zeigt das Schadstoff-Warnzeichen nur bei klassischen Tests unter 10 Punkten", async () => {
     const schlecht = item("eeeeeeee", "Klassisch bedenklich", 3, null, { totalScore: 40, scoreHarmful: 4 });
-    const besser = item("ffffffff", "Klassisch in Ordnung", 3, null, { totalScore: 55, scoreHarmful: 16 });
+    const besser = item("ffffffff", "Klassisch in Ordnung", 3, null, { totalScore: 45, scoreHarmful: 16 });
     findMany.mockResolvedValue([schlecht, besser]);
     const html = renderToStaticMarkup(await ComparePage({ params: Promise.resolve({}), searchParams: Promise.resolve({ ids: "eeeeeeee,ffffffff" }) }));
     expect(html).not.toContain("Testsieger");

@@ -14,6 +14,8 @@ export type VerdictData = Scores & {
   cons: string[];
   updatedAt: Date | string | null;
   harmfulReason?: string | null;
+  /** DB-Feld methodikVersion: „1“ = Ampel nach den Grenzen von Version 1. */
+  methodikVersion?: string | null;
 };
 
 /** Testergebnis-Box (früher „Fazit“; das einzige Fazit-H2 ist das SEO-Fazit): Punkte-Ring, Kriterien-Balken, Klartext-Fazit, Pro/Contra. */
@@ -37,9 +39,9 @@ export function VerdictPanel({ data, showWarning = false, bars, capNote, safetyW
           )}
         </div>
         <div className="mt-6 flex flex-col items-center gap-8 md:flex-row md:items-center md:gap-10">
-          <ScoreRing score={Number(data?.totalScore ?? 0) || 0} />
+          <ScoreRing score={Number(data?.totalScore ?? 0) || 0} methodikVersion={data?.methodikVersion} />
           <div className="w-full flex-1">
-            <CriteriaBars scores={scores} items={bars} />
+            <CriteriaBars scores={scores} items={bars} methodikVersion={data?.methodikVersion} />
           </div>
         </div>
         {capNote ? <p className="mt-4 text-sm text-muted">{capNote}</p> : null}

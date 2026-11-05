@@ -67,7 +67,7 @@ export async function ReviewV2Article({ r, data, draftPreview }: { r: Review; da
   const moisture = null;
   const comparison = comparisonForReview({ title: r.title, productName: r.productName, keyword: r.keyword, categorySlug: r.category.slug, moisture });
   const faqLd = faqPageJsonLd(faqItems(data));
-  const ampelLabel = RATING_LABEL[ratingFor(r.totalScore)];
+  const ampelLabel = RATING_LABEL[ratingFor(r.totalScore, r.methodikVersion)];
 
   return (
     <div>
@@ -111,6 +111,8 @@ export async function ReviewV2Article({ r, data, draftPreview }: { r: Review; da
           data={data}
           totalScore={r.totalScore}
           ampelLabel={ampelLabel}
+          methodikVersion={r.methodikVersion}
+          kaufNeutral={r.efHeilaussage}
           kopf={
             <>
               <div className="hero-badges">

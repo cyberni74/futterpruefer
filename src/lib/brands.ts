@@ -1,3 +1,4 @@
+import { v1Zuletzt } from "./methodik-rank";
 import "server-only";
 import { cache } from "react";
 import { prisma } from "@/lib/db";
@@ -38,6 +39,6 @@ export async function getBrandBySlug(slug: string): Promise<BrandRow | null> {
   return (await getBrands()).find((b) => b.slug === slug) ?? null;
 }
 
-export function getBrandReviews(variants: string[]) {
-  return prisma.review.findMany({ where: { ...publishedWhere(), brand: { in: variants } }, orderBy: [{ totalScore: "desc" }, { publishedAt: "desc" }], select: reviewCardSelect });
+export async function getBrandReviews(variants: string[]) {
+  return v1Zuletzt(await prisma.review.findMany({ where: { ...publishedWhere(), brand: { in: variants } }, orderBy: [{ totalScore: "desc" }, { publishedAt: "desc" }], select: reviewCardSelect }));
 }

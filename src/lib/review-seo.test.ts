@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { amazonPriceUrl, directAnswer, keywordName, kurzGesagt, priceCite, priceSourceFromArticle, renameBodyFazit, reviewFaq, seoFazitHeading, withoutLeadingScore } from "./review-seo";
+import { amazonPriceUrl, ampelFor, directAnswer, keywordName, kurzGesagt, priceCite, priceSourceFromArticle, renameBodyFazit, reviewFaq, seoFazitHeading, withoutLeadingScore } from "./review-seo";
 import { comparisonForPost, comparisonForReview, comparisonsForPost, isInComparison } from "./comparison-links";
 import { faqPageJsonLd } from "./faq-schema";
 
@@ -33,8 +33,17 @@ describe("review-seo", () => {
     for (const w of ["zulässig", "unabhängig", "betrug", "rechtlich angreifbar", "tag=", "amazon.de"]) expect(txt).not.toContain(w);
   });
   it("Urteil: nur erster Buchstabe klein", () => {
-    expect(directAnswer({ ...base, totalScore: 70 })).toContain("Nach unserem Bewertungsschema: mit Abstrichen.");
+    expect(directAnswer({ ...base, totalScore: 60 })).toContain("Nach unserem Bewertungsschema: mit Abstrichen.");
     expect(directAnswer(base)).toContain("Nach unserem Bewertungsschema: Rot – keine Empfehlung.");
+  });
+  it("Ampelwort folgt den Grenzen von Version 2 (68/51) und für methodikVersion „1“ denen von Version 1 (80/60)", () => {
+    expect(ampelFor(68)).toBe("Grün");
+    expect(ampelFor(67)).toBe("Gelb");
+    expect(ampelFor(51)).toBe("Gelb");
+    expect(ampelFor(50)).toBe("Rot");
+    expect(ampelFor(70, "1")).toBe("Gelb");
+    expect(ampelFor(59, "1")).toBe("Rot");
+    expect(directAnswer({ ...base, totalScore: 70, methodikVersion: "1" })).toContain("mit Abstrichen");
   });
   it("FAQ rahmt eine Aussage mit inneren Anführungszeichen nur einmal", () => {
     const faq = reviewFaq({

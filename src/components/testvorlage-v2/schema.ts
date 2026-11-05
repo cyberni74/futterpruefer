@@ -88,6 +88,10 @@ export const layoutDataSchema = z.object({
   /** Alternative zur ASIN: fertiger Link, muss das Partner-Tag tragen */
   kaufUrl: httpUrl.optional(),
   kaufLabel: kurz.optional(),
+  /** Neutraler Kauf-Button unabhängig von der Ampel (Regel V12): beanstandete Krankheitswerbung oder Ausschlussliste „nicht empfehlen“. Auch efHeilaussage am Test löst ihn aus. */
+  kaufNeutral: z.boolean().optional(),
+  /** Satz direkt unter dem neutralen Button. Leer: „Der Link ist keine Kaufempfehlung.“ */
+  kaufHinweisZusatz: z.string().trim().max(500).optional(),
   bildnachweis: z.string().max(500).optional(),
   /** Unterschrift unter Produktbild 1 (z. B. „Bild: Hersteller · Werbung“). Leer: „Verpackung“ */
   bildunterschriftHaupt: z.string().trim().max(500).optional(),

@@ -6,12 +6,12 @@ import { MAX_TOTAL, RATING_LABEL, ratingFor } from "@/lib/scoring";
 const COLOR = { gut: "var(--good)", mittel: "var(--mid-fill)", schlecht: "var(--bad)" } as const;
 
 /** compact: kleiner Tacho ohne Bewertungs-Pille (z. B. Ergebnis-Raster im Vergleichstest). */
-export function ScoreRing({ score, size = 200, compact = false }: { score: number; size?: number; compact?: boolean }) {
+export function ScoreRing({ score, size = 200, compact = false, methodikVersion }: { score: number; size?: number; compact?: boolean; methodikVersion?: string | null }) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-40px" });
   const reduce = useReducedMotion();
   const value = Math.max(0, Math.min(MAX_TOTAL, score ?? 0));
-  const rating = ratingFor(value);
+  const rating = ratingFor(value, methodikVersion);
   const stroke = compact ? 12 : 14;
   const r = (size - stroke) / 2;
   const c = 2 * Math.PI * r;

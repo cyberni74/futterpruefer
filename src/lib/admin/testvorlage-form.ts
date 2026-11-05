@@ -33,7 +33,7 @@ export type Draft = {
   bildunterschriftInhalt: string;
   aehnlicheTests: string[];
   /** Felder ohne eigenes Formularfeld bleiben beim Import/Export erhalten */
-  extra: Pick<LayoutData, "kaufUrl" | "kaufLabel" | "abschnittTitel">;
+  extra: Pick<LayoutData, "kaufUrl" | "kaufLabel" | "abschnittTitel" | "kaufNeutral" | "kaufHinweisZusatz">;
 };
 
 let zaehler = 0;
@@ -166,7 +166,7 @@ export function layoutDataToDraft(data: LayoutData): Draft {
   d.bildunterschriftHaupt = data.bildunterschriftHaupt ?? "";
   d.bildunterschriftInhalt = data.bildunterschriftInhalt ?? "";
   d.aehnlicheTests = data.aehnlicheTests ?? [];
-  d.extra = { ...(data.kaufUrl ? { kaufUrl: data.kaufUrl } : {}), ...(data.kaufLabel ? { kaufLabel: data.kaufLabel } : {}), ...(data.abschnittTitel ? { abschnittTitel: data.abschnittTitel } : {}) };
+  d.extra = { ...(data.kaufUrl ? { kaufUrl: data.kaufUrl } : {}), ...(data.kaufLabel ? { kaufLabel: data.kaufLabel } : {}), ...(data.abschnittTitel ? { abschnittTitel: data.abschnittTitel } : {}), ...(data.kaufNeutral ? { kaufNeutral: data.kaufNeutral } : {}), ...(data.kaufHinweisZusatz ? { kaufHinweisZusatz: data.kaufHinweisZusatz } : {}) };
   return d;
 }
 

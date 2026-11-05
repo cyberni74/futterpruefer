@@ -129,18 +129,43 @@ describe("TestvorlageV2: Server-Rendering", () => {
   });
   it("bei Ampel Rot steht der Preis-Hinweis an jedem Amazon-Button, ab Gelb der Entdecken-Text", () => {
     const { data } = ok(5);
-    const rot = html(data, 59);
+    const rot = html(data, 50);
     expect(rot.match(/Aktuellen Preis bei Amazon ansehen\*/g)).toHaveLength(2);
     expect(rot).not.toContain("Jetzt bei Amazon entdecken*");
     expect(rot.match(/Unsere Bewertung für dieses Produkt ist Rot; der Link ist keine Kaufempfehlung\./g)).toHaveLength(2);
-    const gelb = html(data, 60);
-    const gruen = html(data, 80);
+    const gelb = html(data, 51);
+    const gruen = html(data, 68);
+    expect(html(data, 67)).toContain("Jetzt bei Amazon entdecken*");
     for (const h of [gelb, gruen]) {
       expect(h.match(/Jetzt bei Amazon entdecken\*/g)).toHaveLength(2);
       expect(h).not.toContain("Aktuellen Preis bei Amazon ansehen*");
       expect(h).not.toContain("keine Kaufempfehlung");
     }
     expect(html({ ...data, asin: undefined }, 40)).not.toContain("keine Kaufempfehlung");
+  });
+  it("V12: neutraler Button unabhängig von der Ampel, ohne Rot-Satz bei Gelb, mit Zusatzsatz", () => {
+    const { data } = ok(5);
+    const neutral = renderToStaticMarkup(<TestvorlageV2 data={{ ...data, kaufNeutral: true, kaufHinweisZusatz: "Unsere Bewertung: Gelb. Der Link ist keine Kaufempfehlung." }} totalScore={51} ampelLabel="Test" />);
+    expect(neutral).not.toContain("Jetzt bei Amazon entdecken*");
+    expect(neutral).not.toContain("Unsere Bewertung für dieses Produkt ist Rot");
+    expect(neutral.match(/Aktuellen Preis bei Amazon ansehen\*/g)).toHaveLength(2);
+    expect(neutral.match(/Unsere Bewertung: Gelb\. Der Link ist keine Kaufempfehlung\./g)).toHaveLength(2);
+    expect(neutral).toContain("*Affiliate-Link");
+    const heil = renderToStaticMarkup(<TestvorlageV2 data={data} totalScore={60} ampelLabel="Test" kaufNeutral />);
+    expect(heil.match(/Der Link ist keine Kaufempfehlung\./g)).toHaveLength(2);
+    expect(heil).not.toContain("Jetzt bei Amazon entdecken*");
+    const rotNeutral = renderToStaticMarkup(<TestvorlageV2 data={data} totalScore={40} ampelLabel="Test" kaufNeutral />);
+    expect(rotNeutral).toContain("Link ist keine Kaufempfehlung.");
+    expect(rotNeutral).toContain("Aktuellen Preis bei Amazon ansehen*");
+  });
+  it("Version-1-Test: Rot erst unter 60 (V1-Schwellen), Gelb bei 59 nicht", () => {
+    const { data } = ok(5);
+    const v1 = renderToStaticMarkup(<TestvorlageV2 data={data} totalScore={59} ampelLabel="Test" methodikVersion="1" />);
+    expect(v1).toContain("Unsere Bewertung für dieses Produkt ist Rot");
+    const v1gelb = renderToStaticMarkup(<TestvorlageV2 data={data} totalScore={60} ampelLabel="Test" methodikVersion="1" />);
+    expect(v1gelb).not.toContain("Unsere Bewertung für dieses Produkt ist Rot");
+    const v2 = renderToStaticMarkup(<TestvorlageV2 data={data} totalScore={59} ampelLabel="Test" />);
+    expect(v2).not.toContain("Unsere Bewertung für dieses Produkt ist Rot");
   });
   it("HTML-Tabellen im Kapitel behalten Spaltennamen für die Mobilkarten", () => {
     const h = html({

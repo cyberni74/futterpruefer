@@ -181,7 +181,7 @@ export default async function ReviewPage({ params }: PageProps<"/[kategorie]/[sl
   const inhaltCaption = r.layout === TESTVORLAGE_V2 ? contentImageCaption(r.contentImageAlt) : "Das Futter selbst";
   const gallery = (r.gallery ?? []).filter(Boolean);
   const seoInput: ReviewSeoInput = {
-    slug: r.slug, name: keywordName(r.keyword, r.brand, name), totalScore: r.totalScore, testedAt, verdict: r.verdict, pros: r.pros, cons: consWithClaims(r.cons, claims), claims,
+    slug: r.slug, name: keywordName(r.keyword, r.brand, name), totalScore: r.totalScore, methodikVersion: r.methodikVersion, testedAt, verdict: r.verdict, pros: r.pros, cons: consWithClaims(r.cons, claims), claims,
     price: r.price, packageSize: r.packageSize, pricePerKg: r.pricePerKg, pricePerDay: r.pricePerDay, priceDate: r.priceDate, priceSource: priceSourceFromArticle(r.bodyHtml),
     composition: r.composition, ergaenzung: Boolean(efResult),
   };
@@ -301,7 +301,7 @@ export default async function ReviewPage({ params }: PageProps<"/[kategorie]/[sl
           {/* 4. Fazit */}
           <div className="mt-6">
             <VerdictPanel
-              data={{ ...scores, totalScore: r.totalScore, verdict: r.verdict, pros: r.pros, cons: consWithClaims(r.cons, claims), updatedAt: r.updatedAt }}
+              data={{ ...scores, totalScore: r.totalScore, methodikVersion: r.methodikVersion, verdict: r.verdict, pros: r.pros, cons: consWithClaims(r.cons, claims), updatedAt: r.updatedAt }}
               bars={efInput && efResult ? efBars(efInput, efResult) : undefined}
               capNote={efResult ? capNote(efResult) || undefined : undefined}
             />

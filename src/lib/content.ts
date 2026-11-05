@@ -1,3 +1,4 @@
+import { ohneMethodikV1 } from "./methodik-rank";
 import "server-only";
 import { autolinkUrls } from "./autolink";
 import { cache } from "react";
@@ -44,7 +45,7 @@ export const getLinkTerms = cache(async (): Promise<LinkTerm[]> => {
 export async function renderArticle(html: string | null | undefined, exclude: string[] = [], opts: { rot?: boolean } = {}): Promise<string> {
   const terms = (await getLinkTerms()).filter((t) => !exclude.includes(t.href));
   const clean = badgeScores(autolinkUrls(sanitize(html)));
-  // Rot-Regel: auf Testseiten unter 60 Punkten kein Partner-Link und keine Amazon-CTA-Box.
+  // Rot-Regel: auf Testseiten Rot (bis 50 Punkte) kein Partner-Link und keine Amazon-CTA-Box.
   return linkify(opts.rot ? stripAffiliateForRot(clean) : clean, terms);
 }
 
@@ -105,6 +106,7 @@ export async function getReviewsForPost(p: { slug?: string; title: string; keywo
     const tagged = await prisma.review.findMany({
       where: {
         ...publishedWhere(),
+        ...ohneMethodikV1(),
         ...animalWhere,
         OR: [
           { keywords: { hasSome: tags } },
@@ -126,7 +128,7 @@ export async function getReviewsForPost(p: { slug?: string; title: string; keywo
   const terms = words([...p.keywords, ...lexHits, ...p.title.split(" ")]).filter((w) => !/^(warum|werden|sollten|richtig|zwingend|brauchen|sinnvoll|marketing|unterschied)$/i.test(w));
   if (!terms.length) return [];
   return prisma.review.findMany({
-    where: { ...publishedWhere(), ...animalWhere, OR: terms.flatMap((t) => [{ title: { contains: t, mode: "insensitive" as const } }, { keyword: { contains: t, mode: "insensitive" as const } }, { verdict: { contains: t, mode: "insensitive" as const } }, { bodyHtml: { contains: t, mode: "insensitive" as const } }]) },
+    where: { ...publishedWhere(), ...ohneMethodikV1(), ...animalWhere, OR: terms.flatMap((t) => [{ title: { contains: t, mode: "insensitive" as const } }, { keyword: { contains: t, mode: "insensitive" as const } }, { verdict: { contains: t, mode: "insensitive" as const } }, { bodyHtml: { contains: t, mode: "insensitive" as const } }]) },
     orderBy: { totalScore: "desc" },
     take,
     select: reviewCardSelect,
@@ -138,7 +140,7 @@ export function getReviewsMentioning(names: string[], take = 12) {
   const n = names.map((s) => s.trim()).filter((s) => s.length >= 3);
   if (!n.length) return Promise.resolve([]);
   return prisma.review.findMany({
-    where: { ...publishedWhere(), OR: n.flatMap((t) => [{ bodyHtml: { contains: t, mode: "insensitive" as const } }, { verdict: { contains: t, mode: "insensitive" as const } }, { cons: { has: t } }, { pros: { has: t } }]) },
+    where: { ...publishedWhere(), ...ohneMethodikV1(), OR: n.flatMap((t) => [{ bodyHtml: { contains: t, mode: "insensitive" as const } }, { verdict: { contains: t, mode: "insensitive" as const } }, { cons: { has: t } }, { pros: { has: t } }]) },
     orderBy: { totalScore: "desc" },
     take,
     select: reviewCardSelect,

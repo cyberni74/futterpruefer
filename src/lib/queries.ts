@@ -1,3 +1,4 @@
+import { ohneMethodikV1 } from "./methodik-rank";
 import "server-only";
 import { cache } from "react";
 import { prisma } from "@/lib/db";
@@ -28,6 +29,7 @@ export const reviewCardSelect = {
   layout: true,
   efSicherheit: true,
   layoutData: true,
+  methodikVersion: true,
   priceClass: true,
   publishedAt: true,
   category: { select: { slug: true, shortName: true, animal: true } },
@@ -97,8 +99,8 @@ export function getPostBySlug(slug: string) {
 /** Produkte des Monats (Testsieger je Monat, manuelle Einträge überschreiben), neueste zuerst. */
 export async function getProductOfMonthArchive() {
   const [reviews, manual] = await Promise.all([
-    prisma.review.findMany({ where: publishedWhere(), select: reviewCardSelect }),
-    prisma.productOfMonth.findMany({ where: { review: publishedWhere() }, include: { review: { select: reviewCardSelect } } }),
+    prisma.review.findMany({ where: { ...publishedWhere(), ...ohneMethodikV1() }, select: reviewCardSelect }),
+    prisma.productOfMonth.findMany({ where: { review: { ...publishedWhere(), ...ohneMethodikV1() } }, include: { review: { select: reviewCardSelect } } }),
   ]);
   return buildMonthlyWinners(reviews, manual);
 }
@@ -148,7 +150,7 @@ export async function getTickerEntries(): Promise<TickerEntry[]> {
  */
 export async function getRelatedReviews(categoryId: string, excludeId: string, take = 3) {
   const ranking = await prisma.review.findMany({
-    where: { ...publishedWhere(), categoryId },
+    where: { ...publishedWhere(), ...ohneMethodikV1(), categoryId },
     orderBy: [{ totalScore: "desc" }, { id: "asc" }],
     select: { id: true },
   });
@@ -201,7 +203,7 @@ export async function getCategoryLeaders() {
       const where = { ...publishedWhere(), categoryId: c.id };
       const [count, top] = await Promise.all([
         prisma.review.count({ where }),
-        prisma.review.findFirst({ where, orderBy: [{ totalScore: "desc" }, { publishedAt: "desc" }], select: { slug: true, brand: true, productName: true, totalScore: true } }),
+        prisma.review.findFirst({ where: { ...where, ...ohneMethodikV1() }, orderBy: [{ totalScore: "desc" }, { publishedAt: "desc" }], select: { slug: true, brand: true, productName: true, totalScore: true } }),
       ]);
       return { ...c, count, top };
     }),

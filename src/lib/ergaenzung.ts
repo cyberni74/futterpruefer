@@ -1,4 +1,8 @@
 /** Ergänzungsfutter-Bewertung. Reine Funktionen, serverseitig und im Admin genutzt. */
+import { RATING_THRESHOLDS } from "./scoring";
+
+/** Obergrenzen der Ergänzungsfutter-Bewertung, Version 2 (seit 05.11.2026; vorher 59 / 59 / 79 / 59 / 39). */
+export const EF_DECKEL = { alibi: 50, keineMenge: 50, heilaussage: 67, sicherheitMittel: 50, sicherheitSchwer: 33 } as const;
 import { isSponsoredHref } from "./sanitize";
 
 export const EF_METHODIK_VERSION = "ergaenzung-v1";
@@ -99,26 +103,26 @@ export function scoreErgaenzung(input: EfInput): EfResult {
   let cap = 100;
   const gruende: string[] = [];
   if (input.alibi) {
-    cap = Math.min(cap, 59);
-    gruende.push("Alibi-Dosierung: höchstens 59 Punkte.");
+    cap = Math.min(cap, EF_DECKEL.alibi);
+    gruende.push(`Alibi-Dosierung: höchstens ${EF_DECKEL.alibi} Punkte.`);
   } else if (mengen === 0) {
-    cap = Math.min(cap, 59);
-    gruende.push("Keine deklarierte Wirkstoffmenge: höchstens 59 Punkte.");
+    cap = Math.min(cap, EF_DECKEL.keineMenge);
+    gruende.push(`Keine deklarierte Wirkstoffmenge: höchstens ${EF_DECKEL.keineMenge} Punkte.`);
   }
   if (input.heilaussage) {
-    cap = Math.min(cap, 79);
-    gruende.push("Heilaussage: höchstens 79 Punkte.");
+    cap = Math.min(cap, EF_DECKEL.heilaussage);
+    gruende.push(`Heilaussage: höchstens ${EF_DECKEL.heilaussage} Punkte.`);
   }
   if (input.sicherheit === "MITTEL") {
-    cap = Math.min(cap, 59);
-    gruende.push("Sicherheit mittel: rotes Warnsignal, höchstens 59 Punkte.");
+    cap = Math.min(cap, EF_DECKEL.sicherheitMittel);
+    gruende.push(`Sicherheit mittel: rotes Warnsignal, höchstens ${EF_DECKEL.sicherheitMittel} Punkte.`);
   }
   if (input.sicherheit === "SCHWER") {
-    cap = Math.min(cap, 39);
-    gruende.push("Sicherheit schwer: rotes Warnsignal, höchstens 39 Punkte.");
+    cap = Math.min(cap, EF_DECKEL.sicherheitSchwer);
+    gruende.push(`Sicherheit schwer: rotes Warnsignal, höchstens ${EF_DECKEL.sicherheitSchwer} Punkte.`);
   }
   const gesamt = Math.min(summe, cap);
-  const ampel: EfAmpel = gesamt >= 80 ? "GRUEN" : gesamt >= 60 ? "GELB" : "ROT";
+  const ampel: EfAmpel = gesamt >= RATING_THRESHOLDS.gut ? "GRUEN" : gesamt >= RATING_THRESHOLDS.mittel ? "GELB" : "ROT";
   return { dosierung, summe, cap, gesamt, warnsignal: input.sicherheit !== "OK", ampel, gruende };
 }
 

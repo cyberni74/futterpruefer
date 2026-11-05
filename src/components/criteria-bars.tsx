@@ -8,14 +8,14 @@ const COLOR = { gut: "var(--good)", mittel: "var(--mid-fill)", schlecht: "var(--
 export type CriteriaBarItem = { key: string; label: string; max: number; value: number; failed?: boolean };
 
 /** Sechs Kriterien-Balken; füllen sich nacheinander beim Sichtbarwerden (nur transform → flüssig, kein Layout-Shift). */
-export function CriteriaBars({ scores, items }: { scores: Scores; items?: CriteriaBarItem[] }) {
+export function CriteriaBars({ scores, items, methodikVersion }: { scores: Scores; items?: CriteriaBarItem[]; methodikVersion?: string | null }) {
   const reduce = useReducedMotion();
   if (items) {
     return (
       <ul className="space-y-3.5">
         {items.map((c, i) => {
           const v = Math.max(0, Math.min(c.max, Math.round(Number(c.value) || 0)));
-          const tone = c.failed ? "schlecht" : ratioRating(v, c.max);
+          const tone = c.failed ? "schlecht" : ratioRating(v, c.max, methodikVersion);
           const ratio = c.max > 0 ? v / c.max : 0;
           return (
             <li key={c.key}>
@@ -49,7 +49,7 @@ export function CriteriaBars({ scores, items }: { scores: Scores; items?: Criter
       {CRITERIA.map((c, i) => {
         const v = Math.max(0, Math.min(c.max, Math.round(Number(scores?.[c.key] ?? 0)) || 0));
         const failed = c.key === "scoreHarmful" && harmfulFailed(v);
-        const tone = failed ? "schlecht" : ratioRating(v, c.max);
+        const tone = failed ? "schlecht" : ratioRating(v, c.max, methodikVersion);
         const ratio = v / c.max;
         return (
           <li key={c.key}>

@@ -59,7 +59,7 @@ describe("Startseiten-Text", () => {
     expect(intro).toContain(`${harmful.label} (${harmful.max}; bewertet anhand der deklarierten Zutaten und Zusatzstoffe)`);
     expect(HOME_FAQ[1].a).toContain(`Ab ${RATING_THRESHOLDS.gut} Punkten`);
     expect(HOME_FAQ[1].a).toContain(`von ${RATING_THRESHOLDS.mittel} bis ${RATING_THRESHOLDS.gut - 1} Punkten`);
-    expect(HOME_FAQ[1].a).toContain(`unter ${RATING_THRESHOLDS.mittel} Punkten rot (keine Empfehlung)`);
+    expect(HOME_FAQ[1].a).toContain(`bis ${RATING_THRESHOLDS.mittel - 1} Punkte rot (keine Empfehlung)`);
     expect(HOME_FAQ[1].a).not.toContain("nicht empfehlenswert");
     expect(RATING_LABEL.schlecht).toBe("Rot – keine Empfehlung");
     const storedHarmful = CRITERIA.find((c) => c.key === "scoreHarmful")!;

@@ -28,6 +28,7 @@ function card(over: Partial<ReviewCardData>): ReviewCardData {
     layout: "",
     efSicherheit: "OK",
     layoutData: null,
+    methodikVersion: "",
     priceClass: "MITTEL",
     publishedAt: new Date("2026-10-27T12:00:00Z"),
     category: { slug: "ergaenzungsfuttermittel-hund", shortName: "Ergänzungsfuttermittel Hund", animal: "HUND" },

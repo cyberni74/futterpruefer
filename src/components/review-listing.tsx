@@ -1,3 +1,4 @@
+import { v1Zuletzt } from "@/lib/methodik-rank";
 import Link from "next/link";
 import { prisma } from "@/lib/db";
 import { canonicalBrand } from "@/lib/brand-alias";
@@ -27,7 +28,7 @@ export async function ReviewListing({ basePath, filters, categoryId, showAnimal 
   };
   // Mit Preisklasse: Kandidaten per Prisma, exakte Quellenprüfung und Limit danach,
   // damit Tests ohne Preisquelle keine der ersten Plätze belegen.
-  const reviews = filters.preis
+  const gefunden = filters.preis
     ? reviewsMatchingPriceFilter(await prisma.review.findMany({
         where: { AND: [listWhere, priceClassCandidateWhere(filters.preis)] },
         orderBy: orderByFor(filters.sort),
@@ -39,6 +40,8 @@ export async function ReviewListing({ basePath, filters, categoryId, showAnimal 
         select: reviewCardSelect,
         take: REVIEW_LIST_CAP,
       });
+  // Tests auf Version 1 stehen am Listenende, nicht zwischen Version-2-Werten (nur bei Sortierung nach Punkten)
+  const reviews = filters.sort === "punkte" || !(["neu", "preis_auf", "preis_ab"] as string[]).includes(filters.sort) ? v1Zuletzt(gefunden) : gefunden;
 
   const field = "min-h-11 rounded-xl border border-border bg-surface px-3 text-sm font-medium";
   return (
