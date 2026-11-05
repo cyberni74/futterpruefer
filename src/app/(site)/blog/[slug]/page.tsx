@@ -50,6 +50,7 @@ const BODY_FAQ_SLUGS = new Set([
   "krill-tierfutter-antarktis",
   "klimabilanz-hundefutter-co2",
   "fleischherkunft-tierhaltung-tierfutter",
+  "katze-trinkt-zu-wenig-wasserbedarf",
 ]);
 
 export async function generateStaticParams() {
