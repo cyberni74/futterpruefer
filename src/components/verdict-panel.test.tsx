@@ -33,7 +33,8 @@ describe("Fazit-Box", () => {
   it("Deckelzeile an den Balken, Teilwerte bleiben roh", () => {
     const data: VerdictData = { ...base, scoreRaw: 26, scoreHarmful: 20, scoreNutrients: 17, scoreDeclaration: 2, scoreNeeds: 7, scoreValue: 3, totalScore: 59 };
     const html = renderToStaticMarkup(<VerdictPanel data={data} />);
-    expect(html).toContain("Deckel aktiv (Deklaration &amp; Transparenz unter 6 von 15 Punkten: höchstens 59 Punkte (befriedigend).). Summe 75, gewertet 59.");
+    expect(html).toContain("Deckel aktiv (Deklaration &amp; Transparenz unter 6 von 15 Punkten: höchstens 59 Punkte (befriedigend)). Summe 75, gewertet 59.");
+    expect(html).not.toContain("(befriedigend).)");
     expect(html).toContain('aria-label="Deklaration &amp; Transparenz: 2 von 15 Punkten"');
     expect(html).toContain('aria-valuenow="26"');
     expect(html).toContain('aria-label="Rohstoffqualität: 26 von 30 Punkten"');

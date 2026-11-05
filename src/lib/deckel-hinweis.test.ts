@@ -25,7 +25,7 @@ describe("Deckel-Hinweis Alleinfutter", () => {
   it("MjAMjAM Möhrchen: Deklaration 2, Summe 75, gewertet 59", () => {
     const scores = voll({ scoreRaw: 26, scoreHarmful: 20, scoreNutrients: 17, scoreDeclaration: 2, scoreNeeds: 7, scoreValue: 3 });
     expect(alleinfutterDeckelHinweis(scores, 59)).toBe(
-      "Deckel aktiv (Deklaration & Transparenz unter 6 von 15 Punkten: höchstens 59 Punkte (befriedigend).). Summe 75, gewertet 59.",
+      "Deckel aktiv (Deklaration & Transparenz unter 6 von 15 Punkten: höchstens 59 Punkte (befriedigend)). Summe 75, gewertet 59.",
     );
     expect(scores.scoreDeclaration).toBe(2);
   });
@@ -36,7 +36,8 @@ describe("Deckel-Hinweis Alleinfutter", () => {
     const wolfsblut = voll({ scoreRaw: 24, scoreHarmful: 15, scoreNutrients: 13, scoreDeclaration: 0, scoreNeeds: 7, scoreValue: 2 });
     for (const scores of [vegdog, leonardo, wolfsblut]) {
       const text = alleinfutterDeckelHinweis(scores, 59);
-      expect(text).toContain("Deklaration & Transparenz unter 6 von 15 Punkten: höchstens 59 Punkte (befriedigend).");
+      expect(text).toContain("Deklaration & Transparenz unter 6 von 15 Punkten: höchstens 59 Punkte (befriedigend)");
+      expect(text).not.toContain("(befriedigend).)");
       expect(text).toContain("gewertet 59.");
       expect(text).not.toContain("höchstens 50");
     }
@@ -48,8 +49,18 @@ describe("Deckel-Hinweis Alleinfutter", () => {
   it("Mera: Rohstoffqualität 11 löst höchstens 59 aus, Deklaration 10 nicht", () => {
     const scores = voll({ scoreRaw: 11, scoreHarmful: 14, scoreNutrients: 15, scoreDeclaration: 10, scoreNeeds: 7, scoreValue: 4 });
     expect(alleinfutterDeckelHinweis(scores, 59)).toBe(
-      "Deckel aktiv (Rohstoffqualität unter 12 von 30 Punkten: höchstens 59 Punkte (befriedigend).). Summe 61, gewertet 59.",
+      "Deckel aktiv (Rohstoffqualität unter 12 von 30 Punkten: höchstens 59 Punkte (befriedigend)). Summe 61, gewertet 59.",
     );
+  });
+
+  it("zwei Notenhinweise: Punkt zwischen den Gründen, Satzpunkt erst nach der Klammer", () => {
+    const scores = voll({ scoreRaw: 11, scoreDeclaration: 2 });
+    const text = alleinfutterDeckelHinweis(scores, 59);
+    expect(text).toBe(
+      "Deckel aktiv (Rohstoffqualität unter 12 von 30 Punkten: höchstens 59 Punkte (befriedigend). Deklaration & Transparenz unter 6 von 15 Punkten: höchstens 59 Punkte (befriedigend)). Summe 63, gewertet 59.",
+    );
+    expect(text).not.toContain("befriedigend).).");
+    expect(text).not.toContain("befriedigend.).");
   });
 
   it("6 von 15 und 12 von 30 lösen die Obergrenze 59 nicht aus", () => {
@@ -63,7 +74,8 @@ describe("Deckel-Hinweis Alleinfutter", () => {
     const scores = voll({ scoreHarmful: 8, scoreDeclaration: 3, scoreValue: 0 });
     const text = alleinfutterDeckelHinweis(scores, 50);
     expect(text).toContain("Schadstoffe & Bedenkliches unter 10 von 20 Punkten: höchstens 50 Punkte (ausreichend).");
-    expect(text).toContain("Deklaration & Transparenz unter 6 von 15 Punkten: höchstens 59 Punkte (befriedigend).");
+    expect(text).toContain("Deklaration & Transparenz unter 6 von 15 Punkten: höchstens 59 Punkte (befriedigend)).");
+    expect(text).not.toContain("(befriedigend).)");
     expect(text).toContain(`Summe ${8 + 26 + 17 + 3 + 9 + 0}, gewertet 50.`);
   });
 
@@ -116,7 +128,7 @@ describe("Deckel-Hinweis Alleinfutter", () => {
       const text = alleinfutterDeckelHinweis(scores, 59);
       expect(summe, name).toBeGreaterThan(59);
       expect(text, name).toBe(
-        `Deckel aktiv (${declaration < 6 ? "Deklaration & Transparenz unter 6 von 15 Punkten: höchstens 59 Punkte (befriedigend)." : ""}${raw < 12 && declaration < 6 ? " " : ""}${raw < 12 ? "Rohstoffqualität unter 12 von 30 Punkten: höchstens 59 Punkte (befriedigend)." : ""}). Summe ${summe}, gewertet 59.`,
+        `Deckel aktiv (${declaration < 6 ? "Deklaration & Transparenz unter 6 von 15 Punkten: höchstens 59 Punkte (befriedigend)" : ""}${raw < 12 && declaration < 6 ? " " : ""}${raw < 12 ? "Rohstoffqualität unter 12 von 30 Punkten: höchstens 59 Punkte (befriedigend)" : ""}). Summe ${summe}, gewertet 59.`,
       );
     }
     const ohne = [

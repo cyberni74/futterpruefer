@@ -7,7 +7,12 @@ import { CRITERIA, clampScore, isMethodikV1, totalScore, type CriterionKey, type
  */
 export function formatDeckelHinweis(gruende: readonly string[], summe: number, gewertet: number): string {
   if (gruende.length === 0 || summe === gewertet) return "";
-  return `Deckel aktiv (${gruende.join(" ")}). Summe ${summe}, gewertet ${gewertet}.`;
+  const innen = gruende.join(" ");
+  // Der Notenhinweis endet schon mit „(befriedigend).“. Der Satzpunkt von
+  // „Deckel aktiv (…).“ steht danach, sonst erscheint live „(befriedigend).).“.
+  // Andere Gründe (ausreichend, Heilaussage, …) bleiben unverändert.
+  const kern = innen.endsWith("(befriedigend).") ? innen.slice(0, -1) : innen;
+  return `Deckel aktiv (${kern}). Summe ${summe}, gewertet ${gewertet}.`;
 }
 
 /**
