@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { AlertTriangle, PawPrint } from "lucide-react";
 import type { ReviewCardData } from "@/lib/queries";
+import { isMethodikV1 } from "@/lib/scoring";
+import { V1_KENNZEICHNUNG } from "@/lib/methodik-rank";
 import { showsBedenklichBadge } from "@/lib/bedenklich-badge";
 import { productLabel } from "@/lib/seo";
 import { hyphenateCategory, reviewPath } from "@/lib/urls";
@@ -23,12 +25,13 @@ export function ReviewCard({ review, priority = false, eager = false, imageSizes
           )}
         </div>
         <div className="relative flex flex-1 flex-col p-2 pt-4 sm:p-4 sm:pt-5">
-          <ScoreBadge score={review.totalScore} size="sm" className="absolute -top-6 right-1.5 z-10 sm:-top-7 sm:right-3" />
+          <ScoreBadge score={review.totalScore} methodikVersion={review.methodikVersion} size="sm" className="absolute -top-6 right-1.5 z-10 sm:-top-7 sm:right-3" />
           <p className="hidden pr-12 text-[0.7rem] font-bold uppercase tracking-wide text-brand sm:block">{hyphenateCategory(review.category?.shortName)}</p>
           <h3 className="hyphens-auto break-words text-[0.78rem] font-bold leading-tight sm:mt-1 sm:text-base sm:leading-snug">
             <Link href={reviewPath(review)} className="line-clamp-4 after:absolute after:inset-0 after:z-[1] sm:line-clamp-3">{review.title}</Link>
           </h3>
           {review.teaser && <p className="mt-2 hidden line-clamp-3 text-sm leading-relaxed text-muted lg:block">{review.teaser}</p>}
+          {isMethodikV1(review.methodikVersion) ? <p className="mt-2 text-xs text-muted">{V1_KENNZEICHNUNG}</p> : null}
         </div>
       </article>
     );
@@ -50,13 +53,14 @@ export function ReviewCard({ review, priority = false, eager = false, imageSizes
       </div>
       {imageCredit && !neutralImage ? <p className="px-4 pt-2 text-xs text-muted">{imageCredit}</p> : null}
       <div className="relative flex flex-1 flex-col p-4 pt-5">
-        <ScoreBadge score={review.totalScore} className="absolute -top-9 right-4 z-10" />
+        <ScoreBadge score={review.totalScore} methodikVersion={review.methodikVersion} className="absolute -top-9 right-4 z-10" />
         <p className="text-xs font-bold uppercase tracking-wide text-brand">{hyphenateCategory(review.category?.shortName)}</p>
         <h3 className="mt-1 pr-16 text-lg font-bold leading-snug">
           <Link href={reviewPath(review)} className="after:absolute after:inset-0 after:z-[1]">
             {review.title}
           </Link>
         </h3>
+        {isMethodikV1(review.methodikVersion) ? <p className="mt-2 text-xs text-muted">{V1_KENNZEICHNUNG}</p> : null}
         {review.teaser ? (
           <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-muted">{review.teaser}</p>
         ) : (

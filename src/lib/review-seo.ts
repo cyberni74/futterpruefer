@@ -1,4 +1,4 @@
-import { ratingFor, RATING_LABEL } from "./scoring";
+import { ratingFor, RATING_LABEL, thresholdsFor } from "./scoring";
 import { misleadingClaims, splitComposition, type Claim } from "./product-data";
 import { frameQuote } from "./quotes";
 import { REVIEW_EXTRA_FAQ } from "./review-extra-faq";
@@ -11,8 +11,8 @@ import { REVIEW_EXTRA_FAQ } from "./review-extra-faq";
 
 export const AMPEL_WORD = { gut: "Grün", mittel: "Gelb", schlecht: "Rot" } as const;
 
-export function ampelFor(score: number | null | undefined): string {
-  return AMPEL_WORD[ratingFor(score)];
+export function ampelFor(score: number | null | undefined, methodikVersion?: string | null): string {
+  return AMPEL_WORD[ratingFor(score, methodikVersion)];
 }
 
 const TZ = "Europe/Berlin";
@@ -50,6 +50,8 @@ export type ReviewSeoInput = {
   slug?: string;
   name: string;
   totalScore: number;
+  /** DB-Feld methodikVersion: „1“ = Darstellung nach den Ampelgrenzen von Version 1 (80/60). */
+  methodikVersion?: string | null;
   testedAt: Date | null | undefined;
   verdict?: string | null;
   pros?: string[] | null;
@@ -70,7 +72,7 @@ const lowerFirst = (s: string) => s.charAt(0).toLocaleLowerCase("de") + s.slice(
 
 /** Erster Satz: beantwortet „Wie schneidet … im Test ab?“ direkt mit Punkten und Ampel. */
 export function directAnswer(r: ReviewSeoInput): string {
-  const rating = ratingFor(r.totalScore);
+  const rating = ratingFor(r.totalScore, r.methodikVersion);
   const d = dayDate(r.testedAt);
   const label = RATING_LABEL[rating];
   // „Rot – …“ ist der Name der roten Ampel und bleibt groß. Die anderen Notenwörter stehen im Satz klein.
@@ -154,7 +156,7 @@ export function amazonPriceUrl(input: { html?: string | null; asin?: string | nu
 }
 
 export function kurzGesagt(r: ReviewSeoInput): string[] {
-  const rating = ratingFor(r.totalScore);
+  const rating = ratingFor(r.totalScore, r.methodikVersion);
   const items = [`${r.totalScore}/100 Punkte, Ampel ${AMPEL_WORD[rating]}: ${RATING_LABEL[rating]}.`];
   const pro = clean(r.pros?.[0]);
   if (pro) items.push(`Pluspunkt: ${sentence(pro)}`);
@@ -170,7 +172,7 @@ export function kurzGesagt(r: ReviewSeoInput): string[] {
 export type FaqItem = { question: string; answer: string };
 
 export function reviewFaq(r: ReviewSeoInput, comparison?: { title: string } | null, productInComparison = false): FaqItem[] {
-  const rating = ratingFor(r.totalScore);
+  const rating = ratingFor(r.totalScore, r.methodikVersion);
   const d = dayDate(r.testedAt);
   const out: FaqItem[] = [];
   const verdict = withoutLeadingScore(clean(r.verdict), r.totalScore);
@@ -203,7 +205,7 @@ export function reviewFaq(r: ReviewSeoInput, comparison?: { title: string } | nu
   }
   out.push({
     question: `Wie hat Futterprüfer ${r.name} getestet?`,
-    answer: `Wir haben ${r.name} nicht im Labor untersucht. Unsere Bewertung beruht auf veröffentlichten Angaben: Produktseite, Deklaration und öffentlich zugängliche Herstellerangaben${d ? ` (Stand ${d})` : ""}. Bewertet wird nach unserem ${r.ergaenzung ? "Bewertungsschema für Ergänzungsfutter" : "rezepturbasierten Bewertungsschema"} mit 100 Punkten: ab 80 Grün, ab 60 Gelb, darunter Rot.`,
+    answer: `Wir haben ${r.name} nicht im Labor untersucht. Unsere Bewertung beruht auf veröffentlichten Angaben: Produktseite, Deklaration und öffentlich zugängliche Herstellerangaben${d ? ` (Stand ${d})` : ""}. Bewertet wird nach unserem ${r.ergaenzung ? "Bewertungsschema für Ergänzungsfutter" : "rezepturbasierten Bewertungsschema"} mit 100 Punkten: ab ${thresholdsFor(r.methodikVersion).gut} Grün, ab ${thresholdsFor(r.methodikVersion).mittel} Gelb, darunter Rot.`,
   });
   if (comparison) {
     out.push(

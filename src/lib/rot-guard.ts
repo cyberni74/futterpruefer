@@ -7,8 +7,8 @@ import { ratingFor } from "./scoring";
  * Rot-Tests einen neutralen Amazon-Link; die Testseite ruft stripAffiliateForRot nicht mehr auf.
  * isRotScore bleibt als Hilfsfunktion.
  */
-export function isRotScore(total: number | null | undefined): boolean {
-  return ratingFor(total) === "schlecht";
+export function isRotScore(total: number | null | undefined, methodikVersion?: string | null): boolean {
+  return ratingFor(total, methodikVersion) === "schlecht";
 }
 
 const hasClass = (attribs: Record<string, string> | undefined, name: string) =>

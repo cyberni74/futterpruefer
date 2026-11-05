@@ -1,3 +1,5 @@
+import { isMethodikV1 } from "./scoring";
+import { V1_KENNZEICHNUNG } from "./methodik-rank";
 import "server-only";
 import { prisma } from "@/lib/db";
 
@@ -9,6 +11,8 @@ export type SearchHit = {
   title: string;
   subtitle: string;
   score: number | null;
+  /** DB-Feld methodikVersion des Tests (nur bei Tests): „1“ = Ampel nach Version 1. */
+  methodikVersion?: string;
   imageUrl: string | null;
 };
 
@@ -20,8 +24,8 @@ export async function search(query: string | null | undefined, limit = 20): Prom
   const now = new Date();
 
   const [tests, posts, lex] = await Promise.all([
-    prisma.$queryRaw<Array<{ slug: string; catSlug: string; title: string; brand: string; keyword: string; totalScore: number; imageUrl: string | null; rank: number }>>`
-      SELECT r.slug, c.slug AS "catSlug", title, brand, keyword, "totalScore", "imageUrl",
+    prisma.$queryRaw<Array<{ slug: string; catSlug: string; title: string; brand: string; keyword: string; totalScore: number; methodikVersion: string; imageUrl: string | null; rank: number }>>`
+      SELECT r.slug, c.slug AS "catSlug", title, brand, keyword, "totalScore", "methodikVersion", "imageUrl",
         ts_rank(to_tsvector('german', coalesce(title,'') || ' ' || coalesce(brand,'') || ' ' || coalesce("productName",'') || ' ' || coalesce(keyword,'') || ' ' || coalesce(verdict,'')), websearch_to_tsquery('german', ${q}))
         + similarity(lower(brand || ' ' || "productName"), lower(${q})) AS rank
       FROM "Review" r JOIN "Category" c ON c.id = r."categoryId"
@@ -59,9 +63,9 @@ export async function search(query: string | null | undefined, limit = 20): Prom
   ]);
 
   const hits: Array<SearchHit & { rank: number }> = [
-    ...tests.map((t) => ({ type: "test" as const, slug: t.slug, href: `/${t.catSlug}/${t.slug}`, title: t.title, subtitle: t.keyword || t.brand, score: t.totalScore, imageUrl: t.imageUrl, rank: Number(t.rank) })),
+    ...tests.map((t) => ({ type: "test" as const, slug: t.slug, href: `/${t.catSlug}/${t.slug}`, title: t.title, subtitle: isMethodikV1(t.methodikVersion) ? `${t.keyword || t.brand} · ${V1_KENNZEICHNUNG}` : t.keyword || t.brand, score: t.totalScore, methodikVersion: t.methodikVersion, imageUrl: t.imageUrl, rank: Number(t.rank) })),
     ...lex.map((l) => ({ type: "lexikon" as const, slug: l.slug, href: `/lexikon/${l.slug}`, title: l.name, subtitle: l.shortDescription, score: null, imageUrl: null, rank: Number(l.rank) })),
     ...posts.map((p) => ({ type: "blog" as const, slug: p.slug, href: `/blog/${p.slug}`, title: p.title, subtitle: p.excerpt, score: null, imageUrl: p.imageUrl, rank: Number(p.rank) })),
   ];
-  return hits.sort((a, b) => b.rank - a.rank).slice(0, limit).map(({ type, slug, href, title, subtitle, score, imageUrl }) => ({ type, slug, href, title, subtitle, score, imageUrl }));
+  return hits.sort((a, b) => b.rank - a.rank).slice(0, limit).map(({ type, slug, href, title, subtitle, score, methodikVersion, imageUrl }) => ({ type, slug, href, title, subtitle, score, ...(methodikVersion !== undefined ? { methodikVersion } : {}), imageUrl }));
 }

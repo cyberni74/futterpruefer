@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import {
+  EF_DECKEL,
   EF_FIELDS,
   EF_METHODIK_VERSION,
   EINHEIT_LABEL,
@@ -227,7 +228,7 @@ export function ErgaenzungFields({
         <div className="mt-4 space-y-4">
           <label className="flex min-h-11 items-center gap-3 text-sm font-semibold">
             <input type="checkbox" name="efAlibiDosierung" value="true" checked={value.alibi} onChange={(e) => set({ alibi: e.target.checked, dosierung: e.target.checked ? "0" : value.dosierung })} />
-            Alibi-Dosierung (Dosierung wird 0, Gesamtnote höchstens 59)
+            Alibi-Dosierung (Dosierung wird 0, Gesamtnote höchstens {EF_DECKEL.alibi})
           </label>
           <label className="flex min-h-11 items-center gap-3 text-sm font-semibold">
             <input type="checkbox" name="efKeineReferenzdosis" value="true" checked={value.keineReferenz} onChange={(e) => set({ keineReferenz: e.target.checked })} />
@@ -240,8 +241,8 @@ export function ErgaenzungFields({
           <Field id="efSicherheit" label="Sicherheit" error={errors.efSicherheit}>
             <select id="efSicherheit" name="efSicherheit" value={value.sicherheit} onChange={(e) => set({ sicherheit: e.target.value as EfFormState["sicherheit"] })} className={inputCls}>
               <option value="OK">OK</option>
-              <option value="MITTEL">mittel (Warnsignal, höchstens 59)</option>
-              <option value="SCHWER">schwer (Warnsignal, höchstens 39)</option>
+              <option value="MITTEL">{`mittel (Warnsignal, höchstens ${EF_DECKEL.sicherheitMittel})`}</option>
+              <option value="SCHWER">{`schwer (Warnsignal, höchstens ${EF_DECKEL.sicherheitSchwer})`}</option>
             </select>
           </Field>
           <Field id="efSicherheitBegruendung" label={`Begründung Sicherheit${value.sicherheit === "OK" ? "" : " *"}`} error={errors.efSicherheitBegruendung}>

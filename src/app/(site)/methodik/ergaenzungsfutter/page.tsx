@@ -4,6 +4,8 @@ import { JsonLd } from "@/components/json-ld";
 import { PageShell } from "@/components/page-shell";
 import { faqPageJsonLd } from "@/lib/faq-schema";
 import { trimMetaDescription } from "@/lib/seo";
+import { EF_DECKEL } from "@/lib/ergaenzung";
+import { METHODOLOGY_CHANGELOG_ERGAENZUNG_V2, RATING_THRESHOLDS } from "@/lib/scoring";
 
 const TITLE = "Methodik Ergänzungsfutter: So testen wir";
 const DESCRIPTION = trimMetaDescription(
@@ -113,6 +115,7 @@ export default function ErgaenzungsfutterMethodikPage() {
         <p><em>Stand: 27.10.2026 · Verantwortlich: Redaktion Futterprüfer · Methodik-Version: ergaenzung-v1.1</em></p>
         <p><strong>Änderungsprotokoll:</strong></p>
         <ul>
+          <li><strong>05.11.2026:</strong> {METHODOLOGY_CHANGELOG_ERGAENZUNG_V2.replace(/^05\.11\.2026 – /, "")}</li>
           <li><strong>27.10.2026:</strong> Geltungsbereich festgelegt (Abschnitt 1, „Für welche Ergänzungsfutter gilt diese Bewertung?“): Ergänzungsfutter, die ein Futter im Alltagssinn sind und keinen benannten Wirkstoff haben, etwa Nassfutter-Filets und Snacks, bewerten wir nach der <Link href="/methodik">Methodik für Alleinfutter</Link> mit sechs Kriterien. Die fünf Kriterien dieser Seite gelten für funktionelle Ergänzungsfutter mit Wirkstoff oder Wirkversprechen. Durch diese Festlegung hat sich keine Punktzahl geändert. Ältere Tests funktioneller Produkte mit sechs Teilnoten bleiben nach den sechs Kriterien bewertet.</li>
           <li><strong>27.10.2026:</strong> Renaltec als Lücke in die Referenztabelle aufgenommen (Begründung in der Tabelle).</li>
           <li><strong>25.10.2026 – ergaenzung-v1.1:</strong> Drei Regeln für Omega-3-Produkte ergänzt: Abzug für Omega-3-Quellen ohne Wirksamkeitsstudie beim Hund (Abschnitt 3), Abzug je weiterem Öl ohne belegten Nutzen (Abschnitt 3), Stufung der Dosierung bei Haut und Fell (Abschnitt 4). Auf unseren Lachsöl-Test vom 23.10.2026 angewendet, ändern die Regeln keine Punktzahl. Erstmals angewendet im Algenöl-Test Oktober 2026.</li>
@@ -185,7 +188,7 @@ export default function ErgaenzungsfutterMethodikPage() {
           <li><strong>0 Punkte:</strong> keine Mengenangabe zu EPA und DHA.</li>
         </ul>
         <p>Tropfen ohne Größenangabe rechnen wir mit 0,025 bis 0,05 ml.</p>
-        <p><strong>Alibi-Regel:</strong> Wird ein Wirkstoff beworben, aber als Alibi dosiert, ist die Gesamtnote <strong>höchstens 59 Punkte (Rot)</strong>.</p>
+        <p><strong>Alibi-Regel:</strong> Wird ein Wirkstoff beworben, aber als Alibi dosiert, ist die Gesamtnote <strong>höchstens {EF_DECKEL.alibi} Punkte (Rot)</strong>.</p>
         <p><strong>Quellen zu den Omega-3-Regeln (ergaenzung-v1.1):</strong></p>
         <ul>
           <li>Bauer J. E., Therapeutic use of fish oils in companion animals, J Am Vet Med Assoc 2011;239:1441–1451, <Quelle href="https://pubmed.ncbi.nlm.nih.gov/22087720/">PMID 22087720</Quelle></li>
@@ -335,7 +338,7 @@ export default function ErgaenzungsfutterMethodikPage() {
           <li><strong>6–11:</strong> unbelegte Wirkversprechen, fehlende Pflichtangaben oder widersprüchliche Angaben (z. B. „Ergänzung“ und „vollwertige Mahlzeit“)</li>
           <li><strong>0–5:</strong> Krankheitsbezüge („bei Arthrose“, „heilt Durchfall“) oder andere Angaben, die wir nach Prüfung für irreführend halten; jede Einstufung begründen wir im Faktencheck</li>
         </ul>
-        <p><strong>Heilaussagen-Deckel:</strong> höchstens 79 Punkte (nie Grün). Jede beanstandete Aussage steht wörtlich und mit Quelle im Faktencheck.</p>
+        <p><strong>Heilaussagen-Deckel:</strong> höchstens {EF_DECKEL.heilaussage} Punkte (nie Grün). Jede beanstandete Aussage steht wörtlich und mit Quelle im Faktencheck.</p>
 
         <h2 id="traeger">Was macht einen guten Träger aus? (15 Punkte)</h2>
         <p>Wir starten bei 15 Punkten. Gute, klar benannte und sinnvolle Rohstoffe halten die Punkte, jeder Mangel kostet:</p>
@@ -389,12 +392,12 @@ export default function ErgaenzungsfutterMethodikPage() {
         <h2 id="gesamtnote">Wie entstehen Gesamtnote und Ampel?</h2>
         <p>Punkte addieren, dann Deckel anwenden (der niedrigste gilt):</p>
         <ul>
-          <li>Alibi-Dosierung oder keine Mengenangabe: max. 59</li>
-          <li>Heilaussagen: max. 79</li>
-          <li>Sicherheit mittel: max. 59 + Warnsignal</li>
-          <li>Sicherheit schwer: max. 39 + Warnsignal</li>
+          <li>Alibi-Dosierung oder keine Mengenangabe: max. {EF_DECKEL.alibi}</li>
+          <li>Heilaussagen: max. {EF_DECKEL.heilaussage}</li>
+          <li>Sicherheit mittel: max. {EF_DECKEL.sicherheitMittel} + Warnsignal</li>
+          <li>Sicherheit schwer: max. {EF_DECKEL.sicherheitSchwer} + Warnsignal</li>
         </ul>
-        <p><strong className="text-good">Grün</strong> ab 80 (empfehlenswert) · <strong className="text-mid">Gelb</strong> 60–79 (mit Abstrichen) · <strong className="text-bad">Rot</strong> unter 60 (keine Empfehlung). Auch bei roter Ampel verlinken wir die Amazon-Produktseite; das ist keine Kaufempfehlung.</p>
+        <p><strong className="text-good">Grün</strong> ab {RATING_THRESHOLDS.gut} (empfehlenswert) · <strong className="text-mid">Gelb</strong> {RATING_THRESHOLDS.mittel}–{RATING_THRESHOLDS.gut - 1} (mit Abstrichen) · <strong className="text-bad">Rot</strong> bis {RATING_THRESHOLDS.mittel - 1} (keine Empfehlung). Auch bei roter Ampel verlinken wir die Amazon-Produktseite; das ist keine Kaufempfehlung.</p>
 
         <h2 id="faq">Häufige Fragen</h2>
         {ERGAENZUNG_FAQ.map((item) => (

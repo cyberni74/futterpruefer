@@ -1,4 +1,5 @@
 import "server-only";
+import { RATING_THRESHOLDS } from "@/lib/scoring";
 import { prisma } from "@/lib/db";
 import { publishedWhere } from "@/lib/queries";
 import { ReviewCardData, reviewCardSelect } from "@/lib/queries";
@@ -10,7 +11,7 @@ export type TestCta = ReviewCardData;
 export async function ladeTestCtas(art: "hund" | "katze"): Promise<Record<"trocken" | "nass", TestCta[]>> {
   try {
     const rows = await prisma.review.findMany({
-      where: { ...publishedWhere(), bewertungsart: "ALLEINFUTTER", totalScore: { gte: 60 }, category: { animal: art === "hund" ? "HUND" : "KATZE" } },
+      where: { ...publishedWhere(), bewertungsart: "ALLEINFUTTER", totalScore: { gte: RATING_THRESHOLDS.mittel }, category: { animal: art === "hund" ? "HUND" : "KATZE" } },
       select: { ...reviewCardSelect, analysis: true },
       orderBy: { totalScore: "desc" },
       take: 80,

@@ -4,11 +4,11 @@ const zahl = (x: number) => new Intl.NumberFormat("de-DE", { maximumFractionDigi
 
 /**
  * Halbkreis-Tacho aus geometrisch berechneten Bögen (Start links, Endpunkt aus punkte/max, nie über 180°).
- * Farbe nach Ampel (80 % / 60 %). Kein stroke-dasharray.
+ * Farbe nach Ampel (68 % / 51 %, Version 1: 80 % / 60 %). Kein stroke-dasharray.
  */
-export function Gauge({ punkte, max, gross = false }: { punkte: number; max: number; gross?: boolean }) {
+export function Gauge({ punkte, max, gross = false, methodikVersion }: { punkte: number; max: number; gross?: boolean; methodikVersion?: string | null }) {
   const pfad = tachoPfad(punkte, max);
-  const farbe = AMPEL_FARBE[ampelFuerAnteil(tachoAnteil(punkte, max))];
+  const farbe = AMPEL_FARBE[ampelFuerAnteil(tachoAnteil(punkte, max), methodikVersion)];
   return (
     <div role="img" aria-label={`${zahl(punkte)} von ${zahl(max)} Punkten`} className={`gauge ${gross ? "gauge--large" : "gauge--small"}`}>
       <svg aria-hidden="true" viewBox="0 0 200 133" width="100%" focusable="false">

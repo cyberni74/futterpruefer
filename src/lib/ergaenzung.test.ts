@@ -54,41 +54,51 @@ describe("Ergänzungsfutter-Note", () => {
     expect(r).toMatchObject({ summe: 100, cap: 100, gesamt: 100, ampel: "GRUEN", warnsignal: false, gruende: [] });
   });
 
-  it("Alibi setzt die Dosierung auf 0 und deckelt auf 59", () => {
+  it("Alibi setzt die Dosierung auf 0 und deckelt auf 50", () => {
     const r = scoreErgaenzung(full({ alibi: true, dosierung: 27 }));
     expect(r.dosierung).toBe(0);
     expect(r.summe).toBe(70);
-    expect(r.gesamt).toBe(59);
+    expect(r.gesamt).toBe(50);
     expect(r.ampel).toBe("ROT");
     expect(r.warnsignal).toBe(false);
   });
 
-  it("fehlende Menge deckelt auf 59, auch ohne Alibi-Häkchen", () => {
+  it("fehlende Menge deckelt auf 50, auch ohne Alibi-Häkchen", () => {
     const r = scoreErgaenzung(full({ mengen: 0, dosierung: 30 }));
-    expect(r.gesamt).toBe(59);
+    expect(r.gesamt).toBe(50);
     expect(r.ampel).toBe("ROT");
   });
 
-  it("Heilaussage deckelt auf 79 und bleibt Gelb", () => {
+  it("Heilaussage mit Summe 90 ergibt 67 (Gelb), Alibi ergibt 50 (Rot)", () => {
+    const heil = scoreErgaenzung(full({ heilaussage: true }));
+    expect(heil.summe).toBeGreaterThanOrEqual(90);
+    expect(heil.gesamt).toBe(67);
+    expect(heil.ampel).toBe("GELB");
+    const alibi = scoreErgaenzung(full({ alibi: true }));
+    expect(alibi.gesamt).toBe(50);
+    expect(alibi.ampel).toBe("ROT");
+  });
+
+  it("Heilaussage deckelt auf 67 und bleibt Gelb", () => {
     const r = scoreErgaenzung(full({ heilaussage: true }));
-    expect(r.gesamt).toBe(79);
+    expect(r.gesamt).toBe(67);
     expect(r.ampel).toBe("GELB");
     expect(r.warnsignal).toBe(false);
   });
 
-  it("Sicherheit mittel deckelt auf 59 und setzt das Warnsignal", () => {
+  it("Sicherheit mittel deckelt auf 50 und setzt das Warnsignal", () => {
     const r = scoreErgaenzung(full({ sicherheit: "MITTEL" }));
-    expect(r.gesamt).toBe(59);
+    expect(r.gesamt).toBe(50);
     expect(r.warnsignal).toBe(true);
     expect(r.ampel).toBe("ROT");
   });
 
-  it("Sicherheit schwer deckelt auf 39, der niedrigste Deckel gilt", () => {
+  it("Sicherheit schwer deckelt auf 33, der niedrigste Deckel gilt", () => {
     const r = scoreErgaenzung(full({ sicherheit: "SCHWER", heilaussage: true, alibi: true }));
-    expect(r.cap).toBe(39);
-    expect(r.gesamt).toBe(39);
+    expect(r.cap).toBe(33);
+    expect(r.gesamt).toBe(33);
     expect(r.warnsignal).toBe(true);
-    expect(capNote(r)).toContain("höchstens 39");
+    expect(capNote(r)).toContain("höchstens 33");
   });
 
   it("ohne Referenzdosis ist die Dosierung höchstens 10, ohne weiteren Deckel", () => {

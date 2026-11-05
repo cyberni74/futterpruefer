@@ -1,3 +1,4 @@
+import { thresholdsFor } from "@/lib/scoring";
 /** Geometrie des Halbkreis-Tachos: Mittelpunkt (100,104), Radius 78, Start links (22,104). */
 const CX = 100;
 const CY = 104;
@@ -27,7 +28,11 @@ export function tachoPfad(punkte: number, max: number): string | null {
 }
 
 export type Ampel = "gut" | "mittel" | "schlecht";
-export const ampelFuerAnteil = (a: number): Ampel => (a >= 0.8 ? "gut" : a >= 0.6 ? "mittel" : "schlecht");
+/** Ampel des Tachos aus den Ampelgrenzen der Gesamtwertung (68 % / 51 %; Version-1-Tests 80 % / 60 %), damit Tacho und Ampel gleich färben. */
+export const ampelFuerAnteil = (a: number, methodikVersion?: string | null): Ampel => {
+  const th = thresholdsFor(methodikVersion);
+  return a >= th.gut / 100 ? "gut" : a >= th.mittel / 100 ? "mittel" : "schlecht";
+};
 export const AMPEL_FARBE: Record<Ampel, string> = { gut: "#17845f", mittel: "#bb8c31", schlecht: "#b64c48" };
 
 export type Kosten = { tagesdosis: number; menge: number; packungen: number; teilkosten: number | null; kaufpreis: number | null };

@@ -86,7 +86,7 @@ describe("Vergleich Preisklasse", () => {
 
   it("zeigt das Schadstoff-Warnzeichen nur bei klassischen Tests unter 10 Punkten", async () => {
     const schlecht = item("eeeeeeee", "Klassisch bedenklich", 3, null, { totalScore: 40, scoreHarmful: 4 });
-    const besser = item("ffffffff", "Klassisch in Ordnung", 3, null, { totalScore: 55, scoreHarmful: 16 });
+    const besser = item("ffffffff", "Klassisch in Ordnung", 3, null, { totalScore: 45, scoreHarmful: 16 });
     findMany.mockResolvedValue([schlecht, besser]);
     const html = renderToStaticMarkup(await ComparePage({ params: Promise.resolve({}), searchParams: Promise.resolve({ ids: "eeeeeeee,ffffffff" }) }));
     expect(html).not.toContain("Testsieger");

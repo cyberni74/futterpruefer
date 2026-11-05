@@ -29,7 +29,7 @@ export default async function SearchPage({ searchParams }: PageProps<"/suche">) 
             <Link href={h.href} className="flex min-h-16 items-center gap-4 py-3 hover:bg-bg-soft">
               <span className="w-12 shrink-0 text-xs font-bold uppercase text-muted">{h.type === "test" ? "Test" : h.type === "lexikon" ? "Lexikon" : "Blog"}</span>
               <span className="min-w-0 flex-1"><span className="block font-semibold">{h.title}</span><span className="line-clamp-1 text-sm text-muted">{h.subtitle}</span></span>
-              {h.score !== null && <ScoreBadge score={h.score} size="sm" />}
+              {h.score !== null && <ScoreBadge score={h.score} methodikVersion={h.methodikVersion} size="sm" />}
             </Link>
           </li>
         ))}

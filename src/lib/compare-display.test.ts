@@ -2,10 +2,10 @@ import { describe, expect, it } from "vitest";
 import { classicCriteriaApply, criterionFailed, showsComparisonWinner } from "./compare-display";
 
 describe("Vergleich Testsieger", () => {
-  it("nur ab 60 Punkten und nie bei Rot", () => {
+  it("nur ab 51 Punkten und nie bei Rot", () => {
     expect(showsComparisonWinner(27, 27)).toBe(false);
-    expect(showsComparisonWinner(59, 59)).toBe(false);
-    expect(showsComparisonWinner(60, 60)).toBe(true);
+    expect(showsComparisonWinner(50, 50)).toBe(false);
+    expect(showsComparisonWinner(51, 51)).toBe(true);
     expect(showsComparisonWinner(82, 82)).toBe(true);
     expect(showsComparisonWinner(74, 74, 2)).toBe(false);
     expect(showsComparisonWinner(74, 74, 1)).toBe(true);

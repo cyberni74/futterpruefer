@@ -6,9 +6,9 @@ const INK = "#1b2b29";
 const SIZE = { sm: 44, md: 64, lg: 84 } as const;
 
 /** Punkte-Siegel: weiße Scheibe, Ampel-Ring als Fortschritt, Punktzahl in der Mitte. */
-export function ScoreBadge({ score, size = "md", className = "" }: { score: number | null | undefined; size?: "sm" | "md" | "lg"; className?: string }) {
+export function ScoreBadge({ score, size = "md", className = "", methodikVersion }: { score: number | null | undefined; size?: "sm" | "md" | "lg"; className?: string; methodikVersion?: string | null }) {
   const s = Math.max(0, Math.min(100, Math.round(score ?? 0)));
-  const color = COLOR[ratingFor(s)];
+  const color = COLOR[ratingFor(s, methodikVersion)];
   const px = SIZE[size];
   const stroke = size === "sm" ? 4 : 5;
   const r = 50 - stroke / 2 - 3;

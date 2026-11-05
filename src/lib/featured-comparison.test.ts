@@ -24,7 +24,8 @@ describe("Startseiten-Kästen Testsieger", () => {
     expect(katze?.score).toBeUndefined();
     expect(katze?.imageAltFallback).not.toMatch(/pokal/i);
     expect(showsWinnerSeal(katze!)).toBe(false);
-    expect(showsWinnerSeal({ winner: "AMI Cat", score: 59 })).toBe(false);
+    expect(showsWinnerSeal({ winner: "AMI Cat", score: 50 })).toBe(false)
+    expect(showsWinnerSeal({ winner: "AMI Cat", score: 51 })).toBe(true);
     const mono = FEATURED_COMPARISONS.find((c) => c.slug === "monoprotein-katzenfutter-test-2026");
     expect(mono?.winner).toBe("GranataPet DeliCatessen Huhn PUR");
     expect(mono?.score).toBe(74);

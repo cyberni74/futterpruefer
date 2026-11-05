@@ -32,7 +32,7 @@ export default async function OgImage({ params }: { params: Promise<{ slug: stri
   const { slug } = await params;
   const r = await getReviewBySlug(slug, { includeDrafts: previewDraftsEnabled() });
   const score = r?.totalScore ?? 0;
-  const color = COLOR[ratingFor(score)];
+  const color = COLOR[ratingFor(score, r?.methodikVersion)];
   const img = await productImage(r?.imageUrl);
   const c = 2 * Math.PI * 70;
   return new ImageResponse(

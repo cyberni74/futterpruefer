@@ -5,7 +5,7 @@
  * Blogbeitrag (slug); ist der Beitrag nicht veröffentlicht, erscheint sein Kasten nicht.
  * Kein Amazon-Link: Die Kästen verlinken nur auf unseren Vergleichstest.
  * Neutral formulieren: Platz, Punkte, Ampel – keine Wirkversprechen, keine Heilaussagen.
- * Pokal nur mit Testsieger ab Gelb (60 Punkte). Alle Rot: winner und score weglassen, kein Pokal.
+ * Pokal nur mit Testsieger ab Gelb (51 Punkte). Alle Rot: winner und score weglassen, kein Pokal.
  */
 import { RATING_THRESHOLDS } from "@/lib/scoring";
 

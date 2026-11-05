@@ -1,3 +1,4 @@
+import { RATING_THRESHOLDS } from "@/lib/scoring";
 import { absoluteUrl, SITE } from "@/lib/site";
 import { reviewPath } from "@/lib/urls";
 
@@ -142,7 +143,7 @@ export const HOME_FAQ: readonly HomeFaq[] = [
   },
   {
     q: "Was bedeuten die Punkte und Farben?",
-    a: "Ab 80 Punkten ist ein Futter grün und empfehlenswert, von 60 bis 79 Punkten gelb (mit Abstrichen), unter 60 Punkten rot (keine Empfehlung). Erreicht ein Produkt bei „Schadstoffe & Bedenkliches“ weniger als die Hälfte der Punkte, erscheint zusätzlich ein rotes Warnsignal.",
+    a: `Ab ${RATING_THRESHOLDS.gut} Punkten ist ein Futter grün und empfehlenswert, von ${RATING_THRESHOLDS.mittel} bis ${RATING_THRESHOLDS.gut - 1} Punkten gelb (mit Abstrichen), bis ${RATING_THRESHOLDS.mittel - 1} Punkte rot (keine Empfehlung). Erreicht ein Produkt bei „Schadstoffe & Bedenkliches“ weniger als die Hälfte der Punkte, erscheint zusätzlich ein rotes Warnsignal.`,
     links: [["Ampel und Warnsignal erklärt", "/methodik"]],
   },
   {
