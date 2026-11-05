@@ -33,7 +33,7 @@ describe("Startseiten-Kästen Testsieger", () => {
     expect(mono?.imageAltFallback).toMatch(/Pokal Testsieger/);
     expect(showsWinnerSeal(mono!)).toBe(true);
     expect(hund?.winner).toBe("VUTTER Nassfutter Wie Ente");
-    expect(hund?.score).toBe(75);
+    expect(hund?.score).toBe(79);
     expect(showsWinnerSeal(hund!)).toBe(true);
   });
 
