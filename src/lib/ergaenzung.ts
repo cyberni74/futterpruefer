@@ -1,4 +1,5 @@
 /** Ergänzungsfutter-Bewertung. Reine Funktionen, serverseitig und im Admin genutzt. */
+import { formatDeckelHinweis } from "./deckel-hinweis";
 import { RATING_THRESHOLDS } from "./scoring";
 
 /** Obergrenzen der Ergänzungsfutter-Bewertung, Version 2 (seit 05.11.2026; vorher 59 / 59 / 79 / 59 / 39). */
@@ -141,8 +142,7 @@ export function efBars(input: EfInput, result: EfResult): { key: string; label: 
 }
 
 export function capNote(result: EfResult): string {
-  if (result.cap >= 100) return "";
-  return `Deckel aktiv (${result.gruende.join(" ")}). Summe ${result.summe}, gewertet ${result.gesamt}.`;
+  return formatDeckelHinweis(result.gruende, result.summe, result.gesamt);
 }
 
 export type StudieInput = {

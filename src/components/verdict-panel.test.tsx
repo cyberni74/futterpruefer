@@ -30,4 +30,31 @@ describe("Fazit-Box", () => {
     expect(html).not.toContain(">Contra<");
     expect(html).not.toContain("Zuletzt aktualisiert");
   });
+  it("Deckelzeile an den Balken, Teilwerte bleiben roh", () => {
+    const data: VerdictData = { ...base, scoreRaw: 26, scoreHarmful: 20, scoreNutrients: 17, scoreDeclaration: 2, scoreNeeds: 7, scoreValue: 3, totalScore: 59 };
+    const html = renderToStaticMarkup(<VerdictPanel data={data} />);
+    expect(html).toContain("Deckel aktiv (Deklaration &amp; Transparenz unter 6 von 15 Punkten: höchstens 59 Punkte (befriedigend).). Summe 75, gewertet 59.");
+    expect(html).toContain('aria-label="Deklaration &amp; Transparenz: 2 von 15 Punkten"');
+    expect(html).toContain('aria-valuenow="26"');
+    expect(html).toContain('aria-label="Rohstoffqualität: 26 von 30 Punkten"');
+  });
+  it("keine Deckelzeile, wenn die Summe der Teilwerte die Gesamtwertung ist", () => {
+    const html = renderToStaticMarkup(<VerdictPanel data={base} />);
+    expect(html).not.toContain("Deckel aktiv");
+  });
+  it("eigene Kriterienbalken ohne Hinweis erfinden keine Alleinfutter-Zeile", () => {
+    const html = renderToStaticMarkup(
+      <VerdictPanel
+        data={{ ...base, scoreDeclaration: 0, totalScore: 50 }}
+        bars={[{ key: "wirkstoff", label: "Wirkstoff", max: 50, value: 39 }, { key: "werbung", label: "Werbeaussagen", max: 20, value: 11 }]}
+      />,
+    );
+    expect(html).not.toContain("Deckel aktiv");
+    expect(html).toContain('aria-label="Wirkstoff: 39 von 50 Punkten"');
+  });
+  it("übernimmt den mitgegebenen Ergänzungsfutter-Hinweis", () => {
+    const note = "Deckel aktiv (Heilaussage: höchstens 67 Punkte.). Summe 65, gewertet 50.";
+    const html = renderToStaticMarkup(<VerdictPanel data={{ ...base, totalScore: 50 }} capNote={note} />);
+    expect(html).toContain(note);
+  });
 });
