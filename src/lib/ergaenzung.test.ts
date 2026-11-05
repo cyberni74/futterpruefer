@@ -99,6 +99,21 @@ describe("Ergänzungsfutter-Note", () => {
     expect(r.gesamt).toBe(33);
     expect(r.warnsignal).toBe(true);
     expect(capNote(r)).toContain("höchstens 33");
+    expect(capNote(r)).toBe(`Deckel aktiv (${r.gruende.join(" ")}). Summe ${r.summe}, gewertet ${r.gesamt}.`);
+  });
+
+  it("nennt keinen Deckel, wenn die Summe schon unter der Obergrenze liegt", () => {
+    const r = scoreErgaenzung(full({ heilaussage: true, auswahl: 5, dosierung: 5, werbung: 5, traeger: 5, mengen: 2, unterlagen: 2 }));
+    expect(r.summe).toBe(r.gesamt);
+    expect(r.cap).toBe(67);
+    expect(capNote(r)).toBe("");
+  });
+
+  it("formuliert PlaqueOff: Heilaussage und Sicherheit mittel, Summe 65, gewertet 50", () => {
+    const r = scoreErgaenzung(full({ heilaussage: true, sicherheit: "MITTEL", auswahl: 19, dosierung: 20, werbung: 3, traeger: 15, mengen: 3, unterlagen: 5 }));
+    expect(r.summe).toBe(65);
+    expect(r.gesamt).toBe(50);
+    expect(capNote(r)).toBe("Deckel aktiv (Heilaussage: höchstens 67 Punkte. Sicherheit mittel: rotes Warnsignal, höchstens 50 Punkte.). Summe 65, gewertet 50.");
   });
 
   it("ohne Referenzdosis ist die Dosierung höchstens 10, ohne weiteren Deckel", () => {

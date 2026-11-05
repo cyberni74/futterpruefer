@@ -1,11 +1,12 @@
 import Link from "next/link";
 import { CalendarClock, Check, Info, X } from "lucide-react";
-import { ScoreRing } from "./score-ring";
-import { CriteriaBars } from "./criteria-bars";
-import { WarningBanner } from "./warning-banners";
+import { alleinfutterDeckelHinweis } from "@/lib/deckel-hinweis";
 import { CRITERIA, type Scores } from "@/lib/scoring";
 import { formatDate } from "@/lib/site";
-import type { CriteriaBarItem } from "./criteria-bars";
+import { CriteriaBars, type CriteriaBarItem } from "./criteria-bars";
+import { DeckelHinweis } from "./deckel-hinweis";
+import { ScoreRing } from "./score-ring";
+import { WarningBanner } from "./warning-banners";
 
 export type VerdictData = Scores & {
   totalScore: number;
@@ -21,6 +22,9 @@ export type VerdictData = Scores & {
 /** Testergebnis-Box (früher „Fazit“; das einzige Fazit-H2 ist das SEO-Fazit): Punkte-Ring, Kriterien-Balken, Klartext-Fazit, Pro/Contra. */
 export function VerdictPanel({ data, showWarning = false, bars, capNote, safetyWarning }: { data: VerdictData; showWarning?: boolean; bars?: CriteriaBarItem[]; capNote?: string; safetyWarning?: string }) {
   const scores = Object.fromEntries(CRITERIA.map((c) => [c.key, Number(data?.[c.key] ?? 0) || 0])) as Scores;
+  const gewertet = Number(data?.totalScore ?? 0) || 0;
+  // Eigene Balken (Ergänzungsfutter) bringen den Hinweis mit. Sonst aus den sechs Teilwerten.
+  const hinweis = capNote !== undefined ? capNote : bars ? "" : alleinfutterDeckelHinweis(scores, gewertet, data?.methodikVersion);
   const pros = (data?.pros ?? []).map((p) => p?.trim()).filter(Boolean);
   const cons = (data?.cons ?? []).map((p) => p?.trim()).filter(Boolean);
   const updated = data?.updatedAt ? new Date(data.updatedAt) : null;
@@ -39,12 +43,12 @@ export function VerdictPanel({ data, showWarning = false, bars, capNote, safetyW
           )}
         </div>
         <div className="mt-6 flex flex-col items-center gap-8 md:flex-row md:items-center md:gap-10">
-          <ScoreRing score={Number(data?.totalScore ?? 0) || 0} methodikVersion={data?.methodikVersion} />
+          <ScoreRing score={gewertet} methodikVersion={data?.methodikVersion} />
           <div className="w-full flex-1">
             <CriteriaBars scores={scores} items={bars} methodikVersion={data?.methodikVersion} />
           </div>
         </div>
-        {capNote ? <p className="mt-4 text-sm text-muted">{capNote}</p> : null}
+        <DeckelHinweis text={hinweis} />
         {data?.verdict?.trim() && <p className="mt-8 text-lg font-medium leading-relaxed">{data.verdict}</p>}
         {(pros.length > 0 || cons.length > 0) && (
           <div className="mt-6 grid gap-4 md:grid-cols-2">
