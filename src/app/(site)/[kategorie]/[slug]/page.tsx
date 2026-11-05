@@ -24,6 +24,7 @@ import { TableOfContents } from "@/components/table-of-contents";
 import { IngredientList } from "@/components/ingredient-list";
 import { AnalysisTable } from "@/components/analysis-table";
 import { AmazonPriceCta, PriceBlock } from "@/components/price-block";
+import { isRotScore } from "@/lib/rot-guard";
 import { ClaimsCheck } from "@/components/claims-check";
 import { FpImage } from "@/components/fp-image";
 import { ReadAloud } from "@/components/read-aloud";
@@ -169,6 +170,7 @@ export default async function ReviewPage({ params }: PageProps<"/[kategorie]/[sl
     kaufUrl: typeof layoutPrice.kaufUrl === "string" ? layoutPrice.kaufUrl : null,
   });
   const priceDated = Boolean(priceStandDate(r.priceDate));
+  const rotCta = isRotScore(r.totalScore, r.methodikVersion);
   const showPrice = priceDated ? r.price != null || r.pricePerKg != null || r.pricePerDay != null : Boolean(amazonUrl);
   const hasProductData = Boolean(r.composition?.trim() || analysis.length || showPrice);
   const hasConclusion = Boolean(conclusion.trim());
@@ -323,7 +325,7 @@ export default async function ReviewPage({ params }: PageProps<"/[kategorie]/[sl
               <div className="fp-box fp-kurz space-y-3 rounded-3xl border-2 border-brand bg-brand-soft p-5">
                 <p className="font-extrabold">📌 Kurz gesagt</p>
                 <ul>{kurzGesagt(seoInput).map((t) => <li key={t}>{t}</li>)}</ul>
-                {!priceDated && amazonUrl ? <AmazonPriceCta url={amazonUrl} /> : null}
+                {!priceDated && amazonUrl ? <AmazonPriceCta url={amazonUrl} rot={rotCta} /> : null}
               </div>
               {hasConclusion ? <div dangerouslySetInnerHTML={{ __html: conclusion }} /> : r.verdict?.trim() ? <p>{r.verdict.trim()}</p> : null}
             </div>
@@ -344,7 +346,7 @@ export default async function ReviewPage({ params }: PageProps<"/[kategorie]/[sl
                   <details key={f.question} className="vt-acc vt-faq-item"><summary>{f.question}</summary><p>{f.answer}</p></details>
                 ))}
                 {!priceDated && amazonUrl ? (
-                  <details className="vt-acc vt-faq-item"><summary>Was kostet {seoInput.name}?</summary><AmazonPriceCta url={amazonUrl} /></details>
+                  <details className="vt-acc vt-faq-item"><summary>Was kostet {seoInput.name}?</summary><AmazonPriceCta url={amazonUrl} rot={rotCta} /></details>
                 ) : null}
               </div>
             </div>
@@ -368,7 +370,7 @@ export default async function ReviewPage({ params }: PageProps<"/[kategorie]/[sl
               )}
               {showPrice && (
                 <Section id="preis" title={priceSectionTitle(r)}>
-                  <PriceBlock price={r.price} packageSize={r.packageSize} pricePerKg={r.pricePerKg} pricePerDay={r.pricePerDay} priceDate={r.priceDate} priceSource={seoInput.priceSource} amazonUrl={amazonUrl} />
+                  <PriceBlock price={r.price} packageSize={r.packageSize} pricePerKg={r.pricePerKg} pricePerDay={r.pricePerDay} priceDate={r.priceDate} priceSource={seoInput.priceSource} amazonUrl={amazonUrl} rot={rotCta} />
                 </Section>
               )}
             </section>
