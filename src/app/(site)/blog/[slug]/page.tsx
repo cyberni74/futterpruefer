@@ -53,6 +53,8 @@ const BODY_FAQ_SLUGS = new Set([
   "katze-trinkt-zu-wenig-wasserbedarf",
   "josera-erfahrungen-hundefutter",
   "happy-dog-erfahrungen-hundefutter",
+  "katze-erbricht-futter",
+  "salmonellen-hundefutter-interquell-rueckruf",
 ]);
 
 export async function generateStaticParams() {
