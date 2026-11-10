@@ -78,6 +78,13 @@ describe("ReviewCard Bedenklich", () => {
     const html = renderToStaticMarkup(<ReviewCard review={card({ layout: "TESTVORLAGE_V2", scoreHarmful: 0, efSicherheit: "SCHWER", totalScore: 39 })} />);
     expect(html).toContain("Bedenklich");
   });
+
+  it("zeigt das Badge bei Stufe HINWEIS nicht und bei KRITISCH schon", () => {
+    const hinweis = renderToStaticMarkup(<ReviewCard review={card({ layout: "TESTVORLAGE_V2", efSicherheit: "OK", layoutData: { sicherheit: { stufe: "HINWEIS", text: "Symptome abklären" } } })} />);
+    expect(hinweis).not.toContain("Bedenklich");
+    const kritisch = renderToStaticMarkup(<ReviewCard review={card({ layout: "TESTVORLAGE_V2", efSicherheit: "OK", layoutData: { sicherheit: { stufe: "KRITISCH", text: "Schwermetalle" } } })} />);
+    expect(kritisch).toContain("Bedenklich");
+  });
 });
 
 describe("ReviewCard Bildquelle und neutrale Fläche", () => {

@@ -16,8 +16,10 @@ describe("Bedenklich-Badge", () => {
     const leer = { layout: "", scoreRaw: 0, scoreHarmful: 0, scoreNutrients: 0, scoreDeclaration: 0, scoreNeeds: 0, scoreValue: 0, efSicherheit: "OK" };
     expect(showsBedenklichBadge(leer)).toBe(false);
     expect(showsBedenklichBadge({ ...leer, efSicherheit: "MITTEL" })).toBe(true);
+    expect(showsBedenklichBadge({ ...leer, efSicherheit: "SCHWER" })).toBe(true);
     expect(showsBedenklichBadge({ ...leer, layoutData: { sicherheit: { stufe: "KRITISCH" } } })).toBe(true);
-    expect(showsBedenklichBadge({ ...leer, layoutData: { sicherheit: { stufe: "HINWEIS" } } })).toBe(true);
+    expect(showsBedenklichBadge({ ...leer, layoutData: { sicherheit: { stufe: "HINWEIS" } } })).toBe(false);
+    expect(showsBedenklichBadge({ ...leer, layoutData: { sicherheit: { stufe: "OK" } } })).toBe(false);
   });
 
   it("V2 ohne Warnsignal: kein Badge, auch wenn scoreHarmful 0 ist", () => {
@@ -31,6 +33,13 @@ describe("Bedenklich-Badge", () => {
     expect(showsBedenklichBadge({ layout: "TESTVORLAGE_V2", scoreHarmful: 0, efSicherheit: "MITTEL" })).toBe(true);
     expect(showsBedenklichBadge({ layout: "TESTVORLAGE_V2", scoreHarmful: 20, efSicherheit: "SCHWER" })).toBe(true);
     expect(showsBedenklichBadge({ layout: "TESTVORLAGE_V2", scoreHarmful: 0, layoutData: { sicherheit: { stufe: "KRITISCH", text: "Schwermetalle" } } })).toBe(true);
-    expect(showsBedenklichBadge({ layout: "TESTVORLAGE_V2", scoreHarmful: 0, layoutData: { sicherheit: { stufe: "HINWEIS" } } })).toBe(true);
+    expect(showsBedenklichBadge({ layout: "TESTVORLAGE_V2", scoreHarmful: 0, efSicherheit: "OK", layoutData: { sicherheit: { stufe: "HINWEIS", text: "Symptome abklären" } } })).toBe(false);
+    expect(showsBedenklichBadge({ layout: "TESTVORLAGE_V2", scoreHarmful: 0, efSicherheit: "MITTEL", layoutData: { sicherheit: { stufe: "HINWEIS" } } })).toBe(true);
+  });
+
+  it("HINWEIS setzt kein Badge, auch nicht neben einer gefüllten Teilnote ohne Schadstoff-Durchfall", () => {
+    expect(showsBedenklichBadge({ layout: "TESTVORLAGE_V2", ...filled, scoreHarmful: 12, efSicherheit: "OK", layoutData: { sicherheit: { stufe: "HINWEIS" } } })).toBe(false);
+    expect(showsBedenklichBadge({ layout: "", ...filled, scoreHarmful: 12, efSicherheit: "OK", layoutData: { sicherheit: { stufe: "HINWEIS" } } })).toBe(false);
+    expect(showsBedenklichBadge({ layout: "TESTVORLAGE_V2", ...filled, scoreHarmful: 12, efSicherheit: "OK", layoutData: { sicherheit: { stufe: "KRITISCH" } } })).toBe(true);
   });
 });
