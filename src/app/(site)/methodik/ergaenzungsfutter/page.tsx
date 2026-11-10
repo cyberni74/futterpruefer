@@ -5,7 +5,7 @@ import { PageShell } from "@/components/page-shell";
 import { faqPageJsonLd } from "@/lib/faq-schema";
 import { trimMetaDescription } from "@/lib/seo";
 import { EF_DECKEL } from "@/lib/ergaenzung";
-import { METHODOLOGY_CHANGELOG_ERGAENZUNG_V2, RATING_THRESHOLDS } from "@/lib/scoring";
+import { METHODOLOGY_CHANGELOG_ERGAENZUNG_V2, METHODOLOGY_STAND, RATING_THRESHOLDS } from "@/lib/scoring";
 
 const TITLE = "Methodik Ergänzungsfutter: So testen wir";
 const DESCRIPTION = trimMetaDescription(
@@ -112,7 +112,7 @@ export default function ErgaenzungsfutterMethodikPage() {
 
       <div className="prose-fp mt-10">
         <p><strong>Kurz gesagt:</strong> Ergänzungsfutter deckt allein nicht den Tagesbedarf, sondern soll vor allem bestimmte Stoffe liefern (vgl. Art. 3 Abs. 2 Buchst. j VO (EG) Nr. 767/2009). Darum gibt es die Hälfte der Punkte nur für den Wirkstoff: Ist es der richtige, und steckt genug davon drin? Die andere Hälfte verteilt sich auf ehrliche Werbung, einen sauberen Träger und offene Angaben. Sicherheitsprobleme bringen keine Punkte, sondern ein Warnsignal und eine schlechtere Ampel. Die Ampel ist dieselbe wie bei Alleinfutter.</p>
-        <p><em>Stand: 27.10.2026 · Verantwortlich: Redaktion Futterprüfer · Methodik-Version: ergaenzung-v1.1</em></p>
+        <p><em>Methodik für Ergänzungsfutter, Ampelgrenzen seit {METHODOLOGY_STAND} (Stand {METHODOLOGY_STAND}) · Verantwortlich: Redaktion Futterprüfer</em></p>
         <p><strong>Änderungsprotokoll:</strong></p>
         <ul>
           <li><strong>05.11.2026:</strong> {METHODOLOGY_CHANGELOG_ERGAENZUNG_V2.replace(/^05\.11\.2026 – /, "")}</li>
@@ -385,7 +385,7 @@ export default function ErgaenzungsfutterMethodikPage() {
         <p>Sicherheit bringt keine Punkte, weil Sicherheit selbstverständlich sein muss. Ein Problem zieht die Note nach unten:</p>
         <ul>
           <li><strong>Schwer:</strong> Der Stoff ist für die Tierart ungeeignet (z. B. Xylit, Knoblauch/Zwiebel in relevanter Menge, ätherische Öle bei Katzen), oder bei Fütterung nach Herstellerangabe kann der sichere Bereich oder ein gesetzlicher Höchstgehalt nach den Zusatzstoff-Zulassungen (VO (EG) Nr. 1831/2003), umgerechnet auf die Tagesration, überschritten werden (z. B. Vitamin D, Vitamin A, Selen, Kupfer, Zink). <strong>Folge: rotes Warnsignal, höchstens 39 Punkte.</strong></li>
-          <li><strong>Mittel:</strong> Ein Hinweis auf bekannte Wechselwirkungen fehlt (sofern in der Fachliteratur belegt), ebenso nötige Warnhinweise (Trächtigkeit, Jungtiere, Nieren- oder Leberkranke) oder die Angabe der Fütterungsdauer, wo sie nötig ist. <strong>Folge: rotes Warnsignal, höchstens 59 Punkte.</strong></li>
+          <li><strong>Mittel:</strong> Ein Hinweis auf bekannte Wechselwirkungen fehlt (sofern in der Fachliteratur belegt), ebenso nötige Warnhinweise (Trächtigkeit, Jungtiere, Nieren- oder Leberkranke) oder die Angabe der Fütterungsdauer, wo sie nötig ist. <strong>Folge: rotes Warnsignal, höchstens 50 Punkte.</strong></li>
         </ul>
         <p><strong>Tierschutz:</strong> Jede Testseite hat einen Abschnitt „Tierschutz“. Darin steht, ob der Hersteller öffentlich zugängliche Angaben zu Tierversuchen macht, und woher die tierischen Rohstoffe stammen, z. B. Grünlippmuschel aus Aquakultur oder Haifischknorpel. Kritische Befunde nennen wir im Fazit und unter Contra.</p>
 
