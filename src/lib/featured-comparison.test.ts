@@ -27,12 +27,18 @@ describe("Startseiten-Kästen Testsieger", () => {
     expect(showsWinnerSeal({ winner: "AMI Cat", score: 50 })).toBe(false)
     expect(showsWinnerSeal({ winner: "AMI Cat", score: 51 })).toBe(true);
     const mono = FEATURED_COMPARISONS.find((c) => c.slug === "monoprotein-katzenfutter-test-2026");
-    expect(mono?.winner).toBe("GranataPet DeliCatessen Huhn PUR");
-    expect(mono?.score).toBe(74);
+    expect(mono?.winner).toBeUndefined();
+    expect(mono?.score).toBe(59);
     expect(mono?.month).toBe(10);
     expect(mono?.year).toBe(2026);
-    expect(mono?.imageAltFallback).toMatch(/Pokal Testsieger/);
-    expect(showsWinnerSeal(mono!)).toBe(true);
+    expect(mono?.testName).toBe(
+      "Monoprotein-Katzenfutter im Test, Oktober 2026: drei Futter punktgleich auf Platz 1",
+    );
+    expect(mono?.imageAltFallback).toBe(
+      "Monoprotein-Katzenfutter im Test, Oktober 2026: drei Futter punktgleich mit 59 von 100 Punkten, Gelb",
+    );
+    expect(mono?.imageAltFallback).not.toMatch(/pokal|testsieger/i);
+    expect(showsWinnerSeal(mono!)).toBe(false);
     expect(hund?.winner).toBe("VEGDOG Green Crunch");
     expect(hund?.score).toBe(59);
     expect(hund?.summary).toContain("Alle drei liegen bei 59 von 100 Punkten (Gelb).");
@@ -70,8 +76,11 @@ describe("Startseiten-Kästen Testsieger", () => {
       if (c.score != null) {
         expect(c.score).toBeGreaterThanOrEqual(0);
         expect(c.score).toBeLessThanOrEqual(100);
-        expect(c.winner).toBeTruthy();
-      } else {
+        // Gleichstand: score ohne winner ist zulässig.
+      }
+      if (c.winner) {
+        expect(c.score).toBeDefined();
+      } else if (c.score == null) {
         expect(c.winner).toBeUndefined();
       }
       expect(c.month).toBeGreaterThanOrEqual(1);

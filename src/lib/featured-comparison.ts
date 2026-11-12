@@ -5,7 +5,8 @@
  * Blogbeitrag (slug); ist der Beitrag nicht veröffentlicht, erscheint sein Kasten nicht.
  * Kein Amazon-Link: Die Kästen verlinken nur auf unseren Vergleichstest.
  * Neutral formulieren: Platz, Punkte, Ampel – keine Wirkversprechen, keine Heilaussagen.
- * Pokal nur mit Testsieger ab Gelb (51 Punkte). Alle Rot: winner und score weglassen, kein Pokal.
+ * Pokal nur mit Testsieger ab Gelb (51 Punkte). Gleichstand: score setzen, winner weglassen, kein Pokal.
+ * Alle Rot: winner und score weglassen, kein Pokal.
  */
 import { RATING_THRESHOLDS } from "@/lib/scoring";
 
@@ -16,9 +17,9 @@ export type FeaturedComparison = {
   testName: string;
   month: number;
   year: number;
-  /** Produktname des Testsiegers. Fehlt, wenn kein Produkt Testsieger ist (alle Rot). */
+  /** Produktname des Testsiegers. Fehlt bei Gleichstand und wenn kein Produkt Testsieger ist (alle Rot). */
   winner?: string;
-  /** Punkte des Testsiegers (0–100). Fehlt ohne Testsieger. */
+  /** Punkte (0–100). Beim Gleichstand ohne benannten Testsieger gesetzt, sonst Punkte des Testsiegers. Fehlt im Rot-Fall ohne Sieger. */
   score?: number;
   /** Kurztext unter der Überschrift (max. vier Zeilen). */
   summary: string;
@@ -35,14 +36,13 @@ export function showsWinnerSeal(c: Pick<FeaturedComparison, "winner" | "score">)
 export const FEATURED_COMPARISONS: FeaturedComparison[] = [
   {
     slug: "monoprotein-katzenfutter-test-2026",
-    testName: "Monoprotein-Katzenfutter im Test, Oktober 2026",
+    testName: "Monoprotein-Katzenfutter im Test, Oktober 2026: drei Futter punktgleich auf Platz 1",
     month: 10,
     year: 2026,
-    winner: "GranataPet DeliCatessen Huhn PUR",
-    score: 74,
+    score: 59,
     summary:
-      "Drei Monoprotein-Nassfutter für Katzen im Vergleich. GranataPet DeliCatessen Huhn PUR liegt mit 74 von 100 Punkten (Gelb) vorn, vor MjAMjAM Känguru pur (72, Gelb) und LEONARDO Rind pur (67, Gelb).",
-    imageAltFallback: "Pokal Testsieger Monoprotein-Katzenfutter im Test, Oktober 2026: GranataPet DeliCatessen Huhn PUR, 74 von 100 Punkten, Gelb",
+      "Drei Monoprotein-Nassfutter für Katzen im Vergleich. GranataPet Huhn PUR, MjAMjAM Känguru pur und LEONARDO Rind pur liegen punktgleich bei 59 von 100 Punkten (Gelb) und teilen sich Platz 1.",
+    imageAltFallback: "Monoprotein-Katzenfutter im Test, Oktober 2026: drei Futter punktgleich mit 59 von 100 Punkten, Gelb",
   },
   {
     slug: "veganes-katzenfutter-test-oktober-2026",
