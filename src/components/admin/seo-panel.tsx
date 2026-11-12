@@ -32,6 +32,12 @@ type Props = {
   errors?: Record<string, string>;
   /** Keyword-Feld und -Generierung anzeigen (nicht jeder Inhaltstyp speichert Keywords) */
   showKeywords?: boolean;
+  /** Beschriftung des Titel-Felds. Standard bleibt „Meta-Titel“. */
+  titleLabel?: string;
+  /** Hinweis unter dem Titel. Standard beschreibt den Blog-/Test-Fallback. */
+  titleHint?: string;
+  /** SERP-Titel, wenn das Feld leer ist. Sonst „Fallback | Futterprüfer“. */
+  emptyTitle?: string;
 };
 
 function Counter({ length, tone, label }: { length: number; tone: LengthTone; label: string }) {
@@ -42,7 +48,7 @@ function Counter({ length, tone, label }: { length: number; tone: LengthTone; la
   );
 }
 
-export function SeoPanel({ kind, slug, fallbackTitle, fallbackDescription = "", initial, getContext, errors = {}, showKeywords = true }: Props) {
+export function SeoPanel({ kind, slug, fallbackTitle, fallbackDescription = "", initial, getContext, errors = {}, showKeywords = true, titleLabel = "Meta-Titel", titleHint, emptyTitle }: Props) {
   const uid = useId();
   const [metaTitle, setMetaTitle] = useState(initial.metaTitle);
   const [metaDescription, setMetaDescription] = useState(initial.metaDescription);
@@ -62,7 +68,7 @@ export function SeoPanel({ kind, slug, fallbackTitle, fallbackDescription = "", 
           ? "optimal"
           : "zu lang";
 
-  const serpTitle = truncateForSerp(metaTitle || `${fallbackTitle} | Futterprüfer`, 60);
+  const serpTitle = truncateForSerp(metaTitle || emptyTitle || `${fallbackTitle} | Futterprüfer`, 60);
   const serpDesc = truncateForSerp(metaDescription || fallbackDescription || "Keine Meta-Beschreibung – Google wählt selbst einen Textausschnitt.", 158);
   const section = kind === "review" ? "tests" : kind === "lexikon" ? "lexikon" : "blog";
 
@@ -118,7 +124,7 @@ export function SeoPanel({ kind, slug, fallbackTitle, fallbackDescription = "", 
       <div>
         <div className="mb-1.5 flex flex-wrap items-baseline justify-between gap-2">
           <label htmlFor={`${uid}-title`} className={labelCls + " mb-0"}>
-            Meta-Titel
+            {titleLabel}
           </label>
           <Counter length={metaTitle.length} tone={tTone} label={tLabel} />
         </div>
@@ -135,7 +141,7 @@ export function SeoPanel({ kind, slug, fallbackTitle, fallbackDescription = "", 
           <div className={`h-full ${BAR_CLS[tTone]}`} style={{ width: `${Math.min(100, (metaTitle.length / META_TITLE_MAX) * 100)}%` }} />
         </div>
         <p id={`${uid}-title-hint`} className="mt-1 text-xs text-muted">
-          Optimal: bis {META_TITLE_MAX} Zeichen. Leer = Seitentitel wird verwendet.
+          {titleHint ?? `Optimal: bis ${META_TITLE_MAX} Zeichen. Leer = Seitentitel wird verwendet.`}
         </p>
         {errors.metaTitle && <p className="mt-1 text-sm font-medium text-bad">{errors.metaTitle}</p>}
       </div>
