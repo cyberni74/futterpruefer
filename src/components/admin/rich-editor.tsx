@@ -29,6 +29,10 @@ type Props = {
   id?: string;
   label?: string;
   onChange?: (html: string) => void;
+  /** HTML-Modus von Anfang an. Für Artikel mit Tabellen und Abbildungen, die der visuelle Editor nicht kennt. */
+  initialSource?: boolean;
+  /** Verhindert den Wechsel in die visuelle Ansicht, wenn der Quelltext Tabellen oder Abbildungen enthält. */
+  lockComplexHtml?: boolean;
 };
 
 function ToolButton({
@@ -152,9 +156,9 @@ function Toolbar({ editor, source, onToggleSource }: { editor: Editor | null; so
 }
 
 /** TipTap-Editor mit HTML-Quelltextmodus. Schreibt das HTML in ein verstecktes Feld `name`. */
-export function RichEditor({ name, initialHtml = "", id = name, label = "Inhalt", onChange }: Props) {
+export function RichEditor({ name, initialHtml = "", id = name, label = "Inhalt", onChange, initialSource = false, lockComplexHtml = false }: Props) {
   const [html, setHtml] = useState(initialHtml);
-  const [source, setSource] = useState(false);
+  const [source, setSource] = useState(initialSource);
   const [sourceText, setSourceText] = useState(initialHtml);
 
   const update = (v: string) => {
@@ -207,11 +211,15 @@ export function RichEditor({ name, initialHtml = "", id = name, label = "Inhalt"
     if (!source) {
       setSourceText(html);
       setSource(true);
-    } else {
-      editor.commands.setContent(autolinkUrls(sourceText), { emitUpdate: false });
-      update(editor.isEmpty ? "" : editor.getHTML());
-      setSource(false);
+      return;
     }
+    if (lockComplexHtml && /<(?:table|figure|figcaption|div)\b/i.test(sourceText)) {
+      window.alert("Dieser Text enthält Tabellen oder Abbildungen. Bitte im HTML-Modus bleiben und speichern, sonst gehen diese Bausteine verloren.");
+      return;
+    }
+    editor.commands.setContent(autolinkUrls(sourceText), { emitUpdate: false });
+    update(editor.isEmpty ? "" : editor.getHTML());
+    setSource(false);
   };
 
   return (

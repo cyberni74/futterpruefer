@@ -349,8 +349,17 @@ model LexikonEntry {
   concern          Concern   @default(UNBEDENKLICH)
   shortDescription String    @default("")
   assessment       String    @default("")
+  /// Langer Artikel (HTML). Leer oder der bisherige Kurztext: die Seite zeigt die fachliche Einschätzung.
   bodyHtml         String    @default("")
+  /// Sichtbare H1. Leer = Begriff (name), damit bestehende Seiten die bisherige Überschrift behalten.
+  headline         String    @default("")
+  /// Bis zu 5 Bilder in Reihenfolge: [{ "url", "alt", "caption" }]. Das erste Bild mit URL ist das Titelbild (OG).
+  images           Json      @default("[]")
+  /// Frage/Antwort-Paare [{ "question", "answer" }], sichtbar wenn der Artikeltext keinen Abschnitt „Häufige Fragen“ hat.
+  faqs             Json      @default("[]")
+  /// SEO-Titel für <title>. Leer = „[Name] im Tierfutter: [Ampel]?“. Redaktionell auch seoTitle genannt.
   metaTitle        String    @default("")
+  /// Meta-Beschreibung. Leer = Kurzbeschreibung (mit dem bisherigen Auffüllsatz, wenn sie kürzer als 70 Zeichen ist).
   metaDescription  String    @default("")
   status           Status    @default(DRAFT)
   publishedAt      DateTime?

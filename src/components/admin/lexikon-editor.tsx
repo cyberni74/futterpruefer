@@ -4,7 +4,8 @@ import { startTransition, useActionState, useRef, useState } from "react";
 import { slugify } from "@/lib/slug";
 import type { ActionResult } from "@/lib/admin/schemas";
 import type { PublishMode } from "@/lib/admin/publish";
-import { LEXIKON_GROUPS, SYNONYM_LEN, SYNONYM_MAX, type Concern, type LexikonEditorData } from "@/lib/admin/lexikon";
+import { CONCERN_LABEL, LEXIKON_FAQ_MAX, LEXIKON_GROUPS, LEXIKON_IMAGE_SLOTS, SYNONYM_LEN, SYNONYM_MAX, type Concern, type LexikonEditorData, type LexikonFaqInput, type LexikonImageInput } from "@/lib/admin/lexikon";
+import { seoTitle } from "@/lib/seo";
 import { stripTags } from "@/lib/admin/text";
 import { ConcernField } from "./concern-field";
 import { EditorHeader, SaveBar, useFocusFirstError } from "./editor-shell";
@@ -40,11 +41,20 @@ export function LexikonEditor({
   const [synonyms, setSynonyms] = useState<string[]>(initial.synonyms);
   const [group, setGroup] = useState(initial.group);
   const [concern, setConcern] = useState<Concern>(initial.concern);
+  const [headline, setHeadline] = useState(initial.headline);
   const [shortDescription, setShortDescription] = useState(initial.shortDescription);
   const [assessment, setAssessment] = useState(initial.assessment);
+  const [images, setImages] = useState<LexikonImageInput[]>(initial.images);
+  const [faqs, setFaqs] = useState<LexikonFaqInput[]>(initial.faqs);
   const [mode, setMode] = useState<PublishMode>(initial.publishMode);
   const [scheduledAt, setScheduledAt] = useState(initial.scheduledAt);
   const bodyRef = useRef(initial.bodyHtml);
+  const complexBody = /<(?:table|figure|figcaption|div)\b/i.test(initial.bodyHtml);
+  const autoTitle = `${name || "Begriff"} im Tierfutter: ${CONCERN_LABEL[concern]}?`;
+
+  function setImage(index: number, patch: Partial<LexikonImageInput>) {
+    setImages((prev) => prev.map((image, i) => (i === index ? { ...image, ...patch } : image)));
+  }
 
   return (
     <div className="mx-auto max-w-4xl">
@@ -167,6 +177,23 @@ export function LexikonEditor({
 
         <Section title="Beschreibung" id="sec-text">
           <Field
+            id="headline"
+            label="Überschrift (H1)"
+            error={errors.headline}
+            hint={`${headline.length}/160 Zeichen. Leer = der Begriff „${name || "…"}“ bleibt die H1.`}
+          >
+            <input
+              id="headline"
+              name="headline"
+              value={headline}
+              onChange={(e) => setHeadline(e.target.value)}
+              maxLength={160}
+              placeholder="z. B. Tierische Nebenerzeugnisse im Hunde- und Katzenfutter"
+              className={inputCls}
+              {...describe("headline", errors.headline, true)}
+            />
+          </Field>
+          <Field
             id="shortDescription"
             label="Kurzbeschreibung"
             error={errors.shortDescription}
@@ -197,21 +224,125 @@ export function LexikonEditor({
           </Field>
           <div>
             <p className="mb-1.5 block text-sm font-semibold text-fg">Ausführlicher Text</p>
-            <RichEditor name="bodyHtml" id="bodyHtml" label="Ausführlicher Text" initialHtml={initial.bodyHtml} onChange={(h) => (bodyRef.current = h)} />
+            <p className="mb-2 text-xs text-muted">
+              Leer lassen, dann bleibt die fachliche Einschätzung der Seitentext. Lange Artikel mit Tabellen, Abbildungen, FAQ und Quellen im HTML-Modus einfügen und so speichern. Der visuelle Modus kennt diese Bausteine nicht.
+            </p>
+            <RichEditor name="bodyHtml" id="bodyHtml" label="Ausführlicher Text" initialHtml={initial.bodyHtml} initialSource={complexBody} lockComplexHtml onChange={(h) => (bodyRef.current = h)} />
             {errors.bodyHtml && <p className="mt-1 text-sm font-medium text-bad">{errors.bodyHtml}</p>}
           </div>
+        </Section>
+
+        <Section
+          title="Bilder"
+          id="sec-bilder"
+          description="Bis zu fünf Bilder. Das erste mit URL ist das Titelbild für Vorschau und Open Graph. Steht dieselbe URL schon im Artikeltext, wird sie dort nicht noch einmal ausgegeben. Leere Felder bleiben unsichtbar."
+        >
+          {images.slice(0, LEXIKON_IMAGE_SLOTS).map((image, i) => (
+            <fieldset key={i} className="space-y-3 rounded-xl border border-border p-3">
+              <legend className="px-1 text-sm font-semibold">{i === 0 ? "Bild 1 · Titelbild" : `Bild ${i + 1}`}</legend>
+              <Field id={`image-url-${i}`} label="URL" error={errors[`imageUrl${i}`]} hint="Öffentlicher Bucket „bilder“ oder ein bestehender Pfad wie /uploads/…">
+                <input
+                  id={`image-url-${i}`}
+                  name="imageUrl"
+                  value={image.url}
+                  onChange={(e) => setImage(i, { url: e.target.value })}
+                  maxLength={500}
+                  inputMode="url"
+                  placeholder="https://…/storage/v1/object/public/bilder/datei.webp"
+                  className={inputCls}
+                  {...describe(`image-url-${i}`, errors[`imageUrl${i}`], true)}
+                />
+              </Field>
+              <Field id={`image-alt-${i}`} label="Alt-Text" error={errors[`imageAlt${i}`]} hint="Pflicht, sobald eine URL gesetzt ist. Üblich: „Symbolbild: …“">
+                <input
+                  id={`image-alt-${i}`}
+                  name="imageAlt"
+                  value={image.alt}
+                  onChange={(e) => setImage(i, { alt: e.target.value })}
+                  maxLength={300}
+                  className={inputCls}
+                  {...describe(`image-alt-${i}`, errors[`imageAlt${i}`], true)}
+                />
+              </Field>
+              <Field id={`image-caption-${i}`} label="Bildunterschrift und Credit" error={errors[`imageCaption${i}`]}>
+                <textarea
+                  id={`image-caption-${i}`}
+                  name="imageCaption"
+                  value={image.caption}
+                  onChange={(e) => setImage(i, { caption: e.target.value })}
+                  maxLength={400}
+                  rows={2}
+                  className={textareaCls}
+                  {...describe(`image-caption-${i}`, errors[`imageCaption${i}`])}
+                />
+              </Field>
+            </fieldset>
+          ))}
+        </Section>
+
+        <Section
+          title="Häufige Fragen"
+          id="sec-faq"
+          description="Frage und Antwort, wie sie auf der Seite stehen. Enthält der Artikeltext schon einen Abschnitt „Häufige Fragen“, gilt dessen Wortlaut für Besucher und das FAQ-Markup. Diese Paare erscheinen nur, wenn der Text keinen solchen Abschnitt hat."
+        >
+          {faqs.map((item, i) => (
+            <fieldset key={i} className="space-y-3 rounded-xl border border-border p-3">
+              <legend className="px-1 text-sm font-semibold">Frage {i + 1}</legend>
+              <Field id={`faq-q-${i}`} label="Frage" error={errors[`faqQuestion${i}`]}>
+                <input
+                  id={`faq-q-${i}`}
+                  name="faqQuestion"
+                  value={item.question}
+                  onChange={(e) => setFaqs((prev) => prev.map((faq, n) => (n === i ? { ...faq, question: e.target.value } : faq)))}
+                  maxLength={300}
+                  className={inputCls}
+                  {...describe(`faq-q-${i}`, errors[`faqQuestion${i}`])}
+                />
+              </Field>
+              <Field id={`faq-a-${i}`} label="Antwort" error={errors[`faqAnswer${i}`]}>
+                <textarea
+                  id={`faq-a-${i}`}
+                  name="faqAnswer"
+                  value={item.answer}
+                  onChange={(e) => setFaqs((prev) => prev.map((faq, n) => (n === i ? { ...faq, answer: e.target.value } : faq)))}
+                  maxLength={2000}
+                  rows={4}
+                  className={textareaCls}
+                  {...describe(`faq-a-${i}`, errors[`faqAnswer${i}`])}
+                />
+              </Field>
+              <button
+                type="button"
+                className="inline-flex min-h-11 items-center text-sm font-semibold text-bad"
+                onClick={() => setFaqs((prev) => prev.filter((_, n) => n !== i))}
+              >
+                Frage entfernen
+              </button>
+            </fieldset>
+          ))}
+          <button
+            type="button"
+            className="inline-flex min-h-11 items-center rounded-xl border border-border px-4 text-sm font-semibold hover:bg-bg-soft disabled:opacity-50"
+            disabled={faqs.length >= LEXIKON_FAQ_MAX}
+            onClick={() => setFaqs((prev) => [...prev, { question: "", answer: "" }])}
+          >
+            Frage hinzufügen
+          </button>
         </Section>
 
         <Section title="SEO" id="sec-seo">
           <SeoPanel
             kind="lexikon"
             slug={slug}
-            fallbackTitle={name}
+            fallbackTitle={autoTitle}
             fallbackDescription={shortDescription}
+            emptyTitle={seoTitle(autoTitle)}
+            titleLabel="SEO-Titel"
+            titleHint={`Leer = „${autoTitle}“. Die Marke wird angehängt, wenn der Titel sonst unter 60 Zeichen bleibt.`}
             initial={{ metaTitle: initial.metaTitle, metaDescription: initial.metaDescription, keywords: [] }}
             errors={errors}
             showKeywords={false}
-            getContext={() => ({ title: name, keyword: group, excerpt: shortDescription, verdict: assessment, body: stripTags(bodyRef.current) })}
+            getContext={() => ({ title: headline || name, keyword: group, excerpt: shortDescription, verdict: assessment, body: stripTags(bodyRef.current) })}
           />
         </Section>
 

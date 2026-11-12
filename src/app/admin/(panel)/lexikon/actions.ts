@@ -1,5 +1,6 @@
 "use server";
 import { redirect } from "next/navigation";
+import type { Prisma } from "@/generated/prisma/client";
 import { prisma } from "@/lib/db";
 import { requireAdmin } from "@/auth";
 import { sanitize } from "@/lib/sanitize";
@@ -34,6 +35,9 @@ export async function saveLexikon(id: string | null, _prev: ActionResult | null,
     shortDescription: v.shortDescription,
     assessment: v.assessment,
     bodyHtml: autolinkUrls(sanitize(v.bodyHtml)),
+    headline: v.headline,
+    images: v.images as Prisma.InputJsonValue,
+    faqs: v.faqs as Prisma.InputJsonValue,
     metaTitle: v.metaTitle,
     metaDescription: v.metaDescription,
     status: pub.status,
