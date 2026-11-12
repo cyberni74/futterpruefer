@@ -55,6 +55,7 @@ const BODY_FAQ_SLUGS = new Set([
   "happy-dog-erfahrungen-hundefutter",
   "katze-erbricht-futter",
   "salmonellen-hundefutter-interquell-rueckruf",
+  "barf-risiken-nachteile",
 ]);
 
 export async function generateStaticParams() {
