@@ -1,8 +1,8 @@
 import { Breadcrumbs } from "./breadcrumbs";
 
-export function PageShell({ title, intro, crumb, path, children }: { title: string; intro?: string; crumb: string; path: string; children: React.ReactNode }) {
+export function PageShell({ title, intro, crumb, path, children, wide = false }: { title: string; intro?: string; crumb: string; path: string; children: React.ReactNode; wide?: boolean }) {
   return (
-    <div className="mx-auto max-w-3xl px-4">
+    <div className={`mx-auto px-4 ${wide ? "max-w-4xl" : "max-w-3xl"}`}>
       <Breadcrumbs items={[{ label: crumb, href: path }]} />
       <h1 className="mt-4 text-3xl font-extrabold md:text-5xl">{title}</h1>
       {intro && <p className="mt-4 text-lg text-muted">{intro}</p>}

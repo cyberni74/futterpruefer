@@ -5,6 +5,7 @@ import path from "node:path";
 import sharp from "sharp";
 
 const LOCAL_IMAGES = [
+  "/redaktion/matthias-schroeter-chefredakteur.webp",
   "/brand/drei-hunde-auf-blumenwiese-hundefutter-test.webp",
   "/blog/hund-stadtwohnung-ohne-garten-alltag.webp",
   "/tests/bugbell-bellyvital-hund-kroketten-insektenprotein.webp",

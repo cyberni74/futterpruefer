@@ -1,24 +1,70 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import { PageShell } from "@/components/page-shell";
+import { FpImage } from "@/components/fp-image";
 import { JsonLd } from "@/components/json-ld";
-import { contentAuthor } from "@/lib/attribution";
-import { DEFAULT_AUTHOR } from "@/lib/authors";
-import { SITE } from "@/lib/site";
+import { PageShell } from "@/components/page-shell";
+import { absoluteUrl, pageAlternates, SITE } from "@/lib/site";
 
 const DESCRIPTION =
-  "Futterprüfer.de ist ein transparentes Testportal für Hunde- und Katzenfutter. Wir stützen uns auf Kennzeichnung, Herstellerangaben und öffentliche Quellen.";
+  "Matthias Schröter ist Chefredakteur von Futterprüfer.de. Tierarzt und Wissenschaftler, Schwerpunkt Ernährung von Hund und Katze.";
+
+const PORTRAIT = "/redaktion/matthias-schroeter-chefredakteur.webp";
+
+const PROFILE = {
+  hash: "matthias-schroeter",
+  label: "Chefredaktion",
+  name: "Matthias Schröter",
+  role: "Chefredakteur von Futterprüfer.de",
+  meta: "Seit 6. November 2026, angestellt in Teilzeit",
+  paragraphs: [
+    "Matthias Schröter verantwortet die redaktionelle Linie des Portals: welche Futtermittel geprüft werden, wie die Texte argumentieren und woran ein Urteil erkennbar bleibt. Maßgeblich ist, was auf dem Beutel steht und was sich daraus ableiten lässt – nicht das Werbeversprechen.",
+    "Als Tierarzt und Wissenschaftler liegt sein Schwerpunkt auf der Ernährung von Hund und Katze. An der Vetsuisse-Fakultät der Universität Zürich hat er Veterinärmedizin studiert und in Forschung und Lehre zur Heimtierernährung gearbeitet. Ihm kommt es darauf an, dass aus einer Zutatenliste ein nachvollziehbares Bild wird, kein Wohlfühltext.",
+    "Die Beiträge unter seiner Leitung sollen für Tierhalter klar lesbar und für Suchmaschinen auffindbar sein, ohne die Prüfung weichzuspülen.",
+  ],
+} as const;
+
+const WERDEGANG = [
+  {
+    period: "seit 2026",
+    title: "Chefredakteur, Futterprüfer.de",
+    detail: "Angestellt in Teilzeit, seit 6. November 2026",
+    text: "Leitung der Redaktion, Verantwortung für Tests, Fachbeiträge und die Bewertungslinie des Portals.",
+  },
+  {
+    period: "seit 2025",
+    title: "Forschung und Lehre zur Heimtierernährung",
+    detail: "Institut für Tierernährung und Diätetik, Vetsuisse-Fakultät, Universität Zürich",
+    text: "Arbeit zu klinischer Diätetik, funktionellen Inhaltsstoffen und nachhaltigen Proteinquellen in der Ernährung von Hund und Katze.",
+  },
+  {
+    period: "2022–2025",
+    title: "Wissenschaftliche Tätigkeit nach der Promotion",
+    detail: "Vetsuisse-Fakultät, Universität Zürich",
+    text: "Forschung zu Nährstoffverwertung, Futterakzeptanz und Diätetik; Lehre und Betreuung von Qualifikationsarbeiten.",
+  },
+  {
+    period: "2018–2022",
+    title: "Promotion zum Dr. med. vet.",
+    detail: "Vetsuisse-Fakultät, Universität Zürich",
+    text: "Dissertation zur Nährstoffverwertung und Verdauungsphysiologie bei Hunden und Katzen unter besonderer Berücksichtigung funktioneller Futtermittel.",
+  },
+  {
+    period: "2012–2018",
+    title: "Studium der Veterinärmedizin",
+    detail: "Vetsuisse-Fakultät, Universität Zürich",
+    text: "Abschluss als Tierarzt (Staatsexamen).",
+  },
+] as const;
 
 export const metadata: Metadata = {
   title: "Team",
   description: DESCRIPTION,
-  alternates: { canonical: "/team" },
+  alternates: pageAlternates("/team"),
 };
 
 export default function TeamPage() {
-  const person = contentAuthor();
+  const personUrl = absoluteUrl(`/team#${PROFILE.hash}`);
   return (
-    <PageShell crumb="Team" path="/team" title="Team">
+    <PageShell crumb="Team" path="/team" title="Team" wide>
       <JsonLd
         data={[
           {
@@ -28,21 +74,56 @@ export default function TeamPage() {
             url: SITE.url,
             description: DESCRIPTION,
           },
-          { "@context": "https://schema.org", ...person },
+          {
+            "@context": "https://schema.org",
+            "@type": "Person",
+            "@id": personUrl,
+            name: PROFILE.name,
+            url: personUrl,
+            jobTitle: "Chefredakteur",
+            image: absoluteUrl(PORTRAIT),
+          },
         ]}
       />
-      <div className="prose-fp">
-        <p>
-          Futterprüfer.de ist ein transparentes Testportal für Hunde- und Katzenfutter. Unsere Tests stützen sich auf die Kennzeichnung, die Angaben der Hersteller und öffentlich zugängliche Quellen. Eigene Laboranalysen führen wir nur durch, wenn wir das im Test ausdrücklich angeben. Verantwortlich für die Inhalte ist {DEFAULT_AUTHOR.name} (siehe <Link href="/impressum">Impressum</Link>).
-        </p>
-        <h2 id={DEFAULT_AUTHOR.hash} className="scroll-mt-28">{DEFAULT_AUTHOR.name}</h2>
-        <p>{DEFAULT_AUTHOR.name} ist verantwortlich für die Inhalte von Futterprüfer.de nach § 18 Abs. 2 MStV und arbeitet in der Tierarztpraxis als Assistenz.</p>
-        <p><strong>Berufliche Stationen</strong></p>
-        <ul>
-          <li>seit Januar 2023: Assistenz in der Tierarztpraxis Pfotenfreund, Berlin</li>
-          <li>Januar 2021 bis Januar 2023: Tätigkeit in der Tierarztpraxis Am Sonnenhang, München</li>
-        </ul>
-      </div>
+      <article aria-labelledby={PROFILE.hash} className="rounded-[1.75rem] bg-bg-soft p-5 sm:p-8">
+        <div className="grid items-start gap-8 md:grid-cols-[17.5rem_minmax(0,1fr)] md:gap-10">
+          <div className="mx-auto w-full max-w-xs md:mx-0 md:max-w-none">
+            <div className="relative aspect-[1290/1280] overflow-hidden rounded-[1.35rem] border-[6px] border-brand shadow-card">
+              <FpImage
+                src={PORTRAIT}
+                alt="Matthias Schröter, Chefredakteur von Futterprüfer.de"
+                sizes="(min-width: 768px) 280px, 320px"
+                priority
+              />
+            </div>
+          </div>
+          <div>
+            <p className="text-xs font-bold uppercase tracking-[0.16em] text-brand">{PROFILE.label}</p>
+            <h2 id={PROFILE.hash} className="mt-2 scroll-mt-28 text-3xl font-extrabold tracking-tight md:text-4xl">{PROFILE.name}</h2>
+            <p className="mt-2 text-lg font-semibold text-brand">{PROFILE.role}</p>
+            <p className="mt-1 text-sm text-muted">{PROFILE.meta}</p>
+            <div className="prose-fp mt-6">
+              {PROFILE.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <section aria-labelledby="werdegang" className="mt-8 rounded-[1.75rem] border border-border bg-surface px-5 py-6 shadow-card sm:px-8 sm:py-8">
+        <h2 id="werdegang" className="text-xs font-bold uppercase tracking-[0.16em] text-brand">Werdegang</h2>
+        <ol className="mt-6 divide-y divide-border">
+          {WERDEGANG.map((entry) => (
+            <li key={entry.period} className="grid gap-1 py-5 first:pt-0 last:pb-0 sm:grid-cols-[7rem_minmax(0,1fr)] sm:gap-x-8">
+              <p className="text-sm font-bold text-brand">{entry.period}</p>
+              <div>
+                <h3 className="text-base font-bold leading-snug">{entry.title}</h3>
+                <p className="mt-1 text-sm text-muted">{entry.detail}</p>
+                <p className="mt-2 leading-relaxed">{entry.text}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </section>
     </PageShell>
   );
 }

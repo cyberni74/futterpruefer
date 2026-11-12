@@ -1,4 +1,17 @@
 {
+  "/redaktion/matthias-schroeter-chefredakteur.webp": {
+    "w": 1000,
+    "v": [
+      {
+        "w": 400,
+        "src": "/redaktion/matthias-schroeter-chefredakteur-400.webp"
+      },
+      {
+        "w": 800,
+        "src": "/redaktion/matthias-schroeter-chefredakteur-800.webp"
+      }
+    ]
+  },
   "/brand/drei-hunde-auf-blumenwiese-hundefutter-test.webp": {
     "w": 640,
     "v": [
