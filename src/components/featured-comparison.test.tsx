@@ -39,7 +39,7 @@ describe("Startseiten-Kasten Vergleichstest", () => {
     expect(html).not.toContain("Testsieger ·");
     expect(html).not.toMatch(/aria-label="Testsieger/);
     expect(html).toContain("Vergleichstest · Oktober 2026");
-    expect(html).not.toContain('role="img"');
+    expect(html).toContain('aria-label="59 von 100 Punkten"');
     expect(html).toContain('href="/blog/monoprotein-katzenfutter-test-2026"');
   });
 });
