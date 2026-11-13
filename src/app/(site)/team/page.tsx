@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { FpImage } from "@/components/fp-image";
 import { JsonLd } from "@/components/json-ld";
 import { PageShell } from "@/components/page-shell";
 import { absoluteUrl, pageAlternates, SITE } from "@/lib/site";
 
 const DESCRIPTION =
-  "Matthias Schröter ist Chefredakteur von Futterprüfer.de. Tierarzt und Wissenschaftler, Schwerpunkt Ernährung von Hund und Katze.";
+  "Chefredakteur Matthias Schröter leitet die Redaktion von Futterprüfer.de. Tests von Hunde- und Katzenfutter nach Kennzeichnung, Zusammensetzung und Methodik.";
 
 const PORTRAIT = "/redaktion/matthias-schroeter-chefredakteur.webp";
 
@@ -56,7 +57,7 @@ const WERDEGANG = [
 ] as const;
 
 export const metadata: Metadata = {
-  title: "Team",
+  title: "Redaktion: Chefredakteur Matthias Schröter",
   description: DESCRIPTION,
   alternates: pageAlternates("/team"),
 };
@@ -123,6 +124,14 @@ export default function TeamPage() {
             </li>
           ))}
         </ol>
+      </section>
+
+      <section aria-labelledby="redaktion" className="prose-fp mt-12">
+        <h2 id="redaktion">Die Redaktion von Futterprüfer.de</h2>
+        <p>Die Redaktion von Futterprüfer.de prüft Hundefutter und Katzenfutter. Chefredakteur ist Matthias Schröter, Tierarzt und Wissenschaftler. Seit dem 6. November 2026 verantwortet er in Teilzeit die redaktionelle Linie des Portals: welche Futtermittel geprüft werden, wie die Texte argumentieren und woran ein Urteil erkennbar bleibt. Maßgeblich ist, was auf dem Beutel steht und was sich daraus ableiten lässt – nicht das Werbeversprechen.</p>
+        <p>Die Prüfung stützt sich auf die Kennzeichnung. Zusammensetzung, analytische Bestandteile und Zusatzstoffe werden vom Etikett, von der Herstellerseite und aus öffentlich zugänglichen Angaben übernommen. Werbeaussagen auf Packung und im Shop werden sachlich und rechtlich eingeordnet. Eigene Laboranalysen führt die Redaktion in der Regel nicht durch. Beruht ein Test auf Laborwerten, steht das ausdrücklich im Bericht. Fehlen Angaben oder widersprechen sie sich, wird das im Text genannt.</p>
+        <p>Die Note folgt der offenen <Link href="/methodik">Methodik</Link>. Alleinfutter durchläuft sechs Kriterien und erreicht höchstens 100 Punkte: Rohstoffe, bedenkliche Zusätze, Nährstoffprofil, Deklaration und Transparenz einschließlich der Werbeaussagen, Bedarfsdeckung und Preis. Hersteller beauftragen oder bezahlen keine Tests und haben keinen Einfluss auf die Punkte.</p>
+        <p>Matthias Schröter hat Veterinärmedizin an der Vetsuisse-Fakultät der Universität Zürich studiert und dort in Forschung und Lehre zur Ernährung von Hund und Katze gearbeitet. Die Beiträge unter seiner Leitung sollen für Tierhalter klar lesbar sein, ohne die Prüfung weichzuspülen. Die Produkttests stehen in der <Link href="/tests">Übersicht aller Tests</Link>. Wie die Punkte zustande kommen, beschreibt die Methodik. Fachbegriffe erklärt das <Link href="/lexikon">Futter-Lexikon</Link>.</p>
       </section>
     </PageShell>
   );

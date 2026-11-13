@@ -3,7 +3,7 @@ import { renderToStaticMarkup } from "react-dom/server";
 import TeamPage, { metadata } from "./page";
 
 const DESCRIPTION =
-  "Matthias Schröter ist Chefredakteur von Futterprüfer.de. Tierarzt und Wissenschaftler, Schwerpunkt Ernährung von Hund und Katze.";
+  "Chefredakteur Matthias Schröter leitet die Redaktion von Futterprüfer.de. Tests von Hunde- und Katzenfutter nach Kennzeichnung, Zusammensetzung und Methodik.";
 
 describe("Team-Seite", () => {
   const html = renderToStaticMarkup(<TeamPage />);
@@ -73,8 +73,17 @@ describe("Team-Seite", () => {
     expect(html).not.toContain("Pfotenfreund");
     expect(html).not.toContain("Sonnenhang");
     expect(html).not.toContain("Dr. L.");
-    expect(metadata.title).toBe("Team");
+    expect(metadata.title).toBe("Redaktion: Chefredakteur Matthias Schröter");
     expect(metadata.description).toBe(DESCRIPTION);
+    const redaktion = html.slice(html.indexOf('id="redaktion"'));
+    expect(redaktion).toContain("Die Redaktion von Futterprüfer.de");
+    expect(redaktion).toContain('href="/methodik"');
+    expect(redaktion).toContain('href="/tests"');
+    expect(redaktion).toContain('href="/lexikon"');
+    expect(redaktion).toContain("Hersteller beauftragen oder bezahlen keine Tests und haben keinen Einfluss auf die Punkte.");
+    const words = redaktion.replace(/<[^>]+>/g, " ").split(/\s+/).filter(Boolean);
+    expect(words.length).toBeGreaterThanOrEqual(150);
+    expect(words.length).toBeLessThanOrEqual(250);
     expect(DESCRIPTION.length).toBeGreaterThanOrEqual(70);
     expect(DESCRIPTION.length).toBeLessThanOrEqual(160);
   });
