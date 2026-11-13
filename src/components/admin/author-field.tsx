@@ -8,13 +8,13 @@ export function AuthorField({ value, error }: { value: string; error?: string })
       id="authorSlug"
       label="Autor"
       error={error}
-      hint={`Optional. Ohne Auswahl gilt ${DEFAULT_AUTHOR.name}. Es stehen nur Personen zur Wahl, die auf der Website genannt sind.`}
+      hint={`Optional. Ohne Auswahl gilt ${DEFAULT_AUTHOR.name}.`}
     >
-      <select id="authorSlug" name="authorSlug" defaultValue={value} className={inputCls} {...describe("authorSlug", error, true)}>
+      <select id="authorSlug" name="authorSlug" defaultValue={value === "matthias-schroeter" ? value : ""} className={inputCls} {...describe("authorSlug", error, true)}>
         <option value="">Standard ({DEFAULT_AUTHOR.name})</option>
-        {AUTHORS.map((a) => (
-          <option key={a.slug} value={a.slug}>
-            {a.name}
+        {AUTHORS.filter((author) => author.kind === "person").map((author) => (
+          <option key={author.slug} value={author.slug}>
+            {author.name}
           </option>
         ))}
       </select>

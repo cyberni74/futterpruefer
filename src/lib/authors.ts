@@ -1,46 +1,60 @@
 /**
- * Personen, die auf der Website namentlich stehen.
- * Sebastian Kraft: Impressum, verantwortlich nach § 18 Abs. 2 MStV. Standard, wenn kein Autor gesetzt ist.
- * Matthias Schröter: Chefredakteur, sichtbar auf /team. Nur Tests mit diesem Slug nennen ihn.
- * Keine sameAs-Links.
+ * Öffentliche Autorenangabe.
+ * Standard ist die Redaktion als Organization, verlinkt auf /team ohne Anker.
+ * Gespeicherte Slugs wie „sebastian-kraft“ werden darauf abgebildet.
+ * Sebastian Kraft bleibt nur im Impressum, nicht als Autor.
+ * Matthias Schröter bleibt Person mit Team-Anker. Kein reviewedBy, keine sameAs-Links.
  */
-export type PublicAuthor = {
-  slug: string;
-  name: string;
-  jobTitle: string;
-  /** Anker auf der Team-Seite, an dem der Name sichtbar steht. */
-  hash: string;
+export type EditorialAuthor = {
+  slug: "redaktion-futterpruefer";
+  name: "Redaktion Futterprüfer";
+  kind: "organization";
 };
 
-export const AUTHORS = [
-  {
-    slug: "sebastian-kraft",
-    name: "Sebastian Kraft",
-    jobTitle: "Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV",
-    hash: "sebastian-kraft",
-  },
-  {
-    slug: "matthias-schroeter",
-    name: "Matthias Schröter",
-    jobTitle: "Chefredakteur",
-    hash: "matthias-schroeter",
-  },
-] as const satisfies readonly PublicAuthor[];
+export type PersonAuthor = {
+  slug: "matthias-schroeter";
+  name: "Matthias Schröter";
+  kind: "person";
+  jobTitle: "Chefredakteur";
+  hash: "matthias-schroeter";
+};
 
-export type AuthorSlug = (typeof AUTHORS)[number]["slug"];
+export type PublicAuthor = EditorialAuthor | PersonAuthor;
+
+export const EDITORIAL_AUTHOR: EditorialAuthor = {
+  slug: "redaktion-futterpruefer",
+  name: "Redaktion Futterprüfer",
+  kind: "organization",
+};
+
+export const SCHROETER: PersonAuthor = {
+  slug: "matthias-schroeter",
+  name: "Matthias Schröter",
+  kind: "person",
+  jobTitle: "Chefredakteur",
+  hash: "matthias-schroeter",
+};
+
+export const AUTHORS = [EDITORIAL_AUTHOR, SCHROETER] as const;
 
 /** Standard, wenn ein Test oder Artikel keinen Autor gesetzt hat. */
-export const DEFAULT_AUTHOR: PublicAuthor = AUTHORS[0];
+export const DEFAULT_AUTHOR: EditorialAuthor = EDITORIAL_AUTHOR;
+
+/** Slug aus älteren Datensätzen. Wird wie ein leeres Feld auf die Redaktion abgebildet. */
+export const LEGACY_EDITORIAL_SLUG = "sebastian-kraft";
+
+export type AuthorSlug = (typeof AUTHORS)[number]["slug"] | typeof LEGACY_EDITORIAL_SLUG;
 
 export function authorPath(author: PublicAuthor = DEFAULT_AUTHOR): string {
-  return `/team#${author.hash}`;
+  return author.kind === "person" ? `/team#${author.hash}` : "/team";
 }
 
-/** Nur Personen aus AUTHORS. Unbekannte Freitextwerte fallen auf den Standard zurück. */
+/** Unbekannte Freitextwerte und der alte Kraft-Slug fallen auf die Redaktion zurück. */
 export function resolveAuthor(storedSlug?: string | null): PublicAuthor {
-  return AUTHORS.find((a) => a.slug === storedSlug) ?? DEFAULT_AUTHOR;
+  if (storedSlug === SCHROETER.slug) return SCHROETER;
+  return DEFAULT_AUTHOR;
 }
 
 export function isAuthorSlug(value: string): value is AuthorSlug {
-  return AUTHORS.some((a) => a.slug === value);
+  return value === LEGACY_EDITORIAL_SLUG || AUTHORS.some((author) => author.slug === value);
 }

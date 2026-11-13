@@ -156,39 +156,38 @@ describe("hyphenateCategory", () => {
 });
 
 describe("Urheberschaft", () => {
-  it("nennt eine Person aus der Autorenliste und übernimmt keine freien Namen", async () => {
+  it("nennt die Redaktion als Organization und übernimmt keine freien Namen", async () => {
     const { contentAuthor } = await import("./attribution");
-    const { DEFAULT_AUTHOR, authorPath } = await import("./authors");
-    const { absoluteUrl, SITE } = await import("./site");
+    const { DEFAULT_AUTHOR, authorPath, LEGACY_EDITORIAL_SLUG } = await import("./authors");
+    const { absoluteUrl, CANONICAL_ORIGIN, SITE } = await import("./site");
     const author = contentAuthor(null);
     const url = absoluteUrl(authorPath(DEFAULT_AUTHOR));
     expect(author).toEqual({
-      "@type": "Person",
-      "@id": url,
-      name: DEFAULT_AUTHOR.name,
+      "@type": "Organization",
+      name: "Redaktion Futterprüfer",
       url,
-      jobTitle: DEFAULT_AUTHOR.jobTitle,
     });
-    expect(author.name).toBe("Sebastian Kraft");
-    expect(author.name).not.toMatch(/von |Futterprüfer/i);
-    expect(author.url).toMatch(/^https:\/\/.+\/team#sebastian-kraft$/);
+    expect(url).toBe(`${CANONICAL_ORIGIN}/team`);
+    expect(author).not.toHaveProperty("jobTitle");
+    expect(author).not.toHaveProperty("@id");
     expect(author).not.toHaveProperty("sameAs");
-    expect(author.jobTitle).not.toBe(author.name);
+    expect(JSON.stringify(author)).not.toContain("sebastian-kraft");
+    expect(JSON.stringify(author)).not.toContain("Person");
     const unknown = contentAuthor("gespeicherter Name");
     expect(JSON.stringify(unknown)).not.toContain("gespeicherter Name");
     expect(unknown).toEqual(author);
     expect(contentAuthor(DEFAULT_AUTHOR.slug)).toEqual(author);
+    expect(contentAuthor(LEGACY_EDITORIAL_SLUG)).toEqual(author);
     expect(SITE.name).toBe("Futterprüfer");
   });
 
   it("löst Matthias Schröter auf den Team-Anker auf, ohne sameAs", async () => {
     const { contentAuthor } = await import("./attribution");
-    const { AUTHORS, DEFAULT_AUTHOR, authorPath } = await import("./authors");
+    const { AUTHORS, SCHROETER, authorPath } = await import("./authors");
     const { absoluteUrl } = await import("./site");
-    expect(DEFAULT_AUTHOR.slug).toBe("sebastian-kraft");
-    expect(AUTHORS.map((a) => a.slug)).toEqual(["sebastian-kraft", "matthias-schroeter"]);
+    expect(AUTHORS.map((a) => a.slug)).toEqual(["redaktion-futterpruefer", "matthias-schroeter"]);
     const author = contentAuthor("matthias-schroeter");
-    const url = absoluteUrl(authorPath(AUTHORS[1]));
+    const url = absoluteUrl(authorPath(SCHROETER));
     expect(author).toEqual({
       "@type": "Person",
       "@id": url,
@@ -198,7 +197,9 @@ describe("Urheberschaft", () => {
     });
     expect(author.url).toMatch(/\/team#matthias-schroeter$/);
     expect(author).not.toHaveProperty("sameAs");
-    expect(contentAuthor(null).name).toBe("Sebastian Kraft");
+    expect(author).not.toHaveProperty("reviewedBy");
+    expect(contentAuthor(null).name).toBe("Redaktion Futterprüfer");
+    expect(contentAuthor("sebastian-kraft").name).toBe("Redaktion Futterprüfer");
   });
 });
 

@@ -118,7 +118,8 @@ export function productSnippetIssues(data: ReturnType<typeof productReviewJsonLd
   if (!rating || rating.ratingValue < rating.worstRating || rating.ratingValue > rating.bestRating) issues.push("reviewRating außerhalb 0–100");
   if (rating?.bestRating !== 100 || rating?.worstRating !== 0) issues.push("Skala ist nicht 0–100");
   const author = data.review?.author;
-  if (!author || author["@type"] !== "Person" || !author.name?.trim()) issues.push("Autor ist keine benannte Person");
+  if (!author?.name?.trim() || (author["@type"] !== "Person" && author["@type"] !== "Organization")) issues.push("Autor fehlt");
+  if (author && author["@type"] === "Organization" && "jobTitle" in author) issues.push("Redaktion trägt kein jobTitle");
   if (data.review?.publisher?.["@type"] !== "Organization" || data.review.publisher.name !== SITE.name) issues.push("Publisher fehlt");
   const pros = data.review?.positiveNotes?.itemListElement.length ?? 0;
   const cons = data.review?.negativeNotes?.itemListElement.length ?? 0;
@@ -154,7 +155,7 @@ function simplifyListItem(entry: unknown, index: number) {
 
 /**
  * Bereits gespeicherte JSON-LD-Knoten (Vergleichstests im bodyHtml) auf die Seitenregeln bringen:
- * kein Offer (wir verkaufen nichts), ein Autor wie auf allen anderen Tests (Person, nie Organization)
+ * kein Offer (wir verkaufen nichts), der Autor wie auf den übrigen Seiten (Redaktion als Organization, Matthias Schröter als Person)
  * und ItemList nur mit einfachen ListItem-Einträgen.
  */
 export function normalizeStoredJsonLd(value: unknown): unknown {

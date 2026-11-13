@@ -43,8 +43,16 @@ describe("productReviewJsonLd", () => {
     expect(data.brand).toEqual({ "@type": "Brand", name: "Medidog" });
     expect(data.image?.[0]).toBe(absoluteUrl("/uploads/paste.webp"));
     expect(data.review.name).toBe("Medidog Ulmenrinden Paste im Test");
-    expect(data.review.author).toMatchObject({ "@type": "Person", name: DEFAULT_AUTHOR.name });
-    expect(data.review.author["@type"]).not.toBe("Organization");
+    expect(data.review.author).toEqual({ "@type": "Organization", name: DEFAULT_AUTHOR.name, url: absoluteUrl("/team") });
+    expect(data.review.author).not.toHaveProperty("jobTitle");
+    expect(JSON.stringify(data.review.author)).not.toContain("sebastian-kraft");
+    expect(sample({ authorSlug: "sebastian-kraft" }).review.author).toEqual(data.review.author);
+    expect(sample({ authorSlug: "matthias-schroeter" }).review.author).toMatchObject({
+      "@type": "Person",
+      name: "Matthias Schröter",
+      jobTitle: "Chefredakteur",
+    });
+    expect(JSON.stringify(sample({ authorSlug: "matthias-schroeter" }))).not.toContain("reviewedBy");
     expect(data.review.reviewRating).toEqual({ "@type": "Rating", ratingValue: 56, bestRating: 100, worstRating: 0 });
     expect(data.review).not.toHaveProperty("itemReviewed");
     expect(json).not.toContain("AggregateRating");
@@ -97,14 +105,16 @@ describe("productReviewJsonLd", () => {
 });
 
 describe("normalizeStoredJsonLd", () => {
-  it("entfernt Offer-Knoten und setzt Organization-Autoren auf die Standardperson", () => {
+  it("entfernt Offer-Knoten und setzt Organization-Autoren auf die Redaktion", () => {
     const data = normalizeStoredJsonLd({
       "@type": "Product",
       offers: { "@type": "Offer", price: "16.71" },
-      review: { "@type": "Review", author: { "@type": "Organization", name: "Futterprüfer" } },
+      review: { "@type": "Review", author: { "@type": "Organization", name: "Futterprüfer", jobTitle: "Verlag" } },
     }) as { offers?: unknown; review: { author: Record<string, unknown> } };
     expect(data).not.toHaveProperty("offers");
-    expect(data.review.author).toMatchObject({ "@type": "Person", name: DEFAULT_AUTHOR.name });
+    expect(data.review.author).toEqual({ "@type": "Organization", name: DEFAULT_AUTHOR.name, url: absoluteUrl("/team") });
+    expect(data.review.author).not.toHaveProperty("jobTitle");
+    expect(JSON.stringify(data)).not.toContain("reviewedBy");
   });
 
   it("macht aus einer ItemList mit Review und Product einfache ListItem-Einträge", () => {
