@@ -18,7 +18,7 @@ import { AllLink } from "@/components/all-link";
 import { DEFAULT_OG_IMAGE, SITE, pageAlternates } from "@/lib/site";
 import { PUBLISHED_CRITERIA } from "@/lib/scoring";
 import {
-  HOME_META_DESCRIPTION,
+  homeMetaDescription,
   HOME_FAQ,
   HOME_GUIDES,
   HOME_H1,
@@ -34,10 +34,11 @@ import {
 const textLink = "font-semibold text-brand underline underline-offset-4 hover:text-brand-strong";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const title = homeTitle(await getNewestReviewUpdate());
+  const [latest, counts] = await Promise.all([getNewestReviewUpdate(), getPublishedCounts()]);
+  const title = homeTitle(latest);
   return {
     title: { absolute: title },
-    description: HOME_META_DESCRIPTION,
+    description: homeMetaDescription(counts.tests),
     alternates: pageAlternates("/"),
     openGraph: {
       type: "website",

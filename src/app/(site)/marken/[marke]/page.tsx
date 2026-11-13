@@ -7,6 +7,7 @@ import { BrandProfile } from "@/components/brand-profile";
 import { getBrandInfo } from "@/lib/brand-info";
 import { getBrandBySlug, getBrandReviews, getBrands } from "@/lib/brands";
 import { trimMetaDescription } from "@/lib/seo";
+import { includeBrandInSitemap } from "@/lib/sitemap-entries";
 
 export const revalidate = 3600;
 
@@ -26,6 +27,8 @@ export async function generateMetadata({ params }: PageProps<"/marken/[marke]">)
     title: `${b.brand} im Test: ${b.count} ${b.count === 1 ? "Produkt" : "Produkte"} bewertet`,
     description: trimMetaDescription(`${b.brand}: ${b.count} ${b.count === 1 ? "Test" : "Tests"} nach unserer 100-Punkte-Methodik, durchschnittlich ${b.avg} von 100 Punkten. Zusammensetzung, Werbeaussagen und Preis im Überblick.`),
     alternates: { canonical: `/marken/${b.slug}` },
+    // Eine einzelne Testseite soll ranken, nicht die dünne Markenseite.
+    ...(includeBrandInSitemap(b.count) ? {} : { robots: { index: false, follow: true } }),
   };
 }
 

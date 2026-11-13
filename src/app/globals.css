@@ -168,6 +168,32 @@ button, [role="button"], summary { cursor: pointer; }
 .ticker-track { animation: ticker 64s linear infinite; }
 .ticker-track:hover, .ticker-track:focus-within { animation-play-state: paused; }
 
+@keyframes score-ring-draw {
+  from { stroke-dashoffset: var(--ring-from); }
+  to { stroke-dashoffset: var(--ring-to); }
+}
+.score-ring-arc { animation: score-ring-draw 1.4s cubic-bezier(0.22, 1, 0.36, 1) both; }
+
+@keyframes criteria-bar-grow {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(var(--bar)); }
+}
+.criteria-bar-fill {
+  transform-origin: left center;
+  animation: criteria-bar-grow 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: var(--bar-delay, 0s);
+}
+
+/* Futterrechner-Teaser: Futterart ohne Client-JavaScript. */
+.teaser-art:not(:has(input[value="nass"]:checked)) .teaser-nass { display: none; }
+.teaser-art:has(input[value="nass"]:checked) .teaser-trocken { display: none; }
+.teaser-art label:has(input:checked) {
+  border-color: var(--brand);
+  background: var(--brand);
+  color: #fff;
+}
+.dark .teaser-art label:has(input:checked) { color: #000; }
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; scroll-behavior: auto !important; }
   .ticker-track { animation: none; }

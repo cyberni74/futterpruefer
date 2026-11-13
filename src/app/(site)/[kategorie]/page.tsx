@@ -68,7 +68,7 @@ export default async function CategoryPage({ params, searchParams }: PageProps<"
       {featured && (
         <Link href={`/blog/${featured.slug}`} className="group mb-10 flex items-center gap-4 rounded-2xl border-2 border-brand bg-brand-soft p-3 shadow-card transition hover:-translate-y-0.5 hover:shadow-lift motion-reduce:hover:translate-y-0 sm:gap-5 sm:p-4">
           <span className="relative block aspect-[16/9] w-28 shrink-0 overflow-hidden rounded-xl bg-bg-soft sm:w-48">
-            <FpImage src={featured.imageUrl} alt={featured.imageAlt.trim() || `Titelbild: ${featured.title}`} blur={featured.imageBlur} sizes="(min-width:640px) 192px, 112px" />
+            <FpImage src={featured.imageUrl} alt={featured.imageAlt.trim() || `Titelbild: ${featured.title}`} blur={featured.imageBlur} sizes="(min-width:640px) 192px, 112px" frame="16/9" />
           </span>
           <span className="min-w-0">
             <span className="block text-base font-extrabold leading-snug text-fg group-hover:text-brand sm:text-xl">{featured.title}</span>

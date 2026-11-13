@@ -1,5 +1,3 @@
-"use client";
-import { motion, useReducedMotion } from "framer-motion";
 import { AlertTriangle } from "lucide-react";
 import { CRITERIA, harmfulFailed, ratioRating, type Scores } from "@/lib/scoring";
 
@@ -9,7 +7,6 @@ export type CriteriaBarItem = { key: string; label: string; max: number; value: 
 
 /** Sechs Kriterien-Balken; füllen sich nacheinander beim Sichtbarwerden (nur transform → flüssig, kein Layout-Shift). */
 export function CriteriaBars({ scores, items, methodikVersion }: { scores: Scores; items?: CriteriaBarItem[]; methodikVersion?: string | null }) {
-  const reduce = useReducedMotion();
   if (items) {
     return (
       <ul className="space-y-3.5">
@@ -29,14 +26,7 @@ export function CriteriaBars({ scores, items, methodikVersion }: { scores: Score
                 </span>
               </div>
               <div className="h-2.5 overflow-hidden rounded-full bg-border" role="meter" aria-label={`${c.label}: ${v} von ${c.max} Punkten`} aria-valuemin={0} aria-valuemax={c.max} aria-valuenow={v}>
-                <motion.div
-                  className="h-full w-full origin-left rounded-full"
-                  style={{ background: COLOR[tone] }}
-                  initial={{ scaleX: 0 }}
-                  whileInView={{ scaleX: ratio }}
-                  viewport={{ once: true }}
-                  transition={reduce ? { duration: 0 } : { duration: 0.9, delay: 0.15 + i * 0.1, ease: [0.22, 1, 0.36, 1] }}
-                />
+                <div className="criteria-bar-fill h-full w-full rounded-full" style={{ background: COLOR[tone], ["--bar" as string]: ratio, ["--bar-delay" as string]: `${0.15 + i * 0.1}s` }} />
               </div>
             </li>
           );
@@ -63,14 +53,7 @@ export function CriteriaBars({ scores, items, methodikVersion }: { scores: Score
               </span>
             </div>
             <div className="h-2.5 overflow-hidden rounded-full bg-border" role="meter" aria-label={`${c.label}: ${v} von ${c.max} Punkten`} aria-valuemin={0} aria-valuemax={c.max} aria-valuenow={v}>
-              <motion.div
-                className="h-full w-full origin-left rounded-full"
-                style={{ background: COLOR[tone] }}
-                initial={{ scaleX: 0 }}
-                whileInView={{ scaleX: ratio }}
-                viewport={{ once: true }}
-                transition={reduce ? { duration: 0 } : { duration: 0.9, delay: 0.15 + i * 0.1, ease: [0.22, 1, 0.36, 1] }}
-              />
+              <div className="criteria-bar-fill h-full w-full rounded-full" style={{ background: COLOR[tone], ["--bar" as string]: ratio, ["--bar-delay" as string]: `${0.15 + i * 0.1}s` }} />
             </div>
           </li>
         );

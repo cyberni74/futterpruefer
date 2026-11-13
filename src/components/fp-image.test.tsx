@@ -21,6 +21,12 @@ describe("FpImage", () => {
     expect(html).not.toContain('decoding="async"');
   });
 
+  it("setzt width und height aus dem Rahmen, wenn keine Dateimaße bekannt sind", () => {
+    const html = renderToStaticMarkup(<FpImage src={AMAZON} alt="Packung" sizes="100vw" frame="4/3" />);
+    expect(html).toContain('width="1200"');
+    expect(html).toContain('height="900"');
+  });
+
   it("zeigt ohne Bild einen Platzhalter ohne img-Element", () => {
     expect(renderToStaticMarkup(<FpImage src={null} alt="" sizes="100vw" />)).not.toContain("<img");
   });

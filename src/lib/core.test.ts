@@ -76,15 +76,17 @@ describe("sanitize", () => {
     expect(out).toContain('rel="noopener noreferrer nofollow sponsored"');
     expect(out).toContain('target="_blank"');
   });
-  it("setzt sponsored bei Amazon-Tag und bei amazon.de, nicht bei anderen Shops", () => {
+  it("setzt sponsored nur beim Partner-Tag, nicht bei einer nackten Amazon-URL", () => {
     const tagOnly = sanitize('<a href="https://www.amazon.de/dp/B07KCS7YX1?tag=cyberni7400-21">Amazon</a>');
     expect(tagOnly).toContain('rel="noopener noreferrer nofollow sponsored"');
     const encoded = sanitize('<a href="https://www.amazon.de/dp/B07KCS7YX1?tag=cyberni7400-21&amp;th=1">Amazon</a>');
     expect(encoded).toContain("sponsored");
-    const liveProduct = sanitize('<a href="https://www.amazon.de/dp/B07KCS7YX1">amazon.de</a>');
+    const liveProduct = sanitize('<a href="https://www.amazon.de/dp/B07KCS7YX1" rel="sponsored nofollow noopener">amazon.de</a>');
     const liveRank = sanitize('<a href="https://www.amazon.de/gp/bestsellers/pet-supplies/470653031">Bestseller</a>');
-    expect(liveProduct).toContain('rel="noopener noreferrer nofollow sponsored"');
-    expect(liveRank).toContain('rel="noopener noreferrer nofollow sponsored"');
+    expect(liveProduct).toContain('rel="noopener noreferrer nofollow"');
+    expect(liveProduct).not.toContain("sponsored");
+    expect(liveRank).toContain('rel="noopener noreferrer nofollow"');
+    expect(liveRank).not.toContain("sponsored");
     const shop = sanitize('<a href="https://www.fressnapf.de/p">Fressnapf</a>');
     expect(shop).toContain('rel="noopener noreferrer nofollow"');
     expect(shop).not.toContain("sponsored");
@@ -113,6 +115,15 @@ describe("sanitize", () => {
     const image = out.match(/<a[^>]*class="amz-bild"[^>]*>/)?.[0] ?? "";
     expect(image).toContain("sponsored");
     expect(image).toContain("tag=cyberni7400-21");
+  });
+  it("Amazon-Quellenlink ohne Partner-Tag verliert gespeichertes sponsored, mit Tag bleibt es", () => {
+    const plain = sanitize('<p><a class="src-link" href="https://www.amazon.de/dp/B0PLAIN" rel="sponsored nofollow noopener">amazon.de/dp/B0PLAIN</a></p>');
+    const plainTag = plain.match(/<a[^>]*>/)?.[0] ?? "";
+    expect(plainTag).not.toContain("sponsored");
+    expect(plainTag).toContain('rel="nofollow noopener noreferrer"');
+    const tagged = sanitize('<p><a class="src-link" href="https://www.amazon.de/dp/B0TAG?tag=cyberni7400-21" rel="sponsored nofollow noopener">amazon.de</a></p>');
+    expect(tagged).toContain('rel="noopener noreferrer nofollow sponsored"');
+    expect(tagged).toContain("tag=cyberni7400-21");
   });
   it("behält cta-box und Button-Klassen, entfernt Inline-Styles", () => {
     const out = sanitize('<div class="cta-box" style="border:1px solid red"><span class="werbung">Werbung</span><a class="button" href="https://www.amazon.de/dp/B07D4T5XVT?tag=cyberni7400-21" rel="sponsored nofollow">Zu Amazon</a></div>');

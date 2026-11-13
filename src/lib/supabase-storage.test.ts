@@ -67,6 +67,7 @@ describe("uploadPublicImage", () => {
           apikey: KEY,
           Authorization: `Bearer ${KEY}`,
           "Content-Type": "image/webp",
+          "cache-control": "public, max-age=31536000, immutable",
           "x-upsert": "false",
         }),
       }),

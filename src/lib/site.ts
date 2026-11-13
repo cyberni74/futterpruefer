@@ -63,6 +63,12 @@ export const FOOTER_CLAIM =
 /** Pflichttext Amazon-PartnerNet, Footer und Impressum. */
 export const AMAZON_PARTNER_NOTICE = "Als Amazon-Partner verdiene ich an qualifizierten Verkäufen.";
 
+/** Eigenes Profil, von der Redaktion bestätigt. Steht im Footer und als sameAs der Organization. */
+export const TIKTOK_URL = "https://www.tiktok.com/@futterpruefer";
+
+/** Öffentliche Redaktionsadresse für das contactPoint der Organization. */
+export const EDITORIAL_EMAIL = "futterpruefer@gmail.com";
+
 /** Indexierung nur auf der echten Domain – Vercel-Subdomains, localhost und SITE_NOINDEX=1 bleiben noindex. */
 export function isIndexable(url = SITE.url, flag = process.env.SITE_NOINDEX): boolean {
   if (flag === "1") return false;

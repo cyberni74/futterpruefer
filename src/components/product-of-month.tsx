@@ -44,7 +44,7 @@ export function FeatureHero({ headingId, kicker, srPrefix, title, score, text, i
     <section aria-labelledby={headingId} className="relative overflow-hidden rounded-3xl bg-brand-strong text-white shadow-lift dark:bg-brand-soft">
       <div className="grid md:grid-cols-2">
         <div className="relative aspect-[16/9] md:aspect-auto md:min-h-[18rem]">
-          <FpImage src={image.src} alt={image.alt} blur={image.blur} sizes="(min-width:768px) 50vw, 100vw" />
+          <FpImage src={image.src} alt={image.alt} blur={image.blur} sizes="(min-width:768px) 50vw, 100vw" frame="16/9" />
           {seal}
         </div>
         <div className="flex flex-col justify-center gap-3 p-5 md:p-7">

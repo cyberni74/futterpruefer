@@ -1,40 +1,32 @@
-"use client";
-import { animate, motion, useInView, useMotionValue, useReducedMotion, useTransform } from "framer-motion";
-import { useEffect, useRef } from "react";
 import { MAX_TOTAL, RATING_LABEL, ratingFor } from "@/lib/scoring";
 
 const COLOR = { gut: "var(--good)", mittel: "var(--mid-fill)", schlecht: "var(--bad)" } as const;
 
 /** compact: kleiner Tacho ohne Bewertungs-Pille (z. B. Ergebnis-Raster im Vergleichstest). */
 export function ScoreRing({ score, size = 200, compact = false, methodikVersion }: { score: number; size?: number; compact?: boolean; methodikVersion?: string | null }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-40px" });
-  const reduce = useReducedMotion();
   const value = Math.max(0, Math.min(MAX_TOTAL, score ?? 0));
   const rating = ratingFor(value, methodikVersion);
   const stroke = compact ? 12 : 14;
   const r = (size - stroke) / 2;
   const c = 2 * Math.PI * r;
-  // SSR und erster Paint zeigen den echten Score. Der Strich darf danach nur visuell einlaufen.
-  const progress = useMotionValue(value);
-  const dash = useTransform(progress, (v) => c - (v / MAX_TOTAL) * c);
-
-  useEffect(() => {
-    if (!inView) return;
-    if (reduce) {
-      progress.set(value);
-      return;
-    }
-    progress.set(0);
-    const controls = animate(progress, value, { duration: 1.4, ease: [0.22, 1, 0.36, 1] });
-    return () => controls.stop();
-  }, [inView, reduce, value, progress]);
-
+  const offset = c - (value / MAX_TOTAL) * c;
   return (
-    <div ref={ref} className="relative inline-flex shrink-0" style={{ width: size, height: size }} role="img" aria-label={`Gesamtwertung: ${value} von ${MAX_TOTAL} Punkten – ${RATING_LABEL[rating]}`}>
+    <div className="relative inline-flex shrink-0" style={{ width: size, height: size }} role="img" aria-label={`Gesamtwertung: ${value} von ${MAX_TOTAL} Punkten – ${RATING_LABEL[rating]}`}>
       <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} className="-rotate-90" aria-hidden>
         <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke="var(--border)" strokeWidth={stroke} />
-        <motion.circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke={COLOR[rating]} strokeWidth={stroke} strokeLinecap="round" strokeDasharray={c} style={{ strokeDashoffset: dash }} />
+        <circle
+          className="score-ring-arc"
+          cx={size / 2}
+          cy={size / 2}
+          r={r}
+          fill="none"
+          stroke={COLOR[rating]}
+          strokeWidth={stroke}
+          strokeLinecap="round"
+          strokeDasharray={c}
+          strokeDashoffset={offset}
+          style={{ ["--ring-from" as string]: c, ["--ring-to" as string]: offset }}
+        />
       </svg>
       <div className="absolute inset-0 flex flex-col items-center justify-center" aria-hidden>
         <span className={compact ? "font-display text-4xl font-extrabold tabular-nums leading-none" : "font-display text-6xl font-extrabold tabular-nums leading-none"} style={{ color: "var(--fg)" }}>{value}</span>

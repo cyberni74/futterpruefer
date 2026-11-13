@@ -3,13 +3,17 @@ import Link from "next/link";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { ReviewListing } from "@/components/review-listing";
 import { parseFilters } from "@/lib/filters";
-import { getCategories } from "@/lib/queries";
+import { testsMetaDescription } from "@/lib/home-seo";
+import { getCategories, getPublishedCounts } from "@/lib/queries";
 
-export const metadata: Metadata = {
-  title: "Futtertests Hund & Katze 2026",
-  description: "Alle Futtertests für Hund und Katze: über 110 Produkte mit Punkten und Ampel, von Grün bis Rot. Filtern nach Tierart, Preisklasse und Punkten.",
-  alternates: { canonical: "/tests" },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const { tests } = await getPublishedCounts();
+  return {
+    title: "Futtertests Hund & Katze 2026",
+    description: testsMetaDescription(tests),
+    alternates: { canonical: "/tests" },
+  };
+}
 
 export default async function TestsPage({ searchParams }: PageProps<"/tests">) {
   const [sp, categories] = await Promise.all([searchParams, getCategories()]);

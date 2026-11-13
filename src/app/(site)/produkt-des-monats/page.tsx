@@ -21,7 +21,7 @@ export default async function PomArchive() {
       <ol className="space-y-6">
         {list.map((p) => (
           <li key={p.id} className="relative flex flex-col overflow-hidden rounded-3xl border border-border bg-surface shadow-card sm:flex-row">
-            <div className="relative aspect-[4/3] sm:aspect-auto sm:w-64 sm:shrink-0"><FpImage src={p.review.imageUrl} alt={p.review.imageAlt || p.review.title} blur={p.review.imageBlur} sizes="(min-width:640px) 256px, 100vw" /></div>
+            <div className="relative aspect-[4/3] sm:aspect-auto sm:w-64 sm:shrink-0"><FpImage src={p.review.imageUrl} alt={p.review.imageAlt || p.review.title} blur={p.review.imageBlur} sizes="(min-width:640px) 256px, 100vw" frame="4/3" /></div>
             <div className="flex flex-1 gap-4 p-5">
               <MonthSeal month={p.month} year={p.year} className="hidden size-24 md:flex" />
               <div className="flex-1">

@@ -1,12 +1,9 @@
-"use client";
 import Link from "next/link";
-import { useState } from "react";
 import { AlertTriangle, Megaphone, Pause, Play } from "lucide-react";
 import type { TickerEntry } from "@/lib/queries";
 
-/** Laufband mit wichtigen Meldungen: dunkles Band, Label, Trennpunkte, Warnungen als rote Marke. Pausierbar (WCAG 2.2.2). */
+/** Laufband mit wichtigen Meldungen. Pause über eine Checkbox, damit kein Client-JavaScript nötig ist (WCAG 2.2.2). */
 export function Ticker({ items }: { items: TickerEntry[] }) {
-  const [paused, setPaused] = useState(false);
   if (!items.length) return null;
   const loop = [...items, ...items];
   // Tempo je Meldung statt fester Gesamtdauer: mehr Meldungen laufen nicht schneller.
@@ -14,6 +11,7 @@ export function Ticker({ items }: { items: TickerEntry[] }) {
   return (
     <section aria-label="Aktuelle Meldungen" className="border-b-4 border-accent bg-[#063d3d] text-white">
       <div className="mx-auto flex max-w-6xl items-stretch">
+        <input id="ticker-pause" type="checkbox" className="peer sr-only" />
         <span className="z-10 flex shrink-0 items-center gap-2 bg-accent px-3 text-sm font-extrabold uppercase tracking-wider text-white sm:px-4">
           <span className="relative flex size-2.5" aria-hidden>
             <span className="absolute inline-flex size-full rounded-full bg-white opacity-70 motion-safe:animate-ping" />
@@ -21,9 +19,9 @@ export function Ticker({ items }: { items: TickerEntry[] }) {
           </span>
           <Megaphone className="size-5" aria-hidden /> News
         </span>
-        <div className="relative min-w-0 flex-1 overflow-hidden [mask-image:linear-gradient(to_right,transparent,#000_20px,#000_calc(100%-32px),transparent)]">
+        <div className="relative min-w-0 flex-1 overflow-hidden peer-checked:[&_.ticker-track]:[animation-play-state:paused] [mask-image:linear-gradient(to_right,transparent,#000_20px,#000_calc(100%-32px),transparent)]">
           <ul
-            style={{ animationDuration: duration, animationPlayState: paused ? "paused" : undefined }}
+            style={{ animationDuration: duration }}
             className="ticker-track flex w-max items-center py-3.5 pl-6 motion-reduce:w-full motion-reduce:flex-col motion-reduce:items-start motion-reduce:gap-1 motion-reduce:[&>li:nth-child(n+4)]:hidden"
           >
             {loop.map((t, i) => (
@@ -43,16 +41,16 @@ export function Ticker({ items }: { items: TickerEntry[] }) {
             ))}
           </ul>
         </div>
-        <button
-          type="button"
-          onClick={() => setPaused((p) => !p)}
-          aria-pressed={paused}
-          aria-label={paused ? "Laufband fortsetzen" : "Laufband anhalten"}
-          title={paused ? "Fortsetzen" : "Anhalten"}
-          className="z-10 flex min-w-11 shrink-0 items-center justify-center px-3 text-white/80 hover:bg-white/10 hover:text-white motion-reduce:hidden"
-        >
-          {paused ? <Play className="size-5" aria-hidden /> : <Pause className="size-5" aria-hidden />}
-        </button>
+        <label htmlFor="ticker-pause" className="z-10 flex min-w-11 shrink-0 cursor-pointer items-center justify-center px-3 text-white/80 hover:bg-white/10 hover:text-white motion-reduce:hidden peer-checked:[&_.when-pause]:hidden peer-checked:[&_.when-play]:inline-flex">
+          <span className="when-pause inline-flex items-center">
+            <Pause className="size-5" aria-hidden />
+            <span className="sr-only">Laufband anhalten</span>
+          </span>
+          <span className="when-play hidden items-center">
+            <Play className="size-5" aria-hidden />
+            <span className="sr-only">Laufband fortsetzen</span>
+          </span>
+        </label>
       </div>
     </section>
   );

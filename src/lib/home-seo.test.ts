@@ -4,7 +4,8 @@ import { describe, expect, it } from "vitest";
 import { suggestedDeclarationDeduction } from "./product-data";
 import { CRITERIA, HARMFUL_FAIL_RATIO, PUBLISHED_CRITERIA, RATING_LABEL, RATING_THRESHOLDS } from "./scoring";
 import { FOOTER_CLAIM, SITE } from "./site";
-import { HOME_DESCRIPTION, HOME_META_DESCRIPTION, HOME_FAQ, HOME_GUIDES, HOME_H1, INTRO, METHODIK_NOTE, OG_DESCRIPTION, homeJsonLd, homeTitle, introPlain, linkedAnswer } from "./home-seo";
+import { HOME_DESCRIPTION, HOME_FAQ, HOME_GUIDES, HOME_H1, INTRO, METHODIK_NOTE, OG_DESCRIPTION, homeJsonLd, homeMetaDescription, homeTitle, introPlain, linkedAnswer, testsMetaDescription, ueberProdukte } from "./home-seo";
+import { EDITORIAL_EMAIL, TIKTOK_URL } from "./site";
 
 const INTRO_TEXT = [
   "Welches Hundefutter und welches Katzenfutter ist wirklich gut? Futterprüfer bewertet Trockenfutter, Nassfutter und Snacks für Hunde und Katzen nach einem festen 100-Punkte-Schema. Grundlage jedes Tests sind die veröffentlichten Herstellerangaben: Zusammensetzung, analytische Bestandteile, Zusatzstoffe, Fütterungsempfehlung und Preis. Eigene Laboranalysen gehören nicht zum Test, dafür legen wir jeden Bewertungsschritt offen.",
@@ -89,6 +90,14 @@ describe("JSON-LD", () => {
     expect(byType.WebPage.about).toEqual({ "@id": `${base}#organization` });
     expect(byType.WebPage.name).toBe("Hundefutter- & Katzenfutter-Test 2026 | Futterprüfer");
     expect(byType.Organization.description).toBe(HOME_DESCRIPTION);
+    expect(byType.Organization.sameAs).toEqual([TIKTOK_URL]);
+    expect(byType.Organization.contactPoint).toEqual({
+      "@type": "ContactPoint",
+      contactType: "Redaktion",
+      email: EDITORIAL_EMAIL,
+      url: `${SITE.url}/kontakt`,
+      availableLanguage: "de",
+    });
     expect(JSON.stringify(graph)).not.toMatch(/"@type":\s*"Review"|"@type":\s*"AggregateRating"/);
   });
 
@@ -178,16 +187,20 @@ describe("JSON-LD Startseiten-URL", () => {
 });
 
 describe("Meta-Description der Startseite", () => {
-  it("nennt die Ampel ohne einzelne Produktnoten und bleibt in der Längengrenze", () => {
-    expect(HOME_META_DESCRIPTION).toBe("Hunde- und Katzenfutter im Test: über 110 Produkte nach 100-Punkte-Schema, Ampel Grün, Gelb oder Rot. Wir lesen das Kleingedruckte.");
-    expect(HOME_META_DESCRIPTION.length).toBeLessThanOrEqual(155);
-    expect(HOME_META_DESCRIPTION).not.toMatch(/Josera|MjAMjAM|Leonardo|Whiskas|unabhängig/i);
+  it("rundet die Zahl veröffentlichter Tests auf die untere Zehnerstelle", () => {
+    expect(ueberProdukte(165)).toBe("über 160 Produkte");
+    expect(ueberProdukte(160)).toBe("über 160 Produkte");
+    expect(ueberProdukte(9)).toBe("über 0 Produkte");
+    expect(homeMetaDescription(165)).toBe("Hunde- und Katzenfutter im Test: über 160 Produkte nach 100-Punkte-Schema, Ampel Grün, Gelb oder Rot. Wir lesen das Kleingedruckte.");
+    expect(homeMetaDescription(165).length).toBeLessThanOrEqual(155);
+    expect(homeMetaDescription(165)).not.toMatch(/Josera|MjAMjAM|Leonardo|Whiskas|unabhängig/i);
+    expect(testsMetaDescription(165)).toContain("über 160 Produkte");
   });
 
   it("lässt die Beschreibung der Organization im JSON-LD unverändert", () => {
     const graph = homeJsonLd("Titel", [])["@graph"] as Record<string, unknown>[];
     const organization = graph.find((node) => node["@type"] === "Organization");
     expect(organization?.description).toBe(HOME_DESCRIPTION);
-    expect(HOME_DESCRIPTION).not.toBe(HOME_META_DESCRIPTION);
+    expect(HOME_DESCRIPTION).not.toBe(homeMetaDescription(165));
   });
 });
