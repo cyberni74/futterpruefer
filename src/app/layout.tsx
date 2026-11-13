@@ -34,6 +34,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="de" suppressHydrationWarning className={`${body.variable} ${heading.variable}`}>
       <head>
         <script dangerouslySetInnerHTML={{ __html: consentScript }} />
+        <link rel="stylesheet" href="/ki-hinweis.css" />
       </head>
       <body className="min-h-dvh">
         <ThemeProvider>{children}</ThemeProvider>

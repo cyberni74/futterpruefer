@@ -1,0 +1,13 @@
+/* Dezenter KI-Hinweis unter Bildern in Fachartikeln und Lexikon.
+   Eigene Datei, weil Tailwind v4 / Turbopack dieselben Regeln in src/app/globals.css beim Build verwirft. */
+#artikel.prose-fp figcaption,
+#lexikon-text figcaption {
+  font-size: 10px;
+  line-height: 1.2;
+  font-weight: 400;
+  color: #9ca3af;
+}
+.dark #artikel.prose-fp figcaption,
+.dark #lexikon-text figcaption {
+  color: #b8c0be;
+}
