@@ -1,18 +1,95 @@
 "use client";
 import Link from "next/link";
-import { useState } from "react";
-import { CONSENT_KEY } from "@/lib/consent";
+import { useEffect, useState } from "react";
+import {
+  CONSENT_COOKIE,
+  CONSENT_KEY,
+  CONSENT_OPEN_EVENT,
+  hasCurrentConsent,
+  parseConsentValue,
+  type ConsentChoice,
+} from "@/lib/consent";
 
+function readCookieConsent() {
+  try {
+    for (const part of document.cookie.split(";")) {
+      const c = part.trim();
+      if (!c.startsWith(`${CONSENT_COOKIE}=`)) continue;
+      const parsed = parseConsentValue(decodeURIComponent(c.slice(CONSENT_COOKIE.length + 1)));
+      if (parsed && hasCurrentConsent(`v${parsed.version}.${parsed.choice}`)) return parsed.choice;
+    }
+  } catch {}
+  return null;
+}
 
-/** Die Seite setzt keine Tracking-Cookies (cookiefreie Analyse). Der Hinweis informiert und speichert die Kenntnisnahme lokal. */
+function readStoredChoice(): ConsentChoice | null {
+  const fromCookie = readCookieConsent();
+  if (fromCookie) return fromCookie;
+  try {
+    const stored = localStorage.getItem(CONSENT_KEY);
+    if (stored === "ok" || stored === "essential") return stored;
+  } catch {}
+  return null;
+}
+
+function hasConsentCookie(): boolean {
+  return readCookieConsent() !== null;
+}
+
+function hideBanner() {
+  document.documentElement.classList.add("fp-consent");
+  if (!document.getElementById("fp-consent-hide")) {
+    const style = document.createElement("style");
+    style.id = "fp-consent-hide";
+    style.textContent = "#fp-cookie{display:none!important}";
+    (document.head || document.documentElement).appendChild(style);
+  }
+}
+
+function showBanner() {
+  document.documentElement.classList.remove("fp-consent");
+  document.getElementById("fp-consent-hide")?.remove();
+}
+
+async function persistConsent(choice: ConsentChoice) {
+  try {
+    await fetch("/api/consent", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ choice }),
+      credentials: "same-origin",
+    });
+  } catch {}
+}
+
+/** Die Seite setzt keine Tracking-Cookies (cookiefreie Analyse). Der Hinweis informiert und speichert die Kenntnisnahme. */
 export function CookieBanner() {
-  const [dismissed, setDismissed] = useState(false);
-  if (dismissed) return null;
-  const close = (v: string) => {
-    try { localStorage.setItem(CONSENT_KEY, v); } catch {}
-    document.documentElement.classList.add("fp-consent");
-    setDismissed(true);
+  const [open, setOpen] = useState(true);
+
+  useEffect(() => {
+    const stored = readStoredChoice();
+    if (stored) {
+      hideBanner();
+      setOpen(false);
+      if (!hasConsentCookie()) void persistConsent(stored);
+    }
+    const onOpen = () => {
+      setOpen(true);
+      showBanner();
+    };
+    window.addEventListener(CONSENT_OPEN_EVENT, onOpen);
+    return () => window.removeEventListener(CONSENT_OPEN_EVENT, onOpen);
+  }, []);
+
+  const close = (choice: ConsentChoice) => {
+    try { localStorage.setItem(CONSENT_KEY, choice); } catch {}
+    hideBanner();
+    setOpen(false);
+    void persistConsent(choice);
   };
+
+  if (!open) return null;
+
   return (
     <div id="fp-cookie" role="region" aria-label="Datenschutzhinweis" className="border-b border-border bg-bg-soft">
       <div className="mx-auto flex max-w-6xl flex-col gap-3 px-4 py-3 sm:flex-row sm:items-center">

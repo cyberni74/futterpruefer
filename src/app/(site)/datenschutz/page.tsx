@@ -21,8 +21,8 @@ export default function DatenschutzPage() {
         <p>Die Inhalte der Website und Kontaktanfragen werden in einer Datenbank von Supabase (Rechenzentrum in Frankfurt am Main, Deutschland) gespeichert. Mit Supabase besteht eine Vereinbarung zur Auftragsverarbeitung (Art. 28 DSGVO) (Data Processing Addendum, Bestandteil der Supabase-Nutzungsbedingungen).</p>
         <h2>3. Reichweitenmessung</h2>
         <p>Wir nutzen Vercel Web Analytics. Es werden keine Cookies gesetzt und keine personenbezogenen Profile gebildet; Besuche werden anonymisiert gezählt (Art. 6 Abs. 1 lit. f DSGVO).</p>
-        <h2>4. Lokale Speicherung</h2>
-        <p>Im lokalen Speicher Ihres Browsers werden ausschließlich Ihre Farbschema-Wahl (hell/dunkel) und die Kenntnisnahme des Datenschutzhinweises gespeichert. Diese Daten verlassen Ihr Gerät nicht.</p>
+        <h2>4. Technisch notwendige Speicherung</h2>
+        <p>Im lokalen Speicher Ihres Browsers wird Ihre Farbschema-Wahl (hell/dunkel) gespeichert. Ihre Entscheidung zum Datenschutzhinweis speichern wir in einem technisch notwendigen First-Party-Cookie namens <code>fp_consent</code> (Laufzeit 12 Monate, Pfad „/“, SameSite=Lax, Secure) und ergänzend im lokalen Speicher. Das Cookie enthält nur die gewählte Option und eine Versionsnummer, keine Personenangaben, und verlässt Ihr Gerät nur als technisch notwendiger Hinweis an unseren Server, damit der Hinweis nicht bei jedem Besuch erneut erscheint. Sie können die Entscheidung jederzeit über den Link „Cookie-Einstellungen“ im Fußbereich der Seite ändern oder widerrufen.</p>
         <h2>5. Kontaktformular</h2>
         <p>Ihre Angaben (Name, E-Mail, Nachricht) werden zur Bearbeitung der Anfrage gespeichert und per E-Mail-Dienst Resend an uns übermittelt (Art. 6 Abs. 1 lit. b bzw. f DSGVO). Zum Schutz vor Spam kann Cloudflare Turnstile eingesetzt werden. Spätestens sechs Monate nach Abschluss der Anfrage werden die Daten gelöscht, sofern keine gesetzlichen Aufbewahrungspflichten entgegenstehen.</p>
         <h2>6. Newsletter</h2>
