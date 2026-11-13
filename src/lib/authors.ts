@@ -1,8 +1,8 @@
 /**
- * Personen, die auf der Website bereits namentlich stehen.
- * Quelle: Impressum – „Vertretungsberechtigt“ und die Überschrift
- * „Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV“.
- * Keine weiteren Namen, Titel, Profile oder sameAs-Links ergänzen.
+ * Personen, die auf der Website namentlich stehen.
+ * Sebastian Kraft: Impressum, verantwortlich nach § 18 Abs. 2 MStV. Standard, wenn kein Autor gesetzt ist.
+ * Matthias Schröter: Chefredakteur, sichtbar auf /team. Nur Tests mit diesem Slug nennen ihn.
+ * Keine sameAs-Links.
  */
 export type PublicAuthor = {
   slug: string;
@@ -18,6 +18,12 @@ export const AUTHORS = [
     name: "Sebastian Kraft",
     jobTitle: "Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV",
     hash: "sebastian-kraft",
+  },
+  {
+    slug: "matthias-schroeter",
+    name: "Matthias Schröter",
+    jobTitle: "Chefredakteur",
+    hash: "matthias-schroeter",
   },
 ] as const satisfies readonly PublicAuthor[];
 

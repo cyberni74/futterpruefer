@@ -5,7 +5,7 @@ import { absoluteUrl } from "./site";
  * Autor als schema.org Person.
  * Entspricht den Autoren-Empfehlungen für Article/Review:
  * @type Person, name nur der Name, url zur sichtbaren Stelle, jobTitle getrennt.
- * sameAs nur, wenn ein Profil bereits auf der Seite steht – das ist nicht der Fall.
+ * sameAs wird nicht gesetzt.
  */
 export function contentAuthor(storedSlug?: string | null) {
   const author = resolveAuthor(storedSlug);
