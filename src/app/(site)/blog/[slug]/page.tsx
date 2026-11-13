@@ -58,6 +58,7 @@ const BODY_FAQ_SLUGS = new Set([
   "katze-erbricht-futter",
   "salmonellen-hundefutter-interquell-rueckruf",
   "barf-risiken-nachteile",
+  "glycerin-hundeleckerlis-schaedlich-oder-sicher",
 ]);
 
 export async function generateStaticParams() {
