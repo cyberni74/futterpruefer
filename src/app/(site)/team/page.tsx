@@ -126,10 +126,26 @@ export default function TeamPage() {
         </ol>
       </section>
 
-      <section aria-labelledby="redaktion" className="prose-fp mt-12">
-        <h2 id="redaktion">Hundefutter- und Katzenfutter-Tests vom Tierarzt</h2>
-        <p>Die Redaktion von Futterprüfer.de führt den Hundefutter-Test und den Katzenfutter-Test. Chefredakteur ist Matthias Schröter, Tierarzt. Futtermittel prüfen wir über die Kennzeichnung: Zusammensetzung, Inhaltsstoffe und Werbeaussagen. Eigene Laboranalysen führen wir in der Regel nicht durch.</p>
-        <p>Wer wissen will, welches Hundefutter das beste ist, welches Katzenfutter das beste ist oder welches Futter empfohlen wird, bekommt keine pauschale Empfehlung des Tierarztes. Eine Empfehlung gibt es nur bei grüner Bewertung, einen Testsieger nur dort, wo ein Produkt vorn liegt. Es bleibt ein unabhängiger Futtertest: Hersteller beauftragen oder bezahlen keine Tests und haben keinen Einfluss auf die Punkte. Die Note folgt der <Link href="/methodik">Methodik der Futtertests</Link> mit sechs Kriterien und höchstens 100 Punkten. Alle Prüfungen stehen in der <Link href="/tests">Übersicht aller Hundefutter- und Katzenfutter-Tests</Link>. Begriffe erklärt das <Link href="/lexikon">Futter-Lexikon zu Inhaltsstoffen</Link>.</p>
+      <section id="redaktion" aria-labelledby="redaktion-titel" className="mt-8 rounded-[1.75rem] border border-border bg-surface px-5 py-6 shadow-card sm:px-8 sm:py-8">
+        <h2 id="redaktion-titel" className="text-2xl font-extrabold tracking-tight md:text-3xl">Hundefutter- und Katzenfutter-Tests vom Tierarzt</h2>
+        <p className="mt-4 text-[1.0625rem] leading-relaxed md:text-lg">Die Redaktion von Futterprüfer.de führt den Hundefutter-Test und den Katzenfutter-Test. Chefredakteur ist Matthias Schröter, Tierarzt.</p>
+        <div className="mt-5 rounded-2xl border border-border bg-bg-soft p-4 sm:p-5">
+          <p className="text-[1.0625rem] leading-relaxed md:text-lg">Futtermittel prüfen wir über die Kennzeichnung: <span className="font-bold text-brand">Zusammensetzung</span>, <span className="font-bold text-brand">Inhaltsstoffe</span> und <span className="font-bold text-brand">Werbeaussagen</span>. Eigene Laboranalysen führen wir in der Regel nicht durch.</p>
+        </div>
+        <div className="mt-4 rounded-2xl border-2 border-brand bg-brand-soft p-4 sm:p-5">
+          <p className="text-[1.0625rem] leading-relaxed md:text-lg">Wer wissen will, welches Hundefutter das beste ist, welches Katzenfutter das beste ist oder welches Futter empfohlen wird, bekommt keine pauschale Empfehlung des Tierarztes. Eine Empfehlung gibt es nur bei grüner Bewertung, einen Testsieger nur dort, wo ein Produkt vorn liegt. Es bleibt ein unabhängiger Futtertest: Hersteller beauftragen oder bezahlen keine Tests und haben keinen Einfluss auf die Punkte.</p>
+        </div>
+        <div className="mt-5 grid gap-3 sm:grid-cols-3">
+          <div className="relative rounded-2xl border border-border bg-bg-soft p-4 transition hover:border-brand hover:bg-brand-soft">
+            <p className="text-[1.0625rem] leading-relaxed">Die Note folgt der <Link href="/methodik" className="font-bold text-brand underline decoration-2 underline-offset-4 after:absolute after:inset-0">Methodik der Futtertests</Link> mit sechs Kriterien und höchstens 100 Punkten.</p>
+          </div>
+          <div className="relative rounded-2xl border border-border bg-bg-soft p-4 transition hover:border-brand hover:bg-brand-soft">
+            <p className="text-[1.0625rem] leading-relaxed">Alle Prüfungen stehen in der <Link href="/tests" className="font-bold text-brand underline decoration-2 underline-offset-4 after:absolute after:inset-0">Übersicht aller Hundefutter- und Katzenfutter-Tests</Link>.</p>
+          </div>
+          <div className="relative rounded-2xl border border-border bg-bg-soft p-4 transition hover:border-brand hover:bg-brand-soft">
+            <p className="text-[1.0625rem] leading-relaxed">Begriffe erklärt das <Link href="/lexikon" className="font-bold text-brand underline decoration-2 underline-offset-4 after:absolute after:inset-0">Futter-Lexikon zu Inhaltsstoffen</Link>.</p>
+          </div>
+        </div>
       </section>
     </PageShell>
   );

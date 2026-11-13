@@ -75,7 +75,10 @@ describe("Team-Seite", () => {
     expect(html).not.toContain("Dr. L.");
     expect(metadata.title).toBe("Redaktion: Chefredakteur Matthias Schröter");
     expect(metadata.description).toBe(DESCRIPTION);
-    const redaktion = html.slice(html.indexOf('id="redaktion"'));
+    const redaktion = html.slice(html.indexOf('<section id="redaktion"'));
+    expect(redaktion).toContain("rounded-[1.75rem]");
+    expect(redaktion).toContain("bg-brand-soft");
+    expect(redaktion).toContain("sm:grid-cols-3");
     expect(redaktion).toContain("Hundefutter- und Katzenfutter-Tests vom Tierarzt");
     expect(redaktion).toContain("Chefredakteur ist Matthias Schröter, Tierarzt.");
     expect(redaktion).toContain(">Methodik der Futtertests<");
@@ -92,7 +95,7 @@ describe("Team-Seite", () => {
     expect(redaktion).toContain("Hersteller beauftragen oder bezahlen keine Tests und haben keinen Einfluss auf die Punkte.");
     expect(redaktion).not.toContain("Vetsuisse");
     expect(redaktion).not.toContain("6. November");
-    const words = redaktion.replace(/<[^>]+>/g, " ").split(/\s+/).filter(Boolean);
+    const words = redaktion.replace(/<[^>]+>/g, " ").split(/\s+/).filter((word) => /[\p{L}\p{N}]/u.test(word));
     expect(words.length).toBeGreaterThanOrEqual(100);
     expect(words.length).toBeLessThanOrEqual(130);
     expect(DESCRIPTION.length).toBeGreaterThanOrEqual(70);
