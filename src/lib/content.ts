@@ -8,6 +8,7 @@ import { fitsAnimal, subjectAnimal, type AnimalKind } from "@/lib/animals";
 import { sanitize, stripHtml } from "@/lib/sanitize";
 import { stripAffiliateForRot } from "@/lib/rot-guard";
 import { linkify, type LinkTerm } from "@/lib/linkify";
+import { autolinkPatterns, lexikonLinkTitle } from "@/lib/lexikon-autolink";
 import { badgeScores } from "@/lib/score-badge";
 
 export const getLexikonEntries = cache(() =>
@@ -26,9 +27,9 @@ export const getLinkTerms = cache(async (): Promise<LinkTerm[]> => {
   return [
     ...lex.map((e) => ({
       id: `lex:${e.id}`,
-      patterns: [e.name, ...e.synonyms],
+      patterns: autolinkPatterns(e.slug, e.name, e.synonyms),
       href: `/lexikon/${e.slug}`,
-      title: `${e.name}: ${e.shortDescription}`.slice(0, 200),
+      title: lexikonLinkTitle(e.name),
       className: `lex-link lex-${e.concern.toLowerCase()}`,
     })),
     ...glossary.map((g) => ({

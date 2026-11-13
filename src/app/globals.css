@@ -187,6 +187,9 @@ button, [role="button"], summary { cursor: pointer; }
 .prose-fp a.lex-link::after { content: ""; display: inline-block; width: .5em; height: .5em; border-radius: 9999px; margin-left: .2em; vertical-align: .15em; background: var(--good); }
 .prose-fp a.lex-eingeschraenkt::after { background: var(--mid-fill); }
 .prose-fp a.lex-bedenklich::after { background: var(--bad); }
+/* Verneint („ohne Zucker“): der Link bleibt, der farbige Punkt entfällt. */
+.prose-fp a.lex-link.lex-ohne-marker::after,
+.tv2 a.lex-link.lex-ohne-marker::after { content: none; }
 .prose-fp a.gloss-link { border-bottom-style: dashed; font-weight: 500; }
 .prose-fp a.lex-link:hover, .prose-fp a.gloss-link:hover { color: var(--brand); }
 

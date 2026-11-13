@@ -54,6 +54,29 @@ describe("linkify", () => {
     expect(out).toContain('title="Antioxidans &quot;synthetisch&quot;"');
     expect(out).toContain(">BHA &amp; BHT</a>");
   });
+  it("verlinkt nicht in Zitaten, Anführungen und Aussage-Zellen", () => {
+    const term = t("zucker", ["Zucker"], "Im Lexikon: Zucker");
+    const quote = linkify("<blockquote><p>Zucker ist süß.</p></blockquote><p>Zucker danach.</p>", [term]);
+    expect(quote).toContain("<blockquote><p>Zucker ist süß.</p></blockquote>");
+    expect(quote).toContain("<p><a href=\"/lexikon/zucker\"");
+    const inline = linkify("<p><q>Zucker</q> und Zucker.</p>", [term]);
+    expect(inline).toContain("<q>Zucker</q>");
+    expect(inline.match(/<a /g)?.length).toBe(1);
+    const table = linkify(
+      '<table><tr><td data-label="Aussage">ohne Zucker</td><td data-label="Begründung">Zucker bleibt.</td></tr></table>',
+      [term],
+    );
+    expect(table).toContain('data-label="Aussage">ohne Zucker</td>');
+    expect(table).toContain('>Zucker</a> bleibt');
+  });
+  it("setzt an „ohne Zucker“ keinen Bedenklichkeits-Punkt", () => {
+    const term = t("zucker", ["Zucker"], "Im Lexikon: Zucker");
+    term.className = "lex-link lex-bedenklich";
+    const out = linkify("<p>Das Futter ist ohne Zucker zusammengesetzt.</p>", [term]);
+    expect(out).toContain('class="lex-link lex-ohne-marker"');
+    expect(out).not.toContain("lex-bedenklich");
+    expect(out).toContain('title="Im Lexikon: Zucker"');
+  });
   it("null-sicher und ohne Begriffe unverändert", () => {
     expect(linkify(null, [])).toBe("");
     expect(linkify("<p>x</p>", [])).toBe("<p>x</p>");
