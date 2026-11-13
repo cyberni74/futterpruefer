@@ -6,8 +6,11 @@ import { Home, LayoutGrid, Newspaper, Search } from "lucide-react";
 const ITEMS = [
   { href: "/", label: "Start", icon: Home },
   { href: "/tests", label: "Kategorien", icon: LayoutGrid },
-  { href: "/blog", label: "Blog", icon: Newspaper },
+  { href: "/blog", label: "Fachartikel", icon: Newspaper },
 ] as const;
+
+const itemClass = (active: boolean) =>
+  `flex min-h-14 w-full flex-col items-center justify-center gap-0.5 px-0.5 text-[11px] leading-tight font-semibold ${active ? "text-brand" : "text-muted hover:text-fg"} transition-colors active:scale-95`;
 
 export function BottomBar() {
   const pathname = usePathname();
@@ -18,7 +21,7 @@ export function BottomBar() {
           const active = href === "/" ? pathname === "/" : pathname.startsWith(href) || (href === "/tests" && pathname.startsWith("/kategorie"));
           return (
             <li key={href}>
-              <Link href={href} aria-current={active ? "page" : undefined} className={`flex min-h-14 flex-col items-center justify-center gap-0.5 text-xs font-semibold ${active ? "text-brand" : "text-muted hover:text-fg"} transition-colors active:scale-95`}>
+              <Link href={href} aria-current={active ? "page" : undefined} className={itemClass(active)}>
                 <Icon className="size-6" aria-hidden />
                 {label}
               </Link>
@@ -29,7 +32,7 @@ export function BottomBar() {
           <button
             type="button"
             onClick={() => window.dispatchEvent(new Event("fp:open-search"))}
-            className={`flex min-h-14 w-full flex-col items-center justify-center gap-0.5 text-xs font-semibold ${pathname.startsWith("/suche") ? "text-brand" : "text-muted hover:text-fg"} transition-colors active:scale-95`}
+            className={itemClass(pathname.startsWith("/suche"))}
           >
             <Search className="size-6" aria-hidden />
             Suche
