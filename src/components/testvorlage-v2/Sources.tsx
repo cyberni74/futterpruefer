@@ -1,3 +1,4 @@
+import { BylineText } from "@/components/author-credit";
 import { isSponsoredHref, sourceLinkRel } from "@/lib/sanitize";
 import type { LayoutData } from "./schema";
 
@@ -43,13 +44,13 @@ export function Sources({ quellen, pruefstand, methodikHinweis, kaufUrl, rot = f
             <li key={`${q.titel}-${q.doi ?? q.url ?? ""}`}>
               {q.url ? <a href={q.url} target="_blank" rel={sourceLinkRel(q.url)}>{q.titel}</a> : <span>{q.titel}</span>}
               {q.doi && <span className="hinweis">DOI: <a href={`https://doi.org/${q.doi}`} target="_blank" rel="nofollow noopener noreferrer">{q.doi}</a></span>}
-              {q.hinweis && <span className="hinweis">{q.hinweis}</span>}
+              {q.hinweis && <span className="hinweis"><BylineText text={q.hinweis} /></span>}
             </li>
           ))}
         </ol>
       ) : null}
-      {methodikHinweis && <div className="bottom-note">{methodikHinweis}</div>}
-      {pruefstand && <p className="pruefstand">{pruefstand}</p>}
+      {methodikHinweis && <div className="bottom-note"><BylineText text={methodikHinweis} /></div>}
+      {pruefstand && <p className="pruefstand"><BylineText text={pruefstand} /></p>}
       {kaufUrl && <AmazonKauf url={kaufUrl} rot={rot} neutral={neutral} zusatz={zusatz} />}
     </>
   );

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { renderToStaticMarkup } from "react-dom/server";
-import { AuthorCredit } from "./author-credit";
+import { AuthorCredit, BylineText } from "./author-credit";
 import { authorPath, SCHROETER } from "@/lib/authors";
 
 describe("AuthorCredit", () => {
@@ -25,6 +25,19 @@ describe("AuthorCredit", () => {
     expect(html).not.toContain("sameAs");
     expect(html).not.toContain("Sebastian Kraft");
     expect(html).not.toContain("sebastian-kraft");
+  });
+
+  it("ersetzt die Prüfstand-Zeile und lässt den übrigen Satz stehen", () => {
+    const html = renderToStaticMarkup(
+      <BylineText text="Preise laut Hersteller/UVP mit Stand 11.11.2026; feste Amazon-Preise nennen wir nicht. Autor: Sebastian Kraft, Futterprüfer.de (Karpas Web Solutions Ltd.); Geschäftsbeziehungen: keine." />,
+    );
+    expect(html).toContain("Stand 11.11.2026");
+    expect(html).toContain("Geschäftsbeziehungen: keine.");
+    expect(html).toContain('href="/team"');
+    expect(html).toContain(">Redaktion Futterprüfer<");
+    expect(html).toContain("Von ");
+    expect(html).not.toContain("Sebastian Kraft");
+    expect(html).not.toContain("#");
   });
 
   it("gibt bei unbekanntem Slug die Redaktion aus", () => {

@@ -59,6 +59,12 @@ export function isAuthorSlug(value: string): value is AuthorSlug {
   return value === LEGACY_EDITORIAL_SLUG || AUTHORS.some((author) => author.slug === value);
 }
 
+/** Längere Fassung zuerst, damit der Firmenzusatz nicht stehen bleibt. */
+const STORED_AUTHOR_PHRASES = [
+  "Autor: Sebastian Kraft, Futterprüfer.de (Karpas Web Solutions Ltd.)",
+  "Autor: Sebastian Kraft",
+] as const;
+
 const STORED_AUTHOR_BYLINE = 'Von <a href="/team">Redaktion Futterprüfer</a>';
 
 /**
@@ -66,7 +72,32 @@ const STORED_AUTHOR_BYLINE = 'Von <a href="/team">Redaktion Futterprüfer</a>';
  * Der übrige Text bleibt, das Impressum geht nicht durch diese Funktion.
  */
 export function mapStoredAuthorByline(html: string): string {
-  return html
-    .replaceAll("Autor: Sebastian Kraft, Futterprüfer.de (Karpas Web Solutions Ltd.)", STORED_AUTHOR_BYLINE)
-    .replaceAll("Autor: Sebastian Kraft", STORED_AUTHOR_BYLINE);
+  return STORED_AUTHOR_PHRASES.reduce((out, phrase) => out.replaceAll(phrase, STORED_AUTHOR_BYLINE), html);
+}
+
+export type AuthorBylinePart = { kind: "text"; text: string } | { kind: "author" };
+
+/** Dieselbe Ersetzung für reinen Text, der nicht durch sanitize läuft (Prüfstand). */
+export function splitAuthorByline(text: string): AuthorBylinePart[] {
+  const parts: AuthorBylinePart[] = [];
+  let rest = text;
+  while (rest) {
+    let at = -1;
+    let phrase = "";
+    for (const candidate of STORED_AUTHOR_PHRASES) {
+      const index = rest.indexOf(candidate);
+      if (index !== -1 && (at === -1 || index < at)) {
+        at = index;
+        phrase = candidate;
+      }
+    }
+    if (at === -1) {
+      parts.push({ kind: "text", text: rest });
+      break;
+    }
+    if (at > 0) parts.push({ kind: "text", text: rest.slice(0, at) });
+    parts.push({ kind: "author" });
+    rest = rest.slice(at + phrase.length);
+  }
+  return parts;
 }
