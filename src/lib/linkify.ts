@@ -30,6 +30,12 @@ function isQuoteLabel(label: string): boolean {
   return QUOTE_LABEL.test(label.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim());
 }
 
+function hasClass(tag: string, name: string): boolean {
+  return new RegExp(`(?:^|\\s)${name}(?:\\s|$)`).test(attrValue(tag, "class"));
+}
+
+type TableFrame = { headers: string[]; claims: boolean; rowTh: number; rowTd: number; rowText: string[] };
+
 /** Verneinte Stelle: der Link bleibt, der farbige Punkt entfällt. */
 function withoutConcernMarker(className: string): string {
   const tokens = className.split(/\s+/).filter((token) => token && !CONCERN_CLASS.test(token));
@@ -68,7 +74,7 @@ export function linkify(html: string | null | undefined, terms: LinkTerm[], used
   let skipDepth = 0;
   let inThead = 0;
   let column = 0;
-  const headerStack: string[][] = [];
+  const tables: TableFrame[] = [];
   let headerBuf = "";
   let capturingHeader = false;
 
@@ -79,34 +85,74 @@ export function linkify(html: string | null | undefined, terms: LinkTerm[], used
         const name = mt[2].toLowerCase();
         const closing = !!mt[1];
         const selfClosing = /\/\s*>$/.test(tag) || ["br", "hr", "img", "input", "meta", "link"].includes(name);
+        const table = tables.at(-1);
         if (name === "table" && !selfClosing) {
-          if (closing) headerStack.pop();
-          else headerStack.push([]);
+          if (!closing) {
+            const claims = hasClass(tag, "claims");
+            tables.push({ headers: [], claims, rowTh: 0, rowTd: 0, rowText: [] });
+            // Werbetabelle: keine Autolinks, auch nicht in der Begründungs-Spalte.
+            if (claims) {
+              stack.push("table-claims");
+              skipDepth++;
+            }
+          } else {
+            tables.pop();
+            if (stack.at(-1) === "table-claims") {
+              stack.pop();
+              skipDepth = Math.max(0, skipDepth - 1);
+            }
+          }
         } else if (name === "thead" && !selfClosing) {
           inThead += closing ? -1 : 1;
-        } else if (name === "tr" && !closing && inThead === 0) {
-          column = 0;
-        } else if (name === "th" && inThead > 0 && !selfClosing) {
-          if (closing) {
-            headerStack.at(-1)?.push(headerBuf.replace(/\s+/g, " ").trim());
-            headerBuf = "";
-            capturingHeader = false;
-          } else {
-            capturingHeader = true;
-            headerBuf = "";
-          }
-        } else if (name === "td" && !selfClosing && inThead === 0) {
+        } else if (name === "tr" && !selfClosing) {
           if (!closing) {
-            const headers = headerStack.at(-1) ?? [];
+            column = 0;
+            if (table) {
+              table.rowTh = 0;
+              table.rowTd = 0;
+              table.rowText = [];
+            }
+          } else if (table && table.headers.length === 0 && table.rowTh > 0 && table.rowTd === 0) {
+            // Kopfzeile aus th, auch ohne thead.
+            table.headers = table.rowText.slice();
+          }
+        } else if ((name === "th" || name === "td") && !selfClosing && inThead === 0) {
+          if (!closing) {
+            const headers = table?.headers ?? [];
             const label = attrValue(tag, "data-label") || headers[column] || "";
             column++;
-            if (isQuoteLabel(label)) {
+            if (table) {
+              if (name === "th") table.rowTh++;
+              else table.rowTd++;
+            }
+            if (name === "th" && table && table.headers.length === 0) {
+              capturingHeader = true;
+              headerBuf = "";
+            }
+            if (name === "td" && isQuoteLabel(label)) {
               stack.push("td-quote");
               skipDepth++;
             }
-          } else if (stack.at(-1) === "td-quote") {
-            stack.pop();
-            skipDepth = Math.max(0, skipDepth - 1);
+          } else {
+            if (capturingHeader && name === "th") {
+              table?.rowText.push(headerBuf.replace(/\s+/g, " ").trim());
+              headerBuf = "";
+              capturingHeader = false;
+            }
+            if (name === "td" && stack.at(-1) === "td-quote") {
+              stack.pop();
+              skipDepth = Math.max(0, skipDepth - 1);
+            }
+          }
+        } else if (name === "th" && inThead > 0 && !selfClosing) {
+          if (!closing) {
+            capturingHeader = true;
+            headerBuf = "";
+          } else {
+            table?.rowText.push(headerBuf.replace(/\s+/g, " ").trim());
+            headerBuf = "";
+            capturingHeader = false;
+            if (table) table.rowTh++;
           }
         }
         if (SKIP_TAGS.has(name) && !selfClosing) {

@@ -68,6 +68,19 @@ describe("linkify", () => {
     );
     expect(table).toContain('data-label="Aussage">ohne Zucker</td>');
     expect(table).toContain('>Zucker</a> bleibt');
+    const headRow = linkify(
+      "<table><tr><th>Aussage</th><th>Begründung</th></tr><tr><td>Zucker im Zitat</td><td>Zucker bleibt.</td></tr></table>",
+      [term],
+    );
+    expect(headRow).toContain("<td>Zucker im Zitat</td>");
+    expect(headRow).toContain(">Zucker</a> bleibt");
+    const claims = linkify(
+      '<table class="data claims"><tr><th>Aussage</th><th>Begründung</th></tr><tr><td>Zucker im Zitat</td><td>Zucker in der Begründung</td></tr></table><p>Zucker danach.</p>',
+      [term],
+    );
+    const claimsTable = claims.slice(0, claims.indexOf("</table>") + "</table>".length);
+    expect(claimsTable).not.toContain("<a ");
+    expect(claims).toContain("<p><a href=\"/lexikon/zucker\"");
   });
   it("setzt an „ohne Zucker“ keinen Bedenklichkeits-Punkt", () => {
     const term = t("zucker", ["Zucker"], "Im Lexikon: Zucker");
