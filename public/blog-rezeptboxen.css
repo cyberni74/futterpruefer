@@ -1,0 +1,4 @@
+/* Abstand zwischen Deklarationsbox und folgender Einkaufsliste in Rezeptartikeln. */
+.prose-fp .vt-calc.deklaration + .vt-facts.einkaufsliste {
+  margin-top: 1.25rem;
+}
