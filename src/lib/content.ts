@@ -41,7 +41,7 @@ export const getLinkTerms = cache(async (): Promise<LinkTerm[]> => {
   ];
 });
 
-/** Artikel-HTML: bereinigen, dann Lexikon-/Glossarbegriffe verlinken. */
+/** Artikel-HTML: bereinigen, dann Lexikon-/Glossarbegriffe verlinken. `exclude` unterdrückt Selbstlinks (die eigene Lexikon-URL). */
 export async function renderArticle(html: string | null | undefined, exclude: string[] = [], opts: { rot?: boolean } = {}): Promise<string> {
   const terms = (await getLinkTerms()).filter((t) => !exclude.includes(t.href));
   const clean = badgeScores(autolinkUrls(sanitize(html)));

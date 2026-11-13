@@ -2,7 +2,9 @@ import Link from "next/link";
 import { Award, CalendarCheck, Clock, PawPrint, RefreshCw, Scale, UserRound, ArrowRight } from "lucide-react";
 import { prisma } from "@/lib/db";
 import { getRelatedReviews, publishedWhere, reviewCardSelect, type ReviewCardData } from "@/lib/queries";
-import { getPostsForReview } from "@/lib/content";
+import { getLinkTerms, getPostsForReview } from "@/lib/content";
+import { linkify } from "@/lib/linkify";
+import { sanitize } from "@/lib/sanitize";
 import { misleadingClaims, parseClaims } from "@/lib/product-data";
 import { faqPageJsonLd } from "@/lib/faq-schema";
 import { productReviewJsonLd, reviewHeadline } from "@/lib/review-schema";
@@ -55,14 +57,23 @@ export async function ReviewV2Article({ r, data, draftPreview }: { r: Review; da
   const description = trimMetaDescription(r.metaDescription?.trim() || data.hero?.gesamturteil?.trim() || `${r.title} im Fachtest: ${r.totalScore}/100 Punkte.`);
   const minutes = readingMinutes(JSON.stringify(data), r.verdict);
 
-  const [related, posts, pom, handPicked] = await Promise.all([
+  const [related, posts, pom, handPicked, linkTerms] = await Promise.all([
     getRelatedReviews(r.categoryId, r.id, 3),
     getPostsForReview(r, 2),
     prisma.productOfMonth.findFirst({ where: { reviewId: r.id }, orderBy: [{ year: "desc" }, { month: "desc" }] }),
     data.aehnlicheTests?.length
       ? prisma.review.findMany({ where: { slug: { in: data.aehnlicheTests }, id: { not: r.id }, ...publishedWhere() }, select: reviewCardSelect, take: 6 })
       : Promise.resolve([] as ReviewCardData[]),
+    getLinkTerms(),
   ]);
+  const lexTerms = linkTerms.filter((term) => term.href.startsWith("/lexikon/"));
+  const linkedTerms = new Set<string>();
+  const linkHtml = (html: string) => linkify(sanitize(html), lexTerms, linkedTerms);
+  const linked: LayoutData = {
+    ...data,
+    kapitel: data.kapitel?.map((kapitel) => (kapitel.html ? { ...kapitel, html: linkHtml(kapitel.html) } : kapitel)),
+    fazit: data.fazit ? { ...data.fazit, html: linkHtml(data.fazit.html) } : data.fazit,
+  };
   const similar = handPicked.length ? data.aehnlicheTests!.map((s) => handPicked.find((x) => x.slug === s)).filter((x): x is ReviewCardData => Boolean(x)) : related;
   const moisture = null;
   const comparison = comparisonForReview({ title: r.title, productName: r.productName, keyword: r.keyword, categorySlug: r.category.slug, moisture });
@@ -108,7 +119,7 @@ export async function ReviewV2Article({ r, data, draftPreview }: { r: Review; da
 
       <div id="testbericht" className="mt-4">
         <TestvorlageV2
-          data={data}
+          data={linked}
           totalScore={r.totalScore}
           ampelLabel={ampelLabel}
           methodikVersion={r.methodikVersion}

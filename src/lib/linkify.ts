@@ -1,6 +1,6 @@
 /**
  * Verlinkt Lexikon- und Glossarbegriffe automatisch im (bereits bereinigten) Artikel-HTML.
- * - je Begriff nur das erste Vorkommen
+ * - je Begriff nur das erste Vorkommen (ein übergebenes Set gilt über mehrere Abschnitte)
  * - nie in Links, Überschriften, Code oder Tabellenköpfen
  * - längere Begriffe haben Vorrang („Tierische Nebenerzeugnisse“ vor „Nebenerzeugnisse“)
  */
@@ -17,7 +17,7 @@ const SKIP_TAGS = new Set(["a", "h1", "h2", "h3", "h4", "h5", "h6", "code", "pre
 const escapeHtml = (s: string) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 const escapeRe = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
-export function linkify(html: string | null | undefined, terms: LinkTerm[]): string {
+export function linkify(html: string | null | undefined, terms: LinkTerm[], used = new Set<string>()): string {
   if (!html) return "";
   const patterns: Array<{ text: string; term: LinkTerm }> = [];
   for (const term of terms) {
@@ -28,10 +28,14 @@ export function linkify(html: string | null | undefined, terms: LinkTerm[]): str
   }
   if (!patterns.length) return html;
   patterns.sort((a, b) => b.text.length - a.text.length);
-  const lookup = new Map(patterns.map((p) => [p.text.toLocaleLowerCase("de"), p.term]));
+  // Bei gleicher Schreibweise gewinnt der zuerst übergebene Begriff (Lexikon steht vor dem Glossar).
+  const lookup = new Map<string, LinkTerm>();
+  for (const pattern of patterns) {
+    const key = pattern.text.toLocaleLowerCase("de");
+    if (!lookup.has(key)) lookup.set(key, pattern.term);
+  }
   const re = new RegExp(`(?<![\\p{L}\\p{N}])(${patterns.map((p) => escapeRe(p.text)).join("|")})(?![\\p{L}\\p{N}])`, "giu");
 
-  const used = new Set<string>();
   const stack: string[] = [];
   let skipDepth = 0;
 
