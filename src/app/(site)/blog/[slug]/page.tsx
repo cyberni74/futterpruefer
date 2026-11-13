@@ -147,13 +147,13 @@ export default async function PostPage({ params }: PageProps<"/blog/[slug]">) {
       </header>
       {p.imageUrl && !heroCaption && (
         <figure className="relative mt-6 aspect-[16/9] overflow-hidden rounded-3xl bg-bg-soft">
-          <FpImage src={p.imageUrl} alt={p.imageAlt.trim() || `Titelbild: ${p.title}`} blur={p.imageBlur} sizes="(min-width:768px) 736px, 100vw" priority />
+          <FpImage src={p.imageUrl} alt={p.imageAlt.trim() || `Titelbild: ${p.title}`} blur={p.imageBlur} sizes="(min-width:768px) 736px, 100vw" priority frame="16/9" />
         </figure>
       )}
       {p.imageUrl && heroCaption && (
         <figure className="mt-6">
           <div className="relative aspect-[16/9] overflow-hidden rounded-3xl bg-bg-soft">
-            <FpImage src={p.imageUrl} alt={p.imageAlt.trim() || `Titelbild: ${p.title}`} blur={p.imageBlur} sizes="(min-width:768px) 736px, 100vw" priority />
+            <FpImage src={p.imageUrl} alt={p.imageAlt.trim() || `Titelbild: ${p.title}`} blur={p.imageBlur} sizes="(min-width:768px) 736px, 100vw" priority frame="16/9" />
           </div>
           <figcaption className="titelbild-unterschrift" dangerouslySetInnerHTML={{ __html: heroCaption }} />
         </figure>

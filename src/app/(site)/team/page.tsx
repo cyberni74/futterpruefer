@@ -95,6 +95,7 @@ export default function TeamPage() {
                 alt="Matthias Schröter, Chefredakteur von Futterprüfer.de"
                 sizes="(min-width: 768px) 280px, 320px"
                 priority
+                frame="1/1"
               />
             </div>
           </div>

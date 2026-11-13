@@ -1,5 +1,5 @@
 import { RATING_THRESHOLDS } from "@/lib/scoring";
-import { absoluteUrl, SITE } from "@/lib/site";
+import { absoluteUrl, EDITORIAL_EMAIL, SITE, TIKTOK_URL } from "@/lib/site";
 import { reviewPath } from "@/lib/urls";
 
 /**
@@ -11,8 +11,24 @@ export const HOME_DESCRIPTION =
   "Hundefutter und Katzenfutter im Test: Rohstoffe, bedenkliche Zusatzstoffe, Nährstoffe und Deklaration nach 100-Punkte-Schema bewertet – transparent erklärt.";
 
 /** Meta-Description der Startseite. HOME_DESCRIPTION bleibt unverändert, weil sie auch die Organization im JSON-LD beschreibt. */
-export const HOME_META_DESCRIPTION =
-  "Hunde- und Katzenfutter im Test: über 110 Produkte nach 100-Punkte-Schema, Ampel Grün, Gelb oder Rot. Wir lesen das Kleingedruckte.";
+export function homeMetaDescription(publishedReviews: number): string {
+  return `Hunde- und Katzenfutter im Test: ${ueberProdukte(publishedReviews)} nach 100-Punkte-Schema, Ampel Grün, Gelb oder Rot. Wir lesen das Kleingedruckte.`;
+}
+
+/** Meta-Description von /tests. Dieselbe Zahl wie auf der Startseite. */
+export function testsMetaDescription(publishedReviews: number): string {
+  return `Alle Futtertests für Hund und Katze: ${ueberProdukte(publishedReviews)} mit Punkten und Ampel, von Grün bis Rot. Filtern nach Tierart, Preisklasse und Punkten.`;
+}
+
+/**
+ * „über N Produkte“: N ist die Anzahl veröffentlichter Tests, abgerundet auf die nächste Zehnerstelle.
+ * 165 Tests werden zu „über 160 Produkte“.
+ */
+export function ueberProdukte(publishedReviews: number): string {
+  const count = Number.isFinite(publishedReviews) ? Math.max(0, publishedReviews) : 0;
+  const n = Math.floor(count / 10) * 10;
+  return `über ${n} Produkte`;
+}
 
 export const OG_TITLE = `Hundefutter & Katzenfutter im Test – ${SITE.name}`;
 export const OG_DESCRIPTION =
@@ -188,6 +204,14 @@ export function homeJsonLd(title: string, reviews: ListedReview[]): Record<strin
       url: home,
       logo: { "@type": "ImageObject", url: absoluteUrl("/brand/logo-round-512.png"), width: 512, height: 512 },
       description: HOME_DESCRIPTION,
+      sameAs: [TIKTOK_URL],
+      contactPoint: {
+        "@type": "ContactPoint",
+        contactType: "Redaktion",
+        email: EDITORIAL_EMAIL,
+        url: absoluteUrl("/kontakt"),
+        availableLanguage: "de",
+      },
     },
     {
       "@type": "WebSite",

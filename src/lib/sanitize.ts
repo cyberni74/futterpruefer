@@ -1,4 +1,5 @@
 import sanitizeHtml from "sanitize-html";
+import { intrinsicSize } from "./image-variants";
 import { labelTableCells } from "./table-labels";
 
 const REL_ORDER = ["noopener", "noreferrer", "nofollow", "sponsored", "ugc"] as const;
@@ -12,7 +13,7 @@ const AMAZON_HOST = /(^|\.)amazon\.(de|com|co\.uk|fr|it|es|nl|pl|se|com\.be|ca|c
 /** Affiliate: gesetztes rel=sponsored, der Partner-Tag oder ein Amazon-Retail-Link. */
 export function isSponsoredHref(href: string | undefined): boolean {
   if (!href) return false;
-  const raw = href.replace(/&/gi, "&").trim();
+  const raw = decodeHref(href);
   try {
     const url = new URL(raw);
     if ((url.searchParams.get("tag") ?? "").toLowerCase() === AMAZON_AFFILIATE_TAG) return true;
@@ -24,10 +25,34 @@ export function isSponsoredHref(href: string | undefined): boolean {
   }
 }
 
+function decodeHref(href: string): string {
+  return href.replace(/&/gi, "&").trim();
+}
+
+function hasPartnerTag(href: string): boolean {
+  const raw = decodeHref(href);
+  try {
+    return (new URL(raw).searchParams.get("tag") ?? "").toLowerCase() === AMAZON_AFFILIATE_TAG;
+  } catch {
+    return new RegExp(`(?:^|[?&])tag=${AMAZON_AFFILIATE_TAG}(?:&|$)`, "i").test(raw);
+  }
+}
+
+/** Amazon-Retail-Host, nicht amazonaws und nicht amzn.to. */
+function isAmazonRetailHref(href: string | undefined): boolean {
+  if (!href) return false;
+  try {
+    const host = new URL(decodeHref(href)).hostname.toLowerCase().replace(/\.$/, "");
+    return AMAZON_HOST.test(host);
+  } catch {
+    return false;
+  }
+}
+
 /** Partner-Link im engeren Sinn: unser Partner-Tag oder ein amzn-Kurzlink (nicht jede Amazon-URL). */
 export function isTaggedAffiliateHref(href: string | undefined): boolean {
   if (!href) return false;
-  const raw = href.replace(/&/gi, "&").trim();
+  const raw = decodeHref(href);
   if (/[?&]tag=/i.test(raw)) return isSponsoredHref(raw);
   try {
     const host = new URL(raw).hostname.toLowerCase().replace(/\.$/, "");
@@ -40,9 +65,11 @@ export function isTaggedAffiliateHref(href: string | undefined): boolean {
 /**
  * Rel für einen Quellenlink. sponsored nur beim Partner-Tag, bei einem amzn-Kurzlink
  * oder wenn der gespeicherte Link schon rel=sponsored trägt (ausdrücklicher Werbelink).
- * Eine nackte Amazon-URL, auch eine Suche, bleibt ohne sponsored.
+ * Eine nackte Amazon-URL ohne Partner-Tag, auch eine Suche, bleibt ohne sponsored –
+ * auch wenn im gespeicherten HTML noch rel=sponsored steht.
  */
 export function sourceLinkRel(href: string | undefined, existing?: string): string {
+  if (isAmazonRetailHref(href) && !hasPartnerTag(href ?? "")) return "nofollow noopener noreferrer";
   const explicit = /(^|\s)sponsored(\s|$)/i.test(existing ?? "");
   if (explicit || isTaggedAffiliateHref(href)) return externalRel(existing, href);
   return "nofollow noopener noreferrer";
@@ -149,7 +176,18 @@ const OPTIONS: sanitizeHtml.IOptions = {
       const rel = isSource ? sourceLinkRel(attribs.href, attribs.rel) : externalRel(attribs.rel, attribs.href);
       return { tagName, attribs: { ...attribs, target: "_blank", rel } };
     },
-    img: (tagName, attribs) => ({ tagName, attribs: { ...attribs, loading: "lazy" } }),
+    img: (tagName, attribs) => {
+      const known = !attribs.width || !attribs.height ? intrinsicSize(attribs.src) : null;
+      return {
+        tagName,
+        attribs: {
+          ...attribs,
+          ...(known && !attribs.width ? { width: String(known.width) } : {}),
+          ...(known && !attribs.height ? { height: String(known.height) } : {}),
+          loading: "lazy",
+        },
+      };
+    },
   },
 };
 

@@ -10,7 +10,7 @@ export function BlogCard({ post, as: Heading = "h3", variant = "card" }: { post:
       <article className="group relative flex h-full flex-col overflow-hidden rounded-xl border border-border bg-surface shadow-card transition duration-300 hover:-translate-y-1 hover:shadow-lift motion-reduce:hover:translate-y-0 sm:rounded-2xl">
         <div className="relative aspect-square overflow-hidden bg-bg-soft">
           <Link href={`/blog/${post.slug}`} tabIndex={-1} aria-hidden aria-label={post.title} className="absolute inset-0 z-[1]" />
-          <FpImage src={post.imageUrl} alt={post.imageAlt.trim() || `Titelbild: ${post.title}`} blur={post.imageBlur} sizes="(min-width:1152px) 380px, 33vw" className="transition duration-500 group-hover:scale-[1.03] motion-reduce:group-hover:scale-100" />
+          <FpImage src={post.imageUrl} alt={post.imageAlt.trim() || `Titelbild: ${post.title}`} blur={post.imageBlur} sizes="(min-width:1152px) 380px, 33vw" frame="1/1" className="transition duration-500 group-hover:scale-[1.03] motion-reduce:group-hover:scale-100" />
         </div>
         <div className="flex flex-1 flex-col p-2 sm:p-4">
           {post.publishedAt && <time dateTime={post.publishedAt.toISOString()} className="hidden text-xs font-semibold text-muted sm:block">{formatDate(post.publishedAt)}</time>}
@@ -26,7 +26,7 @@ export function BlogCard({ post, as: Heading = "h3", variant = "card" }: { post:
     <article className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-surface shadow-card transition duration-300 hover:-translate-y-1 hover:shadow-lift motion-reduce:hover:translate-y-0">
       <div className="relative aspect-[16/9] overflow-hidden bg-bg-soft">
         <Link href={`/blog/${post.slug}`} tabIndex={-1} aria-hidden aria-label={post.title} className="absolute inset-0 z-[1]" />
-        <FpImage src={post.imageUrl} alt={post.imageAlt.trim() || `Titelbild: ${post.title}`} blur={post.imageBlur} sizes="(min-width:1024px) 33vw, (min-width:640px) 50vw, 100vw" className="transition duration-500 group-hover:scale-[1.03] motion-reduce:group-hover:scale-100" />
+        <FpImage src={post.imageUrl} alt={post.imageAlt.trim() || `Titelbild: ${post.title}`} blur={post.imageBlur} sizes="(min-width:1024px) 33vw, (min-width:640px) 50vw, 100vw" frame="16/9" className="transition duration-500 group-hover:scale-[1.03] motion-reduce:group-hover:scale-100" />
       </div>
       <div className="flex flex-1 flex-col p-4">
         {post.publishedAt && <time dateTime={post.publishedAt.toISOString()} className="text-xs font-semibold text-muted">{formatDate(post.publishedAt)}</time>}

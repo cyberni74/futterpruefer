@@ -1,8 +1,8 @@
+import dynamic from "next/dynamic";
 import { Fragment, type ReactNode } from "react";
 import { isRotScore } from "@/lib/rot-guard";
 import { AnalyticalValues } from "./AnalyticalValues";
 import { ArticleNavigation } from "./ArticleNavigation";
-import { CostCalculator } from "./CostCalculator";
 import { EditorialConclusion } from "./EditorialConclusion";
 import { FeedingTable } from "./FeedingTable";
 import { Html } from "./Html";
@@ -19,6 +19,8 @@ import { TvSection } from "./Section";
 import { AmazonKauf, Sources } from "./Sources";
 import { baueAbschnitte, kaufLink, type BlockTyp, type LayoutData } from "./schema";
 import "@/styles/testvorlage-v2.css";
+
+const CostCalculator = dynamic(() => import("./CostCalculator").then((mod) => mod.CostCalculator));
 
 function Block({ typ, data }: { typ: BlockTyp; data: LayoutData }): ReactNode {
   switch (typ) {

@@ -114,6 +114,15 @@ describe("sanitize", () => {
     expect(image).toContain("sponsored");
     expect(image).toContain("tag=cyberni7400-21");
   });
+  it("Amazon-Quellenlink ohne Partner-Tag verliert gespeichertes sponsored, mit Tag bleibt es", () => {
+    const plain = sanitize('<p><a class="src-link" href="https://www.amazon.de/dp/B0PLAIN" rel="sponsored nofollow noopener">amazon.de/dp/B0PLAIN</a></p>');
+    const plainTag = plain.match(/<a[^>]*>/)?.[0] ?? "";
+    expect(plainTag).not.toContain("sponsored");
+    expect(plainTag).toContain('rel="nofollow noopener noreferrer"');
+    const tagged = sanitize('<p><a class="src-link" href="https://www.amazon.de/dp/B0TAG?tag=cyberni7400-21" rel="sponsored nofollow noopener">amazon.de</a></p>');
+    expect(tagged).toContain('rel="noopener noreferrer nofollow sponsored"');
+    expect(tagged).toContain("tag=cyberni7400-21");
+  });
   it("behält cta-box und Button-Klassen, entfernt Inline-Styles", () => {
     const out = sanitize('<div class="cta-box" style="border:1px solid red"><span class="werbung">Werbung</span><a class="button" href="https://www.amazon.de/dp/B07D4T5XVT?tag=cyberni7400-21" rel="sponsored nofollow">Zu Amazon</a></div>');
     expect(out).toContain('class="cta-box"');

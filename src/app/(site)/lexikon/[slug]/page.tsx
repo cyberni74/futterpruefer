@@ -5,7 +5,7 @@ import { notFound, permanentRedirect } from "next/navigation";
 import { getLexikonEntries, getLexikonEntry, getReviewsMentioning, renderArticle } from "@/lib/content";
 import { findRedirect } from "@/lib/queries";
 import { DEFAULT_AUTHOR } from "@/lib/authors";
-import { responsiveImage } from "@/lib/image-variants";
+import { intrinsicSize, responsiveImage } from "@/lib/image-variants";
 import {
   bodyRepeatsAssessment,
   bodyRepeatsLead,
@@ -189,7 +189,7 @@ function LexikonHero({ image }: { image: LexikonImage }) {
   return (
     <figure className="mt-6">
       <div className="relative aspect-[1200/630] overflow-hidden rounded-3xl bg-bg-soft">
-        <FpImage src={image.url} alt={image.alt} sizes="(min-width:768px) 736px, 100vw" priority />
+        <FpImage src={image.url} alt={image.alt} sizes="(min-width:768px) 736px, 100vw" priority frame="1200/630" />
       </div>
       {image.caption ? <figcaption className="mt-2 px-1 text-sm leading-relaxed text-muted">{image.caption}</figcaption> : null}
     </figure>
@@ -198,6 +198,7 @@ function LexikonHero({ image }: { image: LexikonImage }) {
 
 function LexikonExtraImage({ image }: { image: LexikonImage }) {
   const picture = responsiveImage(image.url);
+  const size = intrinsicSize(image.url);
   return (
     <figure className="mt-6">
       {/* eslint-disable-next-line @next/next/no-img-element -- vorab erzeugte Größen, kein Next-Bild-Optimizer */}
@@ -206,6 +207,8 @@ function LexikonExtraImage({ image }: { image: LexikonImage }) {
         srcSet={picture.srcSet}
         sizes={picture.srcSet ? "(min-width:768px) 736px, 100vw" : undefined}
         alt={image.alt}
+        width={size?.width}
+        height={size?.height}
         loading="lazy"
         decoding="async"
         className="h-auto w-full max-w-full rounded-2xl"

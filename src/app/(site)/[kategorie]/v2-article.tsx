@@ -20,7 +20,7 @@ import { ClaimsCheck } from "@/components/claims-check";
 import { FpImage } from "@/components/fp-image";
 import { ReadAloud } from "@/components/read-aloud";
 import { ShareButtons } from "@/components/share-buttons";
-import { ShareBar } from "@/components/share-bar";
+import { ShareBarSlot } from "@/components/share-bar-slot";
 import { AllLink } from "@/components/all-link";
 import { ReviewCard } from "@/components/review-card";
 import { BlogCard } from "@/components/blog-card";
@@ -139,12 +139,12 @@ export async function ReviewV2Article({ r, data, draftPreview }: { r: Review; da
                 <div className={`medien ${r.imageUrl && r.contentImageUrl ? "zwei" : ""}`}>
                   {r.imageUrl && (
                     <MedienFigure kaufUrl={medienKaufUrl} label={name} caption={medienCaption(data.bildunterschriftHaupt, "Verpackung", istHerstellerBild(r.imageAlt))}>
-                      <FpImage src={r.imageUrl} alt={r.imageAlt.trim() || `Verpackung von ${name}`} blur={r.imageBlur} sizes={r.contentImageUrl ? "(min-width:1024px) 600px, (min-width:640px) 50vw, 100vw" : "(min-width:1024px) 1000px, 100vw"} priority />
+                      <FpImage src={r.imageUrl} alt={r.imageAlt.trim() || `Verpackung von ${name}`} blur={r.imageBlur} sizes={r.contentImageUrl ? "(min-width:1024px) 600px, (min-width:640px) 50vw, 100vw" : "(min-width:1024px) 1000px, 100vw"} priority frame="4/3" />
                     </MedienFigure>
                   )}
                   {r.contentImageUrl && (
                     <MedienFigure kaufUrl={medienKaufUrl} label={name} caption={medienCaption(data.bildunterschriftInhalt, inhaltCaption, istHerstellerBild(r.contentImageAlt))}>
-                      <FpImage src={r.contentImageUrl} alt={r.contentImageAlt.trim() || `Inhalt von ${name} ohne Verpackung`} blur={r.contentImageBlur} sizes={r.imageUrl ? "(min-width:1024px) 600px, (min-width:640px) 50vw, 100vw" : "(min-width:1024px) 1000px, 100vw"} priority={!r.imageUrl} />
+                      <FpImage src={r.contentImageUrl} alt={r.contentImageAlt.trim() || `Inhalt von ${name} ohne Verpackung`} blur={r.contentImageBlur} sizes={r.imageUrl ? "(min-width:1024px) 600px, (min-width:640px) 50vw, 100vw" : "(min-width:1024px) 1000px, 100vw"} priority={!r.imageUrl} frame="4/3" />
                     </MedienFigure>
                   )}
                 </div>
@@ -153,7 +153,7 @@ export async function ReviewV2Article({ r, data, draftPreview }: { r: Review; da
                   <ul className="mt-3 flex gap-3 overflow-x-auto pb-1" aria-label="Weitere Produktbilder">
                     {gallery.map((src, i) => (
                       <li key={src} className="relative aspect-square w-24 shrink-0 overflow-hidden rounded-xl bg-bg-soft">
-                        <FpImage src={src} alt={`${name} – weiteres Bild ${i + 1}`} sizes="96px" />
+                        <FpImage src={src} alt={`${name} – weiteres Bild ${i + 1}`} sizes="96px" frame="1/1" />
                       </li>
                     ))}
                   </ul>
@@ -178,7 +178,7 @@ export async function ReviewV2Article({ r, data, draftPreview }: { r: Review; da
         <p className="mb-3 text-sm font-bold">Diesen Test teilen</p>
         <ShareButtons url={url} title={`${name} im Test – ${r.totalScore}/100 Punkte`} />
       </div>
-      <ShareBar url={url} title={`${name} im Test – ${r.totalScore}/100 Punkte`} />
+      <ShareBarSlot url={url} title={`${name} im Test – ${r.totalScore}/100 Punkte`} />
 
       {similar.length > 0 && (
         <section aria-labelledby="aehnliche" className="mt-16">

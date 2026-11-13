@@ -41,7 +41,7 @@ export function CompareResults({ items }: { items: CompareRow[] }) {
             <th scope="col" className="w-28 p-2 text-left align-bottom text-muted sm:w-44 sm:p-3">Produkt</th>
             {items.map((i) => (
               <th key={i.id} scope="col" className="p-2 text-left align-top sm:p-3">
-                <div className="relative mb-3 aspect-[4/3] overflow-hidden rounded-xl bg-bg-soft"><FpImage src={i.imageUrl} alt={i.imageAlt || i.title} blur={i.imageBlur} sizes="260px" /></div>
+                <div className="relative mb-3 aspect-[4/3] overflow-hidden rounded-xl bg-bg-soft"><FpImage src={i.imageUrl} alt={i.imageAlt || i.title} blur={i.imageBlur} sizes="260px" frame="4/3" /></div>
                 <Link href={reviewPath(i)} className="text-base font-bold hover:underline">{i.title}</Link>
                 <p className="text-xs font-medium text-muted">{hyphenateCategory(i.category.shortName)}</p>
               </th>

@@ -1,4 +1,35 @@
-export type SitemapRecord = { slug: string; updatedAt: Date; categorySlug?: string };
+export type SitemapRecord = { slug: string; updatedAt: Date; categorySlug?: string; count?: number };
+
+/**
+ * Letzte inhaltliche Änderung statischer Seiten (Git-Commit der Seite, UTC).
+ * Nicht die Build-Zeit: sonst bekäme jede Auslieferung ein neues lastmod.
+ */
+export const STATIC_LASTMOD: Record<string, Date> = {
+  "/": new Date("2026-11-13T12:23:38.000Z"),
+  "/tests": new Date("2026-11-13T12:23:38.000Z"),
+  "/marken": new Date("2026-11-13T12:23:38.000Z"),
+  "/blog": new Date("2026-11-13T12:23:38.000Z"),
+  "/methodik": new Date("2026-11-05T20:33:40.000Z"),
+  "/methodik/ergaenzungsfutter": new Date("2026-10-17T00:00:00.000Z"),
+  "/futterrechner": new Date("2026-10-27T08:45:51.000Z"),
+  "/futterrechner/hund": new Date("2026-10-26T22:49:01.000Z"),
+  "/futterrechner/katze": new Date("2026-10-26T22:49:01.000Z"),
+  "/team": new Date("2026-11-13T11:13:15.000Z"),
+  "/fuer-hersteller": new Date("2026-10-26T08:05:24.000Z"),
+  "/kontakt": new Date("2026-10-16T07:42:23.000Z"),
+  "/faq": new Date("2026-10-16T07:42:23.000Z"),
+  "/werbeaussagen": new Date("2026-10-28T03:01:27.000Z"),
+  "/produkt-des-monats": new Date("2026-11-13T12:23:38.000Z"),
+  "/lexikon": new Date("2026-11-13T12:23:38.000Z"),
+  "/glossar": new Date("2026-11-13T12:23:38.000Z"),
+  "/impressum": new Date("2026-10-23T15:47:51.000Z"),
+  "/datenschutz": new Date("2026-11-13T12:23:38.000Z"),
+};
+
+/** Marken mit nur einem veröffentlichten Test bleiben erreichbar, kommen aber nicht in die Sitemap. */
+export function includeBrandInSitemap(count: number): boolean {
+  return count >= 2;
+}
 
 const STATIC_PATHS = [
   "/",
@@ -43,8 +74,8 @@ function latest(dates: Date[]): Date | undefined {
 }
 
 /**
- * lastmod nur aus echten updatedAt-Werten.
- * Statische Seiten ohne eigenen Inhalt bleiben ohne Datum, damit kein Build-Zeitpunkt als Änderung erscheint.
+ * Jeder Eintrag hat lastmod. Dynamische Seiten nehmen das neueste updatedAt,
+ * statische Seiten das Datum ihrer letzten inhaltlichen Änderung.
  */
 export function sitemapEntries(input: {
   categories: { slug: string }[];
@@ -68,9 +99,11 @@ export function sitemapEntries(input: {
     "/produkt-des-monats": latest(reviewDates),
     "/methodik/ergaenzungsfutter": new Date("2026-10-17T00:00:00.000Z"),
   };
+  const contentLatest = latest([...reviewDates, ...postDates, ...lexDates, ...glossDates]);
+  const staticLatest = latest(Object.values(STATIC_LASTMOD))!;
   const entries: SitemapEntry[] = STATIC_PATHS.map((path) => ({
     path,
-    ...(byPath[path] ? { lastModified: byPath[path] } : {}),
+    lastModified: byPath[path] ?? STATIC_LASTMOD[path] ?? staticLatest,
     changeFrequency: "weekly",
     priority: path === "/" ? 1 : 0.6,
   }));
@@ -78,7 +111,7 @@ export function sitemapEntries(input: {
     const lastModified = latest(input.reviews.filter((row) => row.categorySlug === category.slug).map((row) => withTemplate(row.updatedAt)));
     entries.push({
       path: `/${category.slug}`,
-      ...(lastModified ? { lastModified } : {}),
+      lastModified: lastModified ?? contentLatest ?? staticLatest,
       changeFrequency: "daily",
       priority: 0.8,
     });
@@ -90,6 +123,7 @@ export function sitemapEntries(input: {
     entries.push({ path: `/blog/${post.slug}`, lastModified: post.updatedAt, priority: 0.7 });
   }
   for (const brand of input.brands ?? []) {
+    if (!includeBrandInSitemap(brand.count ?? 2)) continue;
     entries.push({ path: `/marken/${brand.slug}`, lastModified: brand.updatedAt, priority: 0.7 });
   }
   for (const entry of input.lexikon) {

@@ -7,7 +7,7 @@ function ClaimPhoto({ src, claim }: { src: string; claim: string }) {
   return (
     <a href={src} target="_blank" rel="noopener" className="mt-2 inline-flex items-center gap-2 text-sm font-semibold text-brand underline-offset-2 hover:underline">
       <span className="relative block size-16 shrink-0 overflow-hidden rounded-lg border border-border bg-bg-soft">
-        <FpImage src={src} alt={`Verpackungsfoto mit der Aussage ${frameQuote(claim)}`} sizes="64px" />
+        <FpImage src={src} alt={`Verpackungsfoto mit der Aussage ${frameQuote(claim)}`} sizes="64px" frame="1/1" />
       </span>
       Foto vergrößern<span className="sr-only"> (öffnet in neuem Tab)</span>
     </a>

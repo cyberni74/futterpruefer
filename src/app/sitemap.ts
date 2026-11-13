@@ -23,7 +23,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       posts,
       lexikon,
       glossary,
-      brands: brands.flatMap((b) => (b.updatedAt ? [{ slug: b.slug, updatedAt: b.updatedAt }] : [])),
+      brands: brands.flatMap((b) => (b.updatedAt && b.count >= 2 ? [{ slug: b.slug, updatedAt: b.updatedAt, count: b.count }] : [])),
     }).map((entry) => ({
       url: absoluteUrl(entry.path),
       ...(entry.lastModified ? { lastModified: entry.lastModified } : {}),
@@ -35,6 +35,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     console.error("sitemap: Datenbankabfrage fehlgeschlagen, es werden nur statische Seiten ausgeliefert", error);
     return sitemapEntries({ categories: [], reviews: [], posts: [], lexikon: [], glossary: [] }).map((entry) => ({
       url: absoluteUrl(entry.path),
+      ...(entry.lastModified ? { lastModified: entry.lastModified } : {}),
       changeFrequency: entry.changeFrequency,
       priority: entry.priority,
     }));

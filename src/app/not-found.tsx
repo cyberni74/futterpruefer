@@ -1,4 +1,16 @@
+import type { Metadata } from "next";
 import Link from "next/link";
+
+/**
+ * Kein Canonical: die Root-Layout-Angabe zeigt sonst auf die Startseite,
+ * und eine 404-URL würde als Duplikat der Startseite gelesen.
+ * noindex bleibt, Links auf der Seite dürfen gefolgt werden.
+ */
+export const metadata: Metadata = {
+  title: "Seite nicht gefunden",
+  robots: { index: false, follow: true },
+  alternates: { canonical: null },
+};
 
 export default function NotFound() {
   return (

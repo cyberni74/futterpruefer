@@ -1,18 +1,35 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type ComponentType } from "react";
 import { Search } from "lucide-react";
 import { Logo } from "./logo";
 import { ThemeToggle } from "./theme-toggle";
-import { SearchDialog } from "./search-dialog";
 import { NAV } from "@/lib/site";
+
+type SearchDialogProps = { open: boolean; onClose: () => void };
+
+function loadSearchDialog(): Promise<ComponentType<SearchDialogProps>> {
+  return import("./search-dialog").then((mod) => mod.SearchDialog);
+}
 
 export function SiteHeader() {
   const pathname = usePathname();
   const [hidden, setHidden] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  const [SearchDialog, setSearchDialog] = useState<ComponentType<SearchDialogProps> | null>(null);
   const lastY = useRef(0);
+
+  useEffect(() => {
+    if (!searchOpen || SearchDialog) return;
+    let cancel = false;
+    loadSearchDialog().then((Dialog) => {
+      if (!cancel) setSearchDialog(() => Dialog);
+    });
+    return () => {
+      cancel = true;
+    };
+  }, [searchOpen, SearchDialog]);
 
   useEffect(() => {
     const onScroll = () => {
@@ -68,6 +85,8 @@ export function SiteHeader() {
           <div className="ml-auto flex items-center gap-1">
             <button
               type="button"
+              onPointerEnter={() => { if (!SearchDialog) void loadSearchDialog().then((Dialog) => setSearchDialog(() => Dialog)); }}
+              onFocus={() => { if (!SearchDialog) void loadSearchDialog().then((Dialog) => setSearchDialog(() => Dialog)); }}
               onClick={() => setSearchOpen(true)}
               className="inline-flex min-h-11 items-center gap-2 rounded-full border border-border bg-bg-soft px-3.5 text-sm text-muted hover:text-fg md:min-w-56"
               aria-label="Suche öffnen"
@@ -80,7 +99,7 @@ export function SiteHeader() {
           </div>
         </div>
       </header>
-      <SearchDialog open={searchOpen} onClose={() => setSearchOpen(false)} />
+      {SearchDialog ? <SearchDialog open={searchOpen} onClose={() => setSearchOpen(false)} /> : null}
     </>
   );
 }

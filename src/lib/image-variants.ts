@@ -20,8 +20,16 @@ export function isVariantName(name: string): boolean {
   return VARIANT_WIDTHS.some((w) => name.endsWith(`-${w}.webp`));
 }
 
-type LocalEntry = { w: number; v: { w: number; src: string }[] };
+type LocalEntry = { w: number; h?: number; v: { w: number; src: string }[] };
 const LOCAL = manifest as Record<string, LocalEntry>;
+
+/** Echte Pixelmaße lokaler Bilder (public/…), sonst null. */
+export function intrinsicSize(src: string | null | undefined): { width: number; height: number } | null {
+  if (!src) return null;
+  const entry = LOCAL[src];
+  if (!entry?.h) return null;
+  return { width: entry.w, height: entry.h };
+}
 
 export type ResponsiveImage = { src: string; srcSet?: string };
 

@@ -214,11 +214,11 @@ export function getHomeFaq(take = 4) {
   return prisma.faqItem.findMany({ orderBy: { sortOrder: "asc" }, take });
 }
 
-/** Anzahl veröffentlichter Tests und Beiträge für Aufrufe unter den Vorschau-Boxen. */
-export async function getPublishedCounts() {
+/** Anzahl veröffentlichter Tests und Beiträge. cache(): Startseiten-Meta und Seite teilen sich eine Abfrage. */
+export const getPublishedCounts = cache(async function getPublishedCounts() {
   const [tests, posts] = await Promise.all([prisma.review.count({ where: publishedWhere() }), prisma.blogPost.count({ where: publishedWhere() })]);
   return { tests, posts };
-}
+});
 
 /** Chronologisch vorheriger veröffentlichter Beitrag; beim ältesten der neueste (Ring). */
 export async function getPreviousPost(postId: string) {

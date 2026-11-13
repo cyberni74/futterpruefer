@@ -10,7 +10,8 @@
         "w": 800,
         "src": "/redaktion/matthias-schroeter-chefredakteur-800.webp"
       }
-    ]
+    ],
+    "h": 992
   },
   "/brand/drei-hunde-auf-blumenwiese-hundefutter-test.webp": {
     "w": 640,
@@ -19,7 +20,8 @@
         "w": 400,
         "src": "/brand/drei-hunde-auf-blumenwiese-hundefutter-test-400.webp"
       }
-    ]
+    ],
+    "h": 593
   },
   "/blog/hund-stadtwohnung-ohne-garten-alltag.webp": {
     "w": 1000,
@@ -32,7 +34,8 @@
         "w": 800,
         "src": "/blog/hund-stadtwohnung-ohne-garten-alltag-800.webp"
       }
-    ]
+    ],
+    "h": 562
   },
   "/tests/bugbell-bellyvital-hund-kroketten-insektenprotein.webp": {
     "w": 1000,
@@ -45,7 +48,8 @@
         "w": 800,
         "src": "/tests/bugbell-bellyvital-hund-kroketten-insektenprotein-800.webp"
       }
-    ]
+    ],
+    "h": 562
   },
   "/tests/bugbell-bellyvital-trockenfutter-hund-napf.webp": {
     "w": 1000,
@@ -58,7 +62,8 @@
         "w": 800,
         "src": "/tests/bugbell-bellyvital-trockenfutter-hund-napf-800.webp"
       }
-    ]
+    ],
+    "h": 562
   },
   "/tests/medidog-ulmenrinden-paste-hund-dose.webp": {
     "w": 900,
@@ -71,7 +76,8 @@
         "w": 800,
         "src": "/tests/medidog-ulmenrinden-paste-hund-dose-800.webp"
       }
-    ]
+    ],
+    "h": 900
   },
   "/tests/medidog-ulmenrinden-paste-hund-etikett-pflichtangaben.webp": {
     "w": 1000,
@@ -84,7 +90,8 @@
         "w": 800,
         "src": "/tests/medidog-ulmenrinden-paste-hund-etikett-pflichtangaben-800.webp"
       }
-    ]
+    ],
+    "h": 454
   },
   "/tests/medidog-ulmenrinden-paste-hund-fuetterungsempfehlung.webp": {
     "w": 1000,
@@ -97,7 +104,8 @@
         "w": 800,
         "src": "/tests/medidog-ulmenrinden-paste-hund-fuetterungsempfehlung-800.webp"
       }
-    ]
+    ],
+    "h": 1000
   },
   "/tests/medidog-ulmenrinden-paste-hund-paste-in-schale.webp": {
     "w": 1000,
@@ -110,6 +118,7 @@
         "w": 800,
         "src": "/tests/medidog-ulmenrinden-paste-hund-paste-in-schale-800.webp"
       }
-    ]
+    ],
+    "h": 750
   }
 }

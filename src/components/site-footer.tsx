@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { AMAZON_PARTNER_NOTICE, FOOTER_CLAIM } from "@/lib/site";
+import { AMAZON_PARTNER_NOTICE, FOOTER_CLAIM, TIKTOK_URL } from "@/lib/site";
 import { Logo } from "./logo";
 import { CookieSettingsButton } from "./cookie-settings-button";
 
@@ -25,7 +25,12 @@ export function SiteFooter() {
                 <li key={href}><Link href={href} className="inline-flex min-h-9 items-center text-sm text-muted hover:text-fg hover:underline">{label}</Link></li>
               ))}
               {col.title === "Kontakt" ? (
-                <li><CookieSettingsButton /></li>
+                <>
+                  <li>
+                    <a href={TIKTOK_URL} target="_blank" rel="noopener" className="inline-flex min-h-9 items-center text-sm text-muted hover:text-fg hover:underline">Futterprüfer auf TikTok</a>
+                  </li>
+                  <li><CookieSettingsButton /></li>
+                </>
               ) : null}
             </ul>
           </nav>
