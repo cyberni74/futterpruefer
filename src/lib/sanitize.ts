@@ -172,8 +172,14 @@ const OPTIONS: sanitizeHtml.IOptions = {
       const external = /^https?:\/\//.test(attribs.href ?? "");
       if (!external) return { tagName, attribs };
       // Quellenbeleg (.src-link, auch in vt-sources/fp-quellen/source-list): sponsored nur bei Partner-Tag oder Werbelink.
+      // Amazon-URL ohne Partner-Tag (Beleg „amazon.de/…“) bekommt kein sponsored, auch ohne Klasse src-link.
       const isSource = /(^|\s)src-link(\s|$)/.test(attribs.class ?? "");
-      const rel = isSource ? sourceLinkRel(attribs.href, attribs.rel) : externalRel(attribs.rel, attribs.href);
+      const plainAmazon = isAmazonRetailHref(attribs.href) && !hasPartnerTag(attribs.href ?? "");
+      const rel = plainAmazon
+        ? (isSource ? "nofollow noopener noreferrer" : externalRel((attribs.rel ?? "").replace(/\bsponsored\b/gi, " ")))
+        : isSource
+          ? sourceLinkRel(attribs.href, attribs.rel)
+          : externalRel(attribs.rel, attribs.href);
       return { tagName, attribs: { ...attribs, target: "_blank", rel } };
     },
     img: (tagName, attribs) => {
