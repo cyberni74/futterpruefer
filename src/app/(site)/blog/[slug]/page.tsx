@@ -25,6 +25,8 @@ import { comparisonsForPost } from "@/lib/comparison-links";
 import { bodyJsonLd } from "@/lib/body-jsonld";
 import { extractFaq } from "@/lib/faq-extract";
 import { faqPageJsonLd } from "@/lib/faq-schema";
+import { splitHeroCaption } from "@/lib/hero-caption";
+import { sanitize } from "@/lib/sanitize";
 
 export const revalidate = 3600;
 
@@ -94,12 +96,14 @@ export default async function PostPage({ params }: PageProps<"/blog/[slug]">) {
     notFound();
   }
   const kw = p.keywords.filter(Boolean);
+  const hero = splitHeroCaption(p.bodyHtml);
+  const heroCaption = hero.caption ? sanitize(hero.caption) : null;
   const [related, reviews, body, leaders] = await Promise.all([
     kw.length
       ? prisma.blogPost.findMany({ where: { ...publishedWhere(), id: { not: p.id }, OR: kw.map((k) => ({ OR: [{ title: { contains: k, mode: "insensitive" as const } }, { keywords: { has: k } }] })) }, orderBy: { publishedAt: "desc" }, take: 3, select: blogCardSelect })
       : Promise.resolve([]),
     getReviewsForPost(p, 3),
-    renderArticle(p.bodyHtml),
+    renderArticle(hero.body),
     getCategoryLeaders(),
   ]);
   // Ein Platz geht immer an den chronologisch vorherigen Beitrag (ringförmig), damit auch ältere
@@ -139,9 +143,17 @@ export default async function PostPage({ params }: PageProps<"/blog/[slug]">) {
           {p.publishedAt && <> · <time dateTime={p.publishedAt.toISOString()}>{formatDate(p.publishedAt)}</time> · Zuletzt aktualisiert: {formatDate(p.updatedAt)}</>}
         </p>
       </header>
-      {p.imageUrl && (
+      {p.imageUrl && !heroCaption && (
         <figure className="relative mt-6 aspect-[16/9] overflow-hidden rounded-3xl bg-bg-soft">
           <FpImage src={p.imageUrl} alt={p.imageAlt.trim() || `Titelbild: ${p.title}`} blur={p.imageBlur} sizes="(min-width:768px) 736px, 100vw" priority />
+        </figure>
+      )}
+      {p.imageUrl && heroCaption && (
+        <figure className="mt-6">
+          <div className="relative aspect-[16/9] overflow-hidden rounded-3xl bg-bg-soft">
+            <FpImage src={p.imageUrl} alt={p.imageAlt.trim() || `Titelbild: ${p.title}`} blur={p.imageBlur} sizes="(min-width:768px) 736px, 100vw" priority />
+          </div>
+          <figcaption className="titelbild-unterschrift" dangerouslySetInnerHTML={{ __html: heroCaption }} />
         </figure>
       )}
       <div className="mt-6 flex flex-wrap items-center justify-between gap-3">

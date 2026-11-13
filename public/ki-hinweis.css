@@ -11,3 +11,19 @@
 .dark #lexikon-text figcaption {
   color: #b8c0be;
 }
+
+/* Optionale Titelbild-Unterschrift in Fachartikeln (Absatz .fp-titelbild-unterschrift im bodyHtml), direkt unter dem Titelbild. */
+.titelbild-unterschrift {
+  margin-top: 6px;
+  font-size: 10px;
+  line-height: 1.2;
+  font-weight: 400;
+  color: #9ca3af;
+}
+.titelbild-unterschrift a {
+  color: inherit;
+  text-decoration: underline;
+}
+.dark .titelbild-unterschrift {
+  color: #b8c0be;
+}
