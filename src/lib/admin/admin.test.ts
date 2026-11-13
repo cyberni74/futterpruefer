@@ -245,6 +245,8 @@ describe("reviewSchema", () => {
     expect(empty.success && empty.data.authorSlug).toBe(null);
     const known = reviewSchema.safeParse(reviewFormToRaw(reviewFd({ authorSlug: "sebastian-kraft" })));
     expect(known.success && known.data.authorSlug).toBe("sebastian-kraft");
+    const chef = reviewSchema.safeParse(reviewFormToRaw(reviewFd({ authorSlug: "matthias-schroeter" })));
+    expect(chef.success && chef.data.authorSlug).toBe("matthias-schroeter");
     const bad = reviewSchema.safeParse(reviewFormToRaw(reviewFd({ authorSlug: "Dr. L." })));
     expect(bad.success).toBe(false);
   });

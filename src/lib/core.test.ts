@@ -169,6 +169,26 @@ describe("Urheberschaft", () => {
     expect(contentAuthor(DEFAULT_AUTHOR.slug)).toEqual(author);
     expect(SITE.name).toBe("Futterprüfer");
   });
+
+  it("löst Matthias Schröter auf den Team-Anker auf, ohne sameAs", async () => {
+    const { contentAuthor } = await import("./attribution");
+    const { AUTHORS, DEFAULT_AUTHOR, authorPath } = await import("./authors");
+    const { absoluteUrl } = await import("./site");
+    expect(DEFAULT_AUTHOR.slug).toBe("sebastian-kraft");
+    expect(AUTHORS.map((a) => a.slug)).toEqual(["sebastian-kraft", "matthias-schroeter"]);
+    const author = contentAuthor("matthias-schroeter");
+    const url = absoluteUrl(authorPath(AUTHORS[1]));
+    expect(author).toEqual({
+      "@type": "Person",
+      "@id": url,
+      name: "Matthias Schröter",
+      url,
+      jobTitle: "Chefredakteur",
+    });
+    expect(author.url).toMatch(/\/team#matthias-schroeter$/);
+    expect(author).not.toHaveProperty("sameAs");
+    expect(contentAuthor(null).name).toBe("Sebastian Kraft");
+  });
 });
 
 describe("resolveSiteUrl", () => {
