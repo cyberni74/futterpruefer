@@ -1,6 +1,5 @@
-import Link from "next/link";
 import { QUELLEN, STAND_TEXT, type Frage } from "@/lib/futterrechner/seo";
-import { DEFAULT_AUTHOR, authorPath } from "@/lib/authors";
+import { AuthorCredit } from "@/components/author-credit";
 
 export function FaqListe({ titel = "Häufige Fragen zum Futterrechner", fragen }: { titel?: string; fragen: Frage[] }) {
   return (
@@ -34,7 +33,7 @@ export function QuellenUndAutor() {
         <p className="mt-3 text-sm text-muted">Eigene Festlegungen sind im Text als solche genannt: der Kastriert-Faktor × 0,9 (abgeleitet aus AAHA 2021), die Spanne von ±10 %, das Rohasche-Band von 3 bis 12 % der Trockenmasse, die Bänder für das Protein-Fett-Verhältnis und die Kohlenhydrate (NfE) sowie die Kollagen-Heuristik.</p>
       </section>
       <aside className="mt-8 rounded-3xl border border-border bg-bg-soft p-5 text-sm">
-        <p><strong>Autor:</strong> <Link href={authorPath(DEFAULT_AUTHOR)} className="font-semibold text-brand underline underline-offset-4">{DEFAULT_AUTHOR.name}</Link> · Stand: {STAND_TEXT}</p>
+        <p>Von <AuthorCredit className="font-semibold text-brand underline underline-offset-4" /> · Stand: {STAND_TEXT}</p>
         <p className="mt-1 text-muted">Der Rechner ist ein Werkzeug zur Orientierung und ersetzt keine Beratung durch die Tierarztpraxis.</p>
       </aside>
     </>
