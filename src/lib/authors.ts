@@ -58,3 +58,15 @@ export function resolveAuthor(storedSlug?: string | null): PublicAuthor {
 export function isAuthorSlug(value: string): value is AuthorSlug {
   return value === LEGACY_EDITORIAL_SLUG || AUTHORS.some((author) => author.slug === value);
 }
+
+const STORED_AUTHOR_BYLINE = 'Von <a href="/team">Redaktion Futterprüfer</a>';
+
+/**
+ * Gespeicherte Autorenzeilen im Artikel-HTML auf die Redaktion abbilden.
+ * Der übrige Text bleibt, das Impressum geht nicht durch diese Funktion.
+ */
+export function mapStoredAuthorByline(html: string): string {
+  return html
+    .replaceAll("Autor: Sebastian Kraft, Futterprüfer.de (Karpas Web Solutions Ltd.)", STORED_AUTHOR_BYLINE)
+    .replaceAll("Autor: Sebastian Kraft", STORED_AUTHOR_BYLINE);
+}
