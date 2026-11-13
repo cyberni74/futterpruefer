@@ -35,6 +35,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <script dangerouslySetInnerHTML={{ __html: consentScript }} />
         <link rel="stylesheet" href="/ki-hinweis.css" />
+        <link rel="stylesheet" href="/blog-rezeptboxen.css" />
       </head>
       <body className="min-h-dvh">
         <ThemeProvider>{children}</ThemeProvider>

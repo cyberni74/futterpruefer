@@ -59,6 +59,7 @@ const BODY_FAQ_SLUGS = new Set([
   "salmonellen-hundefutter-interquell-rueckruf",
   "barf-risiken-nachteile",
   "glycerin-hundeleckerlis-schaedlich-oder-sicher",
+  "hundeleckerli-selber-machen",
 ]);
 
 export async function generateStaticParams() {
