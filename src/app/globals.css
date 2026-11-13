@@ -153,18 +153,7 @@ button, [role="button"], summary { cursor: pointer; }
 .prose-fp figure { margin: 2em 0; }
 .prose-fp figure img { width: 100%; }
 .prose-fp figcaption { margin-top: .6em; padding-inline: .25rem; font-size: .85rem; line-height: 1.5; color: var(--fg-muted); text-align: left; }
-/* KI-Hinweis in Fachartikeln und Lexikon: kleiner und dezenter, Text unverändert. */
-#artikel.prose-fp figcaption,
-#lexikon-text figcaption {
-  font-size: 10px;
-  line-height: 1.2;
-  font-weight: 400;
-  color: #9ca3af;
-}
-.dark #artikel.prose-fp figcaption,
-.dark #lexikon-text figcaption {
-  color: #b8c0be;
-}
+/* KI-Hinweis Fachartikel/Lexikon: public/ki-hinweis.css — Tailwind/Turbopack entfernte die Regeln aus dieser Datei. */
 .prose-fp table { width: 100%; border-collapse: collapse; font-size: .95rem; line-height: 1.5; display: block; overflow-x: auto; }
 .prose-fp th, .prose-fp td { border-bottom: 1px solid var(--border); padding: .6em .75em; text-align: left; vertical-align: top; }
 /* Tabellen am Handy: Wörter nicht mitten im Wort brechen, breite Tabellen seitlich scrollen */
