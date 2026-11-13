@@ -50,4 +50,11 @@ describe("BODY_JSON_LD_SLUGS", () => {
     expect(faqBlock).toContain('"barf-risiken-nachteile"');
     expect(BODY_JSON_LD_SLUGS.has("barf-risiken-nachteile")).toBe(false);
   });
+
+  it("gibt FAQ aus dem Beitragskörper für glycerin-hundeleckerlis-schaedlich-oder-sicher aus", () => {
+    const page = readFileSync(new URL("../app/(site)/blog/[slug]/page.tsx", import.meta.url), "utf8");
+    const faqBlock = page.slice(page.indexOf("const BODY_FAQ_SLUGS"), page.indexOf("export async function generateStaticParams"));
+    expect(faqBlock).toContain('"glycerin-hundeleckerlis-schaedlich-oder-sicher"');
+    expect(BODY_JSON_LD_SLUGS.has("glycerin-hundeleckerlis-schaedlich-oder-sicher")).toBe(false);
+  });
 });
