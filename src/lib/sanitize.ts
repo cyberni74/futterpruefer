@@ -1,4 +1,5 @@
 import sanitizeHtml from "sanitize-html";
+import { mapStoredAuthorByline } from "./authors";
 import { intrinsicSize } from "./image-variants";
 import { labelTableCells } from "./table-labels";
 
@@ -208,10 +209,10 @@ export function stripInvisible(text: string): string {
 export function sanitize(html: string | null | undefined): string {
   if (!html) return "";
   // data-label (mobile Tabellen-Beschriftung) aus dem thead ergänzen, wo es fehlt.
-  return labelTableCells(sanitizeHtml(stripInvisible(markSourceListAnchors(html)), OPTIONS));
+  return mapStoredAuthorByline(labelTableCells(sanitizeHtml(stripInvisible(markSourceListAnchors(html)), OPTIONS)));
 }
 
 export function stripHtml(html: string | null | undefined): string {
   if (!html) return "";
-  return sanitizeHtml(html, { allowedTags: [], allowedAttributes: {} }).replace(/\s+/g, " ").trim();
+  return sanitizeHtml(mapStoredAuthorByline(html), { allowedTags: [], allowedAttributes: {} }).replace(/\s+/g, " ").trim();
 }

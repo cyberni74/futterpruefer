@@ -133,6 +133,18 @@ describe("sanitize", () => {
     expect(out).not.toContain("style=");
     expect(out).toContain('rel="noopener noreferrer nofollow sponsored"');
   });
+  it("bildet gespeicherte Kraft-Autorenzeilen auf die Redaktion ab", () => {
+    const lang = sanitize("<p>feste Amazon-Preise nennen wir nicht. Autor: Sebastian Kraft, Futterprüfer.de (Karpas Web Solutions Ltd.); Geschäftsbeziehungen: keine.</p>");
+    expect(lang).toContain('Von <a href="/team">Redaktion Futterprüfer</a>; Geschäftsbeziehungen: keine.');
+    expect(lang).not.toContain("Sebastian Kraft");
+    expect(lang).not.toContain("sebastian-kraft");
+    expect(lang).toContain("feste Amazon-Preise nennen wir nicht.");
+    const kurz = sanitize('<p class="text-sm">Stand: 12.11.2026 · Autor: Sebastian Kraft · Geschäftsbeziehungen: keine.</p>');
+    expect(kurz).toContain("Stand: 12.11.2026 · Von <a href=\"/team\">Redaktion Futterprüfer</a> · Geschäftsbeziehungen: keine.");
+    const punkt = sanitize("<li>Geschäftsbeziehungen zu den Herstellern: keine. Autor: Sebastian Kraft.</li>");
+    expect(punkt).toBe("<li>Geschäftsbeziehungen zu den Herstellern: keine. Von <a href=\"/team\">Redaktion Futterprüfer</a>.</li>");
+    expect(stripHtml("<p>Autor: Sebastian Kraft.</p>")).toBe("Von Redaktion Futterprüfer.");
+  });
   it("h1 wird zu h2", () => expect(sanitize("<h1>T</h1>")).toBe("<h2>T</h2>"));
   it("stripHtml", () => expect(stripHtml("<p>a <b>b</b></p>\n<p>c</p>")).toBe("a b c"));
   it("null-sicher", () => expect(sanitize(null)).toBe(""));
