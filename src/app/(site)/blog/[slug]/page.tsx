@@ -58,6 +58,7 @@ const BODY_FAQ_SLUGS = new Set([
   "katze-erbricht-futter",
   "salmonellen-hundefutter-interquell-rueckruf",
   "barf-risiken-nachteile",
+  "kotfresser-drops-test",
   "glycerin-hundeleckerlis-schaedlich-oder-sicher",
   "hundeleckerli-selber-machen",
 ]);
