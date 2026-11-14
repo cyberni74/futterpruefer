@@ -51,6 +51,13 @@ describe("BODY_JSON_LD_SLUGS", () => {
     expect(BODY_JSON_LD_SLUGS.has("barf-risiken-nachteile")).toBe(false);
   });
 
+  it("gibt FAQ aus dem Beitragskörper für kotfresser-drops-test aus", () => {
+    const page = readFileSync(new URL("../app/(site)/blog/[slug]/page.tsx", import.meta.url), "utf8");
+    const faqBlock = page.slice(page.indexOf("const BODY_FAQ_SLUGS"), page.indexOf("export async function generateStaticParams"));
+    expect(faqBlock).toContain('"kotfresser-drops-test"');
+    expect(BODY_JSON_LD_SLUGS.has("kotfresser-drops-test")).toBe(false);
+  });
+
   it("gibt FAQ aus dem Beitragskörper für glycerin-hundeleckerlis-schaedlich-oder-sicher aus", () => {
     const page = readFileSync(new URL("../app/(site)/blog/[slug]/page.tsx", import.meta.url), "utf8");
     const faqBlock = page.slice(page.indexOf("const BODY_FAQ_SLUGS"), page.indexOf("export async function generateStaticParams"));
