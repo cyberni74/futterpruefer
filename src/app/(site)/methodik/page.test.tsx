@@ -15,8 +15,8 @@ describe("Methodik Transparenz", () => {
     expect(METHODOLOGY_CHANGELOG_ERGAENZUNG).toContain("Durch diese Festlegung hat sich keine Punktzahl geändert. Ältere Tests funktioneller Produkte mit sechs Teilnoten bleiben nach den sechs Kriterien bewertet.");
     expect(html).toContain("Seit dem 27.10.2026 gilt: Ergänzungsfutter, die ein Futter im Alltagssinn sind und keinen benannten Wirkstoff haben");
     expect(html).toContain('href="/methodik/ergaenzungsfutter#geltungsbereich"');
-    for (const entry of METHODOLOGY_CHANGELOG) expect(html).toContain(entry.replace(/&/g, "&amp;"));
-    const version2 = html.indexOf(METHODOLOGY_CHANGELOG[0].replace(/&/g, "&amp;"));
+    for (const entry of METHODOLOGY_CHANGELOG) expect(html).toContain(entry.replace(/&/g, "\u0026amp;"));
+    const version2 = html.indexOf(METHODOLOGY_CHANGELOG[0].replace(/&/g, "\u0026amp;"));
     const vegan = html.indexOf(METHODOLOGY_CHANGELOG[1]);
     const werbeaussagen = html.indexOf(METHODOLOGY_CHANGELOG[2]);
     const neubewertung = html.indexOf(METHODOLOGY_CHANGELOG[3]);
@@ -117,7 +117,11 @@ describe("Methodik Transparenz", () => {
     expect(html).toContain("Die 43 Tests von Produkten der Marke Tierliebhaber und die zwei Tests von Medidog haben wir bei der Umstellung nicht angepasst. Das ist eine redaktionelle Entscheidung.");
     expect(html).toContain("Für diese Tests gelten weiter die Grenzen von Version 1 (Grün ab 80, Gelb ab 60, Rot unter 60 Punkten); die neuen Obergrenzen für Alleinfutter wenden wir auf sie nicht an.");
     expect(html).toContain("in Ranglisten und Vergleichen führen wir sie nicht zusammen mit ihnen.");
-    expect(html).toContain("Tierliebhaber Gras- &amp; Kotfresser Drops (92 Punkte) und Medidog Ulmenrinden Paste (82 Punkte) sind Einzelbewertungen außerhalb der aktuellen Methodik (Bewertungsstand 27.10.2026).");
+    expect(html).toContain("Tierliebhaber Gras- \u0026amp; Kotfresser Drops (92 Punkte) und Medidog Ulmenrinden Paste (82 Punkte) sind Einzelbewertungen außerhalb der aktuellen Methodik (Bewertungsstand 27.10.2026).");
+    expect(html).toContain("MEDIDOG Haut- \u0026amp; Fellglück Paste");
+    expect(html).toContain("Teamwertung von 91,8 Punkten (Ampel Grün, Note 1,3 · sehr gut) nach Entscheidung des Herausgebers, außerhalb der veröffentlichten Methodik Ergänzungsfutter (ergaenzung-v1.1).");
+    expect(html).toContain("Die Gesamtwertung von 91,8 Punkten beruht auf dem Praxistest des Testteams. Sie ist keine Summe der fünf Kriterien und belegt keine Wirkung gegen Juckreiz, Haarausfall oder andere Hautbefunde.");
+    expect(html).toContain("Nach dieser Methodik würden die Deckel für Alibi-Dosierung und für eine Werbung mit Krankheitsbezug Grün ausschließen; die Methodik-Gegenrechnung liegt bei 28 von 100 Punkten und wird hier nicht als Gesamtwertung ausgewiesen.");
     expect(html).toContain("mit Ausnahme der im Abschnitt „Ausnahmen“ und im Änderungsprotokoll vom 05.11.2026 genannten Bewertungen");
     expect(METHODOLOGY_CHANGELOG[0]).toContain("Ausgenommen: alle Tests der Marke Tierliebhaber (43) und von Medidog (2); sie bleiben auf dem Stand von Version 1.");
     expect(METHODOLOGY_CHANGELOG[0]).not.toContain("zwei Bewertungen");
