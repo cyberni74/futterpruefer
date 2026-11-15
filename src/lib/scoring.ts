@@ -93,6 +93,23 @@ export const isMethodikV1 = (methodikVersion: string | null | undefined) => (met
 
 export const thresholdsFor = (methodikVersion?: string | null) => (isMethodikV1(methodikVersion) ? RATING_THRESHOLDS_V1 : RATING_THRESHOLDS);
 
+/** Punktzahl als Zahl 0–100, ohne auf ganze Punkte zu runden. */
+export function asScore(score: number | null | undefined): number {
+  const n = Number(score ?? 0);
+  if (!Number.isFinite(n)) return 0;
+  return Math.min(100, Math.max(0, n));
+}
+
+/** Öffentliche Punktzahl: ganze Werte unverändert („91“), sonst eine Nachkommastelle mit Komma („91,8“). Nicht auf 92 runden. */
+export function formatScore(score: number | null | undefined): string {
+  return new Intl.NumberFormat("de-DE", { maximumFractionDigits: 1, minimumFractionDigits: 0 }).format(asScore(score));
+}
+
+/** ratingValue im JSON-LD: Zahl mit höchstens einer Nachkommastelle, ohne Binärstaub. */
+export function scoreForJsonLd(score: number | null | undefined): number {
+  return Math.round(asScore(score) * 10) / 10;
+}
+
 export function ratingFor(total: number | null | undefined, methodikVersion?: string | null): Rating {
   const t = total ?? 0;
   const th = thresholdsFor(methodikVersion);

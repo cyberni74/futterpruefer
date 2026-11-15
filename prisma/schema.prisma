@@ -126,7 +126,7 @@ model Review {
   scoreDeclaration Int @default(0)
   scoreNeeds       Int @default(0)
   scoreValue       Int @default(0)
-  totalScore       Int @default(0)
+  totalScore       Float @default(0)
 
   verdict  String   @default("")
   /// Reißerischer Anreißer für die Vorschau-Karte (max. 100 Zeichen, drei Zeilen)
