@@ -9,7 +9,7 @@ import { misleadingClaims, parseClaims } from "@/lib/product-data";
 import { faqPageJsonLd } from "@/lib/faq-schema";
 import { productReviewJsonLd, reviewHeadline } from "@/lib/review-schema";
 import { productLabel, trimMetaDescription } from "@/lib/seo";
-import { RATING_LABEL, ratingFor } from "@/lib/scoring";
+import { RATING_LABEL, ratingFor, formatScore } from "@/lib/scoring";
 import { brandPath, reviewPath } from "@/lib/urls";
 import { absoluteUrl, ANIMAL_LABEL, formatDate, MONTHS, SITE } from "@/lib/site";
 import { contentAuthor } from "@/lib/attribution";
@@ -54,7 +54,7 @@ export async function ReviewV2Article({ r, data, draftPreview }: { r: Review; da
   // Nur mit ASIN: beide Produktbilder sind Partnerlinks und tragen das Label „Werbung“
   const medienKaufUrl = data.asin ? kaufLink({ asin: data.asin }) : null;
   const abs = (u: string) => (u.startsWith("http") ? u : absoluteUrl(u));
-  const description = trimMetaDescription(r.metaDescription?.trim() || data.hero?.gesamturteil?.trim() || `${r.title} im Fachtest: ${r.totalScore}/100 Punkte.`);
+  const description = trimMetaDescription(r.metaDescription?.trim() || data.hero?.gesamturteil?.trim() || `${r.title} im Fachtest: ${formatScore(r.totalScore)}/100 Punkte.`);
   const minutes = readingMinutes(JSON.stringify(data), r.verdict);
 
   const [related, posts, pom, handPicked, linkTerms] = await Promise.all([
@@ -187,9 +187,9 @@ export async function ReviewV2Article({ r, data, draftPreview }: { r: Review; da
 
       <div className="mt-12">
         <p className="mb-3 text-sm font-bold">Diesen Test teilen</p>
-        <ShareButtons url={url} title={`${name} im Test – ${r.totalScore}/100 Punkte`} />
+        <ShareButtons url={url} title={`${name} im Test – ${formatScore(r.totalScore)}/100 Punkte`} />
       </div>
-      <ShareBarSlot url={url} title={`${name} im Test – ${r.totalScore}/100 Punkte`} />
+      <ShareBarSlot url={url} title={`${name} im Test – ${formatScore(r.totalScore)}/100 Punkte`} />
 
       {similar.length > 0 && (
         <section aria-labelledby="aehnliche" className="mt-16">
