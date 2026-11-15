@@ -106,13 +106,24 @@ describe("ReviewCard Bildquelle und neutrale Fläche", () => {
 });
 
 describe("Bildquelle in Blog-Karten (Regel der Seite)", () => {
-  const credit = (r: Pick<ReviewCardData, "imageUrl" | "imageAlt">) => (r.imageUrl && !/symbolbild|ki-generiert/i.test(r.imageAlt ?? "") ? "Bild: Hersteller" : undefined);
-  it("KI-Bild ohne Credit", () => {
+  const credit = (r: Pick<ReviewCardData, "imageUrl" | "imageAlt">) => {
+    if (!r.imageUrl) return undefined;
+    if (/ki-generiert/i.test(r.imageAlt ?? "")) return "Bild: KI-generiert";
+    if (/symbolbild/i.test(r.imageAlt ?? "")) return undefined;
+    return "Bild: Hersteller";
+  };
+  it("KI-Bild trägt Bild: KI-generiert, nicht Hersteller", () => {
     const ki = card({ imageUrl: "https://example.com/ki.jpg", imageAlt: "Trockenfutter, KI-generiertes Symbolbild" });
-    expect(credit(ki)).toBeUndefined();
-    expect(renderToStaticMarkup(<ReviewCard review={ki} imageCredit={credit(ki)} />)).not.toContain("Bild: Hersteller");
+    expect(credit(ki)).toBe("Bild: KI-generiert");
+    const h = renderToStaticMarkup(<ReviewCard review={ki} imageCredit={credit(ki)} />);
+    expect(h).toContain("Bild: KI-generiert");
+    expect(h).not.toContain("Bild: Hersteller");
     const foto = card({ imageUrl: "https://example.com/pack.jpg", imageAlt: "Packung" });
     expect(renderToStaticMarkup(<ReviewCard review={foto} imageCredit={credit(foto)} />)).toContain("Bild: Hersteller");
+  });
+  it("Symbolbild ohne KI-generiert bleibt ohne Credit", () => {
+    const r = card({ imageUrl: "https://example.com/s.jpg", imageAlt: "Symbolbild: Kroketten im Napf" });
+    expect(credit(r)).toBeUndefined();
   });
   it("ohne Bild keine Bildquelle", () => {
     expect(credit(card({ imageUrl: null }))).toBeUndefined();
