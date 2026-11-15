@@ -5,7 +5,7 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { isAmazonHotlink } from "@/lib/image-hosts";
 import { getReviewBySlug, previewDraftsEnabled } from "@/lib/queries";
-import { ratingFor } from "@/lib/scoring";
+import { ratingFor, formatScore } from "@/lib/scoring";
 import { LOGO_ROUND_DATA_URL } from "@/lib/logo-data";
 
 export const alt = "Testergebnis";
@@ -54,7 +54,7 @@ export default async function OgImage({ params }: { params: Promise<{ slug: stri
                 <circle cx="85" cy="85" r="70" fill="none" stroke={color} strokeWidth="16" strokeLinecap="round" strokeDasharray={`${(score / 100) * c} ${c}`} />
               </svg>
               <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-                <div style={{ display: "flex", fontSize: 60, fontWeight: 800, color: "#12201f" }}>{score}</div>
+                <div style={{ display: "flex", fontSize: 60, fontWeight: 800, color: "#12201f" }}>{formatScore(score)}</div>
                 <div style={{ display: "flex", fontSize: 20, color: "#4b5f5d" }}>von 100</div>
               </div>
             </div>
