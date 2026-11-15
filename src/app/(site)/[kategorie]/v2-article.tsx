@@ -214,7 +214,7 @@ export async function ReviewV2Article({ r, data, draftPreview }: { r: Review; da
       )}
       <div className="mt-16"><WishBox /></div>
       <div className="mt-16"><NewsletterBox /></div>
-      <div className="mt-8 mb-12"><Disclosure /></div>
+      {r.slug !== "medidog-haut-und-fellglueck-paste" && <div className="mt-8 mb-12"><Disclosure /></div>}
       </div>
     </div>
   );
