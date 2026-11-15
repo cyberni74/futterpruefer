@@ -1,4 +1,4 @@
-import { ratingFor, RATING_LABEL, thresholdsFor } from "./scoring";
+import { ratingFor, RATING_LABEL, thresholdsFor, formatScore } from "./scoring";
 import { misleadingClaims, splitComposition, type Claim } from "./product-data";
 import { frameQuote } from "./quotes";
 import { REVIEW_EXTRA_FAQ } from "./review-extra-faq";
@@ -77,7 +77,7 @@ export function directAnswer(r: ReviewSeoInput): string {
   const label = RATING_LABEL[rating];
   // „Rot – …“ ist der Name der roten Ampel und bleibt groß. Die anderen Notenwörter stehen im Satz klein.
   const wort = label.startsWith("Rot") ? label : lowerFirst(label);
-  return `Wie schneidet ${r.name} im Test ab? Nach unserem Bewertungsschema: ${wort}. ${r.name} erreicht im Test${d ? ` vom ${d}` : ""} ${r.totalScore} von 100 Punkten, Ampel ${AMPEL_WORD[rating]}.`;
+  return `Wie schneidet ${r.name} im Test ab? Nach unserem Bewertungsschema: ${wort}. ${r.name} erreicht im Test${d ? ` vom ${d}` : ""} ${formatScore(r.totalScore)} von 100 Punkten, Ampel ${AMPEL_WORD[rating]}.`;
 }
 
 /** TT.MM.JJJJ in Europe/Berlin. Leer, wenn kein Datum vorliegt. */
@@ -157,7 +157,7 @@ export function amazonPriceUrl(input: { html?: string | null; asin?: string | nu
 
 export function kurzGesagt(r: ReviewSeoInput): string[] {
   const rating = ratingFor(r.totalScore, r.methodikVersion);
-  const items = [`${r.totalScore}/100 Punkte, Ampel ${AMPEL_WORD[rating]}: ${RATING_LABEL[rating]}.`];
+  const items = [`${formatScore(r.totalScore)}/100 Punkte, Ampel ${AMPEL_WORD[rating]}: ${RATING_LABEL[rating]}.`];
   const pro = clean(r.pros?.[0]);
   if (pro) items.push(`Pluspunkt: ${sentence(pro)}`);
   const con = clean(r.cons?.[0]);
@@ -178,7 +178,7 @@ export function reviewFaq(r: ReviewSeoInput, comparison?: { title: string } | nu
   const verdict = withoutLeadingScore(clean(r.verdict), r.totalScore);
   out.push({
     question: `Wie schneidet ${r.name} im Test ab?`,
-    answer: `${r.name} erreicht in unserem Test${d ? ` vom ${d}` : ""} ${r.totalScore} von 100 Punkten, Ampel ${AMPEL_WORD[rating]} (${RATING_LABEL[rating]}).${verdict ? ` ${sentence(verdict)}` : ""}`,
+    answer: `${r.name} erreicht in unserem Test${d ? ` vom ${d}` : ""} ${formatScore(r.totalScore)} von 100 Punkten, Ampel ${AMPEL_WORD[rating]} (${RATING_LABEL[rating]}).${verdict ? ` ${sentence(verdict)}` : ""}`,
   });
   if (r.slug) out.push(...(REVIEW_EXTRA_FAQ[r.slug] ?? []));
   const pros = (r.pros ?? []).map(clean).filter(Boolean);

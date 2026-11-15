@@ -1,4 +1,5 @@
 import { contentAuthor } from "./attribution";
+import { scoreForJsonLd } from "./scoring";
 import { productLabel } from "./seo";
 import { absoluteUrl, SITE } from "./site";
 
@@ -97,7 +98,7 @@ export function productReviewJsonLd(r: ProductReviewInput) {
       publisher: { "@type": "Organization" as const, name: SITE.name, url: SITE.url },
       reviewRating: {
         "@type": "Rating" as const,
-        ratingValue: r.totalScore,
+        ratingValue: scoreForJsonLd(r.totalScore),
         bestRating: REVIEW_BEST_RATING,
         worstRating: REVIEW_WORST_RATING,
       },

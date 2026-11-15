@@ -7,7 +7,7 @@ import { getRelatedReviews, getReviewBySlug, previewDraftsEnabled, publishedWher
 import { getLexikonEntries, getPostsForReview, renderArticle } from "@/lib/content";
 import { enhanceArticle } from "@/lib/article-html";
 import { consWithClaims, misleadingClaims, parseAnalysis, parseClaims, readingMinutes } from "@/lib/product-data";
-import { CRITERIA, type Scores } from "@/lib/scoring";
+import { CRITERIA, type Scores, formatScore } from "@/lib/scoring";
 import { capNote, efBars, prepareErgaenzungArticle, renderStudienListe, scoreErgaenzung, studieDosisText, type EfInput } from "@/lib/ergaenzung";
 import { productReviewJsonLd, reviewHeadline } from "@/lib/review-schema";
 import { productLabel, seoTitle, trimMetaDescription } from "@/lib/seo";
@@ -62,7 +62,7 @@ export async function generateStaticParams() {
 }
 
 const autoDescription = (r: { title: string; totalScore: number; verdict: string }) =>
-  trimMetaDescription(r.verdict?.trim() ? `${r.title} im Fachtest: ${r.totalScore}/100 Punkte. ${r.verdict}` : `${r.title} im Fachtest: ${r.totalScore}/100 Punkte. Rohstoffe, Schadstoffe, Nährstoffprofil, Deklaration und Preis-Leistung bewertet.`);
+  trimMetaDescription(r.verdict?.trim() ? `${r.title} im Fachtest: ${formatScore(r.totalScore)}/100 Punkte. ${r.verdict}` : `${r.title} im Fachtest: ${formatScore(r.totalScore)}/100 Punkte. Rohstoffe, Schadstoffe, Nährstoffprofil, Deklaration und Preis-Leistung bewertet.`);
 
 export async function generateMetadata({ params }: PageProps<"/[kategorie]/[slug]">): Promise<Metadata> {
   const { slug } = await params;
@@ -70,7 +70,7 @@ export async function generateMetadata({ params }: PageProps<"/[kategorie]/[slug
   const r = await getReviewBySlug(slug, { includeDrafts: allowDrafts });
   if (!r) return {};
   const draft = allowDrafts && !isPublicReview(r);
-  const title = r.metaTitle?.trim() || `${productLabel(r.brand, r.productName)} im Test: ${r.totalScore}/100`;
+  const title = r.metaTitle?.trim() || `${productLabel(r.brand, r.productName)} im Test: ${formatScore(r.totalScore)}/100`;
   const description = trimMetaDescription(r.metaDescription?.trim() || autoDescription(r));
   const path = reviewPath(r);
   return {
@@ -384,9 +384,9 @@ export default async function ReviewPage({ params }: PageProps<"/[kategorie]/[sl
           {/* 8. Teilen */}
           <div className="mt-12">
             <p className="mb-3 text-sm font-bold">Diesen Test teilen</p>
-            <ShareButtons url={url} title={`${name} im Test – ${r.totalScore}/100 Punkte`} />
+            <ShareButtons url={url} title={`${name} im Test – ${formatScore(r.totalScore)}/100 Punkte`} />
           </div>
-          <ShareBarSlot url={url} title={`${name} im Test – ${r.totalScore}/100 Punkte`} />
+          <ShareBarSlot url={url} title={`${name} im Test – ${formatScore(r.totalScore)}/100 Punkte`} />
 
           {/* 9. Call-to-Actions */}
           {related.length > 0 && (
