@@ -62,6 +62,7 @@ const BODY_FAQ_SLUGS = new Set([
   "glycerin-hundeleckerlis-schaedlich-oder-sicher",
   "hundeleckerli-selber-machen",
   "mammaly-firma-werbeaussagen",
+  "bionic-nature-medidog-medipet-medicat",
 ]);
 
 export async function generateStaticParams() {
