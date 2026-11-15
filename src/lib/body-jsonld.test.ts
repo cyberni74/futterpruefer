@@ -71,4 +71,11 @@ describe("BODY_JSON_LD_SLUGS", () => {
     expect(faqBlock).toContain('"hundeleckerli-selber-machen"');
     expect(BODY_JSON_LD_SLUGS.has("hundeleckerli-selber-machen")).toBe(false);
   });
+
+  it("gibt FAQ aus dem Beitragskörper für mammaly-firma-werbeaussagen aus", () => {
+    const page = readFileSync(new URL("../app/(site)/blog/[slug]/page.tsx", import.meta.url), "utf8");
+    const faqBlock = page.slice(page.indexOf("const BODY_FAQ_SLUGS"), page.indexOf("export async function generateStaticParams"));
+    expect(faqBlock).toContain('"mammaly-firma-werbeaussagen"');
+    expect(BODY_JSON_LD_SLUGS.has("mammaly-firma-werbeaussagen")).toBe(false);
+  });
 });

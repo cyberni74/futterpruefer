@@ -61,6 +61,7 @@ const BODY_FAQ_SLUGS = new Set([
   "kotfresser-drops-test",
   "glycerin-hundeleckerlis-schaedlich-oder-sicher",
   "hundeleckerli-selber-machen",
+  "mammaly-firma-werbeaussagen",
 ]);
 
 export async function generateStaticParams() {
