@@ -153,6 +153,31 @@ export type HomeFaq = {
 
 export const HOME_FAQ: readonly HomeFaq[] = [
   {
+    q: "Welches Hundefutter ist das beste?",
+    a: "Das eine beste Hundefutter gibt es nicht – das hängt auch von Alter, Größe, Aktivität und Verträglichkeit des Hundes ab. Nach unserem rezepturbasierten Bewertungsschema liegt in seiner Kategorie vorn, welches Alleinfutter die höchste Punktzahl erreicht – nicht welches Versprechen am lautesten klingt. Wir bewerten nach 100 Punkten und sechs offengelegten Kriterien. Die Ampel zeigt Grün, Gelb oder Rot; empfehlenswert ist nur Grün. Welche Produkte in der Übersicht vorn liegen, steht in den Hundefutter-Tests. Wie die Punkte zustande kommen, erklärt die Methodik.",
+    anchors: [
+      { text: "Hundefutter-Tests", href: "/alleinfuttermittel-hund" },
+      { text: "Methodik", href: "/methodik" },
+    ],
+    links: [
+      ["Zur Methodik", "/methodik"],
+      ["Alle Hundefutter-Tests", "/alleinfuttermittel-hund"],
+      ["Gute Zusammensetzung erkennen", "/blog/bestes-hundefutter-zusammensetzung"],
+    ],
+  },
+  {
+    q: "Nassfutter oder Trockenfutter?",
+    a: "Die Dose wirbt mit Frische, der Sack mit Bequemlichkeit. Vergleichbar wird beides erst in der Trockenmasse: Nassfutter bringt oft rund 80 Prozent Feuchtigkeit mit, Trockenfutter etwa 10. Deshalb rechnen wir die Nährwerte um, bevor wir werten. Beide Formen prüfen wir nach demselben 100-Punkte-Schema, jeweils innerhalb ihrer Kategorie. Den Ausschlag gibt die Deklaration, nicht die Konsistenz.",
+    anchors: [
+      { text: "Trockenmasse", href: "/blog/trockenmasse-berechnen-nass-trockenfutter" },
+    ],
+    links: [
+      ["Trockenmasse berechnen", "/blog/trockenmasse-berechnen-nass-trockenfutter"],
+      ["Nass- oder Trockenfutter bei der Katze", "/blog/nassfutter-oder-trockenfutter-katze"],
+      ["Zur Methodik", "/methodik"],
+    ],
+  },
+  {
     q: "Wie testet Futterprüfer Hunde- und Katzenfutter?",
     a: "Wir werten die veröffentlichten Herstellerangaben aus: Zusammensetzung, analytische Bestandteile, Zusatzstoffe, Fütterungsempfehlung und Preis. Jedes Alleinfutter wird nach sechs Kriterien mit maximal 100 Punkten bewertet. Eigene Laboranalysen führen wir nicht durch.",
     links: [["Zur Methodik", "/methodik"]],
