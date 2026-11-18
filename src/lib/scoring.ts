@@ -19,6 +19,10 @@ export const MAX_TOTAL = CRITERIA.reduce((s, c) => s + c.max, 0);
  */
 export const METHODOLOGY_STAND = "05.11.2026";
 
+/** Changelog-Eintrag Notenschlüssel V3 (Wortlaut zur Rechtsprüfung). */
+export const METHODOLOGY_CHANGELOG_NOTEN_V3 =
+  "19.11.2026 – Notenschlüssel: Wir haben alle Noten um 0,5 verschoben, damit 100 Punkte der Note 1,0 und 0 Punkte der Note 6,0 entsprechen (bisher 0,5 und 5,5). Punktzahlen, Ampelgrenzen, Notenwörter und das Siegel ‚Empfohlen‘ ab 80 Punkten bleiben unverändert; kein Produkt wurde dafür neu geprüft. Beispiel: 76 Punkte waren bisher Note 1,4 und sind jetzt Note 1,9 · sehr gut.";
+
 export const METHODOLOGY_CHANGELOG_ERGAENZUNG =
   "27.10.2026 – Ergänzung: Ergänzungsfutter, die ein Futter im Alltagssinn sind und keinen benannten Wirkstoff haben, etwa Nassfutter-Filets und Snacks, bewerten wir nach den sechs Kriterien dieser Seite. So bleiben sie mit unseren bisherigen Tests solcher Produkte vergleichbar. Die fünf Kriterien der Ergänzungsfutter-Methodik gelten für funktionelle Ergänzungsfutter mit Wirkstoff oder Wirkversprechen, etwa Tropfen, Pulver, Öle und Tabletten. Durch diese Festlegung hat sich keine Punktzahl geändert. Ältere Tests funktioneller Produkte mit sechs Teilnoten bleiben nach den sechs Kriterien bewertet.";
 
@@ -124,15 +128,15 @@ export function ratingFor(total: number | null | undefined, methodikVersion?: st
  */
 export const showsEmpfohlen = (total: number | null | undefined, methodikVersion?: string | null) => !isMethodikV1(methodikVersion) && (total ?? 0) >= EMPFOHLEN_AB;
 
-/** Notenschlüssel C (Version 2): feste Ankerpunkte, dazwischen linear, kaufmännisch auf eine Nachkommastelle. Rechnung für /methodik; die angezeigte Note einer Testseite steht im Datenbank-Patch. */
+/** Notenschlüssel V3 (ab 13.11.2026 intern, öffentlich mit /methodik): feste Ankerpunkte, dazwischen linear, kaufmännisch auf eine Nachkommastelle. Gegenüber Version 2 alle Noten um 0,5 verschoben (100 = 1,0, 0 = 6,0); Punkte, Ampel und Notenwörter bleiben. Rechnung für /methodik; die angezeigte Note einer Testseite steht im Datenbank-Patch. */
 export const NOTEN_ANKER: ReadonlyArray<{ punkte: number; note: number }> = [
-  { punkte: 100, note: 0.5 }, { punkte: 72, note: 1.5 }, { punkte: 60, note: 2.5 }, { punkte: 51, note: 3.5 }, { punkte: 34, note: 4.5 }, { punkte: 0, note: 5.5 },
+  { punkte: 100, note: 1.0 }, { punkte: 72, note: 2.0 }, { punkte: 60, note: 3.0 }, { punkte: 51, note: 4.0 }, { punkte: 34, note: 5.0 }, { punkte: 0, note: 6.0 },
 ];
 
-/** Note zu 0–100 Punkten; die Ampelgrenzen fallen auf Notengrenzen (Grün höchstens 1,8, Gelb 1,9–3,5, Rot ab 3,6). */
+/** Note zu 0–100 Punkten; die Ampelgrenzen fallen auf Notengrenzen (Grün höchstens 2,3, Gelb 2,4–4,0, Rot ab 4,1). */
 export function noteFuerPunkte(punkte: number): number {
   const p = Math.min(100, Math.max(0, Math.round(punkte)));
-  let note = 5.5;
+  let note = 6.0;
   for (let i = 0; i < NOTEN_ANKER.length - 1; i++) {
     const hi = NOTEN_ANKER[i], lo = NOTEN_ANKER[i + 1];
     if (p <= hi.punkte && p >= lo.punkte) {
@@ -142,17 +146,17 @@ export function noteFuerPunkte(punkte: number): number {
   }
   let n = Math.round(note * 10 + 1e-9) / 10;
   const th = RATING_THRESHOLDS;
-  if (p >= th.gut) n = Math.min(n, 1.8);
-  else if (p >= th.mittel) n = Math.min(3.5, Math.max(n, 1.9));
-  else n = Math.max(n, 3.6);
+  if (p >= th.gut) n = Math.min(n, 2.3);
+  else if (p >= th.mittel) n = Math.min(4.0, Math.max(n, 2.4));
+  else n = Math.max(n, 4.1);
   return n;
 }
 
 export function notenwort(note: number): string {
-  if (note <= 1.5) return "sehr gut";
-  if (note <= 2.5) return "gut";
-  if (note <= 3.5) return "befriedigend";
-  if (note <= 4.5) return "ausreichend";
+  if (note <= 2.0) return "sehr gut";
+  if (note <= 3.0) return "gut";
+  if (note <= 4.0) return "befriedigend";
+  if (note <= 5.0) return "ausreichend";
   return "mangelhaft";
 }
 
