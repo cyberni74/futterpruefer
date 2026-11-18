@@ -10,7 +10,11 @@ describe("Methodik Transparenz", () => {
   const html = renderToStaticMarkup(<MethodikPage />);
 
   it("zeigt die neue Gewichtung, den Stand und die Changelog-Zeile", () => {
-    expect(html).toContain("Stand 05.11.2026");
+    expect(html).toContain("Kriterien und Ampel: Stand 05.11.2026; Notenschlüssel: Stand 19.11.2026.");
+    expect(html).toContain("sie sind nicht mit Schulnoten oder den Noten anderer Tests gleichzusetzen.");
+    expect(html).not.toContain("kennt man aus Schule");
+    expect(html).toContain("100 Punkte = 1,0, 72 = 2,0, 60 = 3,0, 51 = 4,0, 34 = 5,0, 0 = 6,0");
+    expect(html).not.toContain("Note 0,5–1,8");
     expect(html).toContain(METHODOLOGY_CHANGELOG_ERGAENZUNG);
     expect(METHODOLOGY_CHANGELOG_ERGAENZUNG).toContain("Durch diese Festlegung hat sich keine Punktzahl geändert. Ältere Tests funktioneller Produkte mit sechs Teilnoten bleiben nach den sechs Kriterien bewertet.");
     expect(html).toContain("Seit dem 27.10.2026 gilt: Ergänzungsfutter, die ein Futter im Alltagssinn sind und keinen benannten Wirkstoff haben");
@@ -79,7 +83,7 @@ describe("Methodik Transparenz", () => {
 
   it("nennt die rote Ampel „keine Empfehlung“, passend zum Notenwort", () => {
     expect(RATING_LABEL.schlecht).toBe("Rot – keine Empfehlung");
-    expect(html).toContain(`<strong class="text-bad">Rot (bis ${RATING_THRESHOLDS.mittel - 1} Punkte, Note 3,6–5,5):</strong> keine Empfehlung`);
+    expect(html).toContain(`<strong class="text-bad">Rot (bis ${RATING_THRESHOLDS.mittel - 1} Punkte, Note 4,1–6,0):</strong> keine Empfehlung`);
     expect(html).not.toContain("nicht empfehlenswert");
   });
 
@@ -89,13 +93,13 @@ describe("Methodik Transparenz", () => {
   });
 
   it("Ampel und Note Version 2: Grenzen, Notenschlüssel, Empfohlen ab 80, Obergrenzen", () => {
-    expect(html).toContain("Ampel und Note – Version 2, gültig seit 05.11.2026");
-    expect(html).toContain('<strong class="text-good">Grün (ab 68 Punkten, Note 0,5–1,8):</strong> empfehlenswert');
-    expect(html).toContain('<strong class="text-mid">Gelb (51–67 Punkte, Note 1,9–3,5):</strong> mit Abstrichen');
+    expect(html).toContain("Ampel und Note – Ampel Version 2 (seit 05.11.2026), Notenschlüssel seit 19.11.2026");
+    expect(html).toContain('<strong class="text-good">Grün (ab 68 Punkten, Note 1,0–2,3):</strong> empfehlenswert');
+    expect(html).toContain('<strong class="text-mid">Gelb (51–67 Punkte, Note 2,4–4,0):</strong> mit Abstrichen');
     expect(html).toContain("Unser Siegel ‚Empfohlen‘ vergeben wir zusätzlich erst ab 80 Punkten.");
-    expect(html).toContain("<td>72–100</td><td>0,5–1,5 sehr gut</td><td>Grün</td>");
-    expect(html).toContain("<td>33–50</td><td>3,6–4,5 ausreichend</td><td>Rot</td>");
-    expect(html).toContain("Feste Ankerpunkte: 100 Punkte = 0,5, 72 = 1,5, 60 = 2,5, 51 = 3,5, 34 = 4,5, 0 = 5,5.");
+    expect(html).toContain("<td>72–100</td><td>1,0–2,0 sehr gut</td><td>Grün</td>");
+    expect(html).toContain("<td>33–50</td><td>4,1–5,0 ausreichend</td><td>Rot</td>");
+    expect(html).toContain("Feste Ankerpunkte: 100 Punkte = 1,0, 72 = 2,0, 60 = 3,0, 51 = 4,0, 34 = 5,0, 0 = 6,0.");
     expect(html).toContain("‚sehr gut‘ heißt bei uns mindestens 72 von 100 Punkten, ‚gut‘ mindestens 60. Sie sind mit Noten anderer Tests nicht vergleichbar.");
     expect(html).toContain("Alibi-Dosierung oder keine deklarierte Wirkstoffmenge ≤ <strong>50</strong>, Heilaussage ≤ <strong>67</strong>, Sicherheit mittel ≤ <strong>50</strong>, Sicherheit schwer ≤ <strong>33</strong>");
     expect(html).toContain("Das ist eine redaktionelle Entscheidung über die Einstufung, keine neue Prüfung der Produkte.");
