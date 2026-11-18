@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { trimMetaDescription } from "@/lib/seo";
 import { EF_DECKEL } from "@/lib/ergaenzung";
-import { EMPFOHLEN_AB, HARMFUL_FAIL_RATIO, METHODOLOGY_CHANGELOG, METHODOLOGY_CHANGELOG_ABGRENZUNG, METHODOLOGY_CHANGELOG_ERGAENZUNG, METHODOLOGY_STAND, PUBLISHED_CRITERIA, PUBLISHED_MAX_TOTAL, RATING_THRESHOLDS, type CriterionKey } from "@/lib/scoring";
+import { EMPFOHLEN_AB, HARMFUL_FAIL_RATIO, METHODOLOGY_CHANGELOG, METHODOLOGY_CHANGELOG_ABGRENZUNG, METHODOLOGY_CHANGELOG_ERGAENZUNG, METHODOLOGY_CHANGELOG_NOTEN_V3, METHODOLOGY_STAND, PUBLISHED_CRITERIA, PUBLISHED_MAX_TOTAL, RATING_THRESHOLDS, type CriterionKey } from "@/lib/scoring";
 import { PageShell } from "@/components/page-shell";
 
 export const metadata: Metadata = {
@@ -59,14 +59,14 @@ const DETAIL: Record<CriterionKey, { fragen: string; punkte: string; abzug: stri
   },
 };
 
-/** Tabelle Punkte → Note → Ampel (Notenschlüssel C, Version 2). */
+/** Tabelle Punkte → Note → Ampel (Notenschlüssel V3, 100 = 1,0). */
 const NOTEN_TABELLE = [
-  { punkte: "72–100", note: "0,5–1,5 sehr gut", ampel: "Grün" },
-  { punkte: "68–71", note: "1,6–1,8 gut", ampel: "Grün" },
-  { punkte: "60–67", note: "1,9–2,5 gut", ampel: "Gelb" },
-  { punkte: "51–59", note: "2,6–3,5 befriedigend", ampel: "Gelb" },
-  { punkte: "33–50", note: "3,6–4,5 ausreichend", ampel: "Rot" },
-  { punkte: "0–32", note: "4,6–5,5 mangelhaft", ampel: "Rot" },
+  { punkte: "72–100", note: "1,0–2,0 sehr gut", ampel: "Grün" },
+  { punkte: "68–71", note: "2,1–2,3 gut", ampel: "Grün" },
+  { punkte: "60–67", note: "2,4–3,0 gut", ampel: "Gelb" },
+  { punkte: "51–59", note: "3,1–4,0 befriedigend", ampel: "Gelb" },
+  { punkte: "33–50", note: "4,1–5,0 ausreichend", ampel: "Rot" },
+  { punkte: "0–32", note: "5,1–6,0 mangelhaft", ampel: "Rot" },
 ];
 
 const SOURCES = [
@@ -79,7 +79,7 @@ const SOURCES = [
 
 export default function MethodikPage() {
   return (
-    <PageShell crumb="Methodik" path="/methodik" title="Unsere Methodik" intro={`Jedes Alleinfutter durchläuft dieselbe Prüfung mit sechs Kriterien und maximal ${PUBLISHED_MAX_TOTAL} Punkten. Stand ${METHODOLOGY_STAND}. Hier steht, was wir prüfen, woher die Informationen stammen und wo die Grenzen eines Tests liegen.`}>
+    <PageShell crumb="Methodik" path="/methodik" title="Unsere Methodik" intro={`Jedes Alleinfutter durchläuft dieselbe Prüfung mit sechs Kriterien und maximal ${PUBLISHED_MAX_TOTAL} Punkten. Kriterien und Ampel: Stand ${METHODOLOGY_STAND}; Notenschlüssel: Stand 19.11.2026. Hier steht, was wir prüfen, woher die Informationen stammen und wo die Grenzen eines Tests liegen.`}>
       <nav aria-label="Inhalt dieser Seite" className="rounded-2xl border border-border bg-surface p-5 shadow-card">
         <p className="text-sm font-bold uppercase tracking-wide text-muted">Auf dieser Seite</p>
         <ol className="mt-3 grid gap-x-6 gap-y-1 sm:grid-cols-2">
@@ -117,8 +117,9 @@ export default function MethodikPage() {
             </tbody>
           </table>
         </div>
-        {METHODOLOGY_CHANGELOG.slice(0, -1).map((entry, index) => (
-          <p key={entry} className={`${index === 0 ? "mt-3" : "mt-2"} text-sm text-muted`}>{entry}</p>
+        <p className="mt-3 text-sm text-muted">{METHODOLOGY_CHANGELOG_NOTEN_V3}</p>
+        {METHODOLOGY_CHANGELOG.slice(0, -1).map((entry) => (
+          <p key={entry} className="mt-2 text-sm text-muted">{entry}</p>
         ))}
         <p className="mt-2 text-sm text-muted">Stand {METHODOLOGY_STAND}. {METHODOLOGY_CHANGELOG_ERGAENZUNG}</p>
         <p className="mt-2 text-sm text-muted">{METHODOLOGY_CHANGELOG_ABGRENZUNG}</p>
@@ -158,12 +159,12 @@ export default function MethodikPage() {
       <div className="prose-fp mt-12">
         <h2 id="gesamtnote">Gesamtnote, Ampel und Warnsignal</h2>
         <p>Die Punkte der sechs Kriterien werden zur Gesamtnote von maximal {PUBLISHED_MAX_TOTAL} Punkten addiert.</p>
-        <h3 id="ampel-version-2">Ampel und Note – Version 2, gültig seit 05.11.2026</h3>
+        <h3 id="ampel-version-2">Ampel und Note – Ampel Version 2 (seit 05.11.2026), Notenschlüssel seit 19.11.2026</h3>
         <p>Jedes Produkt erhält bis zu 100 Punkte. Daraus ergeben sich Ampel und Note:</p>
         <ul>
-          <li><strong className="text-good">Grün (ab {RATING_THRESHOLDS.gut} Punkten, Note 0,5–1,8):</strong> empfehlenswert</li>
-          <li><strong className="text-mid">Gelb ({RATING_THRESHOLDS.mittel}–{RATING_THRESHOLDS.gut - 1} Punkte, Note 1,9–3,5):</strong> mit Abstrichen</li>
-          <li><strong className="text-bad">Rot (bis {RATING_THRESHOLDS.mittel - 1} Punkte, Note 3,6–5,5):</strong> keine Empfehlung</li>
+          <li><strong className="text-good">Grün (ab {RATING_THRESHOLDS.gut} Punkten, Note 1,0–2,3):</strong> empfehlenswert</li>
+          <li><strong className="text-mid">Gelb ({RATING_THRESHOLDS.mittel}–{RATING_THRESHOLDS.gut - 1} Punkte, Note 2,4–4,0):</strong> mit Abstrichen</li>
+          <li><strong className="text-bad">Rot (bis {RATING_THRESHOLDS.mittel - 1} Punkte, Note 4,1–6,0):</strong> keine Empfehlung</li>
         </ul>
         <p>Grün heißt empfehlenswert. Unser Siegel ‚Empfohlen‘ vergeben wir zusätzlich erst ab {EMPFOHLEN_AB} Punkten.</p>
         <table>
@@ -172,7 +173,8 @@ export default function MethodikPage() {
             {NOTEN_TABELLE.map((z) => (<tr key={z.punkte}><td>{z.punkte}</td><td>{z.note}</td><td>{z.ampel}</td></tr>))}
           </tbody>
         </table>
-        <p>Feste Ankerpunkte: 100 Punkte = 0,5, 72 = 1,5, 60 = 2,5, 51 = 3,5, 34 = 4,5, 0 = 5,5. Dazwischen rechnen wir linear und runden kaufmännisch auf eine Nachkommastelle. Jede Ampelgrenze fällt auf eine Notengrenze: Grün ist immer mindestens „gut“, Rot immer „ausreichend“ oder „mangelhaft“. Die Gelb-Klemme für die Anzeige lautet 1,9–3,5; Grün 0,5–1,8; Rot 3,6–5,5.</p>
+        <p>Wir rechnen unsere Punkte in Zehntelschritten in Noten von 1,0 bis 6,0 um, damit sichtbar bleibt, ob ein Futter am oberen oder unteren Rand einer Stufe liegt. Die fünf Notenwörter von ‚sehr gut‘ bis ‚mangelhaft‘ gelten nach unserer eigenen Tabelle oben; sie sind nicht mit Schulnoten oder den Noten anderer Tests gleichzusetzen.</p>
+        <p>Feste Ankerpunkte: 100 Punkte = 1,0, 72 = 2,0, 60 = 3,0, 51 = 4,0, 34 = 5,0, 0 = 6,0. Dazwischen rechnen wir linear und runden kaufmännisch auf eine Nachkommastelle. Jede Ampelgrenze fällt auf eine Notengrenze: Grün ist immer mindestens „gut“, Rot immer „ausreichend“ oder „mangelhaft“. Die Gelb-Klemme für die Anzeige lautet 2,4–4,0; Grün 1,0–2,3; Rot 4,1–6,0.</p>
         <p>Unsere Noten beziehen sich nur auf unsere 100-Punkte-Skala: ‚sehr gut‘ heißt bei uns mindestens 72 von 100 Punkten, ‚gut‘ mindestens 60. Sie sind mit Noten anderer Tests nicht vergleichbar.</p>
         <p><strong>Obergrenzen:</strong></p>
         <ul>

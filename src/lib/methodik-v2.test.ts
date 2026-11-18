@@ -22,16 +22,16 @@ describe("Version 2: Schwellen, Siegel, Notenschlüssel C", () => {
   });
   it("Noten aus den Ankern 100/72/60/51/34/0, Ampelgrenzen fallen auf Notengrenzen", () => {
     expect(NOTEN_ANKER.map((a) => a.punkte)).toEqual([100, 72, 60, 51, 34, 0]);
-    const erwartet: Record<number, number> = { 100: 0.5, 80: 1.2, 78: 1.3, 76: 1.4, 72: 1.5, 71: 1.6, 68: 1.8, 67: 1.9, 60: 2.5, 59: 2.6, 51: 3.5, 50: 3.6, 34: 4.5, 0: 5.5 };
+    const erwartet: Record<number, number> = { 100: 1.0, 91: 1.3, 80: 1.7, 78: 1.8, 76: 1.9, 72: 2.0, 71: 2.1, 69: 2.3, 68: 2.3, 67: 2.4, 60: 3.0, 59: 3.1, 52: 3.9, 51: 4.0, 50: 4.1, 34: 5.0, 18: 5.5, 0: 6.0 };
     for (const [p, n] of Object.entries(erwartet)) expect(noteFuerPunkte(Number(p)), `${p} Punkte`).toBe(n);
-    for (let p = 68; p <= 100; p++) expect(noteFuerPunkte(p)).toBeLessThanOrEqual(1.8);
-    for (let p = 51; p <= 67; p++) { const n = noteFuerPunkte(p); expect(n).toBeGreaterThanOrEqual(1.9); expect(n).toBeLessThanOrEqual(3.5); }
-    for (let p = 0; p <= 50; p++) expect(noteFuerPunkte(p)).toBeGreaterThanOrEqual(3.6);
-    expect(notenwort(1.5)).toBe("sehr gut");
-    expect(notenwort(1.8)).toBe("gut");
-    expect(notenwort(2.6)).toBe("befriedigend");
-    expect(notenwort(3.6)).toBe("ausreichend");
-    expect(notenwort(4.6)).toBe("mangelhaft");
+    for (let p = 68; p <= 100; p++) expect(noteFuerPunkte(p)).toBeLessThanOrEqual(2.3);
+    for (let p = 51; p <= 67; p++) { const n = noteFuerPunkte(p); expect(n).toBeGreaterThanOrEqual(2.4); expect(n).toBeLessThanOrEqual(4.0); }
+    for (let p = 0; p <= 50; p++) expect(noteFuerPunkte(p)).toBeGreaterThanOrEqual(4.1);
+    expect(notenwort(2.0)).toBe("sehr gut");
+    expect(notenwort(2.3)).toBe("gut");
+    expect(notenwort(3.1)).toBe("befriedigend");
+    expect(notenwort(4.1)).toBe("ausreichend");
+    expect(notenwort(5.1)).toBe("mangelhaft");
   });
 });
 
