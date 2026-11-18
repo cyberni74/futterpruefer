@@ -79,7 +79,7 @@ const SOURCES = [
 
 export default function MethodikPage() {
   return (
-    <PageShell crumb="Methodik" path="/methodik" title="Unsere Methodik" intro={`Jedes Alleinfutter durchläuft dieselbe Prüfung mit sechs Kriterien und maximal ${PUBLISHED_MAX_TOTAL} Punkten. Stand ${METHODOLOGY_STAND}. Hier steht, was wir prüfen, woher die Informationen stammen und wo die Grenzen eines Tests liegen.`}>
+    <PageShell crumb="Methodik" path="/methodik" title="Unsere Methodik" intro={`Jedes Alleinfutter durchläuft dieselbe Prüfung mit sechs Kriterien und maximal ${PUBLISHED_MAX_TOTAL} Punkten. Kriterien und Ampel: Stand ${METHODOLOGY_STAND}; Notenschlüssel: Stand 19.11.2026. Hier steht, was wir prüfen, woher die Informationen stammen und wo die Grenzen eines Tests liegen.`}>
       <nav aria-label="Inhalt dieser Seite" className="rounded-2xl border border-border bg-surface p-5 shadow-card">
         <p className="text-sm font-bold uppercase tracking-wide text-muted">Auf dieser Seite</p>
         <ol className="mt-3 grid gap-x-6 gap-y-1 sm:grid-cols-2">
@@ -173,7 +173,7 @@ export default function MethodikPage() {
             {NOTEN_TABELLE.map((z) => (<tr key={z.punkte}><td>{z.punkte}</td><td>{z.note}</td><td>{z.ampel}</td></tr>))}
           </tbody>
         </table>
-        <p>Die fünf Notenstufen von „sehr gut“ bis „mangelhaft“ kennt man aus Schule und Verbrauchertests. Wir rechnen unsere Punkte in Zehntelschritten von 1,0 bis 6,0 um, damit sichtbar bleibt, ob ein Futter am oberen oder unteren Rand einer Stufe liegt.</p>
+        <p>Wir rechnen unsere Punkte in Zehntelschritten in Noten von 1,0 bis 6,0 um, damit sichtbar bleibt, ob ein Futter am oberen oder unteren Rand einer Stufe liegt. Die fünf Notenwörter von ‚sehr gut‘ bis ‚mangelhaft‘ gelten nach unserer eigenen Tabelle oben; sie sind nicht mit Schulnoten oder den Noten anderer Tests gleichzusetzen.</p>
         <p>Feste Ankerpunkte: 100 Punkte = 1,0, 72 = 2,0, 60 = 3,0, 51 = 4,0, 34 = 5,0, 0 = 6,0. Dazwischen rechnen wir linear und runden kaufmännisch auf eine Nachkommastelle. Jede Ampelgrenze fällt auf eine Notengrenze: Grün ist immer mindestens „gut“, Rot immer „ausreichend“ oder „mangelhaft“. Die Gelb-Klemme für die Anzeige lautet 2,4–4,0; Grün 1,0–2,3; Rot 4,1–6,0.</p>
         <p>Unsere Noten beziehen sich nur auf unsere 100-Punkte-Skala: ‚sehr gut‘ heißt bei uns mindestens 72 von 100 Punkten, ‚gut‘ mindestens 60. Sie sind mit Noten anderer Tests nicht vergleichbar.</p>
         <p><strong>Obergrenzen:</strong></p>

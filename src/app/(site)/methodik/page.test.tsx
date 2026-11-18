@@ -10,7 +10,9 @@ describe("Methodik Transparenz", () => {
   const html = renderToStaticMarkup(<MethodikPage />);
 
   it("zeigt die neue Gewichtung, den Stand und die Changelog-Zeile", () => {
-    expect(html).toContain("Stand 05.11.2026");
+    expect(html).toContain("Kriterien und Ampel: Stand 05.11.2026; Notenschlüssel: Stand 19.11.2026.");
+    expect(html).toContain("sie sind nicht mit Schulnoten oder den Noten anderer Tests gleichzusetzen.");
+    expect(html).not.toContain("kennt man aus Schule");
     expect(html).toContain("100 Punkte = 1,0, 72 = 2,0, 60 = 3,0, 51 = 4,0, 34 = 5,0, 0 = 6,0");
     expect(html).not.toContain("Note 0,5–1,8");
     expect(html).toContain(METHODOLOGY_CHANGELOG_ERGAENZUNG);
