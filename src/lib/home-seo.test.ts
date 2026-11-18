@@ -36,11 +36,15 @@ describe("Startseiten-Text", () => {
     expect(HOME_DESCRIPTION).toBe(
       "Hundefutter und Katzenfutter im Test: Rohstoffe, bedenkliche Zusatzstoffe, Nährstoffe und Deklaration nach 100-Punkte-Schema bewertet – transparent erklärt.",
     );
-    expect(HOME_FAQ[2].a).toContain("für die tägliche Ration ausreicht");
-    expect(HOME_FAQ[3].q).toBe("Werden Trockenfutter und Nassfutter getestet?");
-    expect(HOME_FAQ[3].a).toContain("innerhalb einer Kategorie");
-    expect(HOME_FAQ[4].a).toContain("im Onlineshop");
-    expect(HOME_FAQ[4].a).toContain("die wir für irreführend halten oder die nicht ausreichend belegt sind");
+    expect(HOME_FAQ[0].q).toBe("Welches Hundefutter ist das beste?");
+    expect(HOME_FAQ[0].a).toBe("Das eine beste Hundefutter gibt es nicht – das hängt auch von Alter, Größe, Aktivität und Verträglichkeit des Hundes ab. Nach unserem rezepturbasierten Bewertungsschema liegt in seiner Kategorie vorn, welches Alleinfutter die höchste Punktzahl erreicht – nicht welches Versprechen am lautesten klingt. Wir bewerten nach 100 Punkten und sechs offengelegten Kriterien. Die Ampel zeigt Grün, Gelb oder Rot; empfehlenswert ist nur Grün. Welche Produkte in der Übersicht vorn liegen, steht in den Hundefutter-Tests. Wie die Punkte zustande kommen, erklärt die Methodik.");
+    expect(HOME_FAQ[1].q).toBe("Nassfutter oder Trockenfutter?");
+    expect(HOME_FAQ[1].a).toContain("in der Trockenmasse");
+    expect(HOME_FAQ[4].a).toContain("für die tägliche Ration ausreicht");
+    expect(HOME_FAQ[5].q).toBe("Werden Trockenfutter und Nassfutter getestet?");
+    expect(HOME_FAQ[5].a).toContain("innerhalb einer Kategorie");
+    expect(HOME_FAQ[6].a).toContain("im Onlineshop");
+    expect(HOME_FAQ[6].a).toContain("die wir für irreführend halten oder die nicht ausreichend belegt sind");
     expect(HOME_FAQ.map((f) => f.q + f.a).join(" ")).not.toMatch(/zuläss/i);
   });
 
@@ -58,17 +62,17 @@ describe("Startseiten-Text", () => {
     }
     const harmful = PUBLISHED_CRITERIA.find((c) => c.key === "scoreHarmful")!;
     expect(intro).toContain(`${harmful.label} (${harmful.max}; bewertet anhand der deklarierten Zutaten und Zusatzstoffe)`);
-    expect(HOME_FAQ[1].a).toContain(`Ab ${RATING_THRESHOLDS.gut} Punkten`);
-    expect(HOME_FAQ[1].a).toContain(`von ${RATING_THRESHOLDS.mittel} bis ${RATING_THRESHOLDS.gut - 1} Punkten`);
-    expect(HOME_FAQ[1].a).toContain(`bis ${RATING_THRESHOLDS.mittel - 1} Punkte rot (keine Empfehlung)`);
-    expect(HOME_FAQ[1].a).not.toContain("nicht empfehlenswert");
+    expect(HOME_FAQ[3].a).toContain(`Ab ${RATING_THRESHOLDS.gut} Punkten`);
+    expect(HOME_FAQ[3].a).toContain(`von ${RATING_THRESHOLDS.mittel} bis ${RATING_THRESHOLDS.gut - 1} Punkten`);
+    expect(HOME_FAQ[3].a).toContain(`bis ${RATING_THRESHOLDS.mittel - 1} Punkte rot (keine Empfehlung)`);
+    expect(HOME_FAQ[3].a).not.toContain("nicht empfehlenswert");
     expect(RATING_LABEL.schlecht).toBe("Rot – keine Empfehlung");
     const storedHarmful = CRITERIA.find((c) => c.key === "scoreHarmful")!;
     expect(storedHarmful.max * HARMFUL_FAIL_RATIO).toBe(10);
-    expect(HOME_FAQ[1].a).toContain("weniger als die Hälfte");
+    expect(HOME_FAQ[3].a).toContain("weniger als die Hälfte");
 
     const declaration = CRITERIA.find((c) => c.key === "scoreDeclaration")!;
-    expect(HOME_FAQ[4].a).toContain(`„${declaration.label}“`);
+    expect(HOME_FAQ[6].a).toContain(`„${declaration.label}“`);
     const methodik = readFileSync(path.join(process.cwd(), "src/app/(site)/methodik/page.tsx"), "utf8");
     expect(methodik).toContain("Abzügen bei „Deklaration &amp; Transparenz“");
     expect(suggestedDeclarationDeduction([{ claim: "heilt", rating: "UNZULAESSIG", reason: "Heilaussage", legal: "Art. 13", imageUrl: "" }])).toBe(3);
@@ -128,16 +132,22 @@ describe("JSON-LD", () => {
 });
 
 describe("Fachblog-Links", () => {
-  const published = [
+  const publishedGuides = [
     "/blog/futterdeklaration-richtig-lesen",
     "/blog/alleinfuttermittel-ergaenzungsfuttermittel",
     "/blog/getreidefreies-hundefutter-sinnvoll",
     "/blog/taurin-katze",
     "/blog/zucker-im-hundefutter-katzenfutter",
   ];
+  const publishedBlog = [
+    ...publishedGuides,
+    "/blog/bestes-hundefutter-zusammensetzung",
+    "/blog/trockenmasse-berechnen-nass-trockenfutter",
+    "/blog/nassfutter-oder-trockenfutter-katze",
+  ];
 
-  it("verlinkt nur die fünf veröffentlichten Artikel und lässt den Wortlaut gleich", () => {
-    expect(HOME_GUIDES.map((guide) => guide.href)).toEqual(published);
+  it("verlinkt nur veröffentlichte Artikel und lässt den Wortlaut der fünf Fachblog-Karten gleich", () => {
+    expect(HOME_GUIDES.map((guide) => guide.href)).toEqual(publishedGuides);
     const hrefs = [
       ...INTRO.flatMap((paragraph) => paragraph.map((part) => part.href)),
       ...HOME_FAQ.flatMap((item) => [...item.links.map(([, href]) => href), ...(item.anchors ?? []).map((anchor) => anchor.href)]),
@@ -145,7 +155,7 @@ describe("Fachblog-Links", () => {
     ].filter(Boolean);
     for (const href of hrefs) {
       expect(href).not.toMatch(/^\/team/);
-      if (String(href).startsWith("/blog/") && href !== "/blog") expect(published).toContain(href);
+      if (String(href).startsWith("/blog/") && href !== "/blog") expect(publishedBlog).toContain(href);
     }
     const deklaration = INTRO[1].find((part) => part.text === "offene Deklaration");
     const getreide = INTRO[1].find((part) => part.text === "getreidefrei");
@@ -157,12 +167,28 @@ describe("Fachblog-Links", () => {
   });
 
   it("setzt FAQ-Anker nur um bestehende Wörter und behält den Antworttext", () => {
-    const faq = HOME_FAQ[2];
+    const faq = HOME_FAQ[4];
     const parts = linkedAnswer(faq.a, faq.anchors);
     expect(parts.map((part) => part.text).join("")).toBe(faq.a);
     expect(parts.filter((part) => part.href).map((part) => part.text)).toEqual(["Alleinfuttermittel", "Ergänzungsfuttermittel"]);
     expect(new Set(parts.map((part) => part.href).filter(Boolean))).toEqual(new Set(["/blog/alleinfuttermittel-ergaenzungsfuttermittel"]));
     expect(linkedAnswer("ohne Anker").map((part) => part.text).join("")).toBe("ohne Anker");
+  });
+
+  it("setzt die Anker der neuen Startseiten-FAQ und behält den Antworttext 1:1", () => {
+    const best = HOME_FAQ[0];
+    const bestParts = linkedAnswer(best.a, best.anchors);
+    expect(bestParts.map((part) => part.text).join("")).toBe(best.a);
+    expect(bestParts.filter((part) => part.href).map((part) => ({ text: part.text, href: part.href }))).toEqual([
+      { text: "Hundefutter-Tests", href: "/alleinfuttermittel-hund" },
+      { text: "Methodik", href: "/methodik" },
+    ]);
+    const wet = HOME_FAQ[1];
+    const wetParts = linkedAnswer(wet.a, wet.anchors);
+    expect(wetParts.map((part) => part.text).join("")).toBe(wet.a);
+    expect(wetParts.filter((part) => part.href).map((part) => ({ text: part.text, href: part.href }))).toEqual([
+      { text: "Trockenmasse", href: "/blog/trockenmasse-berechnen-nass-trockenfutter" },
+    ]);
   });
 });
 
