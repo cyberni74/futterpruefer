@@ -85,4 +85,18 @@ describe("BODY_JSON_LD_SLUGS", () => {
     expect(faqBlock).toContain('"bionic-nature-medidog-medipet-medicat"');
     expect(BODY_JSON_LD_SLUGS.has("bionic-nature-medidog-medipet-medicat")).toBe(false);
   });
+
+  it("gibt FAQ aus dem Beitragskörper für die vier Rasse-Ratgeber aus", () => {
+    const page = readFileSync(new URL("../app/(site)/blog/[slug]/page.tsx", import.meta.url), "utf8");
+    const faqBlock = page.slice(page.indexOf("const BODY_FAQ_SLUGS"), page.indexOf("export async function generateStaticParams"));
+    for (const slug of [
+      "futter-franzoesische-bulldogge",
+      "futter-chihuahua",
+      "futter-labrador",
+      "hundefutter-grosse-rassen",
+    ]) {
+      expect(faqBlock).toContain(`"${slug}"`);
+      expect(BODY_JSON_LD_SLUGS.has(slug)).toBe(false);
+    }
+  });
 });

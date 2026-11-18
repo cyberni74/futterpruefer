@@ -63,6 +63,10 @@ const BODY_FAQ_SLUGS = new Set([
   "hundeleckerli-selber-machen",
   "mammaly-firma-werbeaussagen",
   "bionic-nature-medidog-medipet-medicat",
+  "futter-franzoesische-bulldogge",
+  "futter-chihuahua",
+  "futter-labrador",
+  "hundefutter-grosse-rassen",
 ]);
 
 export async function generateStaticParams() {

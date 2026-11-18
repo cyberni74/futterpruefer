@@ -105,6 +105,22 @@ export function introPlain(parts: readonly (readonly TextPart[])[] = INTRO): str
 /** Veröffentlicht und live mit 200 geprüft. Keine weiteren Blog-Slugs hier hinterlegen. */
 export const HOME_GUIDES = [
   {
+    href: "/blog/futter-franzoesische-bulldogge",
+    title: "Futter für die Französische Bulldogge: Worauf es in der Deklaration ankommt",
+  },
+  {
+    href: "/blog/futter-chihuahua",
+    title: "Futter für den Chihuahua: Kleine Rasse, gleiche Regeln auf dem Etikett",
+  },
+  {
+    href: "/blog/futter-labrador",
+    title: "Futter für den Labrador: Adult und Welpen nach dem 100-Punkte-Schema",
+  },
+  {
+    href: "/blog/hundefutter-grosse-rassen",
+    title: "Hundefutter für große Rassen: Was die Deklaration zur Größe sagt",
+  },
+  {
     href: "/blog/futterdeklaration-richtig-lesen",
     title: "Futterdeklaration richtig lesen: So verstehen Sie das Etikett von Hunde- und Katzenfutter",
   },

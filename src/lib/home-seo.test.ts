@@ -133,6 +133,10 @@ describe("JSON-LD", () => {
 
 describe("Fachblog-Links", () => {
   const publishedGuides = [
+    "/blog/futter-franzoesische-bulldogge",
+    "/blog/futter-chihuahua",
+    "/blog/futter-labrador",
+    "/blog/hundefutter-grosse-rassen",
     "/blog/futterdeklaration-richtig-lesen",
     "/blog/alleinfuttermittel-ergaenzungsfuttermittel",
     "/blog/getreidefreies-hundefutter-sinnvoll",
@@ -146,8 +150,15 @@ describe("Fachblog-Links", () => {
     "/blog/nassfutter-oder-trockenfutter-katze",
   ];
 
-  it("verlinkt nur veröffentlichte Artikel und lässt den Wortlaut der fünf Fachblog-Karten gleich", () => {
+  it("verlinkt nur veröffentlichte Artikel und lässt den Wortlaut der fünf bisherigen Fachblog-Karten gleich", () => {
     expect(HOME_GUIDES.map((guide) => guide.href)).toEqual(publishedGuides);
+    expect(HOME_GUIDES.slice(4).map((guide) => guide.title)).toEqual([
+      "Futterdeklaration richtig lesen: So verstehen Sie das Etikett von Hunde- und Katzenfutter",
+      "Alleinfuttermittel oder Ergänzungsfuttermittel? Der Unterschied einfach erklärt",
+      "Getreidefreies Hundefutter: Sinnvoll oder nur Marketing?",
+      "Taurin bei Katzen: Warum es lebenswichtig ist und was im Futter stehen sollte",
+      "Zucker im Hunde- und Katzenfutter: So erkennen Sie ihn in der Deklaration",
+    ]);
     const hrefs = [
       ...INTRO.flatMap((paragraph) => paragraph.map((part) => part.href)),
       ...HOME_FAQ.flatMap((item) => [...item.links.map(([, href]) => href), ...(item.anchors ?? []).map((anchor) => anchor.href)]),
