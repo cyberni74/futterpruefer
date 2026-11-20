@@ -65,7 +65,7 @@ export const FEATURED_COMPARISONS: FeaturedComparison[] = [
     imageAltFallback: "Pokal Testsieger Veganes Hundefutter im Test, Oktober 2026: VEGDOG Green Crunch, 59 von 100 Punkten, Gelb",
   },
   {
-    slug: "gelenk-test-hund-oktober-2026",
+    slug: "gelenktabletten-hund-vergleich",
     testName: "Der große Gelenk-Test Oktober 2026",
     month: 10,
     year: 2026,

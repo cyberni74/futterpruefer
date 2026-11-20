@@ -27,6 +27,9 @@ import { extractFaq } from "@/lib/faq-extract";
 import { faqPageJsonLd } from "@/lib/faq-schema";
 import { splitHeroCaption } from "@/lib/hero-caption";
 import { sanitize } from "@/lib/sanitize";
+import { blogPath, blogSlugLookupKeys, canonicalBlogSlug } from "@/lib/blog-slug-aliases";
+import { ComparisonTable } from "@/components/comparison-table";
+import { comparisonIdForBlogSlug, publishedComparisonRows, splitFirstVtTable } from "@/lib/comparison-table";
 
 export const revalidate = 3600;
 
@@ -72,7 +75,11 @@ const BODY_FAQ_SLUGS = new Set([
 export async function generateStaticParams() {
   try {
     const rows = await prisma.blogPost.findMany({ where: publishedWhere(), select: { slug: true }, take: 500 });
-    return rows.map((r) => ({ slug: r.slug }));
+    const slugs = new Set<string>();
+    for (const row of rows) {
+      for (const slug of blogSlugLookupKeys(row.slug)) slugs.add(slug);
+    }
+    return [...slugs].map((slug) => ({ slug }));
   } catch {
     return [];
   }
@@ -82,6 +89,8 @@ export async function generateMetadata({ params }: PageProps<"/blog/[slug]">): P
   const { slug } = await params;
   const p = await getPostBySlug(slug);
   if (!p) return {};
+  const canonical = blogPath(p.slug);
+  if (slug !== canonicalBlogSlug(p.slug)) permanentRedirect(canonical);
   const title = p.metaTitle || p.title;
   const description = trimMetaDescription(p.metaDescription || p.excerpt);
   const imageAlt = p.imageAlt.trim() || `Titelbild: ${p.title}`;
@@ -90,8 +99,8 @@ export async function generateMetadata({ params }: PageProps<"/blog/[slug]">): P
     title: { absolute: seoTitle(title) },
     description,
     keywords: p.keywords,
-    alternates: { canonical: `/blog/${p.slug}` },
-    openGraph: { type: "article", title, description, url: `/blog/${p.slug}`, publishedTime: p.publishedAt?.toISOString(), modifiedTime: p.updatedAt.toISOString(), authors: [resolveAuthor(p.authorSlug).name], images },
+    alternates: { canonical },
+    openGraph: { type: "article", title, description, url: canonical, publishedTime: p.publishedAt?.toISOString(), modifiedTime: p.updatedAt.toISOString(), authors: [resolveAuthor(p.authorSlug).name], images },
     twitter: { card: "summary_large_image", title, description, images },
   };
 }
@@ -100,10 +109,12 @@ export default async function PostPage({ params }: PageProps<"/blog/[slug]">) {
   const { slug } = await params;
   const p = await getPostBySlug(slug);
   if (!p) {
-    const r = await findRedirect(`/blog/${slug}`);
+    const r = await findRedirect(`/blog/${slug}`) ?? await findRedirect(`/blog/${canonicalBlogSlug(slug)}`);
     if (r) permanentRedirect(r.toPath);
     notFound();
   }
+  const canonical = blogPath(p.slug);
+  if (slug !== canonicalBlogSlug(p.slug)) permanentRedirect(canonical);
   const kw = p.keywords.filter(Boolean);
   const hero = splitHeroCaption(p.bodyHtml);
   const heroCaption = hero.caption ? sanitize(hero.caption) : null;
@@ -121,10 +132,16 @@ export default async function PostPage({ params }: PageProps<"/blog/[slug]">) {
   const picked = [...related.filter((x) => x.id !== neighbor?.id).slice(0, neighbor ? 2 : 3), ...(neighbor ? [neighbor] : [])];
   const fill = picked.length < 3 ? await prisma.blogPost.findMany({ where: { ...publishedWhere(), id: { notIn: [p.id, ...picked.map((x) => x.id)] } }, orderBy: { publishedAt: "desc" }, take: 3 - picked.length, select: blogCardSelect }) : [];
   const more = [...picked, ...fill];
-  const url = absoluteUrl(`/blog/${p.slug}`);
+  const url = absoluteUrl(canonical);
   const extraLd = bodyJsonLd(p.slug, p.bodyHtml);
-  const faqLd = BODY_FAQ_SLUGS.has(p.slug) ? faqPageJsonLd(extractFaq(p.bodyHtml)) : null;
+  // Lookup über Aliase, damit evergreen/Monats-Slugs dieselbe FAQ-Logik treffen.
+  // Gelenk- und Lachsöl-Vergleiche stehen bewusst nicht in dieser Liste: ihr FAQPage kommt aus bodyJsonLd.
+  const faqLd = blogSlugLookupKeys(p.slug).some((key) => BODY_FAQ_SLUGS.has(key))
+    ? faqPageJsonLd(extractFaq(p.bodyHtml))
+    : null;
   const vergleiche = comparisonsForPost(p.slug);
+  const comparisonId = comparisonIdForBlogSlug(p.slug);
+  const comparisonParts = comparisonId ? splitFirstVtTable(body) : null;
   return (
     <article className="mx-auto max-w-3xl px-4">
       <JsonLd
@@ -144,7 +161,7 @@ export default async function PostPage({ params }: PageProps<"/blog/[slug]">) {
       />
       {extraLd && <JsonLd data={extraLd} />}
       {faqLd && <JsonLd data={faqLd} />}
-      <Breadcrumbs items={[{ label: "Fachblog", href: "/blog" }, { label: p.title, href: `/blog/${p.slug}` }]} />
+      <Breadcrumbs items={[{ label: "Fachblog", href: "/blog" }, { label: p.title, href: canonical }]} />
       <header className="mt-4">
         <h1 className="text-3xl font-extrabold leading-tight md:text-5xl">{p.title}</h1>
         <p className="mt-3 text-sm text-muted">
@@ -171,7 +188,19 @@ export default async function PostPage({ params }: PageProps<"/blog/[slug]">) {
       </div>
       <div id="artikel" className="prose-fp mt-8">
         {p.excerpt && <p className="text-lg font-medium md:text-xl">{p.excerpt}</p>}
-        <div dangerouslySetInnerHTML={{ __html: body }} />
+        {comparisonId && comparisonParts ? (
+          <>
+            <div dangerouslySetInnerHTML={{ __html: comparisonParts.before }} />
+            <ComparisonTable
+              showPlace
+              rows={publishedComparisonRows(comparisonId)}
+              caption="Ergebnisse auf einen Blick: Punkte, Ampel, Note, belegte Dosis und Preis pro Tag"
+            />
+            <div dangerouslySetInnerHTML={{ __html: comparisonParts.after }} />
+          </>
+        ) : (
+          <div dangerouslySetInnerHTML={{ __html: body }} />
+        )}
       </div>
       <BodyGauges />
       {vergleiche.length === 1 && (

@@ -5,6 +5,7 @@ import { prisma } from "@/lib/db";
 import type { Prisma } from "@/generated/prisma/client";
 import { buildMonthlyWinners, currentPom } from "@/lib/pom";
 import { FEATURED_COMPARISONS } from "@/lib/featured-comparison";
+import { blogPath, blogSlugLookupKeys, databaseBlogSlug } from "@/lib/blog-slug-aliases";
 
 export const publishedWhere = () => ({ status: "PUBLISHED" as const, publishedAt: { lte: new Date() } });
 
@@ -76,6 +77,29 @@ export function getCategory(slug: string) {
   return prisma.category.findUnique({ where: { slug } });
 }
 
+/** Veröffentlichte Ergänzungsfutter-Tests Hund, für die Zweck-Tabellen auf dem Kategoriehub. */
+export async function getErgaenzungsfutterHundReviews() {
+  return prisma.review.findMany({
+    where: { ...publishedWhere(), category: { slug: "ergaenzungsfuttermittel-hund" } },
+    orderBy: [{ totalScore: "desc" }, { slug: "asc" }],
+    select: {
+      slug: true,
+      title: true,
+      brand: true,
+      productName: true,
+      keyword: true,
+      totalScore: true,
+      methodikVersion: true,
+      pricePerDay: true,
+      efPreisTagesdosisEur: true,
+      bodyHtml: true,
+      layoutData: true,
+      category: { select: { slug: true } },
+      wirkstoffe: { select: { name: true, mengeMgProTagesdosis: true }, orderBy: { sortOrder: "asc" } },
+    },
+  });
+}
+
 /** Nur Vercel-Preview. Produktion und lokale Läufe ohne VERCEL_ENV bleiben bei veröffentlichten Tests. */
 export function previewDraftsEnabled(): boolean {
   return process.env.VERCEL_ENV === "preview";
@@ -93,7 +117,7 @@ export function getReviewBySlug(slug: string, options?: { includeDrafts?: boolea
 }
 
 export function getPostBySlug(slug: string) {
-  return prisma.blogPost.findFirst({ where: { slug, ...publishedWhere() } });
+  return prisma.blogPost.findFirst({ where: { slug: { in: blogSlugLookupKeys(slug) }, ...publishedWhere() } });
 }
 
 /** Produkte des Monats (Testsieger je Monat, manuelle Einträge überschreiben), neueste zuerst. */
@@ -112,13 +136,14 @@ export async function getProductOfMonth() {
 /** Alle Startseiten-Kästen „Testsieger“ in der Reihenfolge von FEATURED_COMPARISONS (neuester zuerst). */
 export async function getFeaturedComparisons() {
   if (FEATURED_COMPARISONS.length === 0) return [];
+  const lookup = FEATURED_COMPARISONS.flatMap((c) => blogSlugLookupKeys(c.slug));
   const posts = await prisma.blogPost.findMany({
-    where: { slug: { in: FEATURED_COMPARISONS.map((c) => c.slug) }, ...publishedWhere() },
+    where: { slug: { in: lookup }, ...publishedWhere() },
     select: { slug: true, imageUrl: true, imageAlt: true, imageBlur: true },
   });
   const bySlug = new Map(posts.map((p) => [p.slug, p]));
   return FEATURED_COMPARISONS.flatMap((c) => {
-    const post = bySlug.get(c.slug);
+    const post = bySlug.get(c.slug) ?? bySlug.get(databaseBlogSlug(c.slug));
     return post ? [{ ...c, post }] : [];
   });
 }
@@ -139,7 +164,7 @@ export async function getTickerEntries(): Promise<TickerEntry[]> {
   return [
     ...manual.map((m) => ({ id: m.id, text: m.text, href: m.href, isWarning: m.isWarning })),
     ...reviews.map((r) => ({ id: r.id, text: `Neuer Test: ${r.title} – ${r.totalScore}/100 Punkte`, href: `/${r.category.slug}/${r.slug}`, isWarning: false })),
-    ...posts.map((p) => ({ id: p.id, text: `Fachblog: ${p.title}`, href: `/blog/${p.slug}`, isWarning: false })),
+    ...posts.map((p) => ({ id: p.id, text: `Fachblog: ${p.title}`, href: blogPath(p.slug), isWarning: false })),
   ];
 }
 

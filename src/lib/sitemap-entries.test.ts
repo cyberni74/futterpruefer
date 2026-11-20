@@ -54,6 +54,25 @@ describe("sitemapEntries", () => {
     expect(new Set(paths).size).toBe(paths.length);
   });
 
+  it("setzt Monats-URLs der Gelenk- und Lachsöl-Vergleiche auf die evergreen Canonicals", () => {
+    const paths = sitemapEntries({
+      categories: [],
+      reviews: [],
+      posts: [
+        { slug: "gelenk-test-hund-oktober-2026", updatedAt: at("2026-10-23T10:00:00.000Z") },
+        { slug: "lachsoel-test-hund-oktober-2026", updatedAt: at("2026-10-23T10:00:00.000Z") },
+        { slug: "kotfresser-drops-test", updatedAt: at("2026-11-14T10:00:00.000Z") },
+      ],
+      lexikon: [],
+      glossary: [],
+    }).map((e) => e.path);
+    expect(paths).toContain("/blog/gelenktabletten-hund-vergleich");
+    expect(paths).toContain("/blog/lachsoel-hund-vergleich");
+    expect(paths).toContain("/blog/kotfresser-drops-test");
+    expect(paths).not.toContain("/blog/gelenk-test-hund-oktober-2026");
+    expect(paths).not.toContain("/blog/lachsoel-test-hund-oktober-2026");
+  });
+
   it("ohne Datenbank bleiben die statischen Seiten inklusive Futterrechner erhalten", () => {
     const paths = sitemapEntries({ categories: [], reviews: [], posts: [], lexikon: [], glossary: [] }).map((e) => e.path);
     expect(paths).toEqual(expect.arrayContaining(["/futterrechner", "/futterrechner/hund", "/futterrechner/katze"]));

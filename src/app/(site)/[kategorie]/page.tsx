@@ -1,14 +1,19 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Breadcrumbs } from "@/components/breadcrumbs";
+import { ErgaenzungsfutterHub } from "@/components/ergaenzungsfutter-hub";
 import { ReviewListing } from "@/components/review-listing";
 import { parseFilters } from "@/lib/filters";
 import Link from "next/link";
 import { FpImage } from "@/components/fp-image";
 import { prisma } from "@/lib/db";
-import { blogCardSelect, getCategories, getCategory, publishedWhere } from "@/lib/queries";
+import { blogCardSelect, getCategories, getCategory, getErgaenzungsfutterHundReviews, publishedWhere } from "@/lib/queries";
+import { purposeForReview, reviewToComparisonRow, type HubPurposeId } from "@/lib/comparison-table";
+import { EF_HUB_DESCRIPTION, EF_HUB_TITLE } from "@/lib/ergaenzungsfutter-hub";
 import { trimMetaDescription } from "@/lib/seo";
 import { DEFAULT_OG_IMAGE, SITE, pageAlternates } from "@/lib/site";
+
+const EF_HUND = "ergaenzungsfuttermittel-hund";
 
 export async function generateStaticParams() {
   try {
@@ -21,8 +26,9 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: PageProps<"/[kategorie]">): Promise<Metadata> {
   const cat = await getCategory((await params).kategorie);
   if (!cat) return {};
-  const title = `${cat.name} im Test`;
-  const description = trimMetaDescription(cat.description);
+  const isEfHund = cat.slug === EF_HUND;
+  const title = isEfHund ? EF_HUB_TITLE : `${cat.name} im Test`;
+  const description = isEfHund ? EF_HUB_DESCRIPTION : trimMetaDescription(cat.description);
   return {
     title,
     description,
@@ -55,10 +61,31 @@ async function getFeaturedPost(categorySlug: string) {
   }
 }
 
+async function efHubGroups() {
+  const reviews = await getErgaenzungsfutterHundReviews();
+  const groups: Partial<Record<HubPurposeId, ReturnType<typeof reviewToComparisonRow>[]>> = {};
+  for (const review of reviews) {
+    const purpose = purposeForReview(review);
+    const row = reviewToComparisonRow(review);
+    (groups[purpose] ??= []).push(row);
+  }
+  return groups;
+}
+
 export default async function CategoryPage({ params, searchParams }: PageProps<"/[kategorie]">) {
   const [{ kategorie }, sp] = await Promise.all([params, searchParams]);
   const cat = await getCategory(kategorie);
   if (!cat) notFound();
+  const listing = <ReviewListing basePath={`/${cat.slug}`} filters={parseFilters(sp)} categoryId={cat.id} />;
+  if (cat.slug === EF_HUND) {
+    const groups = await efHubGroups();
+    return (
+      <div className="mx-auto max-w-6xl px-4">
+        <Breadcrumbs items={[{ label: "Tests", href: "/tests" }, { label: cat.name, href: `/${cat.slug}` }]} />
+        <ErgaenzungsfutterHub groups={groups} listing={listing} />
+      </div>
+    );
+  }
   const featured = await getFeaturedPost(cat.slug);
   return (
     <div className="mx-auto max-w-6xl px-4">
@@ -76,7 +103,7 @@ export default async function CategoryPage({ params, searchParams }: PageProps<"
           </span>
         </Link>
       )}
-      <ReviewListing basePath={`/${cat.slug}`} filters={parseFilters(sp)} categoryId={cat.id} />
+      {listing}
     </div>
   );
 }

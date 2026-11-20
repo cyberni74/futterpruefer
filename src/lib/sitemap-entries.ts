@@ -1,3 +1,5 @@
+import { canonicalBlogSlug } from "@/lib/blog-slug-aliases";
+
 export type SitemapRecord = { slug: string; updatedAt: Date; categorySlug?: string; count?: number };
 
 /**
@@ -119,8 +121,12 @@ export function sitemapEntries(input: {
   for (const review of input.reviews) {
     entries.push({ path: `/${review.categorySlug}/${review.slug}`, lastModified: withTemplate(review.updatedAt), priority: 0.9 });
   }
+  const seenBlog = new Set<string>();
   for (const post of input.posts) {
-    entries.push({ path: `/blog/${post.slug}`, lastModified: post.updatedAt, priority: 0.7 });
+    const path = `/blog/${canonicalBlogSlug(post.slug)}`;
+    if (seenBlog.has(path)) continue;
+    seenBlog.add(path);
+    entries.push({ path, lastModified: post.updatedAt, priority: 0.7 });
   }
   for (const brand of input.brands ?? []) {
     if (!includeBrandInSitemap(brand.count ?? 2)) continue;
