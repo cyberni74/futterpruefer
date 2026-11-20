@@ -119,5 +119,6 @@ describe("ComparisonTable", () => {
     const css = readFileSync(join(process.cwd(), "src/styles/vergleichstest.css"), "utf8");
     expect(css).toMatch(/table\.vt-table-cmp\.vt-table-cmp > caption \{ display: block;/);
     expect(css).toMatch(/table\.vt-table-cmp\.vt-table-cmp > thead \{ display: none;/);
+    expect(css).toContain(".prose-fp .vt-table-box:not(:has(*)) { display: none; }");
   });
 });
