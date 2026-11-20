@@ -138,9 +138,9 @@ describe("review-seo", () => {
     expect(priceSourceFromArticle(null)).toBeNull();
   });
   it("ordnet Vergleichstests zu", () => {
-    expect(comparisonForReview({ title: "Premium Lachsöl", categorySlug: "ergaenzungsfuttermittel-hund" })?.slug).toBe("lachsoel-test-hund-oktober-2026");
+    expect(comparisonForReview({ title: "Premium Lachsöl", categorySlug: "ergaenzungsfuttermittel-hund" })?.slug).toBe("lachsoel-hund-vergleich");
     expect(comparisonForReview({ title: "AniForte Algenöl", categorySlug: "ergaenzungsfuttermittel-hund" })?.slug).toBe("algenoel-test-hund-oktober-2026");
-    expect(comparisonForReview({ title: "Gelenk-Pulver", categorySlug: "ergaenzungsfuttermittel-hund" })?.slug).toBe("gelenk-test-hund-oktober-2026");
+    expect(comparisonForReview({ title: "Gelenk-Pulver", categorySlug: "ergaenzungsfuttermittel-hund" })?.slug).toBe("gelenktabletten-hund-vergleich");
     expect(comparisonForReview({ title: "Rinti Kennerfleisch Rind", categorySlug: "alleinfuttermittel-hund" })?.slug).toBe("nassfutter-test-rind-hund-oktober-2026");
     expect(comparisonForReview({ title: "Lachsöl", categorySlug: "ergaenzungsfuttermittel-katze" })).toBeNull();
     expect(comparisonForReview({ title: "Royal Canin Indoor 27", categorySlug: "alleinfuttermittel-katze" })).toBeNull();
@@ -150,7 +150,7 @@ describe("review-seo", () => {
     expect(isInComparison(katze, "mjamjam-purer-fleischgenuss-delikates-kaenguru-pur-test")).toBe(true);
     expect(isInComparison(katze, "leonardo-finest-selection-rind-pur-test")).toBe(true);
     expect(isInComparison(katze, "anderes-nassfutter")).toBe(false);
-    expect(comparisonForPost("lachsoel-hunde")?.slug).toBe("lachsoel-test-hund-oktober-2026");
+    expect(comparisonForPost("lachsoel-hunde")?.slug).toBe("lachsoel-hund-vergleich");
     expect(comparisonsForPost("monoprotein-futter").map((c) => c.slug)).toEqual([
       "monoprotein-katzenfutter-test-2026",
       "nassfutter-test-rind-hund-oktober-2026",
