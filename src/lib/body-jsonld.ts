@@ -1,4 +1,5 @@
 import { normalizeStoredJsonLd } from "@/lib/review-schema";
+import { blogSlugLookupKeys } from "@/lib/blog-slug-aliases";
 
 /**
  * Vergleichstests liegen als BlogPost vor. Ihr JSON-LD (FAQPage, ItemList) steht im bodyHtml,
@@ -8,7 +9,9 @@ import { normalizeStoredJsonLd } from "@/lib/review-schema";
 export const BODY_JSON_LD_SLUGS = new Set([
   "nassfutter-test-rind-hund-oktober-2026",
   "gelenk-test-hund-oktober-2026",
+  "gelenktabletten-hund-vergleich",
   "lachsoel-test-hund-oktober-2026",
+  "lachsoel-hund-vergleich",
   "algenoel-test-hund-oktober-2026",
   "veganes-hundefutter-test-oktober-2026",
   "veganes-katzenfutter-test-oktober-2026",
@@ -17,7 +20,7 @@ export const BODY_JSON_LD_SLUGS = new Set([
 ]);
 
 export function bodyJsonLd(slug: string, html: string | null | undefined): Record<string, unknown> | null {
-  if (!html || !BODY_JSON_LD_SLUGS.has(slug)) return null;
+  if (!html || !blogSlugLookupKeys(slug).some((key) => BODY_JSON_LD_SLUGS.has(key))) return null;
   const nodes: Record<string, unknown>[] = [];
   for (const m of html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)) {
     try {

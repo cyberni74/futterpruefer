@@ -16,8 +16,8 @@ const C = {
       "leonardo-finest-selection-rind-pur-test",
     ],
   },
-  gelenk: { slug: "gelenk-test-hund-oktober-2026", title: "Gelenktabletten und Gelenkpulver für Hunde im Test 2026: 4 Gelenkmittel im Vergleich", href: "/blog/gelenk-test-hund-oktober-2026" },
-  lachsoel: { slug: "lachsoel-test-hund-oktober-2026", title: "Lachsöl für Hunde im Test 2026: 5 Lachsöle im Vergleich", href: "/blog/lachsoel-test-hund-oktober-2026" },
+  gelenk: { slug: "gelenktabletten-hund-vergleich", title: "Gelenktabletten und Gelenkpulver für Hunde im Test 2026: 4 Gelenkmittel im Vergleich", href: "/blog/gelenktabletten-hund-vergleich" },
+  lachsoel: { slug: "lachsoel-hund-vergleich", title: "Lachsöl für Hunde im Test 2026: 5 Lachsöle im Vergleich", href: "/blog/lachsoel-hund-vergleich" },
   algenoel: { slug: "algenoel-test-hund-oktober-2026", title: "Algenöl für Hunde im Test 2026: 5 Algenöle im Vergleich", href: "/blog/algenoel-test-hund-oktober-2026" },
 } satisfies Record<string, Comparison>;
 
