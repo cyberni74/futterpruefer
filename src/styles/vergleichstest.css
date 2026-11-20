@@ -104,6 +104,8 @@
 
 /* Vergleichstabelle */
 .prose-fp .vt-table-box { border: 1px solid var(--border); border-radius: 1.25rem; padding: .5rem; background: var(--surface); box-shadow: var(--shadow); }
+/* Leere Box, wenn <ComparisonTable> die Tabelle aus dem Body herausgelöst hat (Blog-Vergleiche): ausblenden */
+.prose-fp .vt-table-box:not(:has(*)) { display: none; }
 .prose-fp .vt-table-box > p { padding: 0 .5rem .4rem; font-size: .75rem; color: var(--fg-muted); }
 .prose-fp table.vt-table { display: table; width: 100%; font-size: .92rem; overflow: visible; }
 .prose-fp table.vt-table th { font-size: .72rem; text-transform: uppercase; letter-spacing: .03em; color: var(--fg-muted); white-space: nowrap; }
