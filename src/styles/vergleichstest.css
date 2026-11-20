@@ -135,6 +135,18 @@
   .prose-fp table.vt-table tr.vt-top { background: color-mix(in srgb, var(--brand-soft) 45%, transparent) !important; border-radius: .75rem; }
 }
 
+/* Vergleichstabelle aus <ComparisonTable> (data-label, ohne tr.vt-row): am Handy eine Karte pro Zeile.
+   Die Caption muss Block sein, sonst steckt sie in einer anonymen Tabelle mit Breite 0 und bricht Buchstabe für Buchstabe um. */
+@media (max-width: 767px) {
+  .prose-fp table.vt-table-cmp.vt-table-cmp { display: block; width: 100%; max-width: 100%; overflow: visible; }
+  .prose-fp table.vt-table-cmp.vt-table-cmp > caption { display: block; width: auto; margin-bottom: .6rem; }
+  .prose-fp table.vt-table-cmp.vt-table-cmp > thead { display: none; }
+  .prose-fp table.vt-table-cmp.vt-table-cmp tr > td.vt-c-place.vt-c-place { padding-top: 0; font-size: .85rem; font-weight: 800; }
+  .prose-fp table.vt-table-cmp.vt-table-cmp tr > td.vt-c-place.vt-c-place::before { display: inline; content: attr(data-label) " "; font-size: .7rem; letter-spacing: .05em; margin: 0; }
+  .prose-fp table.vt-table-cmp.vt-table-cmp tr > td.vt-c-name { font-size: 1.05rem; line-height: 1.35; }
+  .prose-fp table.vt-table-cmp.vt-table-cmp tr > td.vt-c-place + td.vt-c-name::before { display: none; }
+}
+
 /* Methodik, Regeln, Rechnen, Tierschutz, Warnung, Fazit */
 .prose-fp .vt-method { border: 1px solid var(--border); border-left: 4px solid var(--brand); border-radius: 1.25rem; padding: 1.25rem; background: var(--bg-soft); }
 .prose-fp .vt-method h2 { margin-top: 0; font-size: 1.35rem; }

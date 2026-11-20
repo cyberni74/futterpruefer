@@ -42,7 +42,7 @@ export function ComparisonTable({
   const showTeamWertung = rows.some((row) => row.teamWertung);
   return (
     <div className="prose-fp">
-      <table className="vt-table">
+      <table className="vt-table vt-table-cmp">
         {caption ? <caption className="mb-2 text-left text-sm text-muted">{caption}</caption> : null}
         <thead>
           <tr>
@@ -62,19 +62,19 @@ export function ComparisonTable({
             const amazon = rowAmazonCtaUrl(row);
             return (
               <tr key={`${row.href}-${row.name}`}>
-                {showPlace ? <td className="vt-c-place">{row.place ?? ""}</td> : null}
-                <td className="vt-c-name">
+                {showPlace ? <td className="vt-c-place" data-label="Platz">{row.place ?? ""}</td> : null}
+                <td className="vt-c-name" data-label="Produkt">
                   <Link href={row.href}>{productNameWithTeamWertung(row.name, row.teamWertung)}</Link>
                 </td>
-                <td>{formatScore(row.score)}</td>
-                <td>
+                <td data-label="Punkte">{formatScore(row.score)}</td>
+                <td data-label="Ampel">
                   <span className={AMPEL_CLASS[rating]}>{rowAmpelWord(row)}</span>
                 </td>
-                <td>{rowNoteLabel(row)}</td>
-                {showDose ? <td>{row.dosePerKgLabel ?? "–"}</td> : null}
-                {showPrice ? <td>{row.pricePerDay != null && row.pricePerDay > 0 ? formatEuro(row.pricePerDay) : "–"}</td> : null}
+                <td data-label="Note">{rowNoteLabel(row)}</td>
+                {showDose ? <td data-label="Dosis je kg">{row.dosePerKgLabel ?? "–"}</td> : null}
+                {showPrice ? <td data-label="Preis / Tag">{row.pricePerDay != null && row.pricePerDay > 0 ? formatEuro(row.pricePerDay) : "–"}</td> : null}
                 {showAmazon ? (
-                  <td>
+                  <td data-label="Angebot">
                     {amazon ? (
                       <a className="cta-amazon-btn" href={amazon} target="_blank" rel={COMPARISON_AMAZON_REL}>
                         {AMAZON_CTA}
