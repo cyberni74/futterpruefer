@@ -94,7 +94,11 @@ export function ErgaenzungsfutterHub({
             </p>
           )}
           <div className="mt-5 overflow-x-auto">
-            <ComparisonTable rows={purpose.rows} caption={`Getestete Produkte zum Zweck ${purpose.title}`} />
+            <ComparisonTable
+                rows={purpose.rows}
+                caption={`Getestete Produkte zum Zweck ${purpose.title}`}
+                showPriceStand
+              />
           </div>
         </section>
       ))}
@@ -115,14 +119,15 @@ export function ErgaenzungsfutterHub({
         </p>
         <h3>Werbung darf kein Heilversprechen sein</h3>
         <p>
-          Ergänzungsfuttermittel dürfen den Bedarf einer Ration ergänzen. Sie dürfen nach unserer Lesart der
-          Futtermittelvorschriften keine Krankheiten heilen oder Diagnosen ersetzen. Wo eine Packung das trotzdem nahelegt,
-          werten wir die Aussage – und stufen das Produkt in der Ampel nicht als Empfehlung.
+          Ergänzungsfuttermittel ergänzen eine Ration. Mit der Verhütung, Behandlung oder Heilung von Krankheiten dürfen
+          sie nicht beworben werden (Art. 13 Abs. 3 VO (EG) Nr. 767/2009, mit eng begrenzten Ausnahmen). Wo eine Packung das
+          trotzdem nahelegt, werten wir die Aussage ab; nach unserer Methodik schließt das Grün aus. Weicht eine Bewertung
+          davon ab, etwa als Teamwertung, steht das auf der Testseite und auf der Methodik-Seite.
         </p>
         <h3>Der Träger und der Preis pro Tag</h3>
         <p>
           Zucker, Füllstoffe und überflüssige Zusätze gehören zur Bewertung, nicht nur der beworbene Wirkstoff. Den Preis
-          nennen wir als Betrag je Tagesdosis für einen Hund mit 10 kg, wenn der Test ihn belegt. Ein niedriger Kilopreis
+          nennen wir als Betrag je Tagesdosis für einen Hund mit 10 kg zum Preisstand des Tests, wenn der Test ihn belegt. Ein niedriger Kilopreis
           nützt nichts, wenn die Tagesmenge ein Loch in die Dose reißt.
         </p>
       </section>
