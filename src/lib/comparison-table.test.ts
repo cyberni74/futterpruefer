@@ -74,6 +74,32 @@ describe("comparison-table helpers", () => {
     expect(splitFirstVtTable(html)).toEqual({ before: "<p>Intro</p>", after: '<p>Rest</p><table class="vt-table"><tr><td>B</td></tr></table>' });
     expect(splitFirstVtTable("<p>ohne Tabelle</p>")).toBeNull();
   });
+
+  it("schließt die vt-table-box im vorangehenden Fragment, damit das SSR-HTML hydrierbar bleibt", () => {
+    const html =
+      '<h2 id="vergleich">Gelenkmittel für Hunde: alle vier im Vergleich</h2>\n' +
+      '<div class="fp-box vt-table-box">\n' +
+      '<table class="vt-table"><thead><tr><th>Produkt</th></tr></thead><tbody><tr><td>Cadoc</td></tr></tbody></table>\n' +
+      '<p>Preise: Amazon.de am 23.10.2026, Einmalkauf, Lieferadresse Berlin (Q2, Q3, Q5, Q8).</p>\n' +
+      '</div>\n' +
+      '<div class="fp-box vt-method"><h2 id="methode">Wie wir getestet haben</h2></div>';
+    const parts = splitFirstVtTable(html);
+    expect(parts).not.toBeNull();
+    expect(parts!.before).toBe(
+      '<h2 id="vergleich">Gelenkmittel für Hunde: alle vier im Vergleich</h2>\n' +
+        '<div class="fp-box vt-table-box">\n</div>',
+    );
+    expect(parts!.after).toBe(
+      '\n<p>Preise: Amazon.de am 23.10.2026, Einmalkauf, Lieferadresse Berlin (Q2, Q3, Q5, Q8).</p>\n\n' +
+        '<div class="fp-box vt-method"><h2 id="methode">Wie wir getestet haben</h2></div>',
+    );
+    expect(parts!.before).not.toMatch(/<div[^>]*vt-table-box[^>]*>\s*$/);
+    expect(parts!.after.startsWith("\n</div>")).toBe(false);
+    const divBalance = (html: string) =>
+      (html.match(/<div\b[^>]*>/gi)?.length ?? 0) - (html.match(/<\/div>/gi)?.length ?? 0);
+    expect(divBalance(parts!.before)).toBe(0);
+    expect(divBalance(parts!.after)).toBe(0);
+  });
   it("zeigt bei Methodik Version 1 keine Note, bei 55 Punkten Ampel Rot", () => {
     const row = { name: "V1", href: "/x", score: 55, methodikVersion: "1" };
     expect(isMethodikV1(row.methodikVersion)).toBe(true);

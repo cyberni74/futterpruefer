@@ -265,10 +265,49 @@ export function publishedComparisonRows(id: PublishedComparisonId): ComparisonTa
   return PUBLISHED_COMPARISON_ROWS[id].map((row) => ({ ...row }));
 }
 
+/**
+ * Schneidet die erste `.vt-table` aus dem Beitragskörper, damit React die
+ * Vergleichstabelle als Komponente einsetzen kann.
+ *
+ * Die Tabelle steht im CMS in `<div class="fp-box vt-table-box">…</div>`
+ * zusammen mit dem Preisstand-Absatz. Wird nur die Tabelle herausgetrennt,
+ * bleibt der Öffner in `before` und der Schließer in `after`. Im SSR-HTML
+ * schließt der Browser dann den React-Wrapper von `before` als Box und
+ * verschiebt die Tabelle — Hydration-Mismatch (React #418). Deshalb wird
+ * die Box in `before` geschlossen und der verwaiste `</div>` in `after`
+ * entfernt. Der Preisstand-Absatz bleibt unverändert hinter der Tabelle.
+ */
 export function splitFirstVtTable(html: string): { before: string; after: string } | null {
   const match = html.match(/<table\s+[^>]*class="[^"]*\bvt-table\b[^"]*"[^>]*>[\s\S]*?<\/table>/i);
   if (!match || match.index == null) return null;
-  return { before: html.slice(0, match.index), after: html.slice(match.index + match[0].length) };
+  const before = html.slice(0, match.index);
+  const after = html.slice(match.index + match[0].length);
+  return closeDanglingVtTableBox(before, after);
+}
+
+function closeDanglingVtTableBox(before: string, after: string): { before: string; after: string } {
+  if (!/<div\s+[^>]*class="[^"]*\bvt-table-box\b[^"]*"[^>]*>\s*$/i.test(before)) {
+    return { before, after };
+  }
+  return { before: `${before}</div>`, after: stripOrphanClosingDiv(after) };
+}
+
+/** Entfernt das erste `</div>`, das in `html` keinen eigenen Öffner hat. */
+function stripOrphanClosingDiv(html: string): string {
+  const re = /<div\b[^>]*>|<\/div>/gi;
+  let depth = 0;
+  let match: RegExpExecArray | null;
+  while ((match = re.exec(html))) {
+    if (/^<\/div>/i.test(match[0])) {
+      if (depth === 0) {
+        return html.slice(0, match.index) + html.slice(match.index + match[0].length);
+      }
+      depth -= 1;
+    } else {
+      depth += 1;
+    }
+  }
+  return html;
 }
 
 export function comparisonIdForBlogSlug(slug: string): PublishedComparisonId | null {
