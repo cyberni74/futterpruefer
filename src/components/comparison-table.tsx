@@ -3,11 +3,15 @@ import { AMAZON_CTA, AFFILIATE_HINWEIS } from "@/components/testvorlage-v2/Sourc
 import { formatScore } from "@/lib/scoring";
 import {
   COMPARISON_AMAZON_REL,
+  METHODIK_V1_NOTE_FOOTNOTE,
+  PRICE_PER_DAY_FOOTNOTE,
+  TEAMWERTUNG_FOOTNOTE,
   formatEuro,
-  formatNote,
+  productNameWithTeamWertung,
   rowAmazonCtaUrl,
   rowAmpelWord,
-  rowNote,
+  rowIsMethodikV1,
+  rowNoteLabel,
   rowRating,
   type ComparisonTableRow,
 } from "@/lib/comparison-table";
@@ -22,15 +26,20 @@ export function ComparisonTable({
   rows,
   caption,
   showPlace = false,
+  showPriceStand = false,
 }: {
   rows: ComparisonTableRow[];
   caption?: string;
   showPlace?: boolean;
+  /** A4: Preisstand-Satz unter Hub-Tabellen mit Spalte „Preis / Tag“. */
+  showPriceStand?: boolean;
 }) {
   if (!rows.length) return null;
   const showDose = rows.some((row) => row.dosePerKgLabel);
   const showPrice = rows.some((row) => row.pricePerDay != null && row.pricePerDay > 0);
   const showAmazon = rows.some((row) => rowAmazonCtaUrl(row));
+  const showV1Note = rows.some((row) => rowIsMethodikV1(row));
+  const showTeamWertung = rows.some((row) => row.teamWertung);
   return (
     <div className="prose-fp">
       <table className="vt-table">
@@ -55,13 +64,13 @@ export function ComparisonTable({
               <tr key={`${row.href}-${row.name}`}>
                 {showPlace ? <td className="vt-c-place">{row.place ?? ""}</td> : null}
                 <td className="vt-c-name">
-                  <Link href={row.href}>{row.name}</Link>
+                  <Link href={row.href}>{productNameWithTeamWertung(row.name, row.teamWertung)}</Link>
                 </td>
                 <td>{formatScore(row.score)}</td>
                 <td>
                   <span className={AMPEL_CLASS[rating]}>{rowAmpelWord(row)}</span>
                 </td>
-                <td>{formatNote(rowNote(row))}</td>
+                <td>{rowNoteLabel(row)}</td>
                 {showDose ? <td>{row.dosePerKgLabel ?? "–"}</td> : null}
                 {showPrice ? <td>{row.pricePerDay != null && row.pricePerDay > 0 ? formatEuro(row.pricePerDay) : "–"}</td> : null}
                 {showAmazon ? (
@@ -80,6 +89,9 @@ export function ComparisonTable({
           })}
         </tbody>
       </table>
+      {showV1Note ? <p className="mt-2 text-sm text-muted">{METHODIK_V1_NOTE_FOOTNOTE}</p> : null}
+      {showTeamWertung ? <p className="mt-2 text-sm text-muted">{TEAMWERTUNG_FOOTNOTE}</p> : null}
+      {showPrice && showPriceStand ? <p className="mt-2 text-sm text-muted">{PRICE_PER_DAY_FOOTNOTE}</p> : null}
       {showAmazon ? <p className="cta-hinweis">{AFFILIATE_HINWEIS}</p> : null}
     </div>
   );

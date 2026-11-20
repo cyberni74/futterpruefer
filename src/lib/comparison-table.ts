@@ -1,5 +1,5 @@
 import { AMAZON_TAG } from "@/components/testvorlage-v2/schema";
-import { noteFuerPunkte, ratingFor, type Rating } from "@/lib/scoring";
+import { isMethodikV1, noteFuerPunkte, ratingFor, type Rating } from "@/lib/scoring";
 import { AMPEL_WORD, amazonPriceUrl } from "@/lib/review-seo";
 import { productLabel } from "@/lib/seo";
 
@@ -17,7 +17,45 @@ export type ComparisonTableRow = {
   /** Amazon-URL bereits mit Partner-Tag – die Komponente zeigt sie nur bei Grün/Gelb. */
   amazonUrl?: string | null;
   place?: number;
+  /** Teamwertung außerhalb der Methodik; Kennzeichnung in der Namensspalte und Fußnote. */
+  teamWertung?: boolean;
 };
+
+/** A1: Fußnote unter Tabellen mit Methodik-Version-1-Zeilen. */
+export const METHODIK_V1_NOTE_FOOTNOTE =
+  "Note ‚–‘: Test nach Methodik Version 1 (Bewertungsstand 27.10.2026); dafür vergeben wir keine Note. Maßgeblich ist die Testseite.";
+
+/** A2: Fußnote unter Tabellen mit einer Teamwertung (Wortlaut der Rechtsprüfung). */
+export const TEAMWERTUNG_FOOTNOTE =
+  "Teamwertung: Gesamtwertung nach Entscheidung des Herausgebers, außerhalb unserer Methodik für Ergänzungsfutter. Nach der Methodik ergäben sich 28 von 100 Punkten; Einzelheiten auf der Testseite und auf der Methodik-Seite.";
+
+export const TEAMWERTUNG_LABEL = "Teamwertung";
+
+/** A4: Fußnote unter Hub-Tabellen mit Spalte „Preis / Tag“. */
+export const PRICE_PER_DAY_FOOTNOTE =
+  "Preis / Tag: Tagesdosis für einen Hund mit 10 kg, berechnet zum Preisstand des jeweiligen Tests; heutige Preise können abweichen.";
+
+const TEAMWERTUNG_SLUGS = new Set(["medidog-haut-und-fellglueck-paste"]);
+
+export function isTeamWertungSlug(slug: string): boolean {
+  return TEAMWERTUNG_SLUGS.has(slug);
+}
+
+export function productNameWithTeamWertung(name: string, teamWertung?: boolean): string {
+  if (!teamWertung) return name;
+  const suffix = ` (${TEAMWERTUNG_LABEL})`;
+  return name.endsWith(suffix) ? name : `${name}${suffix}`;
+}
+
+/** A1: Tests nach Methodik Version 1 zeigen in der Noten-Spalte „–“, keine Note V3. */
+export function rowNoteLabel(row: Pick<ComparisonTableRow, "score" | "methodikVersion">): string {
+  if (isMethodikV1(row.methodikVersion)) return "–";
+  return formatNote(rowNote(row));
+}
+
+export function rowIsMethodikV1(row: Pick<ComparisonTableRow, "methodikVersion">): boolean {
+  return isMethodikV1(row.methodikVersion);
+}
 
 export function formatNote(note: number): string {
   return new Intl.NumberFormat("de-DE", { minimumFractionDigits: 1, maximumFractionDigits: 1 }).format(note);
@@ -290,5 +328,6 @@ export function reviewToComparisonRow(review: ReviewForComparisonRow): Compariso
       kaufUrl: layoutKaufUrl(review.layoutData),
       html: review.bodyHtml ?? "",
     }),
+    teamWertung: isTeamWertungSlug(review.slug),
   };
 }

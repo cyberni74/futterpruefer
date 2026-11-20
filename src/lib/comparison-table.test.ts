@@ -5,14 +5,21 @@ import {
   documentedPricePerDay,
   dosePerKgLabel,
   formatNote,
+  isTeamWertungSlug,
+  productNameWithTeamWertung,
   publishedComparisonRows,
   purposeForReview,
+  reviewToComparisonRow,
   rowAmazonCtaUrl,
   rowNote,
+  rowNoteLabel,
   rowRating,
   splitFirstVtTable,
+  METHODIK_V1_NOTE_FOOTNOTE,
+  PRICE_PER_DAY_FOOTNOTE,
+  TEAMWERTUNG_FOOTNOTE,
 } from "./comparison-table";
-import { noteFuerPunkte } from "./scoring";
+import { isMethodikV1, noteFuerPunkte } from "./scoring";
 
 describe("comparison-table helpers", () => {
   it("rechnet die Note nach Notenschlüssel V3", () => {
@@ -67,4 +74,43 @@ describe("comparison-table helpers", () => {
     expect(splitFirstVtTable(html)).toEqual({ before: "<p>Intro</p>", after: '<p>Rest</p><table class="vt-table"><tr><td>B</td></tr></table>' });
     expect(splitFirstVtTable("<p>ohne Tabelle</p>")).toBeNull();
   });
+  it("zeigt bei Methodik Version 1 keine Note, bei 55 Punkten Ampel Rot", () => {
+    const row = { name: "V1", href: "/x", score: 55, methodikVersion: "1" };
+    expect(isMethodikV1(row.methodikVersion)).toBe(true);
+    expect(rowRating(row)).toBe("schlecht");
+    expect(rowNoteLabel(row)).toBe("–");
+    expect(rowNoteLabel(row)).not.toBe(formatNote(noteFuerPunkte(55)));
+    expect(METHODIK_V1_NOTE_FOOTNOTE).toBe(
+      "Note ‚–‘: Test nach Methodik Version 1 (Bewertungsstand 27.10.2026); dafür vergeben wir keine Note. Maßgeblich ist die Testseite.",
+    );
+  });
+
+  it("kennzeichnet die MEDIDOG-Teamwertung am Namen", () => {
+    expect(isTeamWertungSlug("medidog-haut-und-fellglueck-paste")).toBe(true);
+    expect(isTeamWertungSlug("veddelholzer-gelenktabletten-hund-test")).toBe(false);
+    expect(productNameWithTeamWertung("MEDIDOG Haut- & Fellglück Paste 500 g", true)).toBe(
+      "MEDIDOG Haut- & Fellglück Paste 500 g (Teamwertung)",
+    );
+    expect(productNameWithTeamWertung("MEDIDOG Haut- & Fellglück Paste 500 g (Teamwertung)", true)).toBe(
+      "MEDIDOG Haut- & Fellglück Paste 500 g (Teamwertung)",
+    );
+    const row = reviewToComparisonRow({
+      slug: "medidog-haut-und-fellglueck-paste",
+      title: "MEDIDOG",
+      brand: "MEDIDOG",
+      productName: "Haut- & Fellglück Paste 500 g",
+      totalScore: 91.8,
+      methodikVersion: "ergaenzung-v1.1",
+      category: { slug: "ergaenzungsfuttermittel-hund" },
+    });
+    expect(row.teamWertung).toBe(true);
+    expect(rowNoteLabel(row)).toBe(formatNote(noteFuerPunkte(91.8)));
+    expect(TEAMWERTUNG_FOOTNOTE).toBe(
+      "Teamwertung: Gesamtwertung nach Entscheidung des Herausgebers, außerhalb unserer Methodik für Ergänzungsfutter. Nach der Methodik ergäben sich 28 von 100 Punkten; Einzelheiten auf der Testseite und auf der Methodik-Seite.",
+    );
+    expect(PRICE_PER_DAY_FOOTNOTE).toBe(
+      "Preis / Tag: Tagesdosis für einen Hund mit 10 kg, berechnet zum Preisstand des jeweiligen Tests; heutige Preise können abweichen.",
+    );
+  });
+
 });
