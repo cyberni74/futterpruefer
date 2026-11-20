@@ -49,6 +49,8 @@ const nextConfig: NextConfig = {
   outputFileTracingIncludes: { "/[kategorie]/[slug]/opengraph-image": ["./public/demo/**", "./public/uploads/**"] },
   async redirects() {
     const rules: Redirect[] = [
+      { source: "/blog/gelenk-test-hund-oktober-2026", destination: "/blog/gelenktabletten-hund-vergleich", permanent: true },
+      { source: "/blog/lachsoel-test-hund-oktober-2026", destination: "/blog/lachsoel-hund-vergleich", permanent: true },
       { source: "/ueber-mich", destination: "/team", permanent: true },
       // Zusammengeführte Marken (siehe src/lib/brand-alias.ts)
       { source: "/marken/purina-gourmet", destination: "/marken/purina", permanent: true },
