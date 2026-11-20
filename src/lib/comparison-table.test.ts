@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { JSDOM } from "jsdom";
 import {
   affiliateAmazonUrl,
   comparisonIdForBlogSlug,
@@ -73,6 +74,43 @@ describe("comparison-table helpers", () => {
     const html = '<p>Intro</p><table class="vt-table"><tr><td>A</td></tr></table><p>Rest</p><table class="vt-table"><tr><td>B</td></tr></table>';
     expect(splitFirstVtTable(html)).toEqual({ before: "<p>Intro</p>", after: '<p>Rest</p><table class="vt-table"><tr><td>B</td></tr></table>' });
     expect(splitFirstVtTable("<p>ohne Tabelle</p>")).toBeNull();
+  });
+
+  it("schließt die vt-table-box im vorangehenden Fragment, damit das SSR-HTML hydrierbar bleibt", () => {
+    const html =
+      '<h2 id="vergleich">Gelenkmittel für Hunde: alle vier im Vergleich</h2>\n' +
+      '<div class="fp-box vt-table-box">\n' +
+      '<table class="vt-table"><thead><tr><th>Produkt</th></tr></thead><tbody><tr><td>Cadoc</td></tr></tbody></table>\n' +
+      '<p>Preise: Amazon.de am 23.10.2026, Einmalkauf, Lieferadresse Berlin (Q2, Q3, Q5, Q8).</p>\n' +
+      '</div>\n' +
+      '<div class="fp-box vt-method"><h2 id="methode">Wie wir getestet haben</h2></div>';
+    const parts = splitFirstVtTable(html);
+    expect(parts).not.toBeNull();
+    expect(parts!.before).toBe(
+      '<h2 id="vergleich">Gelenkmittel für Hunde: alle vier im Vergleich</h2>\n' +
+        '<div class="fp-box vt-table-box">\n</div>',
+    );
+    expect(parts!.after).toBe(
+      '\n<p>Preise: Amazon.de am 23.10.2026, Einmalkauf, Lieferadresse Berlin (Q2, Q3, Q5, Q8).</p>\n\n' +
+        '<div class="fp-box vt-method"><h2 id="methode">Wie wir getestet haben</h2></div>',
+    );
+    expect(parts!.before).not.toMatch(/<div[^>]*vt-table-box[^>]*>\s*$/);
+    expect(parts!.after.startsWith("\n</div>")).toBe(false);
+
+    const ssr =
+      `<div id="artikel" class="prose-fp mt-8">` +
+      `<div>${parts!.before}</div>` +
+      `<div class="prose-fp"><table class="vt-table vt-table-cmp"><caption>Ergebnisse auf einen Blick</caption></table></div>` +
+      `<div>${parts!.after}</div>` +
+      `</div>`;
+    const artikel = new JSDOM(ssr).window.document.getElementById("artikel");
+    expect(artikel).not.toBeNull();
+    expect(artikel!.children).toHaveLength(3);
+    expect(artikel!.children[0].querySelector(".vt-table-box")?.children.length ?? -1).toBe(0);
+    expect(artikel!.children[0].querySelector("table")).toBeNull();
+    expect(artikel!.children[1].querySelector("table.vt-table-cmp")).not.toBeNull();
+    expect(artikel!.children[2].textContent).toContain("Preise: Amazon.de am 23.10.2026");
+    expect(artikel!.children[2].querySelector(".vt-method")).not.toBeNull();
   });
   it("zeigt bei Methodik Version 1 keine Note, bei 55 Punkten Ampel Rot", () => {
     const row = { name: "V1", href: "/x", score: 55, methodikVersion: "1" };
