@@ -1,4 +1,6 @@
 import { describe, expect, it } from "vitest";
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import { renderToStaticMarkup } from "react-dom/server";
 import { AMAZON_CTA } from "./testvorlage-v2/Sources";
 import { ComparisonTable } from "./comparison-table";
@@ -100,4 +102,22 @@ describe("ComparisonTable", () => {
     expect(withoutFlag).not.toContain(PRICE_PER_DAY_FOOTNOTE);
   });
 
+
+  it("liefert am Handy Karten: data-label je Zelle, eigene Tabellenklasse, Caption als Block", () => {
+    const html = renderToStaticMarkup(
+      <ComparisonTable
+        showPlace
+        rows={publishedComparisonRows("gelenktabletten-hund-vergleich")}
+        caption="Ergebnisse auf einen Blick"
+      />,
+    );
+    expect(html).toContain('class="vt-table vt-table-cmp"');
+    for (const label of ["Platz", "Produkt", "Punkte", "Ampel", "Note", "Dosis je kg", "Preis / Tag", "Angebot"]) {
+      expect(html).toContain(`data-label="${label}"`);
+    }
+    expect(html).not.toContain("vt-row");
+    const css = readFileSync(join(process.cwd(), "src/styles/vergleichstest.css"), "utf8");
+    expect(css).toMatch(/table\.vt-table-cmp\.vt-table-cmp > caption \{ display: block;/);
+    expect(css).toMatch(/table\.vt-table-cmp\.vt-table-cmp > thead \{ display: none;/);
+  });
 });
