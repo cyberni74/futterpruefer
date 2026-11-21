@@ -57,12 +57,17 @@ describe("Preisblock", () => {
     expect(rot).toContain(ROT_KEINE_KAUFEMPFEHLUNG);
     expect(rot).toContain('class="rot-hinweis"');
   });
-  it("datierten Preisblock lässt den Rot-Satz weg, weil kein Amazon-Button dasteht", () => {
-    const html = renderToStaticMarkup(<PriceBlock price={5.19} pricePerKg={null} pricePerDay={null} priceDate={date} priceSource="Amazon" amazonUrl={amazon} rot />);
-    expect(html).toContain("5,19");
-    expect(html).not.toContain(AMAZON_CTA_ROT);
-    expect(html).not.toContain(AMAZON_CTA);
-    expect(html).not.toContain(ROT_KEINE_KAUFEMPFEHLUNG);
+  it("zeigt bei datiertem Preis zusätzlich den Amazon-Button (Gelb/Grün: entdecken, Rot: ansehen)", () => {
+    const gelb = renderToStaticMarkup(<PriceBlock price={5.19} pricePerKg={null} pricePerDay={null} priceDate={date} priceSource="Amazon" amazonUrl={amazon} />);
+    expect(gelb).toContain("5,19");
+    expect(gelb).toContain(AMAZON_CTA);
+    expect(gelb).toContain(`href="${amazon}"`);
+    expect(gelb).not.toContain(AMAZON_CTA_ROT);
+    const rot = renderToStaticMarkup(<PriceBlock price={5.19} pricePerKg={null} pricePerDay={null} priceDate={date} priceSource="Amazon" amazonUrl={amazon} rot />);
+    expect(rot).toContain("5,19");
+    expect(rot).toContain(AMAZON_CTA_ROT);
+    expect(rot).toContain(ROT_KEINE_KAUFEMPFEHLUNG);
+    expect(rot).not.toContain(AMAZON_CTA);
   });
   it("entfällt ohne Datum und ohne Link", () => {
     expect(renderToStaticMarkup(<PriceBlock price={5.19} pricePerKg={null} pricePerDay={null} priceDate={null} priceSource="Hersteller-Shop" />)).toBe("");

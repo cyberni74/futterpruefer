@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { amazonPriceUrl, ampelFor, directAnswer, keywordName, kurzGesagt, priceCite, priceSourceFromArticle, renameBodyFazit, reviewFaq, seoFazitHeading, withoutLeadingScore } from "./review-seo";
+import { amazonPriceUrl, amazonUrlForAmpel, ampelFor, directAnswer, keywordName, kurzGesagt, priceCite, priceSourceFromArticle, renameBodyFazit, reviewFaq, seoFazitHeading, withoutAmazonTag, withoutLeadingScore } from "./review-seo";
 import { comparisonForPost, comparisonForReview, comparisonsForPost, isInComparison } from "./comparison-links";
 import { faqPageJsonLd } from "./faq-schema";
 
@@ -124,6 +124,14 @@ describe("review-seo", () => {
     expect(amazonPriceUrl({ kaufUrl: "https://www.amazon.de/dp/B07KCS7YX1?tag=anderer" })).toBe("https://www.amazon.de/dp/B07KCS7YX1?tag=cyberni7400-21");
     expect(amazonPriceUrl({ html: '<a href="https://www.leonardo-catfood.de/leonardo">Shop</a>' })).toBeNull();
     expect(amazonPriceUrl({})).toBeNull();
+  });
+  it("entfernt den Partner-Tag nur bei Ampel Rot", () => {
+    const tagged = "https://www.amazon.de/dp/B000000000?tag=cyberni7400-21";
+    expect(withoutAmazonTag(tagged)).toBe("https://www.amazon.de/dp/B000000000");
+    expect(withoutAmazonTag("https://www.amazon.de/dp/B000000000?tag=cyberni7400-21&psc=1")).toBe("https://www.amazon.de/dp/B000000000?psc=1");
+    expect(amazonUrlForAmpel(tagged, true)).toBe(tagged);
+    expect(amazonUrlForAmpel(tagged, false)).toBe("https://www.amazon.de/dp/B000000000");
+    expect(amazonUrlForAmpel(null, false)).toBeNull();
   });
   it("liest die Preisquelle nur aus einer ausdrücklichen Preisangabe", () => {
     expect(priceSourceFromArticle("<p>Im Hersteller-Shop kostet die 300-g-Packung 5,19 €.</p>")).toBe("Hersteller-Shop");

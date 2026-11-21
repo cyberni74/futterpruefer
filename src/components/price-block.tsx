@@ -49,6 +49,7 @@ export function PriceBlock({ price, packageSize, pricePerKg, pricePerDay, priceD
         )}
       </dl>
       {cite && <p className="mt-2 text-xs text-muted">{cite}. {priceNotice(priceSource)}</p>}
+      {amazonUrl ? <AmazonPriceCta url={amazonUrl} rot={rot} /> : null}
     </div>
   );
 }

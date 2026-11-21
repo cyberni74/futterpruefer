@@ -32,6 +32,7 @@ import { Disclosure } from "@/components/disclosure";
 import { JsonLd } from "@/components/json-ld";
 import { MedienFigure, TestvorlageV2, faqItems, istHerstellerBild, kaufLink, medienCaption, type LayoutData } from "@/components/testvorlage-v2";
 import { readingMinutes } from "@/lib/product-data";
+import { isRotScore } from "@/lib/rot-guard";
 import { contentImageCaption } from "@/lib/content-caption";
 import type { getReviewBySlug } from "@/lib/queries";
 
@@ -51,8 +52,8 @@ export async function ReviewV2Article({ r, data, draftPreview }: { r: Review; da
   const images = [r.imageUrl, r.contentImageUrl, ...(r.gallery ?? [])].filter((x): x is string => Boolean(x));
   const gallery = (r.gallery ?? []).filter(Boolean);
   const inhaltCaption = contentImageCaption(r.contentImageAlt);
-  // Nur mit ASIN: beide Produktbilder sind Partnerlinks und tragen das Label „Werbung“
-  const medienKaufUrl = data.asin ? kaufLink({ asin: data.asin }) : null;
+  // Nur mit ASIN und Ampel Grün/Gelb: Produktbilder sind Partnerlinks und tragen das Label „Werbung“. Bei Rot kein Affiliate-Tag.
+  const medienKaufUrl = isRotScore(r.totalScore, r.methodikVersion) ? null : (data.asin ? kaufLink({ asin: data.asin }) : null);
   const abs = (u: string) => (u.startsWith("http") ? u : absoluteUrl(u));
   const description = trimMetaDescription(r.metaDescription?.trim() || data.hero?.gesamturteil?.trim() || `${r.title} im Fachtest: ${formatScore(r.totalScore)}/100 Punkte.`);
   const minutes = readingMinutes(JSON.stringify(data), r.verdict);

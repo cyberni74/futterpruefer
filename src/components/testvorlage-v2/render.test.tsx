@@ -132,6 +132,8 @@ describe("TestvorlageV2: Server-Rendering", () => {
     const rot = html(data, 50);
     expect(rot.match(/Aktuellen Preis bei Amazon ansehen\*/g)).toHaveLength(2);
     expect(rot).not.toContain("Jetzt bei Amazon entdecken*");
+    expect(rot).not.toContain("tag=cyberni7400-21");
+    expect(rot).toContain("https://www.amazon.de/dp/B000000000");
     expect(rot.match(/Unsere Bewertung für dieses Produkt ist Rot; der Link ist keine Kaufempfehlung\./g)).toHaveLength(2);
     const gelb = html(data, 51);
     const gruen = html(data, 68);
@@ -184,7 +186,9 @@ describe("TestvorlageV2: Server-Rendering", () => {
     const medien = src.slice(src.indexOf("medien={"), src.indexOf("</TestvorlageV2>"));
     expect(medien).toContain("<MedienFigure");
     expect(medien).not.toMatch(/<a\b[^>]*amazon/i);
-    expect(src).toContain("const medienKaufUrl = data.asin ? kaufLink({ asin: data.asin }) : null;");
+    expect(src).toContain("kaufLink({ asin: data.asin })");
+    expect(src).toContain("isRotScore(r.totalScore, r.methodikVersion)");
+    expect(src).toContain("const medienKaufUrl = isRotScore");
     expect((medien.match(/kaufUrl=\{medienKaufUrl\}/g) ?? []).length).toBe(2);
     expect((medien.match(/caption=\{medienCaption\(/g) ?? []).length).toBe(2);
   });

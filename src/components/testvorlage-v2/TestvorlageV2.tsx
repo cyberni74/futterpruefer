@@ -1,6 +1,7 @@
 import dynamic from "next/dynamic";
 import { Fragment, type ReactNode } from "react";
 import { isRotScore } from "@/lib/rot-guard";
+import { amazonUrlForAmpel } from "@/lib/review-seo";
 import { AnalyticalValues } from "./AnalyticalValues";
 import { ArticleNavigation } from "./ArticleNavigation";
 import { EditorialConclusion } from "./EditorialConclusion";
@@ -43,9 +44,9 @@ const LABEL: Record<string, string> = { urteil: "URTEIL", kapitel: "KAPITEL", bl
  */
 export function TestvorlageV2({ data, totalScore, ampelLabel, kopf, medien, methodikVersion, kaufNeutral = false }: { data: LayoutData; totalScore: number; ampelLabel: string; kopf?: ReactNode; medien?: ReactNode; methodikVersion?: string | null; kaufNeutral?: boolean }) {
   const abschnitte = baueAbschnitte(data);
-  const kauf = kaufLink(data);
-  const asinKauf = data.asin ? kaufLink({ asin: data.asin }) : null;
   const rot = isRotScore(totalScore, methodikVersion);
+  const kauf = amazonUrlForAmpel(kaufLink(data), !rot);
+  const asinKauf = amazonUrlForAmpel(data.asin ? kaufLink({ asin: data.asin }) : null, !rot);
   // Regel V12: neutraler Button unabhängig von der Ampel (Heilaussage am Test, beanstandete Krankheitswerbung, Ausschlussliste)
   const neutral = kaufNeutral || data.kaufNeutral === true;
   const zusatz = data.kaufHinweisZusatz;
