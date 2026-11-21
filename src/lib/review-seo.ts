@@ -155,6 +155,25 @@ export function amazonPriceUrl(input: { html?: string | null; asin?: string | nu
   return null;
 }
 
+/** Entfernt den Partner-Tag aus einer Amazon-URL. Andere Parameter bleiben. */
+export function withoutAmazonTag(url: string | null | undefined): string | null {
+  if (!url) return null;
+  try {
+    const u = new URL(url);
+    u.searchParams.delete("tag");
+    const q = u.searchParams.toString();
+    return `${u.origin}${u.pathname}${q ? `?${q}` : ""}${u.hash}`;
+  } catch {
+    return url;
+  }
+}
+
+/** Partner-Tag nur bei Grün/Gelb. Bei Rot (allowTag = false) bleibt der nackte Produktlink. */
+export function amazonUrlForAmpel(url: string | null | undefined, allowTag: boolean): string | null {
+  if (!url) return null;
+  return allowTag ? url : withoutAmazonTag(url);
+}
+
 export function kurzGesagt(r: ReviewSeoInput): string[] {
   const rating = ratingFor(r.totalScore, r.methodikVersion);
   const items = [`${formatScore(r.totalScore)}/100 Punkte, Ampel ${AMPEL_WORD[rating]}: ${RATING_LABEL[rating]}.`];
