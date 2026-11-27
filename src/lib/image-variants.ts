@@ -1,6 +1,6 @@
 import manifest from "@/data/image-variants.json";
 import ready from "@/data/image-variants-ready.json";
-import { amazonSizedUrl, BILDER_BUCKET, isAmazonHotlink, SUPABASE_IMAGE_HOST } from "./image-hosts";
+import { amazonSizedUrl, BILDER_BUCKET, isAmazonHotlink, SUPABASE_IMAGE_HOST, viaVercel } from "./image-hosts";
 
 /** Breiten der vorab erzeugten Varianten (Supabase-Bucket „bilder“). Die Originaldatei ist die größte Stufe. */
 export const VARIANT_WIDTHS = [400, 800] as const;
@@ -39,6 +39,12 @@ export type ResponsiveImage = { src: string; srcSet?: string };
  * Das srcset erscheint erst, wenn der Build per Bereit-Flag bestätigt hat, dass alle Varianten vorhanden sind.
  */
 export function responsiveImage(src: string): ResponsiveImage {
+  const r = responsiveImageRoh(src);
+  // Bucket-Bilder laufen über /bilder/… (Vercel-Cache) statt direkt von Supabase
+  return { src: viaVercel(r.src), ...(r.srcSet ? { srcSet: r.srcSet.split(", ").map((e) => { const i = e.lastIndexOf(" "); return `${viaVercel(e.slice(0, i))}${e.slice(i)}`; }).join(", ") } : {}) };
+}
+
+function responsiveImageRoh(src: string): ResponsiveImage {
   if (isAmazonHotlink(src)) {
     return {
       src: amazonSizedUrl(src, 500),
