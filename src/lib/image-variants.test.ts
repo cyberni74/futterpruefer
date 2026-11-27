@@ -28,7 +28,7 @@ describe("responsiveImage", () => {
   });
 
   it("setzt für Supabase-Bilder erst nach dem Bereit-Flag ein srcset (hier: Flag aus)", () => {
-    expect(responsiveImage(SUPA)).toEqual({ src: SUPA });
+    expect(responsiveImage(SUPA)).toEqual({ src: "/bilder/alter-hund-abc123.webp" });
   });
 
   it("lässt fremde Hosts und ungültige Angaben unverändert", () => {

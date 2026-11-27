@@ -49,3 +49,25 @@ export function amazonSizedUrl(value: string, px: number): string {
     : url.pathname.replace(/\.(jpe?g|png|webp)$/i, `${sized}.$1`);
   return url.toString();
 }
+
+/** Eigener Auslieferungspfad: Bilder aus dem Supabase-Bucket laufen über Vercel (CDN-Cache), nicht direkt vom Speicher des Browsers. */
+export const BILDER_PROXY_PREFIX = "/bilder/";
+
+/** Einzelner Dateiname im Bucket: Buchstaben, Ziffern, Punkt, Bindestrich, Unterstrich; Endung Bild; kein Pfad. */
+export const BILDER_DATEINAME = /^(?!.*\.\.)[A-Za-z0-9][A-Za-z0-9._-]{0,200}\.(?:webp|png|jpe?g|avif)$/;
+
+/**
+ * Bild-URL für die Anzeige: Dateien im öffentlichen Bucket „bilder“ werden zu `/bilder/<Datei>`
+ * (Route lädt sie einmal vom Speicher und liefert sie danach aus dem Vercel-Cache). Alles andere bleibt unverändert.
+ */
+export function viaVercel(src: string): string {
+  try {
+    const url = new URL(src);
+    const prefix = `/storage/v1/object/public/${BILDER_BUCKET}/`;
+    if (url.protocol !== "https:" || url.hostname !== SUPABASE_IMAGE_HOST || url.username || url.password || url.port || !url.pathname.startsWith(prefix)) return src;
+    const name = url.pathname.slice(prefix.length);
+    return BILDER_DATEINAME.test(name) ? `${BILDER_PROXY_PREFIX}${name}` : src;
+  } catch {
+    return src;
+  }
+}
